@@ -1,0 +1,29 @@
+{
+    "name": "jbzoo/utils",
+    "type": "library",
+    "description": "A collection of useful PHP functions, mini classes and snippets that you need or could use every day.",
+    "license": "MIT",
+    "minimum-stability": "dev",
+    "keywords": ["php", "helpers", "helper", "utility", "utils", "collection"],
+    "authors": [
+        {
+            "name": "SmetDenis",
+            "email": "denis@jbzoo.com",
+            "role": "lead"
+        }
+    ],
+    "require": {
+        "php": ">=5.3.10"
+    },
+    "require-dev": {
+        "jbzoo/phpunit": "dev-master"
+    },
+    "autoload": {
+        "psr-4": {
+            "JBZoo\\Utils\\": "src"
+        }
+    },
+    "support": {
+        "issues": "https://github.com/JBZoo/Utils/issues"
+    }
+}
