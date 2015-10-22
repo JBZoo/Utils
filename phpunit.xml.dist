@@ -16,6 +16,7 @@
 
     <php>
         <env name="PACKAGE_NAME" value="Utils"/>
+        <env name="PACKAGE_AUTHOR" value="Denis Smetannikov &lt;denis@jbzoo.com&gt;"/>
     </php>
 
     <testsuites>
