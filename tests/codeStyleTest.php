@@ -20,5 +20,11 @@ namespace JBZoo\PHPUnit;
  */
 class CodeStyleTestTest extends Codestyle
 {
-    // Your custom code style checking
+    public function testCyrillic()
+    {
+        $this->_excludeFiles[] = 'Filter.php';
+
+        parent::testCyrillic();
+    }
+
 }
