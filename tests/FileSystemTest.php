@@ -25,7 +25,7 @@ use JBZoo\Utils\OS;
 class FileSystemTest extends PHPUnit
 {
 
-    public function test_rmdir()
+    public function testRemoveDir()
     {
         $dirname = dirname(__FILE__);
 
@@ -130,6 +130,11 @@ class FileSystemTest extends PHPUnit
     {
         isContain('<?php', FS::firstLine(__FILE__));
         isNull(FS::firstLine(__FILE__ . '_noexists'));
+    }
+
+    public function testPerms()
+    {
+        isFalse(FS::perms('/no/such/file'));
     }
 
     public function testWritable()
