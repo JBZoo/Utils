@@ -17,7 +17,6 @@ namespace JBZoo\Utils;
 
 /**
  * Class Arr
- *
  * @package JBZoo\Utils
  */
 class Arr
@@ -42,23 +41,6 @@ class Arr
         }
 
         return $array;
-    }
-
-    /**
-     * Access an array index, retrieving the value stored there if it exists or a default if it does not.
-     * This function allows you to concisely access an index which may or may not exist without raising a warning.
-     *
-     * @param  array $var     Array value to access
-     * @param  mixed $default Default value to return if the key is not
-     * @return mixed
-     */
-    public static function get(&$var, $default = null)
-    {
-        if (isset($var)) {
-            return $var;
-        }
-
-        return $default;
     }
 
     /**

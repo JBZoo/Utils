@@ -16,6 +16,7 @@
 namespace JBZoo\PHPUnit;
 
 use JBZoo\Utils\Arr;
+use JBZoo\Utils\Vars;
 
 /**
  * Class ArrayTest
@@ -47,37 +48,37 @@ class ArrayTest extends PHPUnit
         $array['nested'] = array('key1' => 'val1', 'key2' => 'val2', 'key3' => 'val3');
 
         // Looks for $array['abc']
-        is('def', Arr::get($array['abc']));
+        is('def', Vars::get($array['abc']));
 
         // Looks for $array['nested']['key2']
-        is('val2', Arr::get($array['nested']['key2']));
+        is('val2', Vars::get($array['nested']['key2']));
 
         // Looks for $array['doesnotexist']
-        is('defaultval', Arr::get($array['doesnotexist'], 'defaultval'));
+        is('defaultval', Vars::get($array['doesnotexist'], 'defaultval'));
     }
 
     public function testFirst()
     {
         $test = array('a' => array('a', 'b', 'c'));
-        is('a', Arr::first(Arr::get($test['a'])));
+        is('a', Arr::first(Vars::get($test['a'])));
     }
 
     public function testFirstKey()
     {
         $test = array('a' => array('a' => 'b', 'c' => 'd'));
-        is('a', Arr::firstKey(Arr::get($test['a'])));
+        is('a', Arr::firstKey(Vars::get($test['a'])));
     }
 
     public function testLast()
     {
         $test = array('a' => array('a', 'b', 'c'));
-        is('c', Arr::last(Arr::get($test['a'])));
+        is('c', Arr::last(Vars::get($test['a'])));
     }
 
     public function testLastKey()
     {
         $test = array('a' => array('a' => 'b', 'c' => 'd'));
-        is('c', Arr::lastKey(Arr::get($test['a'])));
+        is('c', Arr::lastKey(Vars::get($test['a'])));
     }
 
     public function testFlatten()
