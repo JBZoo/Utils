@@ -275,4 +275,28 @@ class FileSystemTest extends PHPUnit
 
         FS::rmdir($dir);
     }
+
+    public function testFormat()
+    {
+        $size = FS::format(512, 0);
+        is('512 B', $size);
+
+        $size = FS::format(2048, 1);
+        is('2.0 KiB', $size);
+
+        $size = FS::format(25151251, 2);
+        is('23.99 MiB', $size);
+
+        $size = FS::format(19971597926, 2);
+        is('18.60 GiB', $size);
+
+        $size = FS::format(2748779069440, 1);
+        is('2.5 TiB', $size);
+
+        $size = FS::format(2.81475e15, 1);
+        is('2.5 PiB', $size);
+
+        $size = FS::format(2.81475e19, 1);
+        is('25000.0 PiB', $size);
+    }
 }

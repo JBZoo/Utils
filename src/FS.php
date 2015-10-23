@@ -37,6 +37,7 @@ class FS
             $perms = fileperms($file);
         }
 
+        //@codeCoverageIgnoreStart
         if (($perms & 0xC000) == 0xC000) { // Socket
             $info = 's';
 
@@ -61,6 +62,7 @@ class FS
         } else { // Unknown
             $info = 'u';
         }
+        //@codeCoverageIgnoreEnd
 
         // Owner
         $info .= (($perms & 0x0100) ? 'r' : '-');
@@ -188,8 +190,10 @@ class FS
         }
 
         // We're on Windows
-        if (strncasecmp(PHP_OS, 'WIN', 3) === 0) {
+        if (OS::isWin()) {
+            //@codeCoverageIgnoreStart
             return true;
+            //@codeCoverageIgnoreEnd
         }
 
         list($myuid, $mygid) = array(posix_geteuid(), posix_getgid());
@@ -239,8 +243,10 @@ class FS
         }
 
         // We're on Windows
-        if (strncasecmp(PHP_OS, 'WIN', 3) === 0) {
+        if (OS::isWin()) {
+            //@codeCoverageIgnoreStart
             return true;
+            //@codeCoverageIgnoreEnd
         }
 
         list($myuid, $mygid) = array(posix_geteuid(), posix_getgid());
@@ -290,8 +296,10 @@ class FS
         }
 
         // We're on Windows
-        if (strncasecmp(PHP_OS, 'WIN', 3) === 0) {
+        if (OS::isWin()) {
+            //@codeCoverageIgnoreStart
             return true;
+            //@codeCoverageIgnoreEnd
         }
 
         list($myuid, $mygid) = array(posix_geteuid(), posix_getgid());
@@ -371,5 +379,39 @@ class FS
 
         natsort($contents);
         return $contents;
+    }
+
+    /**
+     * Nice formatting for computer sizes (Bytes).
+     *
+     * @param   integer $bytes    The number in bytes to format
+     * @param   integer $decimals The number of decimal points to include
+     * @return  string
+     */
+    public static function format($bytes, $decimals = 0)
+    {
+        $bytes = floatval($bytes);
+
+        if ($bytes < 1024) {
+            return $bytes . ' B';
+
+        } elseif ($bytes < pow(1024, 2)) {
+            return number_format($bytes / 1024, $decimals, '.', '') . ' KiB';
+
+        } elseif ($bytes < pow(1024, 3)) {
+            return number_format($bytes / pow(1024, 2), $decimals, '.', '') . ' MiB';
+
+        } elseif ($bytes < pow(1024, 4)) {
+            return number_format($bytes / pow(1024, 3), $decimals, '.', '') . ' GiB';
+
+        } elseif ($bytes < pow(1024, 5)) {
+            return number_format($bytes / pow(1024, 4), $decimals, '.', '') . ' TiB';
+
+        } elseif ($bytes < pow(1024, 6)) {
+            return number_format($bytes / pow(1024, 5), $decimals, '.', '') . ' PiB';
+
+        } else {
+            return number_format($bytes / pow(1024, 5), $decimals, '.', '') . ' PiB';
+        }
     }
 }
