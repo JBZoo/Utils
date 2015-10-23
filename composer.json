@@ -17,7 +17,8 @@
         }
     ],
     "require": {
-        "php": ">=5.3.10"
+        "php": ">=5.3.10",
+        "ext-mbstring": "*"
     },
     "require-dev": {
         "jbzoo/phpunit": "dev-master"

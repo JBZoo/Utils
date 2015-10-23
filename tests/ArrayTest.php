@@ -27,10 +27,16 @@ class ArrayTest extends PHPUnit
     public function testUnique()
     {
         $array = array(10, 100, 1231, 10, 600, 20, 40, 1231, 20, 6, 1);
-        is(array(10, 100, 1231, 600, 20, 40, 6, 1), Arr::unique($array));
+        same(array(10, 100, 1231, 600, 20, 40, 6, 1), Arr::unique($array));
 
         $array = array('hello', 'world', 'this', 'is', 'a', 'test', 'hello', 'is', 'a', 'word');
-        is(array('hello', 'world', 'this', 'is', 'a', 'test', 'word'), Arr::unique($array));
+        same(array('hello', 'world', 'this', 'is', 'a', 'test', 'word'), Arr::unique($array, false));
+
+        $array = array(
+            'asd_1' => 'asd',
+            'asd_2' => 'asd',
+        );
+        same(array('asd_1' => 'asd'), Arr::unique($array, true));
     }
 
     public function testGet()
@@ -379,5 +385,35 @@ class ArrayTest extends PHPUnit
                 'zero'  => 0,
             ),
         ), Arr::cleanBeforeJson($array));
+    }
+
+    public function testIsAttr()
+    {
+        $array = array(
+            'key'   => 'asd',
+            'null'  => null,
+            'false' => false,
+        );
+
+        isTrue(Arr::isAttr('key', $array));
+        isTrue(Arr::isAttr('null', $array));
+        isTrue(Arr::isAttr('false', $array));
+
+        isFalse(Arr::isAttr('undefined', $array));
+        isFalse(Arr::isAttr('', $array));
+        isFalse(Arr::isAttr(null, $array));
+        isFalse(Arr::isAttr(false, $array));
+    }
+
+    public function testIn()
+    {
+        $array = array(
+            'key'   => 'asd',
+            'null'  => null,
+            'false' => false,
+        );
+
+        isFalse(Arr::in(0, $array));
+        isTrue(Arr::in(false, $array));
     }
 }

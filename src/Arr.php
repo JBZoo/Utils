@@ -17,30 +17,36 @@ namespace JBZoo\Utils;
 
 /**
  * Class Arr
+ *
  * @package JBZoo\Utils
  */
 class Arr
 {
     /**
      * Remove the duplicates from an array.
-     * This is faster version than the builtin array_unique().
-     * http://stackoverflow.com/questions/8321620/array-unique-vs-array-flip
-     * http://php.net/manual/en/function.array-unique.php
      *
-     * @param $array
+     * @param array $array
+     * @param bool  $keepKeys
      * @return array
      */
-    public static function unique($array)
+    public static function unique($array, $keepKeys = false)
     {
-        $array = array_keys(array_flip($array));
+        if ($keepKeys) {
+            $array = array_unique($array);
+
+        } else {
+            // This is faster version than the builtin array_unique().
+            // http://stackoverflow.com/questions/8321620/array-unique-vs-array-flip
+            // http://php.net/manual/en/function.array-unique.php
+            $array = array_keys(array_flip($array));
+        }
+
         return $array;
     }
 
     /**
-     * Access an array index, retrieving the value stored there if it
-     * exists or a default if it does not. This function allows you to
-     * concisely access an index which may or may not exist without
-     * raising a warning.
+     * Access an array index, retrieving the value stored there if it exists or a default if it does not.
+     * This function allows you to concisely access an index which may or may not exist without raising a warning.
      *
      * @param  array $var     Array value to access
      * @param  mixed $default Default value to return if the key is not
@@ -53,6 +59,30 @@ class Arr
         }
 
         return $default;
+    }
+
+    /**
+     * Check is key exists
+     *
+     * @param string $key
+     * @param array  $array
+     * @return bool
+     */
+    public static function isAttr($key, array $array)
+    {
+        return array_key_exists((string)$key, $array);
+    }
+
+    /**
+     * Check is value exists in the array
+     *
+     * @param array  $array
+     * @param string $key
+     * @return bool
+     */
+    public static function in($key, array $array)
+    {
+        return in_array($key, $array, true);
     }
 
     /**
@@ -105,8 +135,7 @@ class Arr
      * Flatten a multi-dimensional array into a one dimensional array.
      *
      * @param  array   $array         The array to flatten
-     * @param  boolean $preserve_keys Whether or not to preserve array keys.
-     *                                Keys from deeply nested arrays will
+     * @param  boolean $preserve_keys Whether or not to preserve array keys. Keys from deeply nested arrays will
      *                                overwrite keys from shallowy nested arrays
      * @return array
      */
@@ -126,17 +155,14 @@ class Arr
     }
 
     /**
-     * Accepts an array, and returns an array of values from that array as
-     * specified by $field. For example, if the array is full of objects
-     * and you call util::array_pluck($array, 'name'), the function will
+     * Accepts an array, and returns an array of values from that array as specified by $field.
+     * For example, if the array is full of objects and you call util::array_pluck($array, 'name'), the function will
      * return an array of values from $array[]->name.
      *
      * @param  array   $array            An array
      * @param  string  $field            The field to get values from
-     * @param  boolean $preserve_keys    Whether or not to preserve the
-     *                                   array keys
-     * @param  boolean $remove_nomatches If the field doesn't appear to be set,
-     *                                   remove it from the array
+     * @param  boolean $preserve_keys    Whether or not to preserve the array keys
+     * @param  boolean $remove_nomatches If the field doesn't appear to be set, remove it from the array
      * @return array
      */
     public static function pluck(array $array, $field, $preserve_keys = true, $remove_nomatches = true)
@@ -174,9 +200,8 @@ class Arr
     }
 
     /**
-     * Searches for a given value in an array of arrays, objects and scalar
-     * values. You can optionally specify a field of the nested arrays and
-     * objects to search in.
+     * Searches for a given value in an array of arrays, objects and scalar values. You can optionally specify
+     * a field of the nested arrays and objects to search in.
      *
      * @param  array $array  The array to search
      * @param  mixed $search The value to search for
@@ -280,6 +305,8 @@ class Arr
     }
 
     /**
+     * Check is array is type assoc
+     *
      * @param $array
      * @return bool
      */
