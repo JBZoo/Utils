@@ -504,15 +504,15 @@ class Str
     /**
      * Get part of string
      *
-     * @param string   $string
-     * @param int      $start
-     * @param int|null $length
+     * @param string $string
+     * @param int    $start
+     * @param int    $length
      * @return string
      */
-    public static function sub($string, $start, $length = null)
+    public static function sub($string, $start, $length = 0)
     {
         if (self::isMBString()) {
-            if (null == $length) {
+            if (0 == $length) {
                 $length = self::len($string);
             }
 

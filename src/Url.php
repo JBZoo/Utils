@@ -342,7 +342,7 @@ class Url
      * Callback for the preg_replace in the linkify() method.
      * Part of the LinkifyURL Project <https://github.com/jmrware/LinkifyURL>
      *
-     * @param  array $matches Matches from the preg_ function
+     * @param  string $matches Matches from the preg_ function
      * @return string
      */
     protected static function _linkifyCallback($matches)

@@ -33,7 +33,7 @@ class Http
         // @codeCoverageIgnoreStart
         if (!headers_sent()) {
             // Required for some browsers
-            if (OS::iniGet('zlib.output_compression')) {
+            if (Vars::bool(OS::iniGet('zlib.output_compression'))) {
                 OS::iniSet('zlib.output_compression', 'Off');
             }
 

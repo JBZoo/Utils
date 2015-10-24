@@ -304,14 +304,17 @@ class FS
 
         list($myuid, $mygid) = array(posix_geteuid(), posix_getgid());
 
+        $isMyUid = $stat['uid'] == $myuid;
+        $isMyGid = $stat['gid'] == $mygid;
+
         if ($isFlag) {
             // Set only the user writable bit (file is owned by us)
-            if ($stat['uid'] == $myuid) {
+            if ($isMyUid) {
                 return chmod($filename, fileperms($filename) | intval('0' . $perm . '00', 8));
             }
 
             // Set only the group writable bit (file group is the same as us)
-            if ($stat['gid'] == $mygid) {
+            if ($isMyGid) {
                 return chmod($filename, fileperms($filename) | intval('0' . $perm . $perm . '0', 8));
             }
 
@@ -319,13 +322,13 @@ class FS
             return chmod($filename, fileperms($filename) | intval('0' . $perm . $perm . $perm, 8));
         } else {
             // Set only the user writable bit (file is owned by us)
-            if ($stat['uid'] == $myuid) {
+            if ($isMyUid) {
                 $add = intval('0' . $perm . $perm . $perm, 8);
                 return chmod($filename, (fileperms($filename) | intval('0' . $perm . $perm . $perm, 8)) ^ $add);
             }
 
             // Set only the group writable bit (file group is the same as us)
-            if ($stat['gid'] == $mygid) {
+            if ($isMyGid) {
                 $add = intval('00' . $perm . $perm, 8);
                 return chmod($filename, (fileperms($filename) | intval('0' . $perm . $perm . $perm, 8)) ^ $add);
             }
