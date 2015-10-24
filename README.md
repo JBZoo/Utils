@@ -3,7 +3,7 @@
 #### PHP library description
 
 [![License](https://poser.pugx.org/JBZoo/Utils/license)](https://packagist.org/packages/JBZoo/Utils)
-[![Latest Stable Version](https://poser.pugx.org/JBZoo/Utils/v/stable)](https://packagist.org/packages/JBZoo/Utils)
+[![Latest Stable Version](https://poser.pugx.org/JBZoo/Utils/v/stable)](https://packagist.org/packages/JBZoo/Utils) [![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/JBZoo/Utils/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/JBZoo/Utils/?branch=master)
 
 
 ### Links (ideas and some functions)
