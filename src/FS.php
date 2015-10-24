@@ -183,51 +183,7 @@ class FS
      */
     public static function writable($filename, $writable = true)
     {
-        $stat = @stat($filename);
-
-        if ($stat === false) {
-            return false;
-        }
-
-        // We're on Windows
-        if (OS::isWin()) {
-            //@codeCoverageIgnoreStart
-            return true;
-            //@codeCoverageIgnoreEnd
-        }
-
-        list($myuid, $mygid) = array(posix_geteuid(), posix_getgid());
-
-        //@codeCoverageIgnoreStart
-        if ($writable) {
-            // Set only the user writable bit (file is owned by us)
-            if ($stat['uid'] == $myuid) {
-                return chmod($filename, fileperms($filename) | 0200);
-            }
-
-            // Set only the group writable bit (file group is the same as us)
-            if ($stat['gid'] == $mygid) {
-                return chmod($filename, fileperms($filename) | 0220);
-            }
-
-            // Set the world writable bit (file isn't owned or grouped by us)
-            return chmod($filename, fileperms($filename) | 0222);
-        } else {
-            // Set only the user writable bit (file is owned by us)
-            if ($stat['uid'] == $myuid) {
-                return chmod($filename, (fileperms($filename) | 0222) ^ 0222);
-            }
-
-            // Set only the group writable bit (file group is the same as us)
-            if ($stat['gid'] == $mygid) {
-                return chmod($filename, (fileperms($filename) | 0222) ^ 0022);
-            }
-
-            // Set the world writable bit (file isn't owned or grouped by us)
-            return chmod($filename, (fileperms($filename) | 0222) ^ 0002);
-        }
-
-        //@codeCoverageIgnoreEnd
+        return self::_setPerms($filename, $writable, 2);
     }
 
     /**
@@ -239,50 +195,7 @@ class FS
      */
     public static function readable($filename, $readable = true)
     {
-        $stat = @stat($filename);
-
-        if ($stat === false) {
-            return false;
-        }
-
-        // We're on Windows
-        if (OS::isWin()) {
-            //@codeCoverageIgnoreStart
-            return true;
-            //@codeCoverageIgnoreEnd
-        }
-
-        list($myuid, $mygid) = array(posix_geteuid(), posix_getgid());
-
-        //@codeCoverageIgnoreStart
-        if ($readable) {
-            // Set only the user readable bit (file is owned by us)
-            if ($stat['uid'] == $myuid) {
-                return chmod($filename, fileperms($filename) | 0400);
-            }
-
-            // Set only the group readable bit (file group is the same as us)
-            if ($stat['gid'] == $mygid) {
-                return chmod($filename, fileperms($filename) | 0440);
-            }
-
-            // Set the world readable bit (file isn't owned or grouped by us)
-            return chmod($filename, fileperms($filename) | 0444);
-        } else {
-            // Set only the user readable bit (file is owned by us)
-            if ($stat['uid'] == $myuid) {
-                return chmod($filename, (fileperms($filename) | 0444) ^ 0444);
-            }
-
-            // Set only the group readable bit (file group is the same as us)
-            if ($stat['gid'] == $mygid) {
-                return chmod($filename, (fileperms($filename) | 0444) ^ 0044);
-            }
-
-            // Set the world readable bit (file isn't owned or grouped by us)
-            return chmod($filename, (fileperms($filename) | 0444) ^ 0004);
-        }
-        //@codeCoverageIgnoreEnd
+        return self::_setPerms($filename, $readable, 4);
     }
 
     /**
@@ -294,50 +207,7 @@ class FS
      */
     public static function executable($filename, $executable = true)
     {
-        $stat = @stat($filename);
-
-        if ($stat === false) {
-            return false;
-        }
-
-        // We're on Windows
-        if (OS::isWin()) {
-            //@codeCoverageIgnoreStart
-            return true;
-            //@codeCoverageIgnoreEnd
-        }
-
-        list($myuid, $mygid) = array(posix_geteuid(), posix_getgid());
-
-        //@codeCoverageIgnoreStart
-        if ($executable) {
-            // Set only the user readable bit (file is owned by us)
-            if ($stat['uid'] == $myuid) {
-                return chmod($filename, fileperms($filename) | 0100);
-            }
-
-            // Set only the group readable bit (file group is the same as us)
-            if ($stat['gid'] == $mygid) {
-                return chmod($filename, fileperms($filename) | 0110);
-            }
-
-            // Set the world readable bit (file isn't owned or grouped by us)
-            return chmod($filename, fileperms($filename) | 0111);
-        } else {
-            // Set only the user readable bit (file is owned by us)
-            if ($stat['uid'] == $myuid) {
-                return chmod($filename, (fileperms($filename) | 0111) ^ 0111);
-            }
-
-            // Set only the group readable bit (file group is the same as us)
-            if ($stat['gid'] == $mygid) {
-                return chmod($filename, (fileperms($filename) | 0111) ^ 0011);
-            }
-
-            // Set the world readable bit (file isn't owned or grouped by us)
-            return chmod($filename, (fileperms($filename) | 0111) ^ 0001);
-        }
-        //@codeCoverageIgnoreEnd
+        return self::_setPerms($filename, $executable, 1);
     }
 
     /**
@@ -397,28 +267,73 @@ class FS
      */
     public static function format($bytes, $decimals = 0)
     {
+        $exp    = 0;
+        $value  = 0;
+        $symbol = array('B', 'KB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB');
+
         $bytes = floatval($bytes);
 
-        if ($bytes < 1024) {
-            return $bytes . ' B';
+        if ($bytes > 0) {
+            $exp   = floor(log($bytes) / log(1024));
+            $value = ($bytes / pow(1024, floor($exp)));
+        }
 
-        } elseif ($bytes < pow(1024, 2)) {
-            return number_format($bytes / 1024, $decimals, '.', '') . ' KiB';
+        return number_format($value, $decimals, '.', '') . ' ' . $symbol[$exp];
+    }
 
-        } elseif ($bytes < pow(1024, 3)) {
-            return number_format($bytes / pow(1024, 2), $decimals, '.', '') . ' MiB';
+    /**
+     * @param string $filename
+     * @param bool   $isFlag
+     * @param int    $perm
+     * @return bool
+     */
+    protected static function _setPerms($filename, $isFlag, $perm)
+    {
+        $stat = @stat($filename);
 
-        } elseif ($bytes < pow(1024, 4)) {
-            return number_format($bytes / pow(1024, 3), $decimals, '.', '') . ' GiB';
+        if ($stat === false) {
+            return false;
+        }
 
-        } elseif ($bytes < pow(1024, 5)) {
-            return number_format($bytes / pow(1024, 4), $decimals, '.', '') . ' TiB';
+        // We're on Windows
+        if (OS::isWin()) {
+            //@codeCoverageIgnoreStart
+            return true;
+            //@codeCoverageIgnoreEnd
+        }
 
-        } elseif ($bytes < pow(1024, 6)) {
-            return number_format($bytes / pow(1024, 5), $decimals, '.', '') . ' PiB';
+        list($myuid, $mygid) = array(posix_geteuid(), posix_getgid());
 
+        if ($isFlag) {
+            // Set only the user writable bit (file is owned by us)
+            if ($stat['uid'] == $myuid) {
+                return chmod($filename, fileperms($filename) | intval('0' . $perm . '00', 8));
+            }
+
+            // Set only the group writable bit (file group is the same as us)
+            if ($stat['gid'] == $mygid) {
+                return chmod($filename, fileperms($filename) | intval('0' . $perm . $perm . '0', 8));
+            }
+
+            // Set the world writable bit (file isn't owned or grouped by us)
+            return chmod($filename, fileperms($filename) | intval('0' . $perm . $perm . $perm, 8));
         } else {
-            return number_format($bytes / pow(1024, 5), $decimals, '.', '') . ' PiB';
+            // Set only the user writable bit (file is owned by us)
+            if ($stat['uid'] == $myuid) {
+                $add = intval('0' . $perm . $perm . $perm, 8);
+                return chmod($filename, (fileperms($filename) | intval('0' . $perm . $perm . $perm, 8)) ^ $add);
+            }
+
+            // Set only the group writable bit (file group is the same as us)
+            if ($stat['gid'] == $mygid) {
+                $add = intval('00' . $perm . $perm, 8);
+                return chmod($filename, (fileperms($filename) | intval('0' . $perm . $perm . $perm, 8)) ^ $add);
+            }
+
+            // Set the world writable bit (file isn't owned or grouped by us)
+            $add = intval('000' . $perm, 8);
+            return chmod($filename, (fileperms($filename) | intval('0' . $perm . $perm . $perm, 8)) ^ $add);
         }
     }
+
 }

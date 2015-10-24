@@ -81,7 +81,7 @@ class FilterTest extends PHPUnit
     {
         $string = " 0 1 a2b 3c!@#$%^&*()-= <>\t";
 
-        is('0123', Vars::digets($string));
+        is('0123', Vars::digits($string));
         is('abc', Vars::alpha($string));
         is('01a2b3c', Vars::alphaDigets($string));
     }

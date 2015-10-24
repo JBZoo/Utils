@@ -122,11 +122,11 @@ class Str
     }
 
     /**
-     * Convert entities, while preserving already-encoded entities.
+     * Convert >, <, ', " and & to html entities, but preserves entities that are already encoded.
      *
      * @param string $string The text to be converted
      * @param bool   $encodedEntities
-     * @return mixed|string
+     * @return string
      */
     public static function htmlEnt($string, $encodedEntities = false)
     {
@@ -136,34 +136,6 @@ class Str
                 $transTable = get_html_translation_table(HTML_ENTITIES, ENT_QUOTES);
             } else {
                 $transTable = get_html_translation_table(HTML_ENTITIES, ENT_QUOTES, self::$encoding);
-            }
-            // @codeCoverageIgnoreEnd
-
-            $transTable[chr(38)] = '&';
-
-            $regExp = '/&(?![A-Za-z]{0,4}\w{2,3};|#[0-9]{2,3};)/';
-
-            return preg_replace($regExp, '&amp;', strtr($string, $transTable));
-        }
-
-        return htmlentities($string, ENT_QUOTES, self::$encoding);
-    }
-
-    /**
-     * Convert >, <, ', " and & to html entities, but preserves entities that are already encoded.
-     *
-     * @param   string $string The text to be converted
-     * @param bool     $encodedEntities
-     * @return  string
-     */
-    public static function htmlChars($string, $encodedEntities = false)
-    {
-        if ($encodedEntities) {
-            // @codeCoverageIgnoreStart
-            if (defined('HHVM_VERSION')) {
-                $transTable = get_html_translation_table(HTML_SPECIALCHARS, ENT_QUOTES);
-            } else {
-                $transTable = get_html_translation_table(HTML_SPECIALCHARS, ENT_QUOTES, self::$encoding);
             }
             // @codeCoverageIgnoreEnd
 
@@ -415,7 +387,7 @@ class Str
      * @param string $haystack
      * @param string $needle
      * @param int    $offset
-     * @return bool|int
+     * @return int
      */
     public static function pos($haystack, $needle, $offset = 0)
     {
@@ -435,7 +407,7 @@ class Str
      * @param string $haystack
      * @param string $needle
      * @param int    $offset
-     * @return bool|int
+     * @return int
      */
     public static function rpos($haystack, $needle, $offset = 0)
     {
@@ -477,7 +449,7 @@ class Str
      * @param bool   $beforeNeedle
      * @return string
      */
-    public static function str($haystack, $needle, $beforeNeedle = false)
+    public static function strstr($haystack, $needle, $beforeNeedle = false)
     {
         if (self::isMBString()) {
             return mb_strstr($haystack, $needle, $beforeNeedle, self::$encoding);
@@ -532,9 +504,9 @@ class Str
     /**
      * Get part of string
      *
-     * @param string $string
-     * @param int    $start
-     * @param int    $length
+     * @param string   $string
+     * @param int      $start
+     * @param int|null $length
      * @return string
      */
     public static function sub($string, $start, $length = null)
@@ -556,7 +528,7 @@ class Str
     /**
      * Make a string lowercase
      *
-     * @param $string
+     * @param string $string
      * @return string
      */
     public static function low($string)
@@ -574,7 +546,7 @@ class Str
     /**
      * Make a string uppercase
      *
-     * @param $string
+     * @param string $string
      * @return string
      */
     public static function up($string)

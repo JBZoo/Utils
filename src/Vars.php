@@ -73,51 +73,47 @@ class Vars
      */
     public static function int($value)
     {
-        $value = preg_replace('#[^0-9\-]#ius', '', $value);
-        $value = (int)$value;
-
-        return $value;
+        return (int)preg_replace('#[^0-9\-]#ius', '', $value);
     }
 
     /**
+     * Return only digits chars
+     *
      * @param $value
-     * @return mixed','string
+     * @return mixed
      */
-    public static function digets($value)
+    public static function digits($value)
     {
-        $value = preg_replace('#[^0-9]#ius', '', $value);
-        $value = trim((string)$value);
-
-        return $value;
+        return preg_replace('#[^0-9]#ius', '', $value);
     }
 
     /**
+     * Return only alpha chars
+     *
      * @param $value
-     * @return mixed','string
+     * @return mixed
      */
     public static function alpha($value)
     {
-        $value = preg_replace('#[^a-z]#ius', '', $value);
-        $value = trim((string)$value);
-
-        return $value;
+        return preg_replace('#[^a-z]#ius', '', $value);
     }
 
     /**
+     * Return only alpha and digits chars
+     *
      * @param $value
-     * @return mixed','string
+     * @return mixed
      */
     public static function alphaDigets($value)
     {
-        $value = preg_replace('#[^a-z0-9]#ius', '', $value);
-        $value = trim((string)$value);
-
-        return $value;
+        return preg_replace('#[^a-z0-9]#ius', '', $value);
     }
 
     /**
+     * Validate emil
+     *
      * @param $email
-     * @return bool','string
+     * @return mixed
      */
     public static function email($email)
     {

@@ -287,21 +287,18 @@ class FileSystemTest extends PHPUnit
         is('512 B', $size);
 
         $size = FS::format(2048, 1);
-        is('2.0 KiB', $size);
+        is('2.0 KB', $size);
 
         $size = FS::format(25151251, 2);
-        is('23.99 MiB', $size);
+        is('23.99 MB', $size);
 
         $size = FS::format(19971597926, 2);
-        is('18.60 GiB', $size);
+        is('18.60 GB', $size);
 
         $size = FS::format(2748779069440, 1);
-        is('2.5 TiB', $size);
+        is('2.5 TB', $size);
 
         $size = FS::format(2.81475e15, 1);
-        is('2.5 PiB', $size);
-
-        $size = FS::format(2.81475e19, 1);
-        is('25000.0 PiB', $size);
+        is('2.5 PB', $size);
     }
 }

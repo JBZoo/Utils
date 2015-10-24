@@ -47,7 +47,7 @@ class Ser
         $length = strlen($data);
 
         // Check some basic requirements of all serialized strings
-        if ($length < 4 || $data[1] !== ':' || ($data[$length - 1] !== ';' && $data[$length - 1] !== '}')) {
+        if (self::_checkBasic($data, $length)) {
             return false;
         }
 
@@ -92,7 +92,7 @@ class Ser
         $length = strlen($data);
 
         // Check some basic requirements of all serialized strings
-        if ($length < 4 || $data[1] !== ':' || ($data[$length - 1] !== ';' && $data[$length - 1] !== '}')) {
+        if (self::_checkBasic($data, $length)) {
             return $data;
         }
 
@@ -139,4 +139,17 @@ class Ser
 
         return $fixdSerializedData;
     }
+
+    /**
+     * Check some basic requirements of all serialized strings
+     *
+     * @param string $data
+     * @param int    $length
+     * @return bool
+     */
+    protected static function _checkBasic($data, $length)
+    {
+        return $length < 4 || $data[1] !== ':' || ($data[$length - 1] !== ';' && $data[$length - 1] !== '}');
+    }
+
 }

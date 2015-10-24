@@ -359,7 +359,7 @@ class Url
      * Part of the LinkifyURL Project <https://github.com/jmrware/LinkifyURL>
      *
      * @param  array $text Matches from the preg_ function
-     * @return string
+     * @return mixed
      */
     protected static function _linkifyRegex($text)
     {

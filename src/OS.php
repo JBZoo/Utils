@@ -59,12 +59,12 @@ class OS
      *
      * @param string $varName
      * @param string $newValue
-     * @return string|null
+     * @return mixed
      */
     public static function iniSet($varName, $newValue)
     {
         if (function_exists('ini_set') && is_callable('ini_set')) {
-            return ini_set($varName, $newValue);
+            return @ini_set($varName, $newValue);
         }
 
         return null;
@@ -74,7 +74,7 @@ class OS
      * Alias fo ini_get function
      *
      * @param string $varName
-     * @return string|false
+     * @return mixed
      */
     public static function iniGet($varName)
     {

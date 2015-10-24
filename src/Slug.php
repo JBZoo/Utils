@@ -266,18 +266,19 @@ class Slug
 
         // @codeCoverageIgnoreStart
         return self::_seemsUtf8Regex($string);
+        // @codeCoverageIgnoreEnd
     }
 
     /**
      * A non-Mbstring UTF-8 checker.
+     * @link http://stackoverflow.com/a/11709412/430062
      *
      * @param $string
      * @return bool
      */
-    // @codeCoverageIgnoreStart
     protected static function _seemsUtf8Regex($string)
     {
-        // Obtained from http://stackoverflow.com/a/11709412/430062 with permission.
+        // @codeCoverageIgnoreStart
         $regex = '/(
             [\xC0-\xC1]                                                         # Invalid UTF-8 Bytes
             | [\xF5-\xFF]                                                       # Invalid UTF-8 Bytes
@@ -295,8 +296,8 @@ class Slug
         )/x';
 
         return !preg_match($regex, $string);
+        // @codeCoverageIgnoreEnd
     }
-    // @codeCoverageIgnoreEnd
 
     /**
      * Transliterates characters to their ASCII equivalents.
@@ -313,7 +314,8 @@ class Slug
 
         if (self::seemsUTF8($text)) {
             if (preg_match_all(self::$_regex, $text, $matches)) {
-                for ($i = 0; $i < count($matches[0]); $i++) {
+                $matchesCount = count($matches[0]);
+                for ($i = 0; $i < $matchesCount; $i++) {
                     $char = $matches[0][$i];
 
                     if (Arr::key($char, self::$_map)) {

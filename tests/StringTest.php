@@ -76,12 +76,6 @@ class StringTest extends PHPUnit
         is('One &amp; Two &lt;&gt; &mdash;', Str::htmlEnt('One &amp; Two <> &mdash;', true));
     }
 
-    public function testHtmlspecialchars()
-    {
-        is('One &amp; Two &lt;&gt; &amp;mdash;', Str::htmlChars('One & Two <> &mdash;'));
-        is('One &amp; Two &lt;&gt; &mdash;', Str::htmlChars('One &amp; Two <> &mdash;', true));
-    }
-
     public function testUnique()
     {
         is(13, strlen(Str::unique()));
@@ -182,7 +176,7 @@ class StringTest extends PHPUnit
         same(1, Str::ipos('Денис', 'Е'));
         same(1, Str::ipos('Денис', 'Е'));
 
-        same('енис', Str::str('Денис', 'е'));
+        same('енис', Str::strstr('Денис', 'е'));
         same('енис', Str::istr('Денис', 'Е'));
 
         same('ис', Str::rchr('Денис', 'и'));
