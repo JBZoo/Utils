@@ -151,5 +151,4 @@ class Ser
     {
         return $length < 4 || $data[1] !== ':' || ($data[$length - 1] !== ';' && $data[$length - 1] !== '}');
     }
-
 }

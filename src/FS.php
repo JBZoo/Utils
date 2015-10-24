@@ -335,5 +335,4 @@ class FS
             return chmod($filename, (fileperms($filename) | intval('0' . $perm . $perm . $perm, 8)) ^ $add);
         }
     }
-
 }
