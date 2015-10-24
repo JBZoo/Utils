@@ -227,10 +227,8 @@ class Url
 
                     $queryParams  = array_replace_recursive($urlQuery, $partsQuery);
                     $url['query'] = self::build($queryParams);
-
-                } else {
-                    $url['query'] = $parts['query'];
                 }
+                // see deadcode else condition from utilphp lib
             }
         }
 

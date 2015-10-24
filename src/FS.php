@@ -307,6 +307,7 @@ class FS
         $isMyUid = $stat['uid'] == $myuid;
         $isMyGid = $stat['gid'] == $mygid;
 
+        //@codeCoverageIgnoreStart
         if ($isFlag) {
             // Set only the user writable bit (file is owned by us)
             if ($isMyUid) {
@@ -337,5 +338,6 @@ class FS
             $add = intval('000' . $perm, 8);
             return chmod($filename, (fileperms($filename) | intval('0' . $perm . $perm . $perm, 8)) ^ $add);
         }
+        //@codeCoverageIgnoreEnd
     }
 }
