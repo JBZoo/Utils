@@ -50,7 +50,7 @@ class Arr
      * @param array  $array
      * @return bool
      */
-    public static function isAttr($key, array $array)
+    public static function key($key, array $array)
     {
         return array_key_exists((string)$key, $array);
     }
@@ -134,51 +134,6 @@ class Arr
         });
 
         return $flattened;
-    }
-
-    /**
-     * Accepts an array, and returns an array of values from that array as specified by $field.
-     * For example, if the array is full of objects and you call util::array_pluck($array, 'name'), the function will
-     * return an array of values from $array[]->name.
-     *
-     * @param  array   $array            An array
-     * @param  string  $field            The field to get values from
-     * @param  boolean $preserve_keys    Whether or not to preserve the array keys
-     * @param  boolean $remove_nomatches If the field doesn't appear to be set, remove it from the array
-     * @return array
-     */
-    public static function pluck(array $array, $field, $preserve_keys = true, $remove_nomatches = true)
-    {
-        $newList = array();
-        foreach ($array as $key => $value) {
-            if (is_object($value)) {
-                if (isset($value->{$field})) {
-                    if ($preserve_keys) {
-                        $newList[$key] = $value->{$field};
-
-                    } else {
-                        $newList[] = $value->{$field};
-                    }
-
-                } elseif (!$remove_nomatches) {
-                    $newList[$key] = $value;
-                }
-
-            } else {
-                if (isset($value[$field])) {
-                    if ($preserve_keys) {
-                        $newList[$key] = $value[$field];
-
-                    } else {
-                        $newList[] = $value[$field];
-                    }
-
-                } elseif (!$remove_nomatches) {
-                    $newList[$key] = $value;
-                }
-            }
-        }
-        return $newList;
     }
 
     /**
@@ -359,7 +314,7 @@ class Arr
                 }
 
             } elseif (is_array($item)) {
-                if (isset($item[$key])) {
+                if (Arr::key($key, $item)) {
                     $result[$item[$key]][] = $item;
                 }
             }

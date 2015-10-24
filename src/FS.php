@@ -198,6 +198,7 @@ class FS
 
         list($myuid, $mygid) = array(posix_geteuid(), posix_getgid());
 
+        //@codeCoverageIgnoreStart
         if ($writable) {
             // Set only the user writable bit (file is owned by us)
             if ($stat['uid'] == $myuid) {
@@ -225,6 +226,8 @@ class FS
             // Set the world writable bit (file isn't owned or grouped by us)
             return chmod($filename, (fileperms($filename) | 0222) ^ 0002);
         }
+
+        //@codeCoverageIgnoreEnd
     }
 
     /**
@@ -251,6 +254,7 @@ class FS
 
         list($myuid, $mygid) = array(posix_geteuid(), posix_getgid());
 
+        //@codeCoverageIgnoreStart
         if ($readable) {
             // Set only the user readable bit (file is owned by us)
             if ($stat['uid'] == $myuid) {
@@ -278,6 +282,7 @@ class FS
             // Set the world readable bit (file isn't owned or grouped by us)
             return chmod($filename, (fileperms($filename) | 0444) ^ 0004);
         }
+        //@codeCoverageIgnoreEnd
     }
 
     /**
@@ -304,6 +309,7 @@ class FS
 
         list($myuid, $mygid) = array(posix_geteuid(), posix_getgid());
 
+        //@codeCoverageIgnoreStart
         if ($executable) {
             // Set only the user readable bit (file is owned by us)
             if ($stat['uid'] == $myuid) {
@@ -331,6 +337,7 @@ class FS
             // Set the world readable bit (file isn't owned or grouped by us)
             return chmod($filename, (fileperms($filename) | 0111) ^ 0001);
         }
+        //@codeCoverageIgnoreEnd
     }
 
     /**

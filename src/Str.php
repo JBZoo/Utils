@@ -51,7 +51,7 @@ class Str
 
         $key = $text . '|' . $toAssoc;
 
-        if (!isset($cache[$key])) {
+        if (!Arr::key($key, $cache)) {
             $text = htmlspecialchars_decode($text);
             $text = self::clean($text, false, false);
 
@@ -298,7 +298,7 @@ class Str
     {
         preg_match('/^\s*+(?:\S++\s*+){1,' . $limit . '}/u', $string, $matches);
 
-        if (!isset($matches[0]) || self::len($string) === self::len($matches[0])) {
+        if (!Arr::key(0, $matches) || self::len($string) === self::len($matches[0])) {
             return $string;
         }
 
@@ -345,7 +345,7 @@ class Str
 
         $key = $text . '|' . $separator . '|' . (int)$cssMode;
 
-        if (!isset($cache[$key])) {
+        if (!Arr::key($key, $cache)) {
             $cache[$key] = Slug::filter($text, $separator, $cssMode);
         }
 
@@ -360,7 +360,7 @@ class Str
     public static function isOverload()
     {
         if (self::isMBString()) {
-            return (int)ini_get('mbstring.func_overload') & MB_OVERLOAD_STRING;
+            return (int)OS::iniGet('mbstring.func_overload') & MB_OVERLOAD_STRING;
         }
 
         // @codeCoverageIgnoreStart
@@ -381,9 +381,9 @@ class Str
             $isLoaded = extension_loaded('mbstring');
 
             if ($isLoaded) {
-                @ini_set('mbstring.internal_encoding', self::$encoding);
-                @ini_set('mbstring.http_input', self::$encoding);
-                @ini_set('mbstring.http_output', self::$encoding);
+                OS::iniSet('mbstring.internal_encoding', self::$encoding);
+                OS::iniSet('mbstring.http_input', self::$encoding);
+                OS::iniSet('mbstring.http_output', self::$encoding);
                 mb_internal_encoding(self::$encoding);
             }
         }

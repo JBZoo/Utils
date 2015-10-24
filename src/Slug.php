@@ -197,11 +197,12 @@ class Slug
         }
 
         // Is a specific map associated with $language?
-        if (isset(self::$maps[$language]) && is_array(self::$maps[$language])) {
+
+        if (Arr::key($language, self::$maps) && is_array(self::$maps[$language])) {
             // Move this map to end. This means it will have priority over others
-            $m = self::$maps[$language];
+            $langMap = self::$maps[$language];
             unset(self::$maps[$language]);
-            self::$maps[$language] = $m;
+            self::$maps[$language] = $langMap;
         }
 
         // Reset static vars
@@ -315,7 +316,7 @@ class Slug
                 for ($i = 0; $i < count($matches[0]); $i++) {
                     $char = $matches[0][$i];
 
-                    if (isset(self::$_map[$char])) {
+                    if (Arr::key($char, self::$_map)) {
                         $text = str_replace($char, self::$_map[$char], $text);
                     }
                 }

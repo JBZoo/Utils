@@ -47,10 +47,41 @@ class OS
      */
     public static function getHome()
     {
-        if (isset($_SERVER['HOMEDRIVE'])) {
+        if (Arr::key('HOMEDRIVE', $_SERVER)) {
             return $_SERVER['HOMEDRIVE'] . $_SERVER['HOMEPATH'];
         }
 
         return $_SERVER['HOME'];
+    }
+
+    /**
+     * Alias fo ini_set function
+     *
+     * @param string $varName
+     * @param string $newValue
+     * @return string|null
+     */
+    public static function iniSet($varName, $newValue)
+    {
+        if (function_exists('ini_set') && is_callable('ini_set')) {
+            return ini_set($varName, $newValue);
+        }
+
+        return null;
+    }
+
+    /**
+     * Alias fo ini_get function
+     *
+     * @param string $varName
+     * @return string|false
+     */
+    public static function iniGet($varName)
+    {
+        if (function_exists('ini_get') && is_callable('ini_get')) {
+            return ini_get($varName);
+        }
+
+        return null;
     }
 }

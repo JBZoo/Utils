@@ -108,44 +108,6 @@ class ArrayTest extends PHPUnit
         is($expectWithKeys, Arr::flat($input, true));
     }
 
-    public function testPluck()
-    {
-        $array = array(
-            array('name' => 'Bob', 'age' => 37),
-            array('name' => 'Fred', 'age' => 37),
-            array('name' => 'Jane', 'age' => 29),
-            array('name' => 'Brandon', 'age' => 20),
-            array('age' => 41),
-        );
-
-        $objArray = array(
-            'bob'     => (object)array('name' => 'Bob', 'age' => 37),
-            'fred'    => (object)array('name' => 'Fred', 'age' => 37),
-            'jane'    => (object)array('name' => 'Jane', 'age' => 29),
-            'brandon' => (object)array('name' => 'Brandon', 'age' => 20),
-            'invalid' => (object)array('age' => 41),
-        );
-
-        $objArrayExpect = array(
-            'bob'     => 'Bob',
-            'fred'    => 'Fred',
-            'jane'    => 'Jane',
-            'brandon' => 'Brandon',
-        );
-
-        is(array('Bob', 'Fred', 'Jane', 'Brandon'), Arr::pluck($array, 'name'));
-        is(array('Bob', 'Fred', 'Jane', 'Brandon', array('age' => 41)), Arr::pluck($array, 'name', true, false));
-        is($objArrayExpect, Arr::pluck($objArray, 'name'));
-        is(array('Bob', 'Fred', 'Jane', 'Brandon'), Arr::pluck($objArray, 'name', false));
-
-        $expected = array('Bob', 'Fred', 'Jane', 'Brandon', 'invalid' => (object)array('age' => 41));
-        is($expected, Arr::pluck($objArray, 'name', false, false));
-
-        $expected = array('Bob', 'Fred', 'Jane', 'Brandon', array('age' => 41));
-        is($expected, Arr::pluck($array, 'name', false, false));
-    }
-
-
     public function testSearch()
     {
         $users = array(
@@ -396,14 +358,14 @@ class ArrayTest extends PHPUnit
             'false' => false,
         );
 
-        isTrue(Arr::isAttr('key', $array));
-        isTrue(Arr::isAttr('null', $array));
-        isTrue(Arr::isAttr('false', $array));
+        isTrue(Arr::key('key', $array));
+        isTrue(Arr::key('null', $array));
+        isTrue(Arr::key('false', $array));
 
-        isFalse(Arr::isAttr('undefined', $array));
-        isFalse(Arr::isAttr('', $array));
-        isFalse(Arr::isAttr(null, $array));
-        isFalse(Arr::isAttr(false, $array));
+        isFalse(Arr::key('undefined', $array));
+        isFalse(Arr::key('', $array));
+        isFalse(Arr::key(null, $array));
+        isFalse(Arr::key(false, $array));
     }
 
     public function testIn()

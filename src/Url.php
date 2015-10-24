@@ -51,11 +51,11 @@ class Url
 
         // Parse the URI into it's components
         $puri = parse_url($uri);
-        if (isset($puri['query'])) {
+        if (Arr::key('query', $puri)) {
             parse_str($puri['query'], $queryParams);
             $queryParams = array_merge($queryParams, $newParams);
 
-        } elseif (isset($puri['path']) && strstr($puri['path'], '=') !== false) {
+        } elseif (Arr::key('path', $puri) && strstr($puri['path'], '=') !== false) {
             $puri['query'] = $puri['path'];
             unset($puri['path']);
             parse_str($puri['query'], $queryParams);
@@ -115,9 +115,9 @@ class Url
         }
 
         // Was a username or password passed?
-        if (isset($_SERVER['PHP_AUTH_USER'])) {
+        if (Arr::key('PHP_AUTH_USER', $_SERVER)) {
             $url .= $_SERVER['PHP_AUTH_USER'];
-            if (isset($_SERVER['PHP_AUTH_PW'])) {
+            if (Arr::key('PHP_AUTH_PW', $_SERVER)) {
                 $url .= ':' . $_SERVER['PHP_AUTH_PW'];
             }
             $url .= '@';
@@ -137,11 +137,11 @@ class Url
         }
 
         // Get the rest of the URL
-        if (!isset($_SERVER['REQUEST_URI'])) {
+        if (!Arr::key('REQUEST_URI', $_SERVER)) {
             // Microsoft IIS doesn't set REQUEST_URI by default
             $url .= $_SERVER['PHP_SELF'];
 
-            if (isset($_SERVER['QUERY_STRING'])) {
+            if (Arr::key('QUERY_STRING', $_SERVER)) {
                 $url .= '?' . $_SERVER['QUERY_STRING'];
             }
 
@@ -177,37 +177,41 @@ class Url
         is_array($url) || $url = parse_url($url);
         is_array($parts) || $parts = parse_url($parts);
 
-        isset($url['query']) && is_string($url['query']) || $url['query'] = null;
-        isset($parts['query']) && is_string($parts['query']) || $parts['query'] = null;
+        Arr::key('query', $url) && is_string($url['query']) || $url['query'] = null;
+        Arr::key('query', $parts) && is_string($parts['query']) || $parts['query'] = null;
         $keys = array('user', 'pass', 'port', 'path', 'query', 'fragment');
 
         // HTTP_URL_STRIP_ALL and HTTP_URL_STRIP_AUTH cover several other flags.
         if ($flags & self::URL_STRIP_ALL) {
-            $flags |= self::URL_STRIP_USER | self::URL_STRIP_PASS
-                | self::URL_STRIP_PORT | self::URL_STRIP_PATH
-                | self::URL_STRIP_QUERY | self::URL_STRIP_FRAGMENT;
+            $flags |= self::URL_STRIP_USER
+                | self::URL_STRIP_PASS
+                | self::URL_STRIP_PORT
+                | self::URL_STRIP_PATH
+                | self::URL_STRIP_QUERY
+                | self::URL_STRIP_FRAGMENT;
 
         } elseif ($flags & self::URL_STRIP_AUTH) {
-            $flags |= self::URL_STRIP_USER | self::URL_STRIP_PASS;
+            $flags |= self::URL_STRIP_USER
+                | self::URL_STRIP_PASS;
         }
 
         // Schema and host are alwasy replaced
         foreach (array('scheme', 'host') as $part) {
-            if (isset($parts[$part])) {
+            if (Arr::key($part, $parts)) {
                 $url[$part] = $parts[$part];
             }
         }
 
         if ($flags & self::URL_REPLACE) {
             foreach ($keys as $key) {
-                if (isset($parts[$key])) {
+                if (Arr::key($key, $parts) && $parts[$key]) {
                     $url[$key] = $parts[$key];
                 }
             }
 
         } else {
-            if (isset($parts['path']) && ($flags & self::URL_JOIN_PATH)) {
-                if (isset($url['path']) && substr($parts['path'], 0, 1) !== '/') {
+            if (Arr::key('path', $parts) && ($flags & self::URL_JOIN_PATH)) {
+                if (Arr::key('path', $url) && substr($parts['path'], 0, 1) !== '/') {
                     $url['path'] = rtrim(str_replace(basename($url['path']), '', $url['path']), '/')
                         . '/' . ltrim($parts['path'], '/');
 
@@ -216,8 +220,8 @@ class Url
                 }
             }
 
-            if (isset($parts['query']) && ($flags & self::URL_JOIN_QUERY)) {
-                if (isset($url['query'])) {
+            if (Arr::key('query', $parts) && ($flags & self::URL_JOIN_QUERY)) {
+                if (Arr::key('query', $url)) {
                     parse_str($url['query'], $urlQuery);
                     parse_str($parts['query'], $partsQuery);
 
@@ -230,7 +234,7 @@ class Url
             }
         }
 
-        if (isset($url['path']) && substr($url['path'], 0, 1) !== '/') {
+        if (Arr::key('path', $url) && substr($url['path'], 0, 1) !== '/') {
             $url['path'] = '/' . $url['path'];
         }
 
@@ -242,23 +246,23 @@ class Url
         }
 
         $parsedString = '';
-        if (isset($url['scheme'])) {
+        if (Arr::key('scheme', $url)) {
             $parsedString .= $url['scheme'] . '://';
         }
 
-        if (isset($url['user'])) {
+        if (Arr::key('user', $url)) {
             $parsedString .= $url['user'];
-            if (isset($url['pass'])) {
+            if (Arr::key('pass', $url)) {
                 $parsedString .= ':' . $url['pass'];
             }
             $parsedString .= '@';
         }
 
-        if (isset($url['host'])) {
+        if (Arr::key('host', $url)) {
             $parsedString .= $url['host'];
         }
 
-        if (isset($url['port'])) {
+        if (Arr::key('port', $url) && $url['port']) {
             $parsedString .= ':' . $url['port'];
         }
 
@@ -268,11 +272,11 @@ class Url
             $parsedString .= '/';
         }
 
-        if (isset($url['query'])) {
+        if (Arr::key('query', $url) && $url['query']) {
             $parsedString .= '?' . $url['query'];
         }
 
-        if (isset($url['fragment'])) {
+        if (Arr::key('fragment', $url) && $url['fragment']) {
             $parsedString .= '#' . $url['fragment'];
         }
 
@@ -288,7 +292,7 @@ class Url
      */
     public static function isHttps()
     {
-        return isset($_SERVER['HTTPS']) && !empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] != 'off';
+        return Arr::key('HTTPS', $_SERVER) && !empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] != 'off';
     }
 
     /**

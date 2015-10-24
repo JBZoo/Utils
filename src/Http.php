@@ -33,8 +33,8 @@ class Http
         // @codeCoverageIgnoreStart
         if (!headers_sent()) {
             // Required for some browsers
-            if (ini_get('zlib.output_compression')) {
-                @ini_set('zlib.output_compression', 'Off');
+            if (OS::iniGet('zlib.output_compression')) {
+                OS::iniSet('zlib.output_compression', 'Off');
             }
 
             header('Pragma: public');
