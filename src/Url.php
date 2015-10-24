@@ -356,7 +356,7 @@ class Url
      * Callback for the preg_replace in the linkify() method.
      * Part of the LinkifyURL Project <https://github.com/jmrware/LinkifyURL>
      *
-     * @param  array $text Matches from the preg_ function
+     * @param  string $text Matches from the preg_ function
      * @return mixed
      */
     protected static function _linkifyRegex($text)
