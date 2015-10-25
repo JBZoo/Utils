@@ -20,7 +20,7 @@
     </php>
 
     <testsuites>
-        <testsuite name="JBZoo Utils suite">
+        <testsuite name="JBZoo Utils Suite">
             <directory suffix="Test.php">./tests</directory>
         </testsuite>
     </testsuites>
