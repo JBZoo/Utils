@@ -18,10 +18,10 @@ namespace JBZoo\PHPUnit;
 use JBZoo\Utils\Vars;
 
 /**
- * Class FilterTest
+ * Class VarsTest
  * @package JBZoo\PHPUnit
  */
-class FilterTest extends PHPUnit
+class VarsTest extends PHPUnit
 {
 
     public function testInt()
@@ -84,5 +84,90 @@ class FilterTest extends PHPUnit
         is('0123', Vars::digits($string));
         is('abc', Vars::alpha($string));
         is('01a2b3c', Vars::alphaDigets($string));
+    }
+
+    public function testIn()
+    {
+        isTrue(Vars::isIn(0.5, 0, 5));
+        isTrue(Vars::isIn(0.5, 0.5, 5));
+        isFalse(Vars::isIn(0.5, 1, 5));
+    }
+
+    public function testLimit()
+    {
+        is(100, Vars::limit(125, 50, 100));
+        is(50, Vars::limit(45, 50, 100));
+        is(77, Vars::limit(77, 50, 100));
+    }
+
+    public function testMin()
+    {
+        is(50, Vars::min(12, 50));
+        is(55, Vars::min(55, 50));
+        is(123, Vars::min(123, 50));
+    }
+
+    public function testMax()
+    {
+        is(-15, Vars::max(-15, 50));
+        is(12, Vars::max(12, 50));
+        is(50, Vars::max(55, 50));
+        is(50, Vars::max(123, 50));
+    }
+
+    public function testOut()
+    {
+        isTrue(Vars::out(15, 5, 10));
+        isTrue(Vars::out(3, 5, 10));
+        isFalse(Vars::out(8, 5, 10));
+    }
+
+    /**
+     * Test that isEven() returns true if the number is even.
+     */
+    public function testIsEven()
+    {
+        isTrue(Vars::isEven(2));
+        isTrue(Vars::isEven(88));
+        isTrue(Vars::isEven(62.3));
+        isFalse(Vars::isEven(9));
+        isFalse(Vars::isEven(17));
+        isFalse(Vars::isEven(47.9));
+    }
+
+    /**
+     * Test that isNegative() returns true if the number is below 0.
+     */
+    public function testIsNegative()
+    {
+        isTrue(Vars::isNegative(-1));
+        isTrue(Vars::isNegative(-384));
+        isFalse(Vars::isNegative(0));
+        isFalse(Vars::isNegative(34));
+    }
+
+    /**
+     * Test that isOdd() returns true if the number is odd.
+     */
+    public function testIsOdd()
+    {
+        isFalse(Vars::isOdd(2));
+        isFalse(Vars::isOdd(88));
+        isFalse(Vars::isOdd(62.3));
+        isTrue(Vars::isOdd(9));
+        isTrue(Vars::isOdd(17));
+        isTrue(Vars::isOdd(47.9));
+    }
+
+    /**
+     * Test that isPositive() returns true if the number is above or equal 0.
+     */
+    public function testIsPositive()
+    {
+        isTrue(Vars::isPositive(343));
+        isTrue(Vars::isPositive(79));
+        isTrue(Vars::isPositive(0));
+        isFalse(Vars::isPositive(0, false)); // don't include 0
+        isFalse(Vars::isPositive(-1));
     }
 }
