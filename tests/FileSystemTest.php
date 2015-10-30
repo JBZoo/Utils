@@ -17,6 +17,7 @@ namespace JBZoo\PHPUnit;
 
 use JBZoo\Utils\FS;
 use JBZoo\Utils\OS;
+use JBZoo\Utils\Vars;
 
 /**
  * Class FileSystemTest
@@ -300,5 +301,83 @@ class FileSystemTest extends PHPUnit
 
         $size = FS::format(2.81475e15, 1);
         is('2.5 PB', $size);
+    }
+
+    public function testExt()
+    {
+        same('png', FS::ext('image.png'));
+        same('png', FS::ext('image.jpg.png'));
+        same('png', FS::ext('/file/path/image.jpg.png'));
+        same('', FS::ext('image'));
+        same('', FS::ext(''));
+        same('', FS::ext(null));
+        same('', FS::ext(false));
+    }
+
+    public function testBase()
+    {
+        same('image.png', FS::base('image.png'));
+        same('image.jpg.png', FS::base('image.jpg.png'));
+        same('image.jpg.png', FS::base('/file/path/image.jpg.png'));
+        same('image', FS::base('image'));
+        same('', FS::base(''));
+        same('', FS::base(null));
+        same('', FS::base(false));
+    }
+
+    public function testFilename()
+    {
+        same('image', FS::filename('image.png'));
+        same('image.jpg', FS::filename('image.jpg.png'));
+        same('image.jpg', FS::filename('/file/path/image.jpg.png'));
+        same('image', FS::filename('image'));
+        same('', FS::filename(''));
+        same('', FS::filename(null));
+        same('', FS::filename(false));
+    }
+
+    public function testDirname()
+    {
+        same('.', FS::dirname('image.png'));
+        same('.', FS::dirname('image.jpg.png'));
+        same('/file/path', FS::dirname('/file/path/image.jpg.png'));
+        same('.', FS::dirname('image'));
+        same('', FS::dirname(''));
+        same('', FS::dirname(null));
+        same('', FS::dirname(false));
+    }
+
+    public function testReal()
+    {
+        same(__FILE__, FS::real(__FILE__));
+    }
+
+    public function testClean()
+    {
+        $d     = DIRECTORY_SEPARATOR;
+        $empty = Vars::get($_SERVER['DOCUMENT_ROOT'], '');
+
+        same($empty, FS::clean(''));
+        same($empty, FS::clean(false));
+        same($empty, FS::clean(null));
+
+        same('path', FS::clean('path'));
+        same("{$d}path", FS::clean('/path'));
+        same("{$d}path", FS::clean(' /path '));
+        same("{$d}path{$d}", FS::clean('/path/'));
+        same("{$d}path{$d}", FS::clean('///path///'));
+        same("{$d}path{$d}path", FS::clean('///path///path'));
+        same("{$d}path{$d}path{$d}path", FS::clean('///path///path/path'));
+        same("{$d}path{$d}path{$d}path{$d}", FS::clean('\path\path\path\\\\\\\\'));
+        same('\\path\\path\\path\\', FS::clean('\path\path\path\\\\\\\\', '\\'));
+        same('\\path\\path\\path\\', FS::clean('\\path\\path\\path\\\\\\\\', '\\'));
+        same('\\\\path\\path\\path\\', FS::clean('\\\\path\\path\\path\\\\\\\\', '\\'));
+    }
+
+    public function testStripExt()
+    {
+        same('image', FS::stripExt('image.png'));
+        same('image.jpg', FS::stripExt('image.jpg.png'));
+        same('/file/path/image.jpg', FS::stripExt('/file/path/image.jpg.png'));
     }
 }

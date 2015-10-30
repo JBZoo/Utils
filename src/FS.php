@@ -321,6 +321,7 @@ class FS
 
             // Set the world writable bit (file isn't owned or grouped by us)
             return chmod($filename, fileperms($filename) | intval('0' . $perm . $perm . $perm, 8));
+
         } else {
             // Set only the user writable bit (file is owned by us)
             if ($isMyUid) {
@@ -339,5 +340,92 @@ class FS
             return chmod($filename, (fileperms($filename) | intval('0' . $perm . $perm . $perm, 8)) ^ $add);
         }
         //@codeCoverageIgnoreEnd
+    }
+
+    /**
+     * @param string $path
+     * @return string
+     */
+    public static function ext($path)
+    {
+        return pathinfo($path, PATHINFO_EXTENSION);
+    }
+
+    /**
+     * @param string $path
+     * @return string
+     */
+    public static function base($path)
+    {
+        return pathinfo($path, PATHINFO_BASENAME);
+    }
+
+    /**
+     * @param string $path
+     * @return string
+     */
+    public static function filename($path)
+    {
+        return pathinfo($path, PATHINFO_FILENAME);
+    }
+
+    /**
+     * @param string $path
+     * @return string
+     */
+    public static function dirname($path)
+    {
+        return pathinfo($path, PATHINFO_DIRNAME);
+    }
+
+    /**
+     * @param string $path
+     * @return string
+     */
+    public static function real($path)
+    {
+        return realpath($path);
+    }
+
+    /**
+     * Function to strip additional / or \ in a path name.
+     *
+     * @param   string $path The path to clean.
+     * @param   string $ds   Directory separator (optional).
+     * @return  string
+     */
+    public static function clean($path, $ds = DIRECTORY_SEPARATOR)
+    {
+        if (!is_string($path) && empty($path)) {
+            $path = null;
+        }
+
+        $path = trim((string)$path);
+
+        if (empty($path)) {
+            $path = Vars::get($_SERVER['DOCUMENT_ROOT'], '');
+
+        } elseif (($ds == '\\') && ($path[0] == '\\') && ($path[1] == '\\')) {
+            $path = "\\" . preg_replace('#[/\\\\]+#', $ds, $path);
+
+        } else {
+            $path = preg_replace('#[/\\\\]+#', $ds, $path);
+        }
+
+        return $path;
+    }
+
+    /**
+     * Strip off the extension if it exists.
+     *
+     * @param string $path
+     * @return string
+     */
+    public static function stripExt($path)
+    {
+        $reg  = '/\.' . preg_quote(self::ext($path)) . '$/';
+        $path = preg_replace($reg, '', $path);
+
+        return $path;
     }
 }
