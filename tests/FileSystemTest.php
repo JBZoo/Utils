@@ -26,6 +26,12 @@ use JBZoo\Utils\Vars;
 class FileSystemTest extends PHPUnit
 {
 
+    public function test()
+    {
+        //incomplete();
+    }
+
+
     public function testRemoveDir()
     {
         $dirname = dirname(__FILE__);
@@ -380,4 +386,6 @@ class FileSystemTest extends PHPUnit
         same('image.jpg', FS::stripExt('image.jpg.png'));
         same('/file/path/image.jpg', FS::stripExt('/file/path/image.jpg.png'));
     }
+
+
 }
