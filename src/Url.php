@@ -44,6 +44,9 @@ class Url
      * @param  mixed $newParams Either newkey or an associative array
      * @param  mixed $uri       URI or URL to append the queru/queries to.
      * @return string
+     *
+     * @SuppressWarnings(PHPMD.NPathComplexity)
+     * @SuppressWarnings(PHPMD.Superglobals)
      */
     public static function addArg(array $newParams, $uri = null)
     {
@@ -101,6 +104,8 @@ class Url
      * Return the current URL.
      *
      * @return string
+     *
+     * @SuppressWarnings(PHPMD.Superglobals)
      */
     public static function current()
     {
@@ -171,6 +176,10 @@ class Url
      * @param int   $flags  a bitmask of binary or'ed HTTP_URL constants; HTTP_URL_REPLACE is the default
      * @param array $newUrl if set, it will be filled with the parts of the composed url like parse_url() would return
      * @return string
+     *
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
+     * @SuppressWarnings(PHPMD.Superglobals)
      */
     public static function buildAll($url, $parts = array(), $flags = self::URL_REPLACE, &$newUrl = array())
     {
@@ -287,6 +296,8 @@ class Url
      * Checks to see if the page is being server over SSL or not
      *
      * @return boolean
+     *
+     * @SuppressWarnings(PHPMD.Superglobals)
      */
     public static function isHttps()
     {

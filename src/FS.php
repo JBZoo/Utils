@@ -26,6 +26,9 @@ class FS
      * @param   string $file  The name of the file to get permissions form
      * @param   int    $perms Numerical value of permissions to display as text.
      * @return  string
+     *
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     public static function perms($file, $perms = null)
     {
@@ -225,7 +228,7 @@ class FS
 
         $dirIter = new \RecursiveIteratorIterator(new \RecursiveDirectoryIterator($dir, $flags));
 
-        foreach ($dirIter as $file => $key) {
+        foreach ($dirIter as $key) {
             if ($key->isFile()) {
                 $size += $key->getSize();
             }
@@ -239,6 +242,9 @@ class FS
      *
      * @param string $dir
      * @return array
+     *
+     * @SuppressWarnings(PHPMD.UnusedLocalVariable)
+     * @SuppressWarnings(PHPMD.ShortMethodName)
      */
     public static function ls($dir)
     {
@@ -390,11 +396,13 @@ class FS
     /**
      * Function to strip additional / or \ in a path name.
      *
-     * @param   string $path The path to clean.
-     * @param   string $ds   Directory separator (optional).
+     * @param   string $path   The path to clean.
+     * @param   string $dirSep Directory separator (optional).
      * @return  string
+     *
+     * @SuppressWarnings(PHPMD.Superglobals)
      */
-    public static function clean($path, $ds = DIRECTORY_SEPARATOR)
+    public static function clean($path, $dirSep = DIRECTORY_SEPARATOR)
     {
         if (!is_string($path) && empty($path)) {
             $path = null;
@@ -405,11 +413,11 @@ class FS
         if (empty($path)) {
             $path = Vars::get($_SERVER['DOCUMENT_ROOT'], '');
 
-        } elseif (($ds == '\\') && ($path[0] == '\\') && ($path[1] == '\\')) {
-            $path = "\\" . preg_replace('#[/\\\\]+#', $ds, $path);
+        } elseif (($dirSep == '\\') && ($path[0] == '\\') && ($path[1] == '\\')) {
+            $path = "\\" . preg_replace('#[/\\\\]+#', $dirSep, $path);
 
         } else {
-            $path = preg_replace('#[/\\\\]+#', $ds, $path);
+            $path = preg_replace('#[/\\\\]+#', $dirSep, $path);
         }
 
         return $path;

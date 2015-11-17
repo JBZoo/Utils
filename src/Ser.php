@@ -26,6 +26,8 @@ class Ser
      *
      * @param  mixed $data Value to check to see if was serialized
      * @return boolean
+     *
+     * @SuppressWarnings(PHPMD.ShortMethodName)
      */
     public static function is($data)
     {

@@ -93,6 +93,9 @@ class Http
      * @param   boolean $trustProxy Whether or not to trust the proxy headers HTTP_CLIENT_IP and HTTP_X_FORWARDED_FOR.
      *                              ONLY use if your server is behind a proxy that sets these values
      * @return  string
+     *
+     * @SuppressWarnings(PHPMD.Superglobals)
+     * @SuppressWarnings(PHPMD.ShortMethodName)
      */
     public static function IP($trustProxy = false)
     {
@@ -101,19 +104,19 @@ class Http
         }
 
         if (!empty($_SERVER['HTTP_CLIENT_IP'])) {
-            $ip = $_SERVER['HTTP_CLIENT_IP'];
+            $ipAddress = $_SERVER['HTTP_CLIENT_IP'];
 
         } elseif (!empty($_SERVER['HTTP_X_REAL_IP'])) {
-            $ip = $_SERVER['HTTP_X_REAL_IP'];
+            $ipAddress = $_SERVER['HTTP_X_REAL_IP'];
 
         } elseif (!empty($_SERVER['HTTP_X_FORWARDED_FOR'])) {
-            $ip = $_SERVER['HTTP_X_FORWARDED_FOR'];
+            $ipAddress = $_SERVER['HTTP_X_FORWARDED_FOR'];
 
         } else {
-            $ip = $_SERVER['REMOTE_ADDR'];
+            $ipAddress = $_SERVER['REMOTE_ADDR'];
         }
 
-        return $ip;
+        return $ipAddress;
     }
 
     /**

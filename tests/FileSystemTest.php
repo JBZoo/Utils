@@ -266,7 +266,7 @@ class FileSystemTest extends PHPUnit
     {
         $dir = dirname(__FILE__) . '/dir1';
 
-        mkdir($dir);
+        @mkdir($dir);
         file_put_contents($dir . '/file1', '1234567890');
         file_put_contents($dir . '/file2', range('a', 'z'));
 
@@ -279,7 +279,7 @@ class FileSystemTest extends PHPUnit
     {
         $dir = dirname(__FILE__) . DIRECTORY_SEPARATOR . 'dir1';
 
-        mkdir($dir);
+        @mkdir($dir);
         $file1 = $dir . DIRECTORY_SEPARATOR . 'file1';
         touch($file1);
 

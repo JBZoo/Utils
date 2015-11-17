@@ -77,10 +77,10 @@ class Dates
             return $time->setTimezone($timeZone);
         }
 
-        $dt = new DateTime('@' . self::toStamp($time));
-        $dt->setTimezone($timeZone);
+        $dateTime = new DateTime('@' . self::toStamp($time));
+        $dateTime->setTimezone($timeZone);
 
-        return $dt;
+        return $dateTime;
     }
 
     /**
@@ -107,6 +107,8 @@ class Dates
      *
      * @param string $date
      * @return bool
+     *
+     * @SuppressWarnings(PHPMD.ShortMethodName)
      */
     public static function is($date)
     {
@@ -143,7 +145,7 @@ class Dates
      */
     public static function isThisWeek($time)
     {
-        return (self::factory($time)->format('W-o') === self::factory()->format('W-o'));
+        return (self::factory($time)->format('W-Y') === self::factory()->format('W-Y'));
     }
 
     /**

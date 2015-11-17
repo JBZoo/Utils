@@ -135,6 +135,7 @@ class Str
             if (defined('HHVM_VERSION')) {
                 $transTable = get_html_translation_table(HTML_ENTITIES, ENT_QUOTES);
             } else {
+                /** @noinspection PhpMethodParametersCountMismatchInspection */
                 $transTable = get_html_translation_table(HTML_ENTITIES, ENT_QUOTES, self::$encoding);
             }
             // @codeCoverageIgnoreEnd
@@ -548,6 +549,8 @@ class Str
      *
      * @param string $string
      * @return string
+     *
+     * @SuppressWarnings(PHPMD.ShortMethodName)
      */
     public static function up($string)
     {

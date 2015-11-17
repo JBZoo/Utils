@@ -44,6 +44,8 @@ class OS
      * Returns a home directory of current user.
      *
      * @return string
+     *
+     * @SuppressWarnings(PHPMD.Superglobals)
      */
     public static function getHome()
     {

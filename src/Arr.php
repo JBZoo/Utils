@@ -61,6 +61,8 @@ class Arr
      * @param array  $array
      * @param string $key
      * @return bool
+     *
+     * @SuppressWarnings(PHPMD.ShortMethodName)
      */
     public static function in($key, array $array)
     {
