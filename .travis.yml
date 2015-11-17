@@ -53,6 +53,7 @@ script:
         mkdir -p build/misc;
         git clone --branch=master https://github.com/JBZoo/Misc.git build/misc;
         php vendor/bin/phpcs ./src --standard=build/misc/phpcs/JBZoo/ruleset.xml --report=full;
+        php vendor/bin/phpmd ./src text ./build/misc/phpmd/jbzoo.xml --verbose;
     fi;'
 
 after_script:
@@ -69,16 +70,6 @@ after_script:
   # Show code statistic
   - sh -c 'if [ "$TRAVIS_PHP_VERSION" = "5.6" ]; then
         php vendor/bin/phploc ./src --no-interaction --verbose;
-    fi;'
-
-  # Show code problems
-  - sh -c 'if [ "$TRAVIS_PHP_VERSION" = "5.6" ]; then
-        php vendor/bin/phpmd ./src text cleancode     --verbose;
-        php vendor/bin/phpmd ./src text codesize      --verbose;
-        php vendor/bin/phpmd ./src text controversial --verbose;
-        php vendor/bin/phpmd ./src text design        --verbose;
-        php vendor/bin/phpmd ./src text naming        --verbose;
-        php vendor/bin/phpmd ./src text unusedcode    --verbose;
     fi;'
 
   # Build pdepend stats
