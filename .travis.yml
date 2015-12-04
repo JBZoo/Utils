@@ -26,7 +26,7 @@ before_script:
   # install report tools
   - sh -c 'if [ "$TRAVIS_PHP_VERSION" = "5.6" ]; then
         composer require
-          satooshi/php-coveralls:dev-master
+          satooshi/php-coveralls:*
           squizlabs/php_codesniffer:*
           sebastian/phpcpd:*
           phploc/phploc:*

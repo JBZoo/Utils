@@ -21,7 +21,7 @@
         "ext-mbstring": "*"
     },
     "require-dev": {
-        "jbzoo/phpunit": "dev-master"
+        "jbzoo/phpunit": "^1.0"
     },
     "autoload": {
         "psr-4": {

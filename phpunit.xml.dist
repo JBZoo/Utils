@@ -14,11 +14,6 @@
          verbose="true"
         >
 
-    <php>
-        <env name="PACKAGE_NAME" value="Utils"/>
-        <env name="PACKAGE_AUTHOR" value="Denis Smetannikov &lt;denis@jbzoo.com&gt;"/>
-    </php>
-
     <testsuites>
         <testsuite name="JBZoo Utils Suite">
             <directory suffix="Test.php">./tests</directory>

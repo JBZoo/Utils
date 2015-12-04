@@ -19,11 +19,20 @@ namespace JBZoo\PHPUnit;
  * Class CodeStyleTest
  * @package JBZoo\PHPUnit
  */
-class Codestyle extends PHPUnit
+class CodestyleTest extends Codestyle
 {
+    protected $_packageName = 'Utils';
+    protected $_packageAuthor = 'Denis Smetannikov <denis@jbzoo.com>';
+
     public function testCyrillic()
     {
-        //parent::testCyrillic();
+        $this->_excludeFiles[] = 'Slug.php';
+        $this->_excludeFiles[] = 'Vars.php';
+        $this->_excludeFiles[] = 'SlugTest.php';
+        $this->_excludeFiles[] = 'StringTest.php';
+        $this->_excludeFiles[] = 'VarsTest.php';
+
+        parent::testCyrillic();
     }
 
 }
