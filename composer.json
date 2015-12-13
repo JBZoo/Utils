@@ -28,6 +28,11 @@
             "JBZoo\\Utils\\": "src"
         }
     },
+    "extra": {
+        "branch-alias": {
+            "dev-master": "1.x-dev"
+        }
+    },    
     "support": {
         "issues": "https://github.com/JBZoo/Utils/issues"
     }
