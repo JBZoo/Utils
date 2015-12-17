@@ -6,75 +6,18 @@ php:
   - 5.5
   - 5.6
   - 7.0
-  - hhvm  
 
 matrix:
   fast_finish: true
-  allow_failures:
-    - php: 7.0
-    - php: hhvm
 
 before_script:
-  # Composer
-  - composer self-update
-  - composer update
-  - composer validate
-
-  # install testing tools
-  - composer require phpunit/phpunit:^4.8
-
-  # install report tools
-  - sh -c 'if [ "$TRAVIS_PHP_VERSION" = "5.6" ]; then
-        composer require
-          satooshi/php-coveralls:*
-          squizlabs/php_codesniffer:*
-          sebastian/phpcpd:*
-          phploc/phploc:*
-          phpmd/phpmd:^2.2
-          pdepend/pdepend:^2.1
-        ;
-    fi;'
-
-  # Dirs
-  - mkdir -p build/cov
-  - mkdir -p build/logs  
-  - mkdir -p build/phpunit
-  - mkdir -p build/pdepend
-
-  # Update env
-  - phpenv rehash
+  - composer update-all
 
 script:
-  # PHPUnit tests
-  - php vendor/bin/phpunit --configuration phpunit.xml.dist;
-
-  # Check PHP Code Standarts
-  - sh -c 'if [ "$TRAVIS_PHP_VERSION" = "5.6" ]; then
-        mkdir -p build/misc;
-        git clone --branch=master https://github.com/JBZoo/Misc.git build/misc;
-        php vendor/bin/phpcs ./src --standard=build/misc/phpcs/JBZoo/ruleset.xml --report=full;
-        php vendor/bin/phpmd ./src text ./build/misc/phpmd/jbzoo.xml --verbose;
-        php vendor/bin/phpcpd ./src --no-interaction --verbose;
-    fi;'
+  - composer test
 
 after_script:
-  # Send to coveralls
-  - sh -c 'if [ "$TRAVIS_PHP_VERSION" = "5.6" ]; then
-        php vendor/bin/coveralls --verbose;
-    fi;'
-
-  # Show code statistic
-  - sh -c 'if [ "$TRAVIS_PHP_VERSION" = "5.6" ]; then
-        php vendor/bin/phploc ./src --no-interaction --verbose;
-    fi;'
-
-  # Build pdepend stats
-  - sh -c 'if [ "$TRAVIS_PHP_VERSION" = "5.6" ]; then
-        php vendor/bin/pdepend
-          --summary-xml=build/pdepend/summary.xml
-          --jdepend-chart=build/pdepend/jdepend.svg
-          --overview-pyramid=build/pdepend/pyramid.svg ./src;
-    fi;'
+  - composer coveralls
 
 notifications:
-  slack: jbzoo:RPyzxVQZPuPhgvm1Q6fDvK3C
+  slack: jbzoo:lKYRTvAF36tRDfKTOK5zhFh9
