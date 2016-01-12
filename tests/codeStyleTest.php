@@ -24,13 +24,17 @@ class CodestyleTest extends Codestyle
     protected $_packageName = 'Utils';
     protected $_packageAuthor = 'Denis Smetannikov <denis@jbzoo.com>';
 
+    /**
+     * @SuppressWarnings(PHPMD.Superglobals)
+     * @backupGlobals
+     */
     public function testCyrillic()
     {
-        $this->_excludeFiles[] = 'Slug.php';
-        $this->_excludeFiles[] = 'Vars.php';
-        $this->_excludeFiles[] = 'SlugTest.php';
-        $this->_excludeFiles[] = 'StringTest.php';
-        $this->_excludeFiles[] = 'VarsTest.php';
+        $GLOBALS['_jbzoo_fileExcludes'][] = 'Slug.php';
+        $GLOBALS['_jbzoo_fileExcludes'][] = 'Vars.php';
+        $GLOBALS['_jbzoo_fileExcludes'][] = 'SlugTest.php';
+        $GLOBALS['_jbzoo_fileExcludes'][] = 'StringTest.php';
+        $GLOBALS['_jbzoo_fileExcludes'][] = 'VarsTest.php';
 
         parent::testCyrillic();
     }
