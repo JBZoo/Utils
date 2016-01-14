@@ -65,4 +65,12 @@ class CliTest extends PHPUnit
         $output2 = Cli::exec('php', array('v' => ''));
         isSame($output1, $output2);
     }
+
+    /**
+     * @expectedException \Symfony\Component\Process\Exception\ProcessFailedException
+     */
+    public function testExecFail()
+    {
+        Cli::exec('undefined-command');
+    }
 }
