@@ -226,8 +226,8 @@ class FilterTest extends PHPUnit
 
         is(array('p' => 'PPP', 'i' => 'III', 'z' => '', 'w' => 123), Filter::_($object, 'arr'));
         is(array('p' => 'PPP', 'i' => 'III', 'w' => 123), Filter::arr($object, 'noempty'));
-        is(array('z' => '', 'w' => 123), Filter::arr($object, function ($value, $key) {
-            return ($key === 'z' || $value === 123) ? true : false;
+        is(array('w' => 123), Filter::arr($object, function ($value) {
+            return ($value === 123) ? true : false;
         }));
     }
 

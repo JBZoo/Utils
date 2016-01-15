@@ -210,7 +210,7 @@ class Filter
             $array = Arr::clean($array);
 
         } elseif ($filter instanceof \Closure) {
-            $array = array_filter($array, $filter, ARRAY_FILTER_USE_BOTH);
+            $array = array_filter($array, $filter);
         }
 
         return $array;
