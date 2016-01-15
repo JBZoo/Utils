@@ -22,8 +22,7 @@
         "symfony/process" : "^2.7|^3.0"
     },
     "require-dev"       : {
-        "jbzoo/phpunit"   : "^1.2",
-        "phpunit/phpunit" : "^4.8"
+        "jbzoo/phpunit"   : "^1.2"
     },
     "autoload"          : {
         "psr-4" : {

@@ -620,4 +620,21 @@ class Str
             return $needle === '' || self::sub($haystack, -self::len($needle)) === $needle;
         }
     }
+
+    /**
+     * Remove whitespaces
+     *
+     * @param $value
+     * @return string
+     */
+    public static function trim($value)
+    {
+        $result = (string)trim($value);
+        $result = trim($result, chr(0xE3) . chr(0x80) . chr(0x80));
+        $result = trim($result, chr(0xC2) . chr(0xA0));
+
+        $result = trim($result);
+
+        return $result;
+    }
 }

@@ -27,43 +27,24 @@ class Vars
      * @param  string $string  The string to convert to boolean
      * @param  bool   $default The value to return if we can't match any yes/no words
      * @return boolean
+     *
+     * @deprecated See JBZoo\Utils\Filter
      */
     public static function bool($string, $default = false)
     {
-
-        $yesList = array('affirmative', 'all right', 'aye', 'indubitably', 'most assuredly', 'ok', 'of course', 'oui',
-            'okay', 'sure thing', 'y', 'yes', 'yea', 'yep', 'sure', 'yeah', 'true', 't', 'on', '1', 'vrai',
-            'да', 'д');
-
-        $noList = array('no*', 'no way', 'nope', 'nah', 'na', 'never', 'absolutely not', 'by no means', 'negative',
-            'never ever', 'false', 'f', 'off', '0', 'non', 'faux', 'нет', 'н', 'немає');
-
-        $string = Str::low($string);
-
-        if (Arr::in($string, $yesList) || self::float($string) > 0) {
-            return true;
-
-        } elseif (Arr::in($string, $noList)) {
-            return false;
-        }
-
-        return (bool)$default;
+        return Filter::bool($string, $default);
     }
 
     /**
      * @param string $value
      * @param int    $round
      * @return float
+     *
+     * @deprecated See JBZoo\Utils\Filter
      */
     public static function float($value, $round = 10)
     {
-        $value = preg_replace('#[^0-9\-\.\,]#ius', '', $value);
-        $value = trim($value);
-        $value = str_replace(array(' ', ','), array('', '.'), $value);
-        $value = (float)$value;
-        $value = round($value, $round);
-
-        return $value;
+        return Filter::float($value, $round);
     }
 
     /**
@@ -71,10 +52,12 @@ class Vars
      *
      * @param string $value
      * @return int
+     *
+     * @deprecated See JBZoo\Utils\Filter
      */
     public static function int($value)
     {
-        return (int)preg_replace('#[^0-9\-]#ius', '', $value);
+        return Filter::int($value);
     }
 
     /**
@@ -82,10 +65,12 @@ class Vars
      *
      * @param $value
      * @return mixed
+     *
+     * @deprecated See JBZoo\Utils\Filter
      */
     public static function digits($value)
     {
-        return preg_replace('#[^0-9]#ius', '', $value);
+        return Filter::digits($value);
     }
 
     /**
@@ -93,10 +78,12 @@ class Vars
      *
      * @param $value
      * @return mixed
+     *
+     * @deprecated See JBZoo\Utils\Filter
      */
     public static function alpha($value)
     {
-        return preg_replace('#[^a-z]#ius', '', $value);
+        return Filter::alpha($value);
     }
 
     /**
@@ -104,10 +91,12 @@ class Vars
      *
      * @param $value
      * @return mixed
+     *
+     * @deprecated See JBZoo\Utils\Filter
      */
     public static function alphaDigets($value)
     {
-        return preg_replace('#[^a-z0-9]#ius', '', $value);
+        return Filter::alphanum($value);
     }
 
     /**
@@ -115,17 +104,12 @@ class Vars
      *
      * @param $email
      * @return mixed
+     *
+     * @deprecated See JBZoo\Utils\Filter
      */
     public static function email($email)
     {
-        $email = trim($email);
-        $regex = chr(1) . '^[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$' . chr(1) . 'u';
-
-        if (preg_match($regex, $email) && (bool)filter_var($email, FILTER_VALIDATE_EMAIL)) {
-            return $email;
-        }
-
-        return false;
+        return Filter::email($email);
     }
 
     /**

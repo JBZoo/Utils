@@ -23,34 +23,30 @@ use JBZoo\Utils\Vars;
  */
 class VarsTest extends PHPUnit
 {
-
-    public function testInt()
+    /**
+     * @deprecated
+     */
+    public function testCompatibility()
     {
-        same(0, Vars::int(null));
-        same(0, Vars::int(0));
-        same(1, Vars::int(1));
-        same(1, Vars::int('1'));
-        same(1, Vars::int('01'));
-        same(-1, Vars::int('-01'));
-        same(-10, Vars::int(' - 1 0 '));
-    }
+        isSame(0, Vars::int(null));
+        isSame(0, Vars::int(0));
+        isSame(1, Vars::int(1));
+        isSame(1, Vars::int('1'));
+        isSame(1, Vars::int('01'));
+        isSame(-1, Vars::int('-01'));
+        isSame(-10, Vars::int(' - 1 0 '));
 
-    public function testFloat()
-    {
-        same(0.0, Vars::float(null));
-        same(0.0, Vars::float(0));
-        same(1.0, Vars::float(1));
-        same(1.0, Vars::float('1'));
-        same(1.0, Vars::float('01'));
-        same(-1.0, Vars::float('-01'));
-        same(-10.0, Vars::float(' - 1 0 '));
-        same(-1.5, Vars::float(' - 1,5 '));
-        same(-1.5, Vars::float(' - 1.5 '));
-        same(-1.512, Vars::float(' - 1.5123 ', 3));
-    }
+        isSame(0.0, Vars::float(null));
+        isSame(0.0, Vars::float(0));
+        isSame(1.0, Vars::float(1));
+        isSame(1.0, Vars::float('1'));
+        isSame(1.0, Vars::float('01'));
+        isSame(-1.0, Vars::float('-01'));
+        isSame(-10.0, Vars::float(' - 1 0 '));
+        isSame(-1.5, Vars::float(' - 1,5 '));
+        isSame(-1.5, Vars::float(' - 1.5 '));
+        isSame(-1.512, Vars::float(' - 1.5123 ', 3));
 
-    public function testBool()
-    {
         isTrue(Vars::bool('true'));
         isTrue(Vars::bool('yes'));
         isTrue(Vars::bool('y'));
@@ -67,18 +63,12 @@ class VarsTest extends PHPUnit
         isFalse(Vars::bool('НЕТ'));
 
         isFalse(Vars::bool('test', false));
-    }
 
-    public function testEmail()
-    {
         isTrue(Vars::email('john.smith@gmail.com'));
         isTrue(Vars::email('john.smith+label@gmail.com'));
         isTrue(Vars::email('john.smith@gmail.co.uk'));
         isFalse(Vars::email('русская@почта.рф')); // madness...
-    }
 
-    public function testDigets()
-    {
         $string = " 0 1 a2b 3c!@#$%^&*()-= <>\t";
 
         is('0123', Vars::digits($string));
@@ -122,9 +112,6 @@ class VarsTest extends PHPUnit
         isFalse(Vars::out(8, 5, 10));
     }
 
-    /**
-     * Test that isEven() returns true if the number is even.
-     */
     public function testIsEven()
     {
         isTrue(Vars::isEven(2));
@@ -135,9 +122,6 @@ class VarsTest extends PHPUnit
         isFalse(Vars::isEven(47.9));
     }
 
-    /**
-     * Test that isNegative() returns true if the number is below 0.
-     */
     public function testIsNegative()
     {
         isTrue(Vars::isNegative(-1));
@@ -146,9 +130,6 @@ class VarsTest extends PHPUnit
         isFalse(Vars::isNegative(34));
     }
 
-    /**
-     * Test that isOdd() returns true if the number is odd.
-     */
     public function testIsOdd()
     {
         isFalse(Vars::isOdd(2));
@@ -159,9 +140,6 @@ class VarsTest extends PHPUnit
         isTrue(Vars::isOdd(47.9));
     }
 
-    /**
-     * Test that isPositive() returns true if the number is above or equal 0.
-     */
     public function testIsPositive()
     {
         isTrue(Vars::isPositive(343));
