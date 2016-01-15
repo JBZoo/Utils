@@ -43,4 +43,10 @@ class HttpTest extends PHPUnit
         unset($_SERVER['HTTP_X_FORWARDED_FOR']);
         is('192.168.0.1', Http::IP(true));
     }
+
+    public function testGetHeaders()
+    {
+        $headers = Http::getHeaders();
+        isNotEmpty($headers);
+    }
 }
