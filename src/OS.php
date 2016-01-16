@@ -38,7 +38,11 @@ class OS
      */
     public static function isRoot()
     {
-        return posix_geteuid() === 0;
+        if (function_exists('posix_geteuid') && is_callable('posix_geteuid')) {
+            return posix_geteuid() === 0;
+        }
+
+        return false;
     }
 
     /**
