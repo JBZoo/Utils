@@ -637,4 +637,34 @@ class Str
 
         return $result;
     }
+
+    /**
+     * Escape string before save it as xml content
+     *
+     * @param $string
+     * @return mixed
+     */
+    public static function escXml($string)
+    {
+        $string = preg_replace('/[^\x{0009}\x{000a}\x{000d}\x{0020}-\x{D7FF}\x{E000}-\x{FFFD}]+/u', ' ', $string);
+
+        $string = str_replace(
+            array("&", "<", ">", '"', "'"),
+            array("&amp;", "&lt;", "&gt;", "&quot;", "&apos;"),
+            $string
+        );
+
+        return $string;
+    }
+
+    /**
+     * Escape UTF-8 strings
+     *
+     * @param string $string
+     * @return string
+     */
+    public static function esc($string)
+    {
+        return htmlspecialchars($string, ENT_NOQUOTES, self::$encoding);
+    }
 }

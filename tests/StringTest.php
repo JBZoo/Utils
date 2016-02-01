@@ -35,33 +35,33 @@ class StringTest extends PHPUnit
     {
         $input = ' <b>ASDF</b> !@#$%^&*()_+"\';:>< ';
 
-        same('ASDF !@#$%^&*()_+"\';:><', Str::clean($input));
-        same('asdf !@#$%^&*()_+\\"\\\';:><', Str::clean($input, true, true));
+        isSame('ASDF !@#$%^&*()_+"\';:><', Str::clean($input));
+        isSame('asdf !@#$%^&*()_+\\"\\\';:><', Str::clean($input, true, true));
     }
 
     public function testParseLines()
     {
-        same(array('asd'), Str::parseLines('asd', false));
-        same(array('asd' => 'asd'), Str::parseLines('asd', true));
-        same(array('asd' => 'asd'), Str::parseLines('asd'));
+        isSame(array('asd'), Str::parseLines('asd', false));
+        isSame(array('asd' => 'asd'), Str::parseLines('asd', true));
+        isSame(array('asd' => 'asd'), Str::parseLines('asd'));
 
         $lines = array('', false, 123, 456, ' 123   ', '      ', 'ASD', '0');
 
-        same(array(
+        isSame(array(
             '123' => '123',
             '456' => '456',
             'ASD' => 'ASD',
             '0'   => '0',
         ), Str::parseLines(implode("\r", $lines), true));
 
-        same(array(
+        isSame(array(
             '123' => '123',
             '456' => '456',
             'ASD' => 'ASD',
             '0'   => '0',
         ), Str::parseLines(implode("\n", $lines), true));
 
-        same(array(
+        isSame(array(
             '123',
             '456',
             '123',
@@ -165,30 +165,30 @@ class StringTest extends PHPUnit
 
     public function testMBString()
     {
-        same(Str::isMBString(), function_exists('mb_strtoupper'));
-        same(Str::isOverload(), ((int)ini_get('mbstring.func_overload') & MB_OVERLOAD_STRING));
+        isSame(Str::isMBString(), function_exists('mb_strtoupper'));
+        isSame(Str::isOverload(), ((int)ini_get('mbstring.func_overload') & MB_OVERLOAD_STRING));
 
         is(5, Str::len('Денис'));
 
-        same(1, Str::pos('Денис', 'е'));
-        same(false, Str::pos('Денис', 'Е'));
-        same(3, Str::rpos('Денис', 'и'));
-        same(1, Str::ipos('Денис', 'Е'));
-        same(1, Str::ipos('Денис', 'Е'));
+        isSame(1, Str::pos('Денис', 'е'));
+        isSame(false, Str::pos('Денис', 'Е'));
+        isSame(3, Str::rpos('Денис', 'и'));
+        isSame(1, Str::ipos('Денис', 'Е'));
+        isSame(1, Str::ipos('Денис', 'Е'));
 
-        same('енис', Str::strstr('Денис', 'е'));
-        same('енис', Str::istr('Денис', 'Е'));
+        isSame('енис', Str::strstr('Денис', 'е'));
+        isSame('енис', Str::istr('Денис', 'Е'));
 
-        same('ис', Str::rchr('Денис', 'и'));
+        isSame('ис', Str::rchr('Денис', 'и'));
 
-        same('нис', Str::sub('Денис', 2));
-        same('ени', Str::sub('Денис', 1, 3));
+        isSame('нис', Str::sub('Денис', 2));
+        isSame('ени', Str::sub('Денис', 1, 3));
 
-        same('денис', Str::low('ДЕНИС'));
-        same('ДЕНИС', Str::up('денис'));
+        isSame('денис', Str::low('ДЕНИС'));
+        isSame('ДЕНИС', Str::up('денис'));
 
-        same(2, Str::subCount('денис ДеНИС', 'е'));
-        same(1, Str::subCount('денис ДеНИС', 'И'));
+        isSame(2, Str::subCount('денис ДеНИС', 'е'));
+        isSame(1, Str::subCount('денис ДеНИС', 'И'));
 
         isTrue(Str::isStart('денис', 'ден', true));
         isTrue(Str::isStart('денис', 'ДЕН', false));
@@ -199,4 +199,19 @@ class StringTest extends PHPUnit
         isFalse(Str::isEnd('денис', 'ДЕНИС', true));
     }
 
+    public function testEsc()
+    {
+        isSame(
+            '&lt;a href="/test"&gt;Test !@#$%^&amp;*()_+\/&lt;/a&gt;',
+            Str::esc('<a href="/test">Test !@#$%^&*()_+\\/</a>')
+        );
+    }
+
+    public function testEscXML()
+    {
+        isSame(
+            '&lt;a href=&quot;/test&quot;&gt;Test!@#$%^&amp;*()_+\/&lt;/a&gt;',
+            Str::escXml('<a href="/test">Test!@#$%^&*()_+\\/</a>')
+        );
+    }
 }
