@@ -104,7 +104,7 @@ class FileSystemTest extends PHPUnit
 
         // Test symlink traversal.
         if (OS::isWin()) {
-            skip('Windows does not correctly support symlinks :(');
+            //skip('Windows does not correctly support symlinks :(');
 
         } else {
             $dir       = $dirname . '/test6';
@@ -147,7 +147,8 @@ class FileSystemTest extends PHPUnit
     public function testWritable()
     {
         if (OS::isWin()) {
-            skip('This functionality is not working on Windows.');
+            //skip('This functionality is not working on Windows.');
+            return false;
         }
 
         if (OS::isRoot()) {
@@ -184,7 +185,8 @@ class FileSystemTest extends PHPUnit
     public function testReadable()
     {
         if (OS::isWin()) {
-            skip('This functionality is not working on Windows.');
+            //skip('This functionality is not working on Windows.');
+            return false;
         }
 
         if (OS::isRoot()) {
@@ -213,7 +215,8 @@ class FileSystemTest extends PHPUnit
     public function testExecutable()
     {
         if (OS::isWin()) {
-            skip('This functionality is not working on Windows.');
+            //skip('This functionality is not working on Windows.');
+            return false;
         }
 
         if (OS::isRoot()) {
@@ -311,51 +314,51 @@ class FileSystemTest extends PHPUnit
 
     public function testExt()
     {
-        same('png', FS::ext('image.png'));
-        same('png', FS::ext('image.jpg.png'));
-        same('png', FS::ext('/file/path/image.jpg.png'));
-        same('', FS::ext('image'));
-        same('', FS::ext(''));
-        same('', FS::ext(null));
-        same('', FS::ext(false));
+        isSame('png', FS::ext('image.png'));
+        isSame('png', FS::ext('image.jpg.png'));
+        isSame('png', FS::ext('/file/path/image.jpg.png'));
+        isSame('', FS::ext('image'));
+        isSame('', FS::ext(''));
+        isSame('', FS::ext(null));
+        isSame('', FS::ext(false));
     }
 
     public function testBase()
     {
-        same('image.png', FS::base('image.png'));
-        same('image.jpg.png', FS::base('image.jpg.png'));
-        same('image.jpg.png', FS::base('/file/path/image.jpg.png'));
-        same('image', FS::base('image'));
-        same('', FS::base(''));
-        same('', FS::base(null));
-        same('', FS::base(false));
+        isSame('image.png', FS::base('image.png'));
+        isSame('image.jpg.png', FS::base('image.jpg.png'));
+        isSame('image.jpg.png', FS::base('/file/path/image.jpg.png'));
+        isSame('image', FS::base('image'));
+        isSame('', FS::base(''));
+        isSame('', FS::base(null));
+        isSame('', FS::base(false));
     }
 
     public function testFilename()
     {
-        same('image', FS::filename('image.png'));
-        same('image.jpg', FS::filename('image.jpg.png'));
-        same('image.jpg', FS::filename('/file/path/image.jpg.png'));
-        same('image', FS::filename('image'));
-        same('', FS::filename(''));
-        same('', FS::filename(null));
-        same('', FS::filename(false));
+        isSame('image', FS::filename('image.png'));
+        isSame('image.jpg', FS::filename('image.jpg.png'));
+        isSame('image.jpg', FS::filename('/file/path/image.jpg.png'));
+        isSame('image', FS::filename('image'));
+        isSame('', FS::filename(''));
+        isSame('', FS::filename(null));
+        isSame('', FS::filename(false));
     }
 
     public function testDirname()
     {
-        same('.', FS::dirname('image.png'));
-        same('.', FS::dirname('image.jpg.png'));
-        same('/file/path', FS::dirname('/file/path/image.jpg.png'));
-        same('.', FS::dirname('image'));
-        same('', FS::dirname(''));
-        same('', FS::dirname(null));
-        same('', FS::dirname(false));
+        isSame('.', FS::dirname('image.png'));
+        isSame('.', FS::dirname('image.jpg.png'));
+        isSame('/file/path', FS::dirname('/file/path/image.jpg.png'));
+        isSame('.', FS::dirname('image'));
+        isSame('', FS::dirname(''));
+        isSame('', FS::dirname(null));
+        isSame('', FS::dirname(false));
     }
 
     public function testReal()
     {
-        same(__FILE__, FS::real(__FILE__));
+        isSame(__FILE__, FS::real(__FILE__));
     }
 
     public function testClean()
@@ -363,28 +366,28 @@ class FileSystemTest extends PHPUnit
         $d     = DIRECTORY_SEPARATOR;
         $empty = Vars::get($_SERVER['DOCUMENT_ROOT'], '');
 
-        same($empty, FS::clean(''));
-        same($empty, FS::clean(false));
-        same($empty, FS::clean(null));
+        isSame($empty, FS::clean(''));
+        isSame($empty, FS::clean(false));
+        isSame($empty, FS::clean(null));
 
-        same('path', FS::clean('path'));
-        same("{$d}path", FS::clean('/path'));
-        same("{$d}path", FS::clean(' /path '));
-        same("{$d}path{$d}", FS::clean('/path/'));
-        same("{$d}path{$d}", FS::clean('///path///'));
-        same("{$d}path{$d}path", FS::clean('///path///path'));
-        same("{$d}path{$d}path{$d}path", FS::clean('///path///path/path'));
-        same("{$d}path{$d}path{$d}path{$d}", FS::clean('\path\path\path\\\\\\\\'));
-        same('\\path\\path\\path\\', FS::clean('\path\path\path\\\\\\\\', '\\'));
-        same('\\path\\path\\path\\', FS::clean('\\path\\path\\path\\\\\\\\', '\\'));
-        same('\\\\path\\path\\path\\', FS::clean('\\\\path\\path\\path\\\\\\\\', '\\'));
+        isSame('path', FS::clean('path'));
+        isSame("{$d}path", FS::clean('/path'));
+        isSame("{$d}path", FS::clean(' /path '));
+        isSame("{$d}path{$d}", FS::clean('/path/'));
+        isSame("{$d}path{$d}", FS::clean('///path///'));
+        isSame("{$d}path{$d}path", FS::clean('///path///path'));
+        isSame("{$d}path{$d}path{$d}path", FS::clean('///path///path/path'));
+        isSame("{$d}path{$d}path{$d}path{$d}", FS::clean('\path\path\path\\\\\\\\'));
+        isSame('\\path\\path\\path\\', FS::clean('\path\path\path\\\\\\\\', '\\'));
+        isSame('\\path\\path\\path\\', FS::clean('\\path\\path\\path\\\\\\\\', '\\'));
+        isSame('\\\\path\\path\\path\\', FS::clean('\\\\path\\path\\path\\\\\\\\', '\\'));
     }
 
     public function testStripExt()
     {
-        same('image', FS::stripExt('image.png'));
-        same('image.jpg', FS::stripExt('image.jpg.png'));
-        same('/file/path/image.jpg', FS::stripExt('/file/path/image.jpg.png'));
+        isSame('image', FS::stripExt('image.png'));
+        isSame('image.jpg', FS::stripExt('image.jpg.png'));
+        isSame('/file/path/image.jpg', FS::stripExt('/file/path/image.jpg.png'));
     }
 
 

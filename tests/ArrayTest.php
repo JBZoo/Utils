@@ -28,16 +28,16 @@ class ArrayTest extends PHPUnit
     public function testUnique()
     {
         $array = array(10, 100, 1231, 10, 600, 20, 40, 1231, 20, 6, 1);
-        same(array(10, 100, 1231, 600, 20, 40, 6, 1), Arr::unique($array));
+        isSame(array(10, 100, 1231, 600, 20, 40, 6, 1), Arr::unique($array));
 
         $array = array('hello', 'world', 'this', 'is', 'a', 'test', 'hello', 'is', 'a', 'word');
-        same(array('hello', 'world', 'this', 'is', 'a', 'test', 'word'), Arr::unique($array, false));
+        isSame(array('hello', 'world', 'this', 'is', 'a', 'test', 'word'), Arr::unique($array, false));
 
         $array = array(
             'asd_1' => 'asd',
             'asd_2' => 'asd',
         );
-        same(array('asd_1' => 'asd'), Arr::unique($array, true));
+        isSame(array('asd_1' => 'asd'), Arr::unique($array, true));
     }
 
     public function testGet()
@@ -165,7 +165,7 @@ class ArrayTest extends PHPUnit
     {
         $input  = array('a', 'b', '', null, false, 0);
         $expect = array('a', 'b');
-        same($expect, Arr::clean($input));
+        isSame($expect, Arr::clean($input));
     }
 
     public function testIsAssoc()
@@ -181,11 +181,11 @@ class ArrayTest extends PHPUnit
     {
         $array = array('a' => 1, 'b' => 2, 'c' => 3);
         Arr::unshiftAssoc($array, 'new', 0);
-        same($array, array('new' => 0, 'a' => 1, 'b' => 2, 'c' => 3));
+        isSame($array, array('new' => 0, 'a' => 1, 'b' => 2, 'c' => 3));
 
         $array    = array('a' => 1, 'b' => 2, 'c' => 3);
         $newArray = Arr::unshiftAssoc($array, 'new', 42);
-        same($newArray, array('new' => 42, 'a' => 1, 'b' => 2, 'c' => 3));
+        isSame($newArray, array('new' => 42, 'a' => 1, 'b' => 2, 'c' => 3));
     }
 
     public function testGetField()
@@ -197,7 +197,7 @@ class ArrayTest extends PHPUnit
             array('name' => 'Brandon', 'age' => 20),
             array('age' => 41),
         );
-        same(array(37, 37, 29, 20, 41), Arr::getField($array, 'age'));
+        isSame(array(37, 37, 29, 20, 41), Arr::getField($array, 'age'));
 
         $array = array(
             (object)array('name' => 'Bob', 'age' => 37),
@@ -206,7 +206,7 @@ class ArrayTest extends PHPUnit
             (object)array('name' => 'Brandon', 'age' => 20),
             (object)array('age' => 41),
         );
-        same(array('Bob', 'Fred', 'Jane', 'Brandon'), Arr::getField($array, 'name'));
+        isSame(array('Bob', 'Fred', 'Jane', 'Brandon'), Arr::getField($array, 'name'));
     }
 
     public function testGroupByKey()
@@ -217,7 +217,7 @@ class ArrayTest extends PHPUnit
             array('name' => 'Fred', 'age' => 20),
             array('age' => 41),
         );
-        same(array(
+        isSame(array(
             'Bob'  => array(
                 array('name' => 'Bob', 'age' => 37),
                 array('name' => 'Bob', 'age' => 66),
@@ -285,7 +285,7 @@ class ArrayTest extends PHPUnit
     public function testAddEachKey()
     {
         $array = array(1, 2, 3, 4, 5);
-        same(array(
+        isSame(array(
             "prefix_0" => 1,
             "prefix_1" => 2,
             "prefix_2" => 3,
@@ -294,7 +294,7 @@ class ArrayTest extends PHPUnit
         ), Arr::addEachKey($array, 'prefix_'));
 
         $array = array('a' => 1, 'b' => 2, 'c' => 3, 'd' => 4, 'e' => 5);
-        same(array(
+        isSame(array(
             "prefix_a" => 1,
             "prefix_b" => 2,
             "prefix_c" => 3,
@@ -334,7 +334,7 @@ class ArrayTest extends PHPUnit
             ),
         );
 
-        same(array(
+        isSame(array(
             'str_0' => '0',
             'str_1' => '1',
             'bool'  => false,

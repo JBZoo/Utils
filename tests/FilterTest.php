@@ -65,9 +65,9 @@ class FilterTest extends PHPUnit
     public function testFloat($exepted, $actual, $round = null)
     {
         if (null === $round) {
-            is($exepted, Filter::_($actual, 'float'));
+            isSame($exepted, Filter::_($actual, 'float'));
         } else {
-            is($exepted, Filter::float($actual, $round));
+            isSame($exepted, Filter::float($actual, $round));
         }
     }
 
@@ -193,40 +193,40 @@ class FilterTest extends PHPUnit
     {
         $string = " 0 1 a2b 3c!@#$%^&*()-= <>\t";
 
-        is('0123', Filter::_($string, 'digits'));
-        is('abc', Filter::_($string, 'alpha'));
-        is('01a2b3c', Filter::_($string, 'alphanum'));
+        isSame('0123', Filter::_($string, 'digits'));
+        isSame('abc', Filter::_($string, 'alpha'));
+        isSame('01a2b3c', Filter::_($string, 'alphanum'));
     }
 
     public function testBase64()
     {
         $string = '+/0123456789=ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz';
-        is($string, Filter::_($string, 'base64'));
+        isSame($string, Filter::_($string, 'base64'));
     }
 
     public function testTrim()
     {
-        is('multi', Filter::_("\n\r" . ' multi　' . chr(0xE3) . chr(0x80) . chr(0x80), 'trim'));
-        is('multi', Filter::_(chr(0xC2) . chr(0xA0) . "\n\r" . ' multi　' . "\t", 'trim'));
+        isSame('multi', Filter::_("\n\r" . ' multi　' . chr(0xE3) . chr(0x80) . chr(0x80), 'trim'));
+        isSame('multi', Filter::_(chr(0xC2) . chr(0xA0) . "\n\r" . ' multi　' . "\t", 'trim'));
 
-        is('clean', Filter::_('clean', 'trim'));
+        isSame('clean', Filter::_('clean', 'trim'));
     }
 
     public function testPath()
     {
-        is('', Filter::_(false, 'path'));
-        is('', Filter::_('http://www.fred.com/josephus', 'path'));
-        is('images/system', Filter::_('images/system', 'path'));
-        is('/images/system', Filter::_('/images/system', 'path'));
+        isSame('', Filter::_(false, 'path'));
+        isSame('', Filter::_('http://www.fred.com/josephus', 'path'));
+        isSame('images/system', Filter::_('images/system', 'path'));
+        isSame('/images/system', Filter::_('/images/system', 'path'));
     }
 
     public function testArray()
     {
         $object = (object)array('p' => 'PPP', 'i' => 'III', 'z' => '', 'w' => 123);
 
-        is(array('p' => 'PPP', 'i' => 'III', 'z' => '', 'w' => 123), Filter::_($object, 'arr'));
-        is(array('p' => 'PPP', 'i' => 'III', 'w' => 123), Filter::arr($object, 'noempty'));
-        is(array('w' => 123), Filter::arr($object, function ($value) {
+        isSame(array('p' => 'PPP', 'i' => 'III', 'z' => '', 'w' => 123), Filter::_($object, 'arr'));
+        isSame(array('p' => 'PPP', 'i' => 'III', 'w' => 123), Filter::arr($object, 'noempty'));
+        isSame(array('w' => 123), Filter::arr($object, function ($value) {
             return ($value === 123) ? true : false;
         }));
     }
@@ -236,39 +236,52 @@ class FilterTest extends PHPUnit
         $excepted = '0123456789-abcdefghijklmnopqrstuvwxyz_abcdefghijklmnopqrstuvwxyz';
         $string   = ' 0123456789-ABCDEFGHIJKLMNOPQRSTUVWXYZ_abcdefghijklmnopqrstuvwxyz ';
 
-        is($excepted, Filter::_($string, 'cmd'));
+        isSame($excepted, Filter::_($string, 'cmd'));
     }
 
     public function testString()
     {
-        is('some word', Filter::_(' <img> some word ' . "\t", 'strip'));
+        isSame('some word', Filter::_(' <img> some word ' . "\t", 'strip'));
     }
 
     public function testAlias()
     {
-        is('some-word', Filter::_(' <img> some word ' . "\t", 'alias'));
+        isSame('some-word', Filter::_(' <img> some word ' . "\t", 'alias'));
     }
 
-    public function testApply()
+    public function testApplyRaw()
     {
-        $source = ' <img> some-WORD ' . "\t";
+        $source = ' <img> some-<b>WORD</b> ' . "\t";
 
-        is($source, Filter::_($source));
-        is($source, Filter::_($source, ''));
-        is($source, Filter::_($source, 'raw'));
+        isSame($source, Filter::_($source));
+        isSame($source, Filter::_($source, ''));
+        isSame($source, Filter::_($source, 'raw'));
+        isSame($source, Filter::_($source, 'RAW'));
+        isSame($source, Filter::_($source, ' R A W '));
+    }
+
+    public function testApplyOneRule()
+    {
+        $source = '127.0001 <img> some-<b>WORD</b> ' . "\t";
 
         $excepted = Filter::strip($source);
-        is($excepted, Filter::_($source, 'strip'));
+        isSame($excepted, Filter::_($source, 'strip'));
+    }
+
+    public function testApplySeveralRules()
+    {
+        $source = '127.0001 <img> some-<b>WORD</b> ' . "\t";
 
         $excepted = Filter::strip($source);
-        $excepted = Filter::cmd($excepted);
-        is($excepted, Filter::_($source, 'Strip, CMD'));
+        $excepted = Filter::alias($excepted);
+        $excepted = Filter::int($excepted);
+        isSame($excepted, Filter::_($source, 'Strip, alias,int'));
     }
 
     /**
      * @expectedException \JBZoo\PHPUnit\Exception
      */
-    public function testApplyUnderfined()
+    public function testApplyUnderfinedRule()
     {
         Filter::_('123', 'qwertY');
     }
@@ -277,7 +290,7 @@ class FilterTest extends PHPUnit
     {
         $source = 'some-WORD';
 
-        is('some_WORD', Filter::_($source, function ($value) {
+        isSame('some_WORD', Filter::_($source, function ($value) {
             $value = str_replace('-', '_', $value);
             return $value;
         }));

@@ -210,7 +210,7 @@ class Filter
             $array = Arr::clean($array);
 
         } elseif ($filter instanceof \Closure) {
-            $array = array_filter($array, $filter);
+            $array = array_filter($array, $filter); // TODO add support both - key + value
         }
 
         return $array;

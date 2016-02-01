@@ -17,7 +17,6 @@ namespace JBZoo\PHPUnit;
 
 
 // @codingStandardsIgnoreFile
-// @codeCoverageIgnoreStart
 if (!defined('ROOT_PATH')) { // for PHPUnit process isolation
     define('ROOT_PATH', realpath('.'));
 }
@@ -29,7 +28,3 @@ if ($autoload = realpath(ROOT_PATH . '/vendor/autoload.php')) {
     echo 'Please execute "composer update" !' . PHP_EOL;
     exit(1);
 }
-
-require_once ROOT_PATH . '/tests/fixtures.php';
-
-// @codeCoverageIgnoreEnd
