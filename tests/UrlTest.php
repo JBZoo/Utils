@@ -159,5 +159,9 @@ class UrlTest extends PHPUnit
 
         isSame('tests/UrlTest.php', Url::pathToRel(__FILE__));
         isSame('http://test.dev/tests/UrlTest.php', Url::pathToUrl(__FILE__));
+
+        $_SERVER['DOCUMENT_ROOT'] = str_replace('/', '\\', PROJECT_ROOT);
+        isSame('tests/UrlTest.php', Url::pathToRel(__FILE__));
+        isSame('http://test.dev/tests/UrlTest.php', Url::pathToUrl(__FILE__));
     }
 }

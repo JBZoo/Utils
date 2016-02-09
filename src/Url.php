@@ -457,8 +457,8 @@ class Url
      */
     public static function pathToRel($path)
     {
-        $root = Vars::get($_SERVER['DOCUMENT_ROOT']);
-        $root = FS::clean($root);
+        $root = FS::clean(Vars::get($_SERVER['DOCUMENT_ROOT']));
+        $path = FS::clean($path);
 
         $normRoot = str_replace(DIRECTORY_SEPARATOR, '/', $root);
         $normPath = str_replace(DIRECTORY_SEPARATOR, '/', $path);
