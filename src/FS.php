@@ -303,7 +303,7 @@ class FS
         }
 
         // We're on Windows
-        if (OS::isWin()) {
+        if (Sys::isWin()) {
             //@codeCoverageIgnoreStart
             return true;
             //@codeCoverageIgnoreEnd

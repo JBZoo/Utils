@@ -19,7 +19,7 @@ namespace JBZoo\Utils;
  * Class OS
  * @package JBZoo\Utils
  */
-class OS
+class Sys
 {
     /**
      * Check is current OS Windows
@@ -38,7 +38,7 @@ class OS
      */
     public static function isRoot()
     {
-        if (function_exists('posix_geteuid') && is_callable('posix_geteuid')) {
+        if (self::isFunc('posix_geteuid')) {
             return posix_geteuid() === 0;
         }
 
@@ -70,7 +70,7 @@ class OS
      */
     public static function iniSet($varName, $newValue)
     {
-        if (function_exists('ini_set') && is_callable('ini_set')) {
+        if (self::isFunc('ini_set')) {
             return @ini_set($varName, $newValue);
         }
 
@@ -85,10 +85,44 @@ class OS
      */
     public static function iniGet($varName)
     {
-        if (function_exists('ini_get') && is_callable('ini_get')) {
+        if (self::isFunc('ini_get')) {
             return ini_get($varName);
         }
 
         return null;
+    }
+
+    /**
+     * @param $funcName
+     * @return bool
+     */
+    public static function isFunc($funcName)
+    {
+        return is_string($funcName) && function_exists($funcName) && is_callable($funcName);
+    }
+
+    /**
+     * Set PHP execution time limit
+     *
+     * @param int $newLimit
+     */
+    public static function setTime($newLimit = -1)
+    {
+        $newLimit = (int)$newLimit;
+
+        self::iniSet('set_time_limit', $newLimit);
+        if (self::isFunc('set_time_limit')) {
+            set_time_limit(1800);
+        }
+    }
+
+    /**
+     * Set new memory limit
+     *
+     * @param string $newLimit
+     */
+    public static function setMemory($newLimit = '256M')
+    {
+        self::iniSet('memory_limit', $newLimit);
     }
 }

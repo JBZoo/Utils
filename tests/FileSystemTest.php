@@ -16,7 +16,7 @@
 namespace JBZoo\PHPUnit;
 
 use JBZoo\Utils\FS;
-use JBZoo\Utils\OS;
+use JBZoo\Utils\Sys;
 use JBZoo\Utils\Vars;
 
 /**
@@ -103,7 +103,7 @@ class FileSystemTest extends PHPUnit
         }
 
         // Test symlink traversal.
-        if (OS::isWin()) {
+        if (Sys::isWin()) {
             //skip('Windows does not correctly support symlinks :(');
 
         } else {
@@ -146,12 +146,12 @@ class FileSystemTest extends PHPUnit
 
     public function testWritable()
     {
-        if (OS::isWin()) {
+        if (Sys::isWin()) {
             //skip('This functionality is not working on Windows.');
             return false;
         }
 
-        if (OS::isRoot()) {
+        if (Sys::isRoot()) {
             skip('These tests don\'t work when run as root');
         }
 
@@ -184,12 +184,12 @@ class FileSystemTest extends PHPUnit
 
     public function testReadable()
     {
-        if (OS::isWin()) {
+        if (Sys::isWin()) {
             //skip('This functionality is not working on Windows.');
             return false;
         }
 
-        if (OS::isRoot()) {
+        if (Sys::isRoot()) {
             skip('These tests don\'t work when run as root');
         }
 
@@ -214,12 +214,12 @@ class FileSystemTest extends PHPUnit
 
     public function testExecutable()
     {
-        if (OS::isWin()) {
+        if (Sys::isWin()) {
             //skip('This functionality is not working on Windows.');
             return false;
         }
 
-        if (OS::isRoot()) {
+        if (Sys::isRoot()) {
             skip('These tests don\'t work when run as root');
         }
 
@@ -245,21 +245,21 @@ class FileSystemTest extends PHPUnit
     public function testGetHome()
     {
         // Test for OS Default.
-        isTrue(is_writable(OS::getHome()));
+        isTrue(is_writable(Sys::getHome()));
 
         $oldServer = $_SERVER;
         unset($_SERVER);
 
         // Test for UNIX.
         $_SERVER['HOME'] = '/home/unknown';
-        is($_SERVER['HOME'], OS::getHome(), 'Could not get the user\'s home directory in UNIX.');
+        is($_SERVER['HOME'], Sys::getHome(), 'Could not get the user\'s home directory in UNIX.');
         unset($_SERVER);
 
         // Test for Windows.
         $expected             = 'X:\Users\ThisUser';
         $_SERVER['HOMEDRIVE'] = 'X:';
         $_SERVER['HOMEPATH']  = '\Users\ThisUser';
-        is($expected, OS::getHome(), 'Could not get the user\'s home directory in Windows.');
+        is($expected, Sys::getHome(), 'Could not get the user\'s home directory in Windows.');
 
         // In case the tests are not being run in isolation.
         $_SERVER = $oldServer;

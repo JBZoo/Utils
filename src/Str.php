@@ -333,7 +333,7 @@ class Str
     public static function isOverload()
     {
         if (self::isMBString()) {
-            return (int)OS::iniGet('mbstring.func_overload') & MB_OVERLOAD_STRING;
+            return (int)Sys::iniGet('mbstring.func_overload') & MB_OVERLOAD_STRING;
         }
 
         // @codeCoverageIgnoreStart
@@ -354,9 +354,9 @@ class Str
             $isLoaded = extension_loaded('mbstring');
 
             if ($isLoaded) {
-                OS::iniSet('mbstring.internal_encoding', self::$encoding);
-                OS::iniSet('mbstring.http_input', self::$encoding);
-                OS::iniSet('mbstring.http_output', self::$encoding);
+                Sys::iniSet('mbstring.internal_encoding', self::$encoding);
+                Sys::iniSet('mbstring.http_input', self::$encoding);
+                Sys::iniSet('mbstring.http_output', self::$encoding);
                 mb_internal_encoding(self::$encoding);
             }
         }
