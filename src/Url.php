@@ -39,6 +39,9 @@ class Url
 
     const ARG_SEPARATOR = '&';
 
+    const PORT_HTTP  = 80;
+    const PORT_HTTPS = 443;
+
     /**
      * Add or remove query arguments to the URL.
      *
@@ -105,12 +108,22 @@ class Url
      * Return the current URL.
      *
      * @return string
-     *
-     * @SuppressWarnings(PHPMD.Superglobals)
      */
     public static function current()
     {
-        $url = self::root();
+        return self::root() . self::path();
+    }
+
+    /**
+     * Return the current path
+     *
+     * @return string
+     *
+     * @SuppressWarnings(PHPMD.Superglobals)
+     */
+    public static function path()
+    {
+        $url = false;
 
         // Get the rest of the URL
         if (!Arr::key('REQUEST_URI', $_SERVER)) {
@@ -163,9 +176,10 @@ class Url
         $port = $_SERVER['SERVER_PORT'];
 
         // Is it on a non standard port?
-        if ($isHttps && ($port != 443)) {
+        if ($isHttps && ($port != self::PORT_HTTPS)) {
             $url .= ':' . $_SERVER['SERVER_PORT'];
-        } elseif (!$isHttps && ($port != 80)) {
+
+        } elseif (!$isHttps && ($port != self::PORT_HTTP)) {
             $url .= ':' . $_SERVER['SERVER_PORT'];
         }
 
