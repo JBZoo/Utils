@@ -147,4 +147,17 @@ class UrlTest extends PHPUnit
         is('http://admin@example.com/', Url::buildAll('http://example.com/', array('user' => 'admin')));
         is('http://admin:1@example.com/', Url::buildAll('http://example.com/', array('user' => 'admin', 'pass' => '1')));
     }
+
+    public function testPathToUrl()
+    {
+        $_SERVER['HTTP_HOST']     = 'test.dev';
+        $_SERVER['SERVER_PORT']   = 80;
+        $_SERVER['REQUEST_URI']   = '/test.php?foo=bar';
+        $_SERVER['QUERY_STRING']  = 'foo=bar';
+        $_SERVER['PHP_SELF']      = '/test.php';
+        $_SERVER['DOCUMENT_ROOT'] = PROJECT_ROOT;
+
+        isSame('tests/UrlTest.php', Url::pathToRel(__FILE__));
+        isSame('http://test.dev/tests/UrlTest.php', Url::pathToUrl(__FILE__));
+    }
 }

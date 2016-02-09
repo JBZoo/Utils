@@ -446,4 +446,41 @@ class Url
 
         return preg_replace($urlPattern, $urlReplace, $text);
     }
+
+    /**
+     * Convert file path to relative URL
+     *
+     * @param $path
+     * @return string
+     *
+     * @SuppressWarnings(PHPMD.Superglobals)
+     */
+    public static function pathToRel($path)
+    {
+        $root = Vars::get($_SERVER['DOCUMENT_ROOT']);
+        $root = FS::clean($root);
+
+        $normRoot = str_replace(DIRECTORY_SEPARATOR, '/', $root);
+        $normPath = str_replace(DIRECTORY_SEPARATOR, '/', $path);
+
+        $regExp   = '/^' . preg_quote($normRoot, '/') . '/i';
+        $relative = preg_replace($regExp, '', $normPath);
+
+        $relative = ltrim($relative, '/');
+
+        return $relative;
+    }
+
+    /**
+     * Convert file path to absolute URL
+     *
+     * @param $path
+     * @return string
+     *
+     * @SuppressWarnings(PHPMD.Superglobals)
+     */
+    public static function pathToUrl($path)
+    {
+        return self::root() . '/' . self::pathToRel($path);
+    }
 }
