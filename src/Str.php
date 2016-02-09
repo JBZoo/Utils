@@ -667,4 +667,36 @@ class Str
     {
         return htmlspecialchars($string, ENT_NOQUOTES, self::$encoding);
     }
+
+    /**
+     * Convert camel case to human readable format
+     *
+     * @param string $input
+     * @param string $separator
+     * @return string
+     */
+    public static function splitCamelCase($input, $separator = '_', $toLower = true)
+    {
+        $original = $input;
+
+        if (strpos($input, '\\') !== false) {
+            $input = explode('\\', $input);
+            reset($input);
+            $input = end($input);
+        }
+
+        $output = preg_replace(array('/(?<=[^A-Z])([A-Z])/', '/(?<=[^0-9])([0-9])/'), '_$0', $input);
+        $output = preg_replace('#_{1,}#', $separator, $output);
+
+        $output = trim($output);
+        if ($toLower) {
+            $output = strtolower($output);
+        }
+
+        if (strlen($output) == 0) {
+            return $original;
+        }
+
+        return $output;
+    }
 }

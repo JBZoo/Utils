@@ -214,4 +214,13 @@ class StringTest extends PHPUnit
             Str::escXml('<a href="/test">Test!@#$%^&*()_+\\/</a>')
         );
     }
+
+    public function testSplitCamelCase()
+    {
+        isSame('word', Str::splitCamelCase('word'));
+        isSame('word_and_word', Str::splitCamelCase('wordAndWord'));
+        isSame('word_123_number', Str::splitCamelCase('word123Number'));
+        isSame('word number', Str::splitCamelCase('wordNumber', ' '));
+        isSame('word Number', Str::splitCamelCase('wordNumber', ' ', false));
+    }
 }
