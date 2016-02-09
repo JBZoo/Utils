@@ -437,4 +437,27 @@ class FS
 
         return $path;
     }
+
+    /**
+     * Check is current path directory
+     * @param string $path
+     * @return bool
+     */
+    public static function isDir($path)
+    {
+        $path = self::clean($path);
+        return is_dir($path);
+    }
+
+    /**
+     * Check is current path regular file
+     * @param string $path
+     * @return bool
+     */
+    public static function isFile($path)
+    {
+        $path = self::clean($path);
+        return file_exists($path) && is_file($path);
+    }
+
 }

@@ -390,5 +390,15 @@ class FileSystemTest extends PHPUnit
         isSame('/file/path/image.jpg', FS::stripExt('/file/path/image.jpg.png'));
     }
 
+    public function testIsDir()
+    {
+        isFalse(FS::isDir(__FILE__));
+        isTrue(FS::isDir(__DIR__));
+    }
 
+    public function testIsFile()
+    {
+        isFalse(FS::isFile(__DIR__));
+        isTrue(FS::isFile(__FILE__));
+    }
 }
