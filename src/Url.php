@@ -110,6 +110,33 @@ class Url
      */
     public static function current()
     {
+        $url = self::root();
+
+        // Get the rest of the URL
+        if (!Arr::key('REQUEST_URI', $_SERVER)) {
+            // Microsoft IIS doesn't set REQUEST_URI by default
+            $url .= $_SERVER['PHP_SELF'];
+
+            if (Arr::key('QUERY_STRING', $_SERVER)) {
+                $url .= '?' . $_SERVER['QUERY_STRING'];
+            }
+
+        } else {
+            $url .= $_SERVER['REQUEST_URI'];
+        }
+
+        return $url;
+    }
+
+    /**
+     * Return current root URL
+     *
+     * @return string
+     *
+     * @SuppressWarnings(PHPMD.Superglobals)
+     */
+    public static function root()
+    {
         $url = '';
 
         // Check to see if it's over https
@@ -140,19 +167,6 @@ class Url
             $url .= ':' . $_SERVER['SERVER_PORT'];
         } elseif (!$isHttps && ($port != 80)) {
             $url .= ':' . $_SERVER['SERVER_PORT'];
-        }
-
-        // Get the rest of the URL
-        if (!Arr::key('REQUEST_URI', $_SERVER)) {
-            // Microsoft IIS doesn't set REQUEST_URI by default
-            $url .= $_SERVER['PHP_SELF'];
-
-            if (Arr::key('QUERY_STRING', $_SERVER)) {
-                $url .= '?' . $_SERVER['QUERY_STRING'];
-            }
-
-        } else {
-            $url .= $_SERVER['REQUEST_URI'];
         }
 
         return $url;

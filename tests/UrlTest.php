@@ -20,18 +20,13 @@ use JBZoo\Utils\Url;
 /**
  * Class UrlTest
  * @package JBZoo\PHPUnit
+ * @SuppressWarnings(PHPMD.Superglobals)
  */
 class UrlTest extends PHPUnit
 {
 
     public function testCurrent()
     {
-        $expected      = 'http://test.dev/test.php?foo=bar';
-        $expectedAuth  = 'http://admin:123@test.dev/test.php?foo=bar';
-        $expectedPort  = 'http://test.dev:443/test.php?foo=bar';
-        $expectedPort2 = 'https://test.dev:80/test.php?foo=bar';
-        $expectedSSL   = 'https://test.dev/test.php?foo=bar';
-
         $_SERVER['HTTP_HOST']    = 'test.dev';
         $_SERVER['SERVER_PORT']  = 80;
         $_SERVER['REQUEST_URI']  = '/test.php?foo=bar';
@@ -39,31 +34,69 @@ class UrlTest extends PHPUnit
         $_SERVER['PHP_SELF']     = '/test.php';
 
         // Test regular.
-        is($expected, Url::current());
+        is('http://test.dev/test.php?foo=bar', Url::current());
 
         // Test server auth.
         $_SERVER['PHP_AUTH_USER'] = 'admin';
         $_SERVER['PHP_AUTH_PW']   = '123';
 
-        is($expectedAuth, Url::current());
+        is('http://admin:123@test.dev/test.php?foo=bar', Url::current());
         unset($_SERVER['PHP_AUTH_USER']);
         unset($_SERVER['PHP_AUTH_PW']);
 
         // Test port.
         $_SERVER['SERVER_PORT'] = 443;
-        is($expectedPort, Url::current());
+        is('http://test.dev:443/test.php?foo=bar', Url::current());
 
         // Test SSL.
         $_SERVER['HTTPS'] = 'on';
-        is($expectedSSL, Url::current());
+        is('https://test.dev/test.php?foo=bar', Url::current());
+
         $_SERVER['SERVER_PORT'] = 80;
-        is($expectedPort2, Url::current());
+        is('https://test.dev:80/test.php?foo=bar', Url::current());
         unset($_SERVER['HTTPS']);
 
         // Test no $_SERVER['REQUEST_URI'] (e.g., MS IIS).
         unset($_SERVER['REQUEST_URI']);
-        is($expected, Url::current());
+        is('http://test.dev/test.php?foo=bar', Url::current());
     }
+
+    public function testRoot()
+    {
+        $_SERVER['HTTP_HOST']    = 'test.dev';
+        $_SERVER['SERVER_PORT']  = 80;
+        $_SERVER['REQUEST_URI']  = '/test.php?foo=bar';
+        $_SERVER['QUERY_STRING'] = 'foo=bar';
+        $_SERVER['PHP_SELF']     = '/test.php';
+
+        // Test regular.
+        is('http://test.dev', Url::root());
+
+        // Test server auth.
+        $_SERVER['PHP_AUTH_USER'] = 'admin';
+        $_SERVER['PHP_AUTH_PW']   = '123';
+
+        is('http://admin:123@test.dev', Url::root());
+        unset($_SERVER['PHP_AUTH_USER']);
+        unset($_SERVER['PHP_AUTH_PW']);
+
+        // Test port.
+        $_SERVER['SERVER_PORT'] = 443;
+        is('http://test.dev:443', Url::root());
+
+        // Test SSL.
+        $_SERVER['HTTPS'] = 'on';
+        is('https://test.dev', Url::root());
+
+        $_SERVER['SERVER_PORT'] = 80;
+        is('https://test.dev:80', Url::root());
+        unset($_SERVER['HTTPS']);
+
+        // Test no $_SERVER['REQUEST_URI'] (e.g., MS IIS).
+        unset($_SERVER['REQUEST_URI']);
+        is('http://test.dev', Url::root());
+    }
+
 
     public function testParseLinky()
     {
@@ -106,7 +139,7 @@ class UrlTest extends PHPUnit
         // If not provided, grab the URI from the server.
         $_SERVER['REQUEST_URI'] = '/app/admin/users';
         is('/app/admin/users?user=6', Url::addArg(array('user' => 6)));
-        is('/app/admin/users?user=7', Url::addArg(array('user'=> 7)));
+        is('/app/admin/users?user=7', Url::addArg(array('user' => 7)));
     }
 
     public function testRemoveArg()
@@ -116,7 +149,7 @@ class UrlTest extends PHPUnit
         is('/app/admin/users?user=5', Url::delArg(array('tab', 'action'), '/app/admin/users?action=edit&tab=personal&user=5'));
     }
 
-    public function test_http_build_url()
+    public function testHttpBuildUrl()
     {
         $url = 'http://user:pass@example.com:8080/path/?query#fragment';
 
