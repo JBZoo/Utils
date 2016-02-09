@@ -28,3 +28,8 @@ if ($autoload = realpath(ROOT_PATH . '/vendor/autoload.php')) {
     echo 'Please execute "composer update" !' . PHP_EOL;
     exit(1);
 }
+
+
+if ($fixtures = realpath(ROOT_PATH . '/tests/fixtures.php')) {
+    require_once $fixtures;
+}

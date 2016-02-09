@@ -459,5 +459,4 @@ class FS
         $path = self::clean($path);
         return file_exists($path) && is_file($path);
     }
-
 }
