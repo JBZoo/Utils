@@ -24,7 +24,7 @@ use JBZoo\Utils\Str;
  */
 class PerformanceTest extends PHPUnit
 {
-    public function getRandomString($length = 2)
+    public function getRandomString($length = 6)
     {
         $chars       = 'абвгд';
         $charsLength = strlen($chars);
@@ -37,7 +37,7 @@ class PerformanceTest extends PHPUnit
         return $result;
     }
 
-    public function testSlug()
+    public function testSlugCache()
     {
         $_this = $this;
 
@@ -75,5 +75,16 @@ class PerformanceTest extends PHPUnit
                 return Slug::filter($_this->getRandomString(4));
             },
         ), array('count' => 10000, 'name' => 'Rundom slug'));
+    }
+
+    public function testSlugSpeed()
+    {
+        $_this = $this;
+
+        runBench(array(
+            'Slug::filter'     => function () use ($_this) {
+                return Slug::filter($_this->getRandomString(15));
+            },
+        ), array('count' => 1000, 'name' => 'Slug speed'));
     }
 }
