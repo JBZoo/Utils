@@ -16,6 +16,7 @@
 namespace JBZoo\PHPUnit;
 
 use JBZoo\Utils\Str;
+use JBZoo\Utils\Slug;
 
 /**
  * Class StringTest
@@ -141,26 +142,26 @@ class StringTest extends PHPUnit
 
     public function testSlug()
     {
-        is('a-simple-title', Str::slug(' A simple     title '));
-        is('this-post-it-has-a-dash', Str::slug('This post -- it has a dash'));
-        is('123-1251251', Str::slug('123----1251251'));
-        is('one23-1251251', Str::slug('123----1251251', '-', true));
+        is('a-simple-title', Slug::filter(' A simple     title '));
+        is('this-post-it-has-a-dash', Slug::filter('This post -- it has a dash'));
+        is('123-1251251', Slug::filter('123----1251251'));
+        is('one23-1251251', Slug::filter('123----1251251', '-', true));
 
-        is('a-simple-title', Str::slug('A simple title', '-'));
-        is('this-post-it-has-a-dash', Str::slug('This post -- it has a dash', '-'));
-        is('123-1251251', Str::slug('123----1251251', '-'));
-        is('one23-1251251', Str::slug('123----1251251', '-', true));
+        is('a-simple-title', Slug::filter('A simple title', '-'));
+        is('this-post-it-has-a-dash', Slug::filter('This post -- it has a dash', '-'));
+        is('123-1251251', Slug::filter('123----1251251', '-'));
+        is('one23-1251251', Slug::filter('123----1251251', '-', true));
 
-        is('a_simple_title', Str::slug('A simple title', '_'));
-        is('this_post_it_has_a_dash', Str::slug('This post -- it has a dash', '_'));
-        is('123_1251251', Str::slug('123----1251251', '_'));
-        is('one23_1251251', Str::slug('123----1251251', '_', true));
+        is('a_simple_title', Slug::filter('A simple title', '_'));
+        is('this_post_it_has_a_dash', Slug::filter('This post -- it has a dash', '_'));
+        is('123_1251251', Slug::filter('123----1251251', '_'));
+        is('one23_1251251', Slug::filter('123----1251251', '_', true));
 
         // Blank seperator tests
-        is('asimpletitle', Str::slug('A simple title', ''));
-        is('thispostithasadash', Str::slug('This post -- it has a dash', ''));
-        is('1231251251', Str::slug('123----1251251', ''));
-        is('one231251251', Str::slug('123----1251251', '', true));
+        is('asimpletitle', Slug::filter('A simple title', ''));
+        is('thispostithasadash', Slug::filter('This post -- it has a dash', ''));
+        is('1231251251', Slug::filter('123----1251251', ''));
+        is('one231251251', Slug::filter('123----1251251', '', true));
     }
 
     public function testMBString()
