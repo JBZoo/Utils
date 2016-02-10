@@ -307,22 +307,22 @@ class Str
     /**
      * Converts any accent characters to their equivalent normal characters
      *
-     * @param string     $text
-     * @param string     $separator
-     * @param bool|false $cssMode
+     * @param string $text
+     * @param bool   $isCache
      * @return string
      */
-    public static function slug($text = '', $separator = '-', $cssMode = false)
+    public static function slug($text = '', $isCache = false)
     {
         static $cache = array();
 
-        $key = $text . '|' . $separator . '|' . (int)$cssMode;
+        if (!$isCache) {
+            return Slug::filter($text);
 
-        if (!Arr::key($key, $cache)) {
-            $cache[$key] = Slug::filter($text, $separator, $cssMode);
+        } elseif (!Arr::key($text, $cache)) {
+            $cache[$text] = Slug::filter($text);
         }
 
-        return $cache[$key];
+        return $cache[$text];
     }
 
     /**

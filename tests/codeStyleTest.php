@@ -37,6 +37,7 @@ class CodestyleTest extends Codestyle
         $GLOBALS['_jbzoo_fileExcludes'][] = 'StringTest.php';
         $GLOBALS['_jbzoo_fileExcludes'][] = 'VarsTest.php';
         $GLOBALS['_jbzoo_fileExcludes'][] = 'FilterTest.php';
+        $GLOBALS['_jbzoo_fileExcludes'][] = 'PerformanceTest.php';
 
         parent::testCyrillic();
     }

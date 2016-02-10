@@ -71,10 +71,11 @@ class Http
      * headers must be sent so that all of them get the point that no caching should occur
      *
      * @return boolean
+     *
+     * @codeCoverageIgnore
      */
     public static function nocache()
     {
-        // @codeCoverageIgnoreStart
         if (!headers_sent()) {
             header('Expires: Wed, 11 Jan 1984 05:00:00 GMT');
             header('Last-Modified: ' . gmdate('D, d M Y H:i:s') . ' GMT');
@@ -85,7 +86,6 @@ class Http
         }
 
         return false;
-        // @codeCoverageIgnoreEnd
     }
 
     /**
@@ -125,10 +125,11 @@ class Http
      *
      * @param  string $content_type The content type to send out
      * @return boolean
+     *
+     * @codeCoverageIgnore
      */
     public static function utf8($content_type = 'text/html')
     {
-        // @codeCoverageIgnoreStart
         if (!headers_sent()) {
             header('Content-type: ' . $content_type . '; charset=utf-8');
 
@@ -136,7 +137,6 @@ class Http
         }
 
         return false;
-        // @codeCoverageIgnoreEnd
     }
 
     /**
