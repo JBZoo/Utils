@@ -279,7 +279,7 @@ class FilterTest extends PHPUnit
     }
 
     /**
-     * @expectedException \JBZoo\PHPUnit\Exception
+     * @expectedException \JBZoo\Utils\Exception
      */
     public function testApplyUnderfinedRule()
     {

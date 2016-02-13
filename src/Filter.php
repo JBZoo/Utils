@@ -15,8 +15,6 @@
 
 namespace JBZoo\Utils;
 
-use JBZoo\PHPUnit\Exception;
-
 /**
  * Class Filter
  * @package JBZoo\Utils
