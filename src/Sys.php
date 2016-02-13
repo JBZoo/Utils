@@ -16,7 +16,7 @@
 namespace JBZoo\Utils;
 
 /**
- * Class OS
+ * Class Sys
  * @package JBZoo\Utils
  */
 class Sys
@@ -124,5 +124,15 @@ class Sys
     public static function setMemory($newLimit = '256M')
     {
         self::iniSet('memory_limit', $newLimit);
+    }
+
+    /**
+     * @param string $version
+     * @param string $current
+     * @return bool
+     */
+    public static function isPHP($version, $current = PHP_VERSION)
+    {
+        return strpos($current, $version) === 0;
     }
 }

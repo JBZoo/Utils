@@ -34,4 +34,25 @@ class SysTest extends PHPUnit
         Sys::setTime(1800);
         Sys::setMemory('128M');
     }
+
+    public function testIsPHPVersion()
+    {
+        isFalse(Sys::isPHP('5.3', '4'));
+        isFalse(Sys::isPHP('5.3', '4.0'));
+        isFalse(Sys::isPHP('5.3', '5'));
+        isFalse(Sys::isPHP('5.3', '5.0'));
+        isFalse(Sys::isPHP('5.3', '5.2'));
+
+        isTrue(Sys::isPHP('5.3', '5.3'));
+        isTrue(Sys::isPHP('5.3', '5.3.0'));
+        isTrue(Sys::isPHP('5.3', '5.3.1'));
+        isTrue(Sys::isPHP('5.3', '5.3.17'));
+
+        isFalse(Sys::isPHP('5.3', '5.4'));
+        isFalse(Sys::isPHP('5.3', '5.4.0'));
+        isFalse(Sys::isPHP('5.3', '5.4.1'));
+
+        isFalse(Sys::isPHP('5.3', '5.5'));
+        isFalse(Sys::isPHP('5.3', '5.5.0'));
+    }
 }
