@@ -92,7 +92,7 @@ Cli::out($message, $addEol = true)
 // Print line to std error (or echo)
 Cli::err($message, $addEol = true)
 
-// Execute cli command with Symp
+// Execute cli command with Symfony Process Component
 Cli::exec($command, $args = array(), $cwd = null, $verbose = false)
 
 // Build params for cli
