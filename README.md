@@ -1,6 +1,6 @@
 # JBZoo Utils  [![Build Status](https://travis-ci.org/JBZoo/Utils.svg?branch=master)](https://travis-ci.org/JBZoo/Utils)      [![Coverage Status](https://coveralls.io/repos/JBZoo/Utils/badge.svg?branch=master&service=github)](https://coveralls.io/github/JBZoo/Utils?branch=master)
 
-#### A collection of useful PHP functions, mini classes and snippets that you need or could use every day.
+A collection of useful PHP functions, mini classes and snippets that you need or could use every day.
 
 [![License](https://poser.pugx.org/JBZoo/Utils/license)](https://packagist.org/packages/JBZoo/Utils)
 [![Latest Stable Version](https://poser.pugx.org/JBZoo/Utils/v/stable)](https://packagist.org/packages/JBZoo/Utils) [![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/JBZoo/Utils/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/JBZoo/Utils/?branch=master)
@@ -10,6 +10,7 @@
 composer require jbzoo/utils:"1.x-dev"  # Last version
 composer require jbzoo/utils            # Stable version
 ```
+
 
 ## Array helper
 ```php
@@ -634,7 +635,8 @@ Vars::max($number, $max)
 Vars::out($number, $min, $max)
 ```
 
-### Links (ideas and some functions)
+
+## Links (ideas and some functions)
  * utilphp - https://github.com/brandonwamboldt/utilphp
  * PHPBinString - https://github.com/Grandt/PHPBinString
  * URLify for PHP - https://github.com/jbroadway/urlify
@@ -647,12 +649,13 @@ Vars::out($number, $min, $max)
  * Askar (ARACOOL) https://github.com/ARACOOOL
 
 
-### Unit tests and check code style
+## Unit tests and check code style
 ```sh
 composer update-all
 composer test
 ```
 
-### License
+
+## License
 
 MIT
