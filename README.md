@@ -84,19 +84,19 @@ Arr::toComment(array $data)
 use JBZoo\Utils\Cli;
 
 // Is command line
-Cli::function check()
+Cli::check()
 
 // Print line to std out (or echo)
-Cli::function out($message, $addEol = true)
+Cli::out($message, $addEol = true)
 
 // Print line to std error (or echo)
-Cli::function err($message, $addEol = true)
+Cli::err($message, $addEol = true)
 
 // Execute cli command with Symp
-Cli::function exec($command, $args = array(), $cwd = null, $verbose = false)
+Cli::exec($command, $args = array(), $cwd = null, $verbose = false)
 
 // Build params for cli
-Cli::function build($command, $args = array())
+Cli::build($command, $args = array())
 ```
 
 
