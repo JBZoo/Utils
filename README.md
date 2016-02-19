@@ -104,13 +104,13 @@ Cli::function build($command, $args = array())
 ```php
 use JBZoo\Utils\Dates;
 
-Dates::MINUTE  // 60
-Dates::HOUR    // 3600      (60 * 60)
-Dates::DAY     // 86400     (60 * 60 * 24)
-Dates::WEEK    // 604800    (60 * 60 * 24 * 7)
-Dates::MONTH   // 2592000   (60 * 60 * 24 * 30)
-Dates::YEAR    // 31536000  (60 * 60 * 24 * 365)
-Dates::SQL     // 'Y-m-d H:i:s';
+Dates::MINUTE  //         60  seconds
+Dates::HOUR    //       3600  (60 * 60)
+Dates::DAY     //      86400  (60 * 60 * 24)
+Dates::WEEK    //     604800  (60 * 60 * 24 * 7)
+Dates::MONTH   //    2592000  (60 * 60 * 24 * 30)
+Dates::YEAR    //   31536000  (60 * 60 * 24 * 365)
+Dates::SQL     //   Y-m-d H:i:s
 
 // Convert to timestamp
 Dates::toStamp($time, $currentIsDefault = true)
@@ -127,6 +127,7 @@ Dates::is($date)
 // Convert time for sql format
 Dates::sql($time = null)
 
+// To human readable format
 Dates::human($date, $format = 'd M Y H:i')
 
 // Returns true if date passed is within this week
