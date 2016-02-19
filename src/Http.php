@@ -195,7 +195,7 @@ class Http
                     // And PHP_AUTH_PW when authorization header is basic
                     $exploded = explode(':', base64_decode(substr($authorizationHeader, 6)), 2);
 
-                    if (count($exploded) == 2) {
+                    if (count($exploded) === 2) {
                         list($headers['PHP_AUTH_USER'], $headers['PHP_AUTH_PW']) = $exploded;
                     }
 

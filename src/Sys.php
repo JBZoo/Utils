@@ -135,4 +135,23 @@ class Sys
     {
         return strpos($current, $version) === 0;
     }
+
+    /**
+     * Get usage memory
+     *
+     * @param bool $isPeak
+     * @return string
+     */
+    public static function getMemory($isPeak = true)
+    {
+        if ($isPeak) {
+            $memory = memory_get_peak_usage(false);
+        } else {
+            $memory = memory_get_usage(false);
+        }
+
+        $result = round($memory / 1024 / 1024, 2) . ' M';
+
+        return $result;
+    }
 }

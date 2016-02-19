@@ -324,13 +324,24 @@ class Url
     /**
      * Checks to see if the page is being server over SSL or not
      *
+     * @param bool $trustProxyHeaders
      * @return boolean
      *
      * @SuppressWarnings(PHPMD.Superglobals)
      */
-    public static function isHttps()
+    public static function isHttps($trustProxyHeaders = false)
     {
-        return Arr::key('HTTPS', $_SERVER) && !empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] != 'off';
+        // Check standard HTTPS header
+        if (Arr::key('HTTPS', $_SERVER)) {
+            return !empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off';
+        }
+
+        if ($trustProxyHeaders && Arr::key('X-FORWARDED-PROTO', $_SERVER)) {
+            return  $_SERVER['X-FORWARDED-PROTO'] === 'https';
+        }
+
+        // Default to not SSL
+        return false;
     }
 
     /**

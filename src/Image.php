@@ -33,16 +33,20 @@ class Image
 
     /**
      * Require GD library
+     * @param bool $thowException
+     * @return bool
      * @throws Exception
      */
-    public static function checkGD()
+    public static function checkGD($thowException = true)
     {
+        $isGd = extension_loaded('gd');
+
         // Require GD library
-        if (!extension_loaded('gd')) {
+        if ($thowException && !$isGd) {
             throw new Exception('Required extension GD is not loaded.'); // @codeCoverageIgnore
         }
 
-        return true;
+        return $isGd;
     }
 
     /**
