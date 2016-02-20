@@ -280,6 +280,83 @@ class Filter
     }
 
     /**
+     * String to lower and trim
+     *
+     * @param $string
+     * @return string
+     */
+    public static function low($string)
+    {
+        $cleaned = Str::low($string);
+        $cleaned = Str::trim($cleaned);
+
+        return $cleaned;
+    }
+
+    /**
+     * String to upper and trim
+     *
+     * @param $string
+     * @return string
+     *
+     * @SuppressWarnings(PHPMD.ShortMethodName)
+     */
+    public static function up($string)
+    {
+        $cleaned = Str::up($string);
+        $cleaned = Str::trim($cleaned);
+
+        return $cleaned;
+    }
+
+    /**
+     * Strip spaces
+     *
+     * @param $string
+     * @return string
+     */
+    public static function stripSpace($string)
+    {
+        return Str::stripSpace($string);
+    }
+
+    /**
+     * @param $string
+     * @return string
+     */
+    public static function clean($string)
+    {
+        return Str::clean($string, true, true);
+    }
+
+    /**
+     * @param $string
+     * @return string
+     */
+    public static function html($string)
+    {
+        return Str::htmlEnt($string);
+    }
+
+    /**
+     * @param $string
+     * @return string
+     */
+    public static function xml($string)
+    {
+        return Str::escXml($string);
+    }
+
+    /**
+     * @param $string
+     * @return string
+     */
+    public static function esc($string)
+    {
+        return Str::esc($string);
+    }
+
+    /**
      * RAW placeholder
      *
      * @param $string

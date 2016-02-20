@@ -260,6 +260,17 @@ class FilterTest extends PHPUnit
         isSame($source, Filter::_($source, ' R A W '));
     }
 
+    public function testOthers()
+    {
+        isSame('low', Filter::_(' LOW ', 'low'));
+        isSame('UP', Filter::_(' up ', 'up'));
+        isSame('spaces', Filter::_(' s p a c e s ', 'stripSpace'));
+        isSame('denis !@#$%^&*()_ 1234567890 qwerty', Filter::_(' Денис !@#$%^&*()_ 1234567890 qwerty ', 'clean'));
+        isSame(' One &amp; Two &lt;&gt; &amp;mdash; ', Filter::_(' One & Two <> &mdash; ', 'html'));
+        isSame(' One &amp; Two &lt;&gt; &amp;mdash; ', Filter::_(' One & Two <> &mdash; ', 'xml'));
+        isSame(' One &amp; Two &lt;&gt; &amp;mdash; ', Filter::_(' One & Two <> &mdash; ', 'esc'));
+    }
+
     public function testApplyOneRule()
     {
         $source = '127.0001 <img> some-<b>WORD</b> ' . "\t";
