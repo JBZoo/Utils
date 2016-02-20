@@ -9,11 +9,17 @@ php:
 
 matrix:
   fast_finish: true
+  include:
+    - php: 5.6
+      env: XDEBUG_OFF="yes"
+    - php: 7.0
+      env: XDEBUG_OFF="yes"
 
 before_script:
-  - composer update-all
+  - if [[ $XDEBUG_OFF = yes ]]; then phpenv config-rm xdebug.ini; fi;
 
 script:
+  - composer update-all
   - composer test
 
 after_script:
