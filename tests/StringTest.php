@@ -218,6 +218,7 @@ class StringTest extends PHPUnit
 
     public function testSplitCamelCase()
     {
+        isSame('_', Str::splitCamelCase('_'));
         isSame('word', Str::splitCamelCase('word'));
         isSame('word_and_word', Str::splitCamelCase('wordAndWord'));
         isSame('word_123_number', Str::splitCamelCase('word123Number'));

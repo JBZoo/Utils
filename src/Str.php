@@ -679,12 +679,6 @@ class Str
     {
         $original = $input;
 
-        if (strpos($input, '\\') !== false) {
-            $input = explode('\\', $input);
-            reset($input);
-            $input = end($input);
-        }
-
         $output = preg_replace(array('/(?<=[^A-Z])([A-Z])/', '/(?<=[^0-9])([0-9])/'), '_$0', $input);
         $output = preg_replace('#_{1,}#', $separator, $output);
 

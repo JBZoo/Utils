@@ -43,6 +43,7 @@ class SysTest extends PHPUnit
         isFalse(Sys::isPHP('5.3', '5.0'));
         isFalse(Sys::isPHP('5.3', '5.2'));
 
+        isTrue(Sys::isPHP('5.3.', '5.3'));
         isTrue(Sys::isPHP('5.3', '5.3'));
         isTrue(Sys::isPHP('5.3', '5.3.0'));
         isTrue(Sys::isPHP('5.3', '5.3.1'));
@@ -54,5 +55,29 @@ class SysTest extends PHPUnit
 
         isFalse(Sys::isPHP('5.3', '5.5'));
         isFalse(Sys::isPHP('5.3', '5.5.0'));
+    }
+
+    public function testGetIP()
+    {
+        $_SERVER['REMOTE_ADDR']          = '192.168.0.1';
+        $_SERVER['HTTP_CLIENT_IP']       = '192.168.0.2';
+        $_SERVER['HTTP_X_REAL_IP']       = '192.168.0.3';
+        $_SERVER['HTTP_X_FORWARDED_FOR'] = '192.168.0.4';
+
+        is('192.168.0.1', Sys::IP());
+        is('192.168.0.2', Sys::IP(true));
+
+        unset($_SERVER['HTTP_CLIENT_IP']);
+        is('192.168.0.3', Sys::IP(true));
+
+        unset($_SERVER['HTTP_X_REAL_IP']);
+        is('192.168.0.4', Sys::IP(true));
+
+        unset($_SERVER['HTTP_X_FORWARDED_FOR']);
+        is('192.168.0.1', Sys::IP(true));
+    }
+
+    public function testGetMemory() {
+        isTrue(Sys::getMemory());
     }
 }

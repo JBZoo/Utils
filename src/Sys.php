@@ -133,6 +133,7 @@ class Sys
      */
     public static function isPHP($version, $current = PHP_VERSION)
     {
+        $version = trim($version, '.');
         return strpos($current, $version) === 0;
     }
 
@@ -153,5 +154,37 @@ class Sys
         $result = round($memory / 1024 / 1024, 2) . ' M';
 
         return $result;
+    }
+
+    /**
+     * Returns the IP address of the client.
+     *
+     * @param   boolean $trustProxy Whether or not to trust the proxy headers HTTP_CLIENT_IP and HTTP_X_FORWARDED_FOR.
+     *                              ONLY use if your server is behind a proxy that sets these values
+     * @return  string
+     *
+     * @SuppressWarnings(PHPMD.Superglobals)
+     * @SuppressWarnings(PHPMD.ShortMethodName)
+     */
+    public static function IP($trustProxy = false)
+    {
+        if (!$trustProxy) {
+            return $_SERVER['REMOTE_ADDR'];
+        }
+
+        if (!empty($_SERVER['HTTP_CLIENT_IP'])) {
+            $ipAddress = $_SERVER['HTTP_CLIENT_IP'];
+
+        } elseif (!empty($_SERVER['HTTP_X_REAL_IP'])) {
+            $ipAddress = $_SERVER['HTTP_X_REAL_IP'];
+
+        } elseif (!empty($_SERVER['HTTP_X_FORWARDED_FOR'])) {
+            $ipAddress = $_SERVER['HTTP_X_FORWARDED_FOR'];
+
+        } else {
+            $ipAddress = $_SERVER['REMOTE_ADDR'];
+        }
+
+        return $ipAddress;
     }
 }

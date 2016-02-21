@@ -89,38 +89,6 @@ class Http
     }
 
     /**
-     * Returns the IP address of the client.
-     *
-     * @param   boolean $trustProxy Whether or not to trust the proxy headers HTTP_CLIENT_IP and HTTP_X_FORWARDED_FOR.
-     *                              ONLY use if your server is behind a proxy that sets these values
-     * @return  string
-     *
-     * @SuppressWarnings(PHPMD.Superglobals)
-     * @SuppressWarnings(PHPMD.ShortMethodName)
-     */
-    public static function IP($trustProxy = false)
-    {
-        if (!$trustProxy) {
-            return $_SERVER['REMOTE_ADDR'];
-        }
-
-        if (!empty($_SERVER['HTTP_CLIENT_IP'])) {
-            $ipAddress = $_SERVER['HTTP_CLIENT_IP'];
-
-        } elseif (!empty($_SERVER['HTTP_X_REAL_IP'])) {
-            $ipAddress = $_SERVER['HTTP_X_REAL_IP'];
-
-        } elseif (!empty($_SERVER['HTTP_X_FORWARDED_FOR'])) {
-            $ipAddress = $_SERVER['HTTP_X_FORWARDED_FOR'];
-
-        } else {
-            $ipAddress = $_SERVER['REMOTE_ADDR'];
-        }
-
-        return $ipAddress;
-    }
-
-    /**
      * Transmit UTF-8 content headers if the headers haven't already been sent.
      *
      * @param  string $content_type The content type to send out
@@ -146,6 +114,7 @@ class Http
      * @return array
      *
      * @SuppressWarnings(PHPMD.Superglobals)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     public static function getHeaders()
     {
@@ -156,15 +125,14 @@ class Http
         foreach ($_SERVER as $key => $value) {
             if (0 === strpos($key, 'HTTP_')) {
                 $headers[substr($key, 5)] = $value;
-            } // CONTENT_* are not prefixed with HTTP_
-            elseif (isset($contentHeaders[$key])) {
+            } elseif (isset($contentHeaders[$key])) { // CONTENT_* are not prefixed with HTTP_
                 $headers[$key] = $value;
             }
         }
 
-        if (Vars::get($_SERVER['PHP_AUTH_USER'])) {
+        if (isset($_SERVER['PHP_AUTH_USER'])) {
             $headers['PHP_AUTH_USER'] = $_SERVER['PHP_AUTH_USER'];
-            $headers['PHP_AUTH_PW']   = Vars::get($_SERVER['PHP_AUTH_PW'], '');
+            $headers['PHP_AUTH_PW']   = isset($_SERVER['PHP_AUTH_PW']) ? $_SERVER['PHP_AUTH_PW'] : '';
 
         } else {
             /*
@@ -180,22 +148,19 @@ class Http
              * RewriteCond %{REQUEST_FILENAME} !-f
              * RewriteRule ^(.*)$ app.php [QSA,L]
              */
-
             $authorizationHeader = null;
-            if (Vars::get($_SERVER['HTTP_AUTHORIZATION'])) {
+            if (isset($_SERVER['HTTP_AUTHORIZATION'])) {
                 $authorizationHeader = $_SERVER['HTTP_AUTHORIZATION'];
 
-            } elseif (Vars::get($_SERVER['REDIRECT_HTTP_AUTHORIZATION'])) {
+            } elseif (isset($_SERVER['REDIRECT_HTTP_AUTHORIZATION'])) {
                 $authorizationHeader = $_SERVER['REDIRECT_HTTP_AUTHORIZATION'];
             }
 
             if (null !== $authorizationHeader) {
                 if (0 === stripos($authorizationHeader, 'basic ')) {
-                    // Decode AUTHORIZATION header into PHP_AUTH_USER
-                    // And PHP_AUTH_PW when authorization header is basic
+                    // Decode AUTHORIZATION header into PHP_AUTH_USER and PHP_AUTH_PW when authorization header is basic
                     $exploded = explode(':', base64_decode(substr($authorizationHeader, 6)), 2);
-
-                    if (count($exploded) === 2) {
+                    if (count($exploded) == 2) {
                         list($headers['PHP_AUTH_USER'], $headers['PHP_AUTH_PW']) = $exploded;
                     }
 
@@ -215,13 +180,15 @@ class Http
             }
         }
 
+        if (isset($headers['AUTHORIZATION'])) {
+            return $headers;
+        }
+
         // PHP_AUTH_USER/PHP_AUTH_PW
-        if (Vars::get($headers['PHP_AUTH_USER'])) {
-            $authorization = 'Basic ' . base64_encode($headers['PHP_AUTH_USER'] . ':' . $headers['PHP_AUTH_PW']);
+        if (isset($headers['PHP_AUTH_USER'])) {
+            $headers['AUTHORIZATION'] = 'Basic ' . base64_encode($headers['PHP_AUTH_USER'] . ':' . $headers['PHP_AUTH_PW']);
 
-            $headers['AUTHORIZATION'] = $authorization;
-
-        } elseif (Vars::get($headers['PHP_AUTH_DIGEST'])) {
+        } elseif (isset($headers['PHP_AUTH_DIGEST'])) {
             $headers['AUTHORIZATION'] = $headers['PHP_AUTH_DIGEST'];
         }
 
