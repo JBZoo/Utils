@@ -28,10 +28,11 @@ class Http
      * @param string      $filename The name of the filename to display to browsers
      * @param string|bool $content  The content to output for the download. If empty just the headers will be sent
      * @return boolean
+     *
+     * @codeCoverageIgnore
      */
     public static function download($filename, $content = false)
     {
-        // @codeCoverageIgnoreStart
         if (!headers_sent()) {
             // Required for some browsers
             if (Vars::bool(Sys::iniGet('zlib.output_compression'))) {
@@ -62,7 +63,6 @@ class Http
         }
 
         return false;
-        // @codeCoverageIgnoreEnd
     }
 
     /**
@@ -186,7 +186,9 @@ class Http
 
         // PHP_AUTH_USER/PHP_AUTH_PW
         if (isset($headers['PHP_AUTH_USER'])) {
-            $headers['AUTHORIZATION'] = 'Basic ' . base64_encode($headers['PHP_AUTH_USER'] . ':' . $headers['PHP_AUTH_PW']);
+            $authorization = 'Basic ' . base64_encode($headers['PHP_AUTH_USER'] . ':' . $headers['PHP_AUTH_PW']);
+
+            $headers['AUTHORIZATION'] = $authorization;
 
         } elseif (isset($headers['PHP_AUTH_DIGEST'])) {
             $headers['AUTHORIZATION'] = $headers['PHP_AUTH_DIGEST'];
