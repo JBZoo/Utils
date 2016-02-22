@@ -20,6 +20,7 @@ use JBZoo\Utils\Sys;
 /**
  * Class SysTest
  * @package JBZoo\PHPUnit
+ * @SuppressWarnings(PHPMD.Superglobals)
  */
 class SysTest extends PHPUnit
 {
@@ -77,7 +78,23 @@ class SysTest extends PHPUnit
         is('192.168.0.1', Sys::IP(true));
     }
 
-    public function testGetMemory() {
+    public function testGetMemory()
+    {
         isTrue(Sys::getMemory());
+    }
+
+    public function testGetDocumentRoot()
+    {
+        $_SERVER['DOCUMENT_ROOT'] = null;
+        isSame(realpath('.'), Sys::getDocRoot());
+
+        $_SERVER['DOCUMENT_ROOT'] = __DIR__;
+        isSame(__DIR__, Sys::getDocRoot());
+
+        $_SERVER['DOCUMENT_ROOT'] = '../../';
+        isSame(realpath('../../'), Sys::getDocRoot());
+
+        $_SERVER['DOCUMENT_ROOT'] = __DIR__ . '\\..\\';
+        isSame(PROJECT_ROOT, Sys::getDocRoot());
     }
 }

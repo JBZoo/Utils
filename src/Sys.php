@@ -187,4 +187,27 @@ class Sys
 
         return $ipAddress;
     }
+
+    /**
+     * Return document root
+     *
+     * @SuppressWarnings(PHPMD.Superglobals)
+     * @return string
+     */
+    public static function getDocRoot()
+    {
+        $result = '.';
+        if (Arr::key('DOCUMENT_ROOT', $_SERVER)) {
+            $result = $_SERVER['DOCUMENT_ROOT'];
+        }
+
+        $result = FS::clean($result);
+        $result = FS::real($result);
+
+        if (!$result) {
+            $result = FS::real('.');
+        }
+
+        return $result;
+    }
 }
