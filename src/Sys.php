@@ -112,7 +112,7 @@ class Sys
 
         self::iniSet('set_time_limit', $newLimit);
         if (self::isFunc('set_time_limit')) {
-            set_time_limit(1800);
+            set_time_limit($newLimit);
         }
     }
 
