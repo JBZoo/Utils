@@ -407,5 +407,8 @@ class FileSystemTest extends PHPUnit
 
         isSame('tests/FileSystemTest.php', FS::getRelative($file, $root, '/'));
         isSame('tests\\FileSystemTest.php', FS::getRelative($file, $root, '\\'));
+
+        isSame('tests/FileSystemTest.php', FS::getRelative($file, null, '/'));
+        isSame('tests\\FileSystemTest.php', FS::getRelative($file, null, '\\'));
     }
 }
