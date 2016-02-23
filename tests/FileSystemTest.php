@@ -403,7 +403,7 @@ class FileSystemTest extends PHPUnit
     public function testIsReal()
     {
         isTrue(FS::isReal(__FILE__));
-        isFalse(FS::isReal(__DIR__ . '/../'));
+        isFalse(FS::isReal(__DIR__.'/../'));
     }
 
     public function testGetRelative()
