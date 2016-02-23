@@ -26,12 +26,6 @@ use JBZoo\Utils\Vars;
 class FileSystemTest extends PHPUnit
 {
 
-    public function test()
-    {
-        //incomplete();
-    }
-
-
     public function testRemoveDir()
     {
         $dirname = dirname(__FILE__);
@@ -363,24 +357,28 @@ class FileSystemTest extends PHPUnit
 
     public function testClean()
     {
-        $d     = DIRECTORY_SEPARATOR;
-        $empty = Vars::get($_SERVER['DOCUMENT_ROOT'], '');
+        $dirSep = DIRECTORY_SEPARATOR;
+        $empty  = Vars::get($_SERVER['DOCUMENT_ROOT'], '');
 
         isSame($empty, FS::clean(''));
         isSame($empty, FS::clean(false));
         isSame($empty, FS::clean(null));
 
         isSame('path', FS::clean('path'));
-        isSame("{$d}path", FS::clean('/path'));
-        isSame("{$d}path", FS::clean(' /path '));
-        isSame("{$d}path{$d}", FS::clean('/path/'));
-        isSame("{$d}path{$d}", FS::clean('///path///'));
-        isSame("{$d}path{$d}path", FS::clean('///path///path'));
-        isSame("{$d}path{$d}path{$d}path", FS::clean('///path///path/path'));
-        isSame("{$d}path{$d}path{$d}path{$d}", FS::clean('\path\path\path\\\\\\\\'));
+        isSame("{$dirSep}path", FS::clean('/path'));
+        isSame("{$dirSep}path", FS::clean(' /path '));
+        isSame("{$dirSep}path{$dirSep}", FS::clean('/path/'));
+        isSame("{$dirSep}path{$dirSep}", FS::clean('///path///'));
+        isSame("{$dirSep}path{$dirSep}path", FS::clean('///path///path'));
+        isSame("{$dirSep}path{$dirSep}path{$dirSep}path", FS::clean('///path///path/path'));
+        isSame("{$dirSep}path{$dirSep}path{$dirSep}path{$dirSep}", FS::clean('\path\path\path\\\\\\\\'));
         isSame('\\path\\path\\path\\', FS::clean('\path\path\path\\\\\\\\', '\\'));
         isSame('\\path\\path\\path\\', FS::clean('\\path\\path\\path\\\\\\\\', '\\'));
         isSame('\\\\path\\path\\path\\', FS::clean('\\\\path\\path\\path\\\\\\\\', '\\'));
+
+        isSame('../../path/', FS::clean('..///..///path/', '/'));
+        isSame('./../path/', FS::clean('.///..///path/', '/'));
+        isSame('/../../path/', FS::clean('/..///..///path/', '/'));
     }
 
     public function testStripExt()
@@ -400,5 +398,14 @@ class FileSystemTest extends PHPUnit
     {
         isFalse(FS::isFile(__DIR__));
         isTrue(FS::isFile(__FILE__));
+    }
+
+    public function testgetRelative()
+    {
+        $file = __FILE__;
+        $root = __DIR__ . '/..';
+
+        isSame('tests/FileSystemTest.php', FS::getRelative($file, $root, '/'));
+        isSame('tests\\FileSystemTest.php', FS::getRelative($file, $root, '\\'));
     }
 }

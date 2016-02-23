@@ -391,7 +391,7 @@ class FS
      */
     public static function real($path)
     {
-        return realpath($path);
+        return realpath(self::clean($path));
     }
 
     /**
@@ -458,5 +458,29 @@ class FS
     {
         $path = self::clean($path);
         return file_exists($path) && is_file($path);
+    }
+
+    /**
+     * Find relative path of file (remove root part)
+     *
+     * @param string      $filePath
+     * @param string|null $rootPath
+     * @param string      $forceDS
+     * @return mixed
+     */
+    public static function getRelative($filePath, $rootPath = null, $forceDS = DIRECTORY_SEPARATOR)
+    {
+        // Clean up & normalize paths
+        $filePath = self::clean($filePath, $forceDS);
+
+        $rootPath = $rootPath ?: Sys::getDocRoot();
+        $rootPath = self::real($rootPath);
+        $rootPath = self::clean($rootPath, $forceDS);
+
+        // Remove root part
+        $relPath = preg_replace('#^' . preg_quote($rootPath) . '#i', '', $filePath);
+        $relPath = ltrim($relPath, $forceDS);
+
+        return $relPath;
     }
 }

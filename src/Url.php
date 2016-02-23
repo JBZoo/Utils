@@ -508,9 +508,7 @@ class Url
      */
     public static function isAbsolute($path)
     {
-        $result = strpos($path, 'http://') === 0
-            || strpos($path, 'https://') === 0
-            || strpos($path, '//') === 0;
+        $result = preg_match('#^(?:[a-z-]+:|\/\/)#i', $path);
 
         return $result;
     }
