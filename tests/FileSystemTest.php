@@ -400,15 +400,27 @@ class FileSystemTest extends PHPUnit
         isTrue(FS::isFile(__FILE__));
     }
 
-    public function testgetRelative()
+    public function testIsReal()
+    {
+        isTrue(FS::isReal(__FILE__));
+        isFalse(FS::isReal(__DIR__ . '/../'));
+    }
+
+    public function testGetRelative()
     {
         $file = __FILE__;
-        $root = __DIR__ . '/..';
 
+        $root = __DIR__;
+        isSame('FileSystemTest.php', FS::getRelative($file, $root, '/'));
+        isSame('FileSystemTest.php', FS::getRelative($file, $root, '\\'));
+
+        $root = __DIR__ . '/..';
         isSame('tests/FileSystemTest.php', FS::getRelative($file, $root, '/'));
         isSame('tests\\FileSystemTest.php', FS::getRelative($file, $root, '\\'));
 
-        isSame('tests/FileSystemTest.php', FS::getRelative($file, null, '/'));
-        isSame('tests\\FileSystemTest.php', FS::getRelative($file, null, '\\'));
+
+        $root = null;
+        isSame('tests/FileSystemTest.php', FS::getRelative($file, $root, '/'));
+        isSame('tests\\FileSystemTest.php', FS::getRelative($file, $root, '\\'));
     }
 }

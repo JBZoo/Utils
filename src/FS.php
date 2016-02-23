@@ -391,7 +391,7 @@ class FS
      */
     public static function real($path)
     {
-        return realpath(self::clean($path));
+        return realpath($path);
     }
 
     /**
@@ -470,12 +470,20 @@ class FS
      */
     public static function getRelative($filePath, $rootPath = null, $forceDS = DIRECTORY_SEPARATOR)
     {
-        // Clean up & normalize paths
+        // Cleanup file path
+        if (!self::isReal($filePath)) {
+            $filePath = self::real($filePath);
+        }
         $filePath = self::clean($filePath, $forceDS);
 
+
+        // Cleanup root path
         $rootPath = $rootPath ?: Sys::getDocRoot();
-        $rootPath = self::real($rootPath);
+        if (!self::isReal($rootPath)) {
+            $rootPath = self::real($rootPath);
+        }
         $rootPath = self::clean($rootPath, $forceDS);
+
 
         // Remove root part
         $relPath = preg_replace('#^' . preg_quote($rootPath) . '#i', '', $filePath);
@@ -483,4 +491,17 @@ class FS
 
         return $relPath;
     }
+
+    /**
+     * @param $path
+     * @return bool
+     */
+    public static function isReal($path)
+    {
+        $expected = self::clean(self::real($path));
+        $actual   = self::clean($path);
+
+        return $expected === $actual;
+    }
+
 }
