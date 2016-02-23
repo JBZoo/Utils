@@ -362,6 +362,11 @@ class ArrayTest extends PHPUnit
         isTrue(Arr::key('null', $array));
         isTrue(Arr::key('false', $array));
 
+        isSame('asd', Arr::key('key', $array, true));
+        isSame(null, Arr::key('undefined', $array, true));
+        isSame(true, Arr::key('key', $array, false));
+        isSame(false, Arr::key('undefined', $array, false));
+
         isFalse(Arr::key('undefined', $array));
         isFalse(Arr::key('', $array));
         isFalse(Arr::key(null, $array));

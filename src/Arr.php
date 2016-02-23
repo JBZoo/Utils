@@ -46,13 +46,24 @@ class Arr
     /**
      * Check is key exists
      *
-     * @param mixed $key
-     * @param mixed $array
-     * @return bool
+     * @param string $key
+     * @param array  $array
+     * @param bool   $returnValue
+     * @return mixed
      */
-    public static function key($key, $array)
+    public static function key($key, $array, $returnValue = false)
     {
-        return array_key_exists((string)$key, (array)$array);
+        $isExists = array_key_exists((string)$key, (array)$array);
+
+        if ($returnValue) {
+            if ($isExists) {
+                return $array[$key];
+            }
+
+            return null;
+        }
+
+        return $isExists;
     }
 
     /**
