@@ -333,20 +333,33 @@ class FS
             // Set only the user writable bit (file is owned by us)
             if ($isMyUid) {
                 $add = intval('0' . $perm . $perm . $perm, 8);
-                return chmod($filename, (fileperms($filename) | intval('0' . $perm . $perm . $perm, 8)) ^ $add);
+                return self::_chmod($filename, $perm, $add);
             }
 
             // Set only the group writable bit (file group is the same as us)
             if ($isMyGid) {
                 $add = intval('00' . $perm . $perm, 8);
-                return chmod($filename, (fileperms($filename) | intval('0' . $perm . $perm . $perm, 8)) ^ $add);
+                return self::_chmod($filename, $perm, $add);
             }
 
             // Set the world writable bit (file isn't owned or grouped by us)
             $add = intval('000' . $perm, 8);
-            return chmod($filename, (fileperms($filename) | intval('0' . $perm . $perm . $perm, 8)) ^ $add);
+            return self::_chmod($filename, $perm, $add);
         }
         //@codeCoverageIgnoreEnd
+    }
+
+    /**
+     * Chmod alias
+     *
+     * @param string $filename
+     * @param int    $perm
+     * @param int    $add
+     * @return bool
+     */
+    protected static function _chmod($filename, $perm, $add)
+    {
+        return chmod($filename, (fileperms($filename) | intval('0' . $perm . $perm . $perm, 8)) ^ $add);
     }
 
     /**

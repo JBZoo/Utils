@@ -47,7 +47,7 @@ class Arr
      * Check is key exists
      *
      * @param string $key
-     * @param array  $array
+     * @param mixed  $array
      * @param bool   $returnValue
      * @return mixed
      */
@@ -70,7 +70,7 @@ class Arr
      * Check is value exists in the array
      *
      * @param string $value
-     * @param array  $array
+     * @param mixed  $array
      * @param bool   $returnKey
      * @return mixed
      *

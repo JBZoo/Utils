@@ -71,7 +71,7 @@ class Sys
     public static function iniSet($varName, $newValue)
     {
         if (self::isFunc('ini_set')) {
-            return @ini_set($varName, $newValue);
+            return Filter::bool(ini_set($varName, $newValue));
         }
 
         return null;
@@ -86,7 +86,7 @@ class Sys
     public static function iniGet($varName)
     {
         if (self::isFunc('ini_get')) {
-            return ini_get($varName);
+            return Filter::bool(ini_get($varName));
         }
 
         return null;

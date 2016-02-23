@@ -93,12 +93,10 @@ class Url
         $nuri = self::buildAll($puri);
 
         // Make the URI consistent with our input
-        if ($nuri[0] === '/' && strstr($uri, '/') === false) {
-            $nuri = substr($nuri, 1);
-        }
-
-        if ($nuri[0] === '?' && strstr($uri, '?') === false) {
-            $nuri = substr($nuri, 1);
+        foreach (array('/', '?') as $char) {
+            if ($nuri[0] === $char && strstr($uri, $char) === false) {
+                $nuri = substr($nuri, 1);
+            }
         }
 
         return rtrim($nuri, '?');
@@ -128,9 +126,8 @@ class Url
 
         // Get the rest of the URL
         if (!Arr::key('REQUEST_URI', $_SERVER)) {
-            // Microsoft IIS doesn't set REQUEST_URI by default
-            //$url .= $_SERVER['PHP_SELF'];
 
+            // Microsoft IIS doesn't set REQUEST_URI by default
             if ($queryString = Arr::key('QUERY_STRING', $_SERVER, true)) {
                 $url .= '?' . $queryString;
             }

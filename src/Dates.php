@@ -87,7 +87,7 @@ class Dates
     /**
      * Return a DateTimeZone object based on the current timezone.
      *
-     * @param string $timezone
+     * @param mixed $timezone
      * @return \DateTimeZone
      */
     public static function timezone($timezone = null)
@@ -96,9 +96,7 @@ class Dates
             return $timezone;
         }
 
-        if (!$timezone) {
-            $timezone = date_default_timezone_get();
-        }
+        $timezone = $timezone ?: date_default_timezone_get();
 
         return new DateTimeZone($timezone);
     }

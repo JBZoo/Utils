@@ -350,13 +350,10 @@ class Str
     {
         static $isLoaded;
 
-        if (null == $isLoaded) {
+        if (null === $isLoaded) {
             $isLoaded = extension_loaded('mbstring');
 
             if ($isLoaded) {
-                Sys::iniSet('mbstring.internal_encoding', self::$encoding);
-                Sys::iniSet('mbstring.http_input', self::$encoding);
-                Sys::iniSet('mbstring.http_output', self::$encoding);
                 mb_internal_encoding(self::$encoding);
             }
         }

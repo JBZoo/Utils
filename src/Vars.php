@@ -24,15 +24,14 @@ class Vars
     /**
      * Converts many english words that equate to true or false to boolean.
      *
-     * @param  string $string  The string to convert to boolean
-     * @param  bool   $default The value to return if we can't match any yes/no words
+     * @param  string $string The string to convert to boolean
      * @return boolean
      *
      * @deprecated See JBZoo\Utils\Filter
      */
-    public static function bool($string, $default = false)
+    public static function bool($string)
     {
-        return Filter::bool($string, $default);
+        return Filter::bool($string);
     }
 
     /**

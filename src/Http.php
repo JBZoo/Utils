@@ -35,7 +35,7 @@ class Http
     {
         if (!headers_sent()) {
             // Required for some browsers
-            if (Vars::bool(Sys::iniGet('zlib.output_compression'))) {
+            if (Sys::iniGet('zlib.output_compression')) {
                 Sys::iniSet('zlib.output_compression', 'Off');
             }
 
