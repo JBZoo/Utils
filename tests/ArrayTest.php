@@ -376,12 +376,21 @@ class ArrayTest extends PHPUnit
     public function testIn()
     {
         $array = array(
-            'key'   => 'asd',
-            'null'  => null,
-            'false' => false,
+            'key'         => 'asd',
+            'null'        => null,
+            'some-bool'   => false,
+            'some-string' => '1234567890098765432111111',
+            'some-int'    => 1111112345678900987654321,
         );
 
         isFalse(Arr::in(0, $array));
         isTrue(Arr::in(false, $array));
+
+        isFalse(Arr::in(0, $array, false));
+        isTrue(Arr::in(false, $array, false));
+
+        isSame('some-string', Arr::in('1234567890098765432111111', $array, true));
+        isTrue('some-int', Arr::in(1111112345678900987654321, $array, true));
+        isTrue('some-bool', Arr::in(false, $array, true));
     }
 }

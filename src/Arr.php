@@ -69,15 +69,26 @@ class Arr
     /**
      * Check is value exists in the array
      *
+     * @param string $value
      * @param array  $array
-     * @param string $key
-     * @return bool
+     * @param bool   $returnKey
+     * @return mixed
      *
      * @SuppressWarnings(PHPMD.ShortMethodName)
      */
-    public static function in($key, array $array)
+    public static function in($value, array $array, $returnKey = false)
     {
-        return in_array($key, $array, true);
+        $inArray = in_array($value, $array, true);
+
+        if ($returnKey) {
+            if ($inArray) {
+                return array_search($value, $array, true);
+            }
+
+            return null;
+        }
+
+        return $inArray;
     }
 
     /**
