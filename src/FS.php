@@ -503,5 +503,4 @@ class FS
 
         return $expected === $actual;
     }
-
 }
