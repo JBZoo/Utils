@@ -197,8 +197,8 @@ class Sys
     public static function getDocRoot()
     {
         $result = '.';
-        if (Arr::key('DOCUMENT_ROOT', $_SERVER)) {
-            $result = $_SERVER['DOCUMENT_ROOT'];
+        if ($root = Arr::key('DOCUMENT_ROOT', $_SERVER, true)) {
+            $result = $root;
         }
 
         $result = FS::clean($result);

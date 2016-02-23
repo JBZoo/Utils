@@ -131,8 +131,8 @@ class Url
             // Microsoft IIS doesn't set REQUEST_URI by default
             //$url .= $_SERVER['PHP_SELF'];
 
-            if (Arr::key('QUERY_STRING', $_SERVER)) {
-                $url .= '?' . $_SERVER['QUERY_STRING'];
+            if ($queryString = Arr::key('QUERY_STRING', $_SERVER, true)) {
+                $url .= '?' . $queryString;
             }
 
         } else {
@@ -148,7 +148,6 @@ class Url
      * @return string
      *
      * @SuppressWarnings(PHPMD.Superglobals)
-     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     public static function root()
     {
@@ -158,19 +157,13 @@ class Url
         $isHttps = self::isHttps();
 
         // Was a username or password passed?
-        if (Arr::key('PHP_AUTH_USER', $_SERVER)) {
-            $url .= $_SERVER['PHP_AUTH_USER'];
-            if (Arr::key('PHP_AUTH_PW', $_SERVER)) {
-                $url .= ':' . $_SERVER['PHP_AUTH_PW'];
-            }
-            $url .= '@';
-        }
+        $url .= self::getAuth();
 
         // We want the user to stay on the same host they are currently on,
         // but beware of security issues
         // see http://shiflett.org/blog/2006/mar/server-name-versus-http-host
-        $url .= Arr::key('HTTP_HOST', $_SERVER) ? $_SERVER['HTTP_HOST'] : null;
-        $port = Arr::key('SERVER_PORT', $_SERVER) ? $_SERVER['SERVER_PORT'] : null;
+        $url .= Arr::key('HTTP_HOST', $_SERVER, true);
+        $port = Arr::key('SERVER_PORT', $_SERVER, true);
 
         // Is it on a non standard port?
         if ($isHttps && ($port != self::PORT_HTTPS)) {
@@ -189,6 +182,29 @@ class Url
         }
 
         return null;
+    }
+
+    /**
+     * Get current auth info
+     *
+     * @return null|string
+     *
+     * @SuppressWarnings(PHPMD.Superglobals)
+     */
+    public static function getAuth()
+    {
+        $result = null;
+        if ($user = Arr::key('PHP_AUTH_USER', $_SERVER, true)) {
+            $result .= $user;
+
+            if ($password = Arr::key('PHP_AUTH_PW', $_SERVER, true)) {
+                $result .= ':' . $password;
+            }
+
+            $result .= '@';
+        }
+
+        return $result;
     }
 
     /**

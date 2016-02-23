@@ -318,7 +318,7 @@ class Str
         if (!$isCache) {
             return Slug::filter($text);
 
-        } elseif (!Arr::key($text, $cache)) {
+        } elseif (!array_key_exists($text, $cache)) { // Not Arr::key() for performance
             $cache[$text] = Slug::filter($text);
         }
 
