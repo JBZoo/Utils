@@ -164,4 +164,12 @@ class UrlTest extends PHPUnit
         isSame('tests/UrlTest.php', Url::pathToRel(__FILE__));
         isSame('http://test.dev/tests/UrlTest.php', Url::pathToUrl(__FILE__));
     }
+
+    public function testIsAbsolute()
+    {
+        isTrue(Url::isAbsolute('https://site.com'));
+        isTrue(Url::isAbsolute('http://site.com'));
+        isTrue(Url::isAbsolute('//site.com'));
+        isFalse(Url::isAbsolute('/path/to/file'));
+    }
 }

@@ -337,7 +337,7 @@ class Url
         }
 
         if ($trustProxyHeaders && Arr::key('X-FORWARDED-PROTO', $_SERVER)) {
-            return  $_SERVER['X-FORWARDED-PROTO'] === 'https';
+            return $_SERVER['X-FORWARDED-PROTO'] === 'https';
         }
 
         // Default to not SSL
@@ -493,5 +493,20 @@ class Url
     public static function pathToUrl($path)
     {
         return self::root() . '/' . self::pathToRel($path);
+    }
+
+    /**
+     * Is absolute url
+     *
+     * @param $path
+     * @return bool
+     */
+    public static function isAbsolute($path)
+    {
+        $result = strpos($path, 'http://') === 0
+            || strpos($path, 'https://') === 0
+            || strpos($path, '//') === 0;
+
+        return $result;
     }
 }
