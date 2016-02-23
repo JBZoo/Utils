@@ -70,8 +70,10 @@ class UrlTest extends PHPUnit
         unset($_SERVER['REQUEST_URI']);
         $_SERVER['SERVER_PORT'] = 80;
         is('http://test.dev', Url::root());
-        is('/test.php?foo=bar', Url::path());
-        is('http://test.dev/test.php?foo=bar', Url::current());
+
+        // Only for MS IIS
+        //is('/test.php?foo=bar', Url::path());
+        //is('http://test.dev/test.php?foo=bar', Url::current());
     }
 
     public function testParseLinky()
@@ -171,5 +173,12 @@ class UrlTest extends PHPUnit
         isTrue(Url::isAbsolute('http://site.com'));
         isTrue(Url::isAbsolute('//site.com'));
         isFalse(Url::isAbsolute('/path/to/file'));
+    }
+
+    public function testEmpty()
+    {
+        isSame(null, Url::root());
+        isSame(null, Url::path());
+        isSame(null, Url::current());
     }
 }

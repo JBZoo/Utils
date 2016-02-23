@@ -111,7 +111,8 @@ class Url
      */
     public static function current()
     {
-        return self::root() . self::path();
+        $current = (string)self::root() . (string)self::path();
+        return $current ? $current : null;
     }
 
     /**
@@ -123,12 +124,12 @@ class Url
      */
     public static function path()
     {
-        $url = false;
+        $url = '';
 
         // Get the rest of the URL
         if (!Arr::key('REQUEST_URI', $_SERVER)) {
             // Microsoft IIS doesn't set REQUEST_URI by default
-            $url .= $_SERVER['PHP_SELF'];
+            //$url .= $_SERVER['PHP_SELF'];
 
             if (Arr::key('QUERY_STRING', $_SERVER)) {
                 $url .= '?' . $_SERVER['QUERY_STRING'];
@@ -138,7 +139,7 @@ class Url
             $url .= $_SERVER['REQUEST_URI'];
         }
 
-        return $url;
+        return $url ? $url : null;
     }
 
     /**
@@ -147,6 +148,7 @@ class Url
      * @return string
      *
      * @SuppressWarnings(PHPMD.Superglobals)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     public static function root()
     {
@@ -154,11 +156,6 @@ class Url
 
         // Check to see if it's over https
         $isHttps = self::isHttps();
-        if ($isHttps) {
-            $url .= 'https://';
-        } else {
-            $url .= 'http://';
-        }
 
         // Was a username or password passed?
         if (Arr::key('PHP_AUTH_USER', $_SERVER)) {
@@ -172,18 +169,26 @@ class Url
         // We want the user to stay on the same host they are currently on,
         // but beware of security issues
         // see http://shiflett.org/blog/2006/mar/server-name-versus-http-host
-        $url .= $_SERVER['HTTP_HOST'];
-        $port = $_SERVER['SERVER_PORT'];
+        $url .= Arr::key('HTTP_HOST', $_SERVER) ? $_SERVER['HTTP_HOST'] : null;
+        $port = Arr::key('SERVER_PORT', $_SERVER) ? $_SERVER['SERVER_PORT'] : null;
 
         // Is it on a non standard port?
         if ($isHttps && ($port != self::PORT_HTTPS)) {
-            $url .= ':' . $_SERVER['SERVER_PORT'];
+            $url .= Arr::key('SERVER_PORT', $_SERVER) ? ':' . $_SERVER['SERVER_PORT'] : '';
 
         } elseif (!$isHttps && ($port != self::PORT_HTTP)) {
-            $url .= ':' . $_SERVER['SERVER_PORT'];
+            $url .= Arr::key('SERVER_PORT', $_SERVER) ? ':' . $_SERVER['SERVER_PORT'] : '';
         }
 
-        return $url;
+        if ($url) {
+            if ($isHttps) {
+                return 'https://' . $url;
+            } else {
+                return 'http://' . $url;
+            }
+        }
+
+        return null;
     }
 
     /**
