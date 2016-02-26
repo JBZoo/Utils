@@ -368,6 +368,10 @@ class FS
      */
     public static function ext($path)
     {
+        if (strpos($path, '?') !== false) {
+            $path = preg_replace('#\?(.*)#', '', $path);
+        }
+
         return pathinfo($path, PATHINFO_EXTENSION);
     }
 

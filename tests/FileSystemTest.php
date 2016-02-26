@@ -315,6 +315,11 @@ class FileSystemTest extends PHPUnit
         isSame('', FS::ext(''));
         isSame('', FS::ext(null));
         isSame('', FS::ext(false));
+
+        isSame('txt', FS::ext('file.txt?some_var=123456'));
+        isSame('txt', FS::ext('file.txt?some_var=123456?invalid=param'));
+        isSame('php', FS::ext('http://demo.jbzoo.com/sites/phones/smartfony.php?logic=and&exact=0&controller=search&option=com_zoo&task=filter&type=phone&app_id=1&Itemid=101'));
+        isSame('', FS::ext('http://demo.jbzoo.com/sites/phones/smartfony?logic=and&exact=0&controller=search&option=com_zoo&task=filter&type=phone&app_id=1&Itemid=101'));
     }
 
     public function testBase()
@@ -417,7 +422,6 @@ class FileSystemTest extends PHPUnit
         $root = __DIR__ . '/..';
         isSame('tests/FileSystemTest.php', FS::getRelative($file, $root, '/'));
         isSame('tests\\FileSystemTest.php', FS::getRelative($file, $root, '\\'));
-
 
         $root = null;
         isSame('tests/FileSystemTest.php', FS::getRelative($file, $root, '/'));
