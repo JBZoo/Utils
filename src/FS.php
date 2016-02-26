@@ -372,7 +372,10 @@ class FS
             $path = preg_replace('#\?(.*)#', '', $path);
         }
 
-        return pathinfo($path, PATHINFO_EXTENSION);
+        $ext = pathinfo($path, PATHINFO_EXTENSION);
+        $ext = strtolower($ext);
+
+        return $ext;
     }
 
     /**

@@ -316,10 +316,15 @@ class FileSystemTest extends PHPUnit
         isSame('', FS::ext(null));
         isSame('', FS::ext(false));
 
+        // URl
         isSame('txt', FS::ext('file.txt?some_var=123456'));
         isSame('txt', FS::ext('file.txt?some_var=123456?invalid=param'));
         isSame('php', FS::ext('http://demo.jbzoo.com/sites/phones/smartfony.php?logic=and&exact=0&controller=search&option=com_zoo&task=filter&type=phone&app_id=1&Itemid=101'));
         isSame('', FS::ext('http://demo.jbzoo.com/sites/phones/smartfony?logic=and&exact=0&controller=search&option=com_zoo&task=filter&type=phone&app_id=1&Itemid=101'));
+
+        // to lower
+        isSame('png', FS::ext('image.PNG'));
+        isSame('png', FS::ext('image.PnG'));
     }
 
     public function testBase()
