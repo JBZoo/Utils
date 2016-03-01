@@ -15,6 +15,10 @@
 
 namespace JBZoo\Utils;
 
+/**
+ * Class Email
+ * @package JBZoo\Utils
+ */
 class Email
 {
 
