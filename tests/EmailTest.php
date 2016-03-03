@@ -35,6 +35,25 @@ class EmailTest extends PHPUnit
     }
 
     /**
+     * @dataProvider getCheckDnsProvider
+     * @param $input
+     * @param $outcome
+     */
+    public function testCheckDns($input, $outcome)
+    {
+        is($outcome, Email::checkDns($input));
+    }
+
+    /**
+     * @dataProvider getEmptyProvider
+     * @param $input
+     */
+    public function testCheckWithEmptyEmails($input)
+    {
+        is(array(), Email::check($input));
+    }
+
+    /**
      * @dataProvider getDomainsProvider
      * @param $input
      * @param $outcome
@@ -42,6 +61,15 @@ class EmailTest extends PHPUnit
     public function testGetDomains($input, $outcome)
     {
         is($outcome, Email::getDomain($input));
+    }
+
+    /**
+     * @dataProvider getEmptyProvider
+     * @param $input
+     */
+    public function testGetDomainsWithEmptyEmails($input)
+    {
+        is(array(), Email::getDomain($input));
     }
 
     public function testGetDomainsWithStringParam()
@@ -90,6 +118,32 @@ class EmailTest extends PHPUnit
                   'test@hotmail.com'
               )
           ),
+        );
+    }
+
+    public function getCheckDnsProvider()
+    {
+        return array(
+            array(
+                'test@gmail.com',
+                true
+            ),
+            array(
+                'test@zzzzzzzzzzzzzzzzzzzzzz',
+                false
+            ),
+            array(
+                '@test@',
+                false
+            ),
+            array(
+                'fake.com@fake.commmmmmmmmm',
+                false
+            ),
+            array(
+                '',
+                false
+            )
         );
     }
 
@@ -161,6 +215,24 @@ class EmailTest extends PHPUnit
               ),
               array()
           ),
+        );
+    }
+
+    public function getEmptyProvider()
+    {
+        return array(
+            array(
+                array()
+            ),
+            array(
+                false
+            ),
+            array(
+                ""
+            ),
+            array(
+                0
+            )
         );
     }
 }

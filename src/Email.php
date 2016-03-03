@@ -24,6 +24,7 @@ class Email
 
     /**
      * Check if email(s) is(are) valid. You can send one or an array of emails.
+     *
      * @param string|array $emails
      * @return array
      */
@@ -35,7 +36,7 @@ class Email
             return $result;
         }
 
-        $emails = !is_array($emails) ? array($emails) : $emails;
+        $emails = self::_handleEmailsInput($emails);
 
         foreach ($emails as $email) {
             if (self::_isValid($email) === false) {
@@ -50,7 +51,32 @@ class Email
     }
 
     /**
-     * Get domains from email addresses. The not valid email addresses will be skipped.
+     * Check for DNS MX records of the email domain. Notice that a
+     * (temporary) DNS error will have the same result as no records
+     * were found.
+     *
+     * @param string $email
+     * @return bool
+     */
+    public static function checkDns($email)
+    {
+
+        if (empty($email) || self::_isValid($email) === false) {
+            return false;
+        }
+
+        $domain = self::_extractDomain($email);
+
+        if (checkdnsrr($domain, "MX") === false) {
+            return false;
+        }
+
+        return true;
+    }
+
+    /**
+     * Get domains from email addresses. The not valid email addresses
+     * will be skipped.
      *
      * @param string|array $emails
      * @return array
@@ -63,7 +89,7 @@ class Email
             return $result;
         }
 
-        $emails = !is_array($emails) ? array($emails) : $emails;
+        $emails = self::_handleEmailsInput($emails);
 
         foreach ($emails as $email) {
             if (self::_isValid($email) === false) {
@@ -95,7 +121,7 @@ class Email
     }
 
     /**
-     * @param $email
+     * @param string $email
      * @return bool
      */
     private static function _isValid($email)
@@ -107,22 +133,38 @@ class Email
             return false;
         }
 
-        $domain = self::_extractDomain($email);
-
-        if (checkdnsrr($domain, "MX") === false) {
-            return false;
-        }
-
         return true;
     }
 
     /**
-     * @param $email
+     * @param string $email
      * @return string
      */
     private static function _extractDomain($email)
     {
         $parts = explode('@', $email);
         return idn_to_ascii(array_pop($parts));
+    }
+
+    /**
+     * Transforms strings in array, and remove duplicates.
+     * Using array_keys array_flip because is faster than array_unique:
+     * array_unique O(n log n)
+     * array_flip O(n)
+     *
+     * @link http://stackoverflow.com/questions/8321620/array-unique-vs-array-flip
+     * @param string|array $emails
+     * @return array
+     */
+    private static function _handleEmailsInput($emails)
+    {
+
+        if (is_array($emails)) {
+            $result = array_keys(array_flip($emails));
+        } else {
+            $result = array($emails);
+        }
+
+        return $result;
     }
 }
