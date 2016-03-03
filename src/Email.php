@@ -122,6 +122,7 @@ class Email
      */
     private static function extractDomain($email)
     {
-        return idn_to_ascii(array_pop(explode('@', $email)));
+        $parts = explode('@', $email);
+        return idn_to_ascii(array_pop($parts));
     }
 }
