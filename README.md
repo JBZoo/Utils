@@ -635,6 +635,21 @@ Vars::max($number, $max)
 Vars::out($number, $min, $max)
 ```
 
+## Email 
+```php
+use JBZoo\Utils\Email;
+
+// Is being always validated the email. Including DNS check for MX records.
+
+// Can be a string or an array of emails. Always return an array with valid emails.
+Email::check('test@gmail.com');
+Email::check(array('test@gmail.com', 'test@hotmail.com'));
+Email::getDomain('test@gmail.com');
+Email::getDomain(array('test@gmail.com', 'test@hotmail.com'));
+
+// It only can be an array of emails
+Email::getDomainInAlphabeticalOrder(array('test@gmail.com', 'test@hotmail.com'));
+```
 
 ## Links (ideas and some functions)
  * utilphp - https://github.com/brandonwamboldt/utilphp
