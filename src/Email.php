@@ -38,7 +38,7 @@ class Email
         $emails = !is_array($emails) ? array($emails) : $emails;
 
         foreach ($emails as $email) {
-            if (self::isValid($email) === false) {
+            if (self::_isValid($email) === false) {
                 continue;
             }
             if (!in_array($email, $result)) {
@@ -66,10 +66,10 @@ class Email
         $emails = !is_array($emails) ? array($emails) : $emails;
 
         foreach ($emails as $email) {
-            if (self::isValid($email) === false) {
+            if (self::_isValid($email) === false) {
                 continue;
             }
-            $domain = self::extractDomain($email);
+            $domain = self::_extractDomain($email);
             if (!empty($domain) && !in_array($domain, $result)) {
                 $result[] = $domain;
             }
@@ -98,7 +98,7 @@ class Email
      * @param $email
      * @return bool
      */
-    private static function isValid($email)
+    private static function _isValid($email)
     {
 
         $email = filter_var($email, FILTER_SANITIZE_STRING);
@@ -107,7 +107,7 @@ class Email
             return false;
         }
 
-        $domain = self::extractDomain($email);
+        $domain = self::_extractDomain($email);
 
         if (checkdnsrr($domain, "MX") === false) {
             return false;
@@ -120,7 +120,7 @@ class Email
      * @param $email
      * @return string
      */
-    private static function extractDomain($email)
+    private static function _extractDomain($email)
     {
         $parts = explode('@', $email);
         return idn_to_ascii(array_pop($parts));
