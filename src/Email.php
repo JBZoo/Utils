@@ -38,7 +38,7 @@ class Email
         $emails = self::_handleEmailsInput($emails);
 
         foreach ($emails as $email) {
-            if (self::_isValid($email) === false) {
+            if (!self::_isValid($email)) {
                 continue;
             }
             if (!in_array($email, $result)) {
@@ -59,7 +59,7 @@ class Email
      */
     public static function checkDns($email)
     {
-        if (empty($email) || self::_isValid($email) === false) {
+        if (!self::_isValid($email)) {
             return false;
         }
 
@@ -90,9 +90,10 @@ class Email
         $emails = self::_handleEmailsInput($emails);
 
         foreach ($emails as $email) {
-            if (self::_isValid($email) === false) {
+            if (!self::_isValid($email)) {
                 continue;
             }
+
             $domain = self::_extractDomain($email);
             if (!empty($domain) && !in_array($domain, $result)) {
                 $result[] = $domain;
@@ -127,6 +128,10 @@ class Email
      */
     private static function _isValid($email)
     {
+        if (empty($email)) {
+            return false;
+        }
+
         $email = filter_var($email, FILTER_SANITIZE_STRING);
 
         if (filter_var($email, FILTER_VALIDATE_EMAIL) === false) {
