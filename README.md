@@ -185,7 +185,7 @@ Filter::alphanum($value)
 // Return only chars for base64
 Filter::base64($value)
 
-// Rmove whitespaces
+// Remove whitespaces
 Filter::path($value)
 
 // Remove whitespaces
