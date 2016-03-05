@@ -59,7 +59,6 @@ class Email
      */
     public static function checkDns($email)
     {
-
         if (empty($email) || self::_isValid($email) === false) {
             return false;
         }
@@ -112,10 +111,13 @@ class Email
     public static function getDomainInAlphabeticalOrder(array $emails)
     {
         $domains = self::getDomain($emails);
+
         if (count($domains) < 2) {
             return $domains;
         }
+
         sort($domains, SORT_STRING);
+
         return $domains;
     }
 
@@ -125,7 +127,6 @@ class Email
      */
     private static function _isValid($email)
     {
-
         $email = filter_var($email, FILTER_SANITIZE_STRING);
 
         if (filter_var($email, FILTER_VALIDATE_EMAIL) === false) {
@@ -141,8 +142,14 @@ class Email
      */
     private static function _extractDomain($email)
     {
-        $parts = explode('@', $email);
-        return idn_to_ascii(array_pop($parts));
+        $parts  = explode('@', $email);
+        $domain = array_pop($parts);
+
+        if (Sys::isFunc('idn_to_ascii')) {
+            return idn_to_ascii($domain);
+        }
+
+        return $domain;
     }
 
     /**
