@@ -22,7 +22,7 @@
     ],
     "require"           : {
         "php"             : ">=5.3.10",
-        "ext-mbstring"    : "*",
+        "symfony/polyfill-mbstring": "^1.0",
         "symfony/process" : "^2.7|^3.0"
     },
     "require-dev"       : {
