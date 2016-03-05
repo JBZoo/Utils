@@ -190,7 +190,7 @@ class Filter
      */
     public static function trim($value)
     {
-        return Str::trim($value);
+        return Str::trim($value, true);
     }
 
     /**
