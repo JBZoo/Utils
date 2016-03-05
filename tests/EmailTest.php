@@ -84,12 +84,12 @@ class EmailTest extends PHPUnit
      */
     public function testGetDomainsInAlphabeticalOrder($input, $outcome)
     {
-        is($outcome, Email::getDomainInAlphabeticalOrder($input));
+        is($outcome, Email::getDomainSorted($input));
     }
 
     public function testGetDomainsInAlphabeticalOrderWithOneSizeArray()
     {
-        is(array('test.pt'), Email::getDomainInAlphabeticalOrder(array('test@test.pt')));
+        is(array('test.pt'), Email::getDomainSorted(array('test@test.pt')));
     }
 
     public function getCheckProvider()

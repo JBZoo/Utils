@@ -108,7 +108,7 @@ class Email
      * @param array $emails
      * @return array
      */
-    public static function getDomainInAlphabeticalOrder(array $emails)
+    public static function getDomainSorted(array $emails)
     {
         $domains = self::getDomain($emails);
 
