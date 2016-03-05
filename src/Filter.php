@@ -366,4 +366,40 @@ class Filter
     {
         return $string;
     }
+
+    /**
+     * First char to upper, other to lower
+     *
+     * @param $input
+     * @return string
+     */
+    public static function ucfirst($input)
+    {
+        $string = Str::low($input);
+        $string = ucfirst($string);
+
+        return $string;
+    }
+
+    /**
+     * Convert words to PHP Class name
+     *
+     * @param $input
+     * @return string
+     */
+    public static function className($input)
+    {
+        $output = preg_replace(array('#(?<=[^A-Z\s])([A-Z\s])#i'), ' $0', $input);
+        $output = explode(' ', $output);
+
+        $output = array_map(function ($item) {
+            $item = preg_replace('#[^a-z0-9]#i', '', $item);
+            $item = self::ucfirst($item);
+            return $item;
+        }, $output);
+
+        $output = array_filter($output);
+
+        return implode('', $output);
+    }
 }

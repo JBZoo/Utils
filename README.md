@@ -205,6 +205,12 @@ Filter::strip($string)
 
 // Get safe string
 Filter::alias($string)
+
+//First char to upper, other to lower
+Filter::ucfirst($string)
+
+//Convert words to PHP Class name (CamelCase)
+Filter::className($string)
 ```
 
 

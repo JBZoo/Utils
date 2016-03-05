@@ -306,4 +306,29 @@ class FilterTest extends PHPUnit
             return $value;
         }));
     }
+
+    public function testUcfirst()
+    {
+        isSame('Test', Filter::ucfirst('test'));
+        isSame('Test', Filter::ucfirst('Test'));
+        isSame('Test', Filter::ucfirst('TEST'));
+        isSame('Test', Filter::ucfirst('tEST'));
+    }
+
+    public function testClassname()
+    {
+        isSame('Class123Name456', Filter::className('Class123Name456'));
+        isSame('Class123Name456', Filter::className('Class123 Name456'));
+        isSame('Class123Name456', Filter::className('CLASS123 NAME456'));
+        isSame('Class123Name456', Filter::className('class123 name456'));
+        isSame('Class123Name456', Filter::className('class123Name456'));
+        isSame('Class123Name456', Filter::className('class123_Name456'));
+        isSame('Class123Name456', Filter::className('class123_name456'));
+        isSame('Class123Name456', Filter::className('class123-name456'));
+        isSame('Class123Name456', Filter::className('class123|name456'));
+        isSame('Class123Name456', Filter::className('class123.name456'));
+        isSame('Class123Name456', Filter::className('class123name456'));
+        isSame('Class123Name456', Filter::className('CLASS123NAME456'));
+        isSame('Classname', Filter::className('CLASSNAME'));
+    }
 }
