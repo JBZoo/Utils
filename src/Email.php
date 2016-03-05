@@ -21,7 +21,6 @@ namespace JBZoo\Utils;
  */
 class Email
 {
-
     /**
      * Check if email(s) is(are) valid. You can send one or an array of emails.
      *
@@ -158,7 +157,6 @@ class Email
      */
     private static function _handleEmailsInput($emails)
     {
-
         if (is_array($emails)) {
             $result = array_keys(array_flip($emails));
         } else {
