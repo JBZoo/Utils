@@ -654,7 +654,7 @@ Email::getDomain('test@gmail.com');
 Email::getDomain(array('test@gmail.com', 'test@hotmail.com'));
 
 // It only can be an array of emails
-Email::getDomainInAlphabeticalOrder(array('test@gmail.com', 'test@hotmail.com'));
+Email::getDomainSorted(array('test@gmail.com', 'test@hotmail.com'));
 ```
 
 ## Links (ideas and some functions)
