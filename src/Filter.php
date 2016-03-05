@@ -394,7 +394,7 @@ class Filter
 
         $output = array_map(function ($item) {
             $item = preg_replace('#[^a-z0-9]#i', '', $item);
-            $item = self::ucfirst($item);
+            $item = Filter::ucfirst($item);
             return $item;
         }, $output);
 
