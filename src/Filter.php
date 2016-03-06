@@ -222,14 +222,11 @@ class Filter
      */
     public static function cmd($value)
     {
-        $value = Str::trim($value);
         $value = Str::low($value);
+        $value = preg_replace('#[^a-z0-9\_\-\.]#', '', $value);
+        $value = Str::trim($value);
 
-        $pattern = '/^[A-Za-z0-9_\/-]+[A-Za-z0-9_\.-]*([\\\\\/][A-Za-z0-9_-]+[A-Za-z0-9_\.-]*)*$/';
-        preg_match($pattern, $value, $matches);
-        $result = isset($matches[0]) ? (string)$matches[0] : '';
-
-        return $result;
+        return $value;
     }
 
     /**

@@ -234,7 +234,7 @@ class FilterTest extends PHPUnit
     public function testCmd()
     {
         $excepted = '0123456789-abcdefghijklmnopqrstuvwxyz_abcdefghijklmnopqrstuvwxyz';
-        $string   = ' 0123456789-ABCDEFGHIJKLMNOPQRSTUVWXYZ_abcdefghijklmnopqrstuvwxyz ';
+        $string   = ' 0123456789-ABCDEFGHIJKLMNOPQRSTUVWXYZ_abcdefghijklmnopqrstuvwxyz  йцуке ';
 
         isSame($excepted, Filter::_($string, 'cmd'));
     }
