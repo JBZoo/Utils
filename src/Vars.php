@@ -104,7 +104,7 @@ class Vars
      * @param $email
      * @return mixed
      *
-     * @deprecated See JBZoo\Utils\Filter
+     * @deprecated See JBZoo\Utils\Email
      */
     public static function email($email)
     {
