@@ -123,6 +123,40 @@ class Email
     }
 
     /**
+     * Generates an Gravatar URL. The default size is 32px, and it
+     * can be anywhere between 1px up to 2048px. If requested any value
+     * above the allowed range, then the maximum is applied. If requested
+     * any value bellow the minimum, then the default is applied.
+     *
+     * @param string $email
+     * @param int $size
+     * @return null|string
+     * @link http://en.gravatar.com/site/implement/images/
+     */
+    public static function getGravatarUrl($email, $size = 32)
+    {
+
+        if (empty($email) || self::_isValid($email) === false) {
+            return null;
+        }
+
+        $hash = md5(strtolower(trim($email)));
+
+        $size = Filter::int($size);
+        if ($size > 2048) {
+            $size = 2048;
+        } elseif ($size < 1) {
+            $size = 32;
+        }
+
+        return sprintf(
+            'http://www.gravatar.com/avatar/%s?s=%s',
+            $hash,
+            $size
+        );
+    }
+
+    /**
      * @param string $email
      * @return bool
      */
