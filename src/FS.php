@@ -425,8 +425,8 @@ class FS
      */
     public static function clean($path, $dirSep = DIRECTORY_SEPARATOR)
     {
-        if (!is_string($path) && empty($path)) {
-            $path = null;
+        if (!is_string($path) || empty($path)) {
+            return '';
         }
 
         $path = trim((string)$path);
