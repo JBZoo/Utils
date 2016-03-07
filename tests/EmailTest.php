@@ -92,6 +92,28 @@ class EmailTest extends PHPUnit
         is(array('test.pt'), Email::getDomainInAlphabeticalOrder(array('test@test.pt')));
     }
 
+    /**
+     * @dataProvider getGravatarUrlProvider
+     * @param $input
+     * @param $size
+     */
+    public function testGetGravatarUrl($input, $size)
+    {
+        isLike(
+            sprintf('/http:\/\/www\.gravatar\.com\/avatar\/.*\?s=%s/', $size),
+            Email::getGravatarUrl($input[0], $input[1])
+        );
+    }
+
+    /**
+     * @dataProvider getEmptyProvider
+     * @param $input
+     */
+    public function testGetGravatarUrlWithEmptyEmails($input)
+    {
+        is(null, Email::getGravatarUrl($input));
+    }
+
     public function getCheckProvider()
     {
         return array(
@@ -232,6 +254,61 @@ class EmailTest extends PHPUnit
             ),
             array(
                 0
+            )
+        );
+    }
+
+    public function getGravatarUrlProvider()
+    {
+        return array(
+            array(
+                array(
+                    'test@test.pt',
+                    32
+                ),
+                32
+            ),
+            array(
+                array(
+                    'test@test.pt',
+                    5000
+                ),
+                2048
+            ),
+            array(
+                array(
+                    'test@test.pt',
+                    2047
+                ),
+                2047
+            ),
+            array(
+                array(
+                    'test@test.pt',
+                    -1
+                ),
+                32
+            ),
+            array(
+                array(
+                    'test@test.pt',
+                    8.1
+                ),
+                8
+            ),
+            array(
+                array(
+                    'test@test.pt',
+                    15.5
+                ),
+                15
+            ),
+            array(
+                array(
+                    'test@test.pt',
+                    "9000"
+                ),
+                2048
             )
         );
     }
