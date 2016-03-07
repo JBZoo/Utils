@@ -486,12 +486,13 @@ class FS
      * @param string      $filePath
      * @param string|null $rootPath
      * @param string      $forceDS
+     * @param bool        $toRealpath
      * @return mixed
      */
-    public static function getRelative($filePath, $rootPath = null, $forceDS = DIRECTORY_SEPARATOR)
+    public static function getRelative($filePath, $rootPath = null, $forceDS = DIRECTORY_SEPARATOR, $toRealpath = true)
     {
         // Cleanup file path
-        if (!self::isReal($filePath)) {
+        if ($toRealpath && !self::isReal($filePath)) {
             $filePath = self::real($filePath);
         }
         $filePath = self::clean($filePath, $forceDS);
@@ -499,7 +500,7 @@ class FS
 
         // Cleanup root path
         $rootPath = $rootPath ?: Sys::getDocRoot();
-        if (!self::isReal($rootPath)) {
+        if ($toRealpath && !self::isReal($rootPath)) {
             $rootPath = self::real($rootPath);
         }
         $rootPath = self::clean($rootPath, $forceDS);
