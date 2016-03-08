@@ -20,7 +20,7 @@ before_script:
 
 script:
   - composer update-all
-  - composer require symfony/process symfony/polyfill-mbstring
+  - composer require symfony/process
   - composer test
 
 after_script:
