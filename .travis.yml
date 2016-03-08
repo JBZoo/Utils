@@ -20,10 +20,8 @@ before_script:
 
 script:
   - composer update-all
+  - composer require symfony/process symfony/polyfill-mbstring
   - composer test
 
 after_script:
   - composer coveralls
-
-notifications:
-  slack: jbzoo:lKYRTvAF36tRDfKTOK5zhFh9
