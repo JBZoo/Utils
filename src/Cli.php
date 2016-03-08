@@ -83,9 +83,14 @@ class Cli
      * @param bool   $verbose
      * @return string
      * @throws ProcessFailedException
+     * @throws \Exception
      */
     public static function exec($command, $args = array(), $cwd = null, $verbose = false)
     {
+        if (!class_exists('\Symfony\Component\Process\Process')) {
+            throw new \Exception("Symfony/Process package required for Cli::exec() method");
+        }
+
         $cmd = self::build($command, $args);
         $cwd = $cwd ? $cwd = realpath($cwd) : null;
 
