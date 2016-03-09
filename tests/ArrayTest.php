@@ -393,4 +393,11 @@ class ArrayTest extends PHPUnit
         isTrue('some-int', Arr::in(1111112345678900987654321, $array, true));
         isTrue('some-bool', Arr::in(false, $array, true));
     }
+
+    public function testWrap()
+    {
+        is([], Arr::wrap(null));
+        is([1, 2, 3], Arr::wrap([1, 2, 3]));
+        is([0], Arr::wrap(0));
+    }
 }

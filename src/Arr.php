@@ -414,4 +414,27 @@ class Arr
 
         return implode(PHP_EOL, $result);
     }
+
+    /**
+     * Wraps its argument in an array unless it is already an array
+     *
+     * @example
+     *   Arr.wrap(null)      # => []
+     *   Arr.wrap([1, 2, 3]) # => [1, 2, 3]
+     *   Arr.wrap(0)         # => [0]
+     *
+     * @param mixed $object
+     * @return array
+     */
+    public static function wrap($object)
+    {
+        if (is_null($object)) {
+            return [];
+        } else if (is_array($object)) {
+            return $object;
+        }
+
+        return [$object];
+    }
+
 }

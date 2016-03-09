@@ -77,6 +77,9 @@ Arr::addEachKey(array $array, $prefix)
 
 // Convert assoc array to comment style
 Arr::toComment(array $data)
+
+// Wraps its argument in an array unless it is already an array
+Arr::wrap($object)
 ```
 
 
