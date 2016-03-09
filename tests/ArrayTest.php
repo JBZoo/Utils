@@ -396,8 +396,8 @@ class ArrayTest extends PHPUnit
 
     public function testWrap()
     {
-        is([], Arr::wrap(null));
-        is([1, 2, 3], Arr::wrap([1, 2, 3]));
-        is([0], Arr::wrap(0));
+        is(array(), Arr::wrap(null));
+        is(array(1, 2, 3), Arr::wrap(array(1, 2, 3)));
+        is(array(0), Arr::wrap(0));
     }
 }
