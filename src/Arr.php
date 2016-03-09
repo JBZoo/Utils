@@ -429,12 +429,12 @@ class Arr
     public static function wrap($object)
     {
         if (is_null($object)) {
-            return [];
+            return array();
         } else if (is_array($object)) {
             return $object;
         }
 
-        return [$object];
+        return array($object);
     }
 
 }
