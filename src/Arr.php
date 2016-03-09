@@ -430,11 +430,10 @@ class Arr
     {
         if (is_null($object)) {
             return array();
-        } else if (is_array($object)) {
+        } elseif (is_array($object)) {
             return $object;
         }
 
         return array($object);
     }
-
 }
