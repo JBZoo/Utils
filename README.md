@@ -101,6 +101,15 @@ Cli::exec($command, $args = array(), $cwd = null, $verbose = false)
 
 // Build params for cli
 Cli::build($command, $args = array())
+
+// Returns true if STDOUT supports colorization.
+Cli::hasColorSupport()
+
+// Returns the number of columns of the terminal.
+Cli::getNumberOfColumns()
+
+// Returns if the file descriptor is an interactive terminal or not.
+Cli::isInteractive($fileDescriptor = self::STDOUT)
 ```
 
 
@@ -675,7 +684,7 @@ Timer::getRequestTime();
 ```
 
 
-## Env
+## Enviroment
 ```php
 use JBZoo\Utils\Env;
 
