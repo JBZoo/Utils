@@ -660,6 +660,20 @@ Email::getDomain(array('test@gmail.com', 'test@hotmail.com'));
 Email::getDomainSorted(array('test@gmail.com', 'test@hotmail.com'));
 ```
 
+## Timer
+```php
+use JBZoo\Utils\Timer;
+
+// Formats the elapsed time as a string.
+Timer::format($time);
+
+// Formats the elapsed time since the start of the request as a string.
+Timer::timeSinceStart();
+
+// Get request time
+Timer::getRequestTime();
+```
+
 ## Links (ideas and some functions)
  * utilphp - https://github.com/brandonwamboldt/utilphp
  * PHPBinString - https://github.com/Grandt/PHPBinString
@@ -671,6 +685,7 @@ Email::getDomainSorted(array('test@gmail.com', 'test@hotmail.com'));
  * http://shiflett.org/blog/2006/mar/server-name-versus-http-host
  * https://github.com/joomla-framework/string
  * Askar (ARACOOL) https://github.com/ARACOOOL
+ * Sebastian Bergmann https://github.com/sebastianbergmann/php-timer
 
 
 ## Unit tests and check code style

@@ -151,7 +151,7 @@ class Sys
             $memory = memory_get_usage(false);
         }
 
-        $result = round($memory / 1024 / 1024, 2) . ' M';
+        $result = FS::format($memory, 2);
 
         return $result;
     }
