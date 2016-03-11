@@ -17,10 +17,10 @@ matrix:
 
 before_script:
   - if [[ $XDEBUG_OFF = yes ]]; then phpenv config-rm xdebug.ini; fi;
-
-script:
   - composer update-all
   - composer require symfony/process
+
+script:
   - composer test
 
 after_script:
