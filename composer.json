@@ -28,7 +28,7 @@
         "php" : ">=5.3.10"
     },
     "require-dev"       : {
-        "jbzoo/phpunit" : "^1.3"
+        "jbzoo/phpunit" : "^1.0"
     },
     "suggest"           : {
         "ext-mbstring"              : "Provides multibyte specific string functions",
