@@ -674,6 +674,49 @@ Timer::timeSinceStart();
 Timer::getRequestTime();
 ```
 
+
+## Env
+```php
+use JBZoo\Utils\Env;
+
+// Returns an environment variable.
+Env::get($name, $options = self::VAR_STRING);
+
+// Converts the type of values like "true", "false", "null" or "123".
+Env::convert($value, $options = self::VAR_STRING);
+
+// Returns true when Xdebug is supported or the runtime used is PHPDBG (PHP >= 7.0).
+Env::canCollectCodeCoverage();
+
+// Returns the path to the binary of the current runtime. Appends ' --php' to the path when the runtime is HHVM.
+Env::getBinary();
+
+// PHP Name and version
+Env::getNameWithVersion();
+
+// Get PHP Name
+Env::getName();
+
+// Get PHP Version
+Env::getVersion();
+
+// Returns true when the runtime used is PHP and Xdebug is loaded.
+Env::hasXdebug();
+
+// Returns true when the runtime used is HHVM.
+Env::isHHVM();
+
+// Returns true when the runtime used is PHP without the PHPDBG SAPI.
+Env::isPHP();
+
+// Returns true when the runtime used is PHP with the PHPDBG SAPI.
+Env::isPHPDBG();
+
+// Returns true when the runtime used is PHP with the PHPDBG SAPI and the phpdbg_*_oplog() functions are available (PHP >= 7.0).
+Env::hasPHPDBGCodeCoverage();
+```
+
+
 ## Links (ideas and some functions)
  * utilphp - https://github.com/brandonwamboldt/utilphp
  * PHPBinString - https://github.com/Grandt/PHPBinString
@@ -686,6 +729,8 @@ Timer::getRequestTime();
  * https://github.com/joomla-framework/string
  * Askar (ARACOOL) https://github.com/ARACOOOL
  * Sebastian Bergmann https://github.com/sebastianbergmann/php-timer
+ * Sebastian Bergmann https://github.com/sebastianbergmann/environment
+ * Oscar Otero https://github.com/oscarotero/env
 
 
 ## Unit tests and check code style

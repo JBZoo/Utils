@@ -77,4 +77,38 @@ class CliTest extends PHPUnit
     {
         Cli::exec('undefined-command');
     }
+
+    /**
+     * @covers \JBZoo\Utils\Cli::isInteractive
+     */
+    public function testCanDetectIfStdoutIsInteractiveByDefault()
+    {
+        $this->assertInternalType('boolean', Cli::isInteractive());
+    }
+
+    /**
+     * @covers \JBZoo\Utils\Cli::isInteractive
+     */
+    public function testCanDetectIfFileDescriptorIsInteractive()
+    {
+        $this->assertInternalType('boolean', Cli::isInteractive(STDOUT));
+    }
+
+    /**
+     * @covers \JBZoo\Utils\Cli::hasColorSupport
+     * @uses   \JBZoo\Utils\Cli::isInteractive
+     */
+    public function testCanDetectColorSupport()
+    {
+        $this->assertInternalType('boolean', Cli::hasColorSupport());
+    }
+
+    /**
+     * @covers \JBZoo\Utils\Cli::getNumberOfColumns
+     * @uses   \JBZoo\Utils\Cli::isInteractive
+     */
+    public function testCanDetectNumberOfColumns()
+    {
+        $this->assertInternalType('integer', Cli::getNumberOfColumns());
+    }
 }
