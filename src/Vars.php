@@ -241,4 +241,27 @@ class Vars
     {
         return ($number < $min || $number > $max);
     }
+
+    /**
+     * Get relative percent
+     *
+     * @param float $current
+     * @param float $normal
+     * @return string
+     */
+    public static function relativePercent($current, $normal)
+    {
+        $current = (float)$current;
+        $normal  = (float)$normal;
+
+        if (!$current) {
+            return '~';
+
+        } else {
+            $current = abs($current);
+            $percent = round($normal / $current * 100);
+
+            return number_format($percent, 0, '.', ' ');
+        }
+    }
 }
