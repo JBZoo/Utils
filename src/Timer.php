@@ -44,16 +44,34 @@ class Timer
      */
     public static function format($time)
     {
-        $ms = round($time * 1000);
-
+        $time = round($time * 1000);
         foreach (self::$_times as $unit => $value) {
-            if ($ms >= $value) {
-                $time = floor($ms / $value * 100.0) / 100.0;
+            if ($time >= $value) {
+                $time = floor($time / $value * 100.0) / 100.0;
                 return $time . ' ' . $unit . ($time == 1 ? '' : 's');
             }
         }
 
-        return $ms . ' ms';
+        return $time . ' ms';
+    }
+
+    /**
+     * Formats the elapsed time as a string.
+     *
+     * @param  float $time
+     * @return string
+     */
+    public static function formatMS($time)
+    {
+        $decimals = 3;
+
+        if ($time >= 0.001 || $time == 0) {
+            $decimals = 0;
+        }
+
+        $time *= round(1000, 3);
+
+        return number_format($time, $decimals, '.', ' ') . ' ms';
     }
 
     /**

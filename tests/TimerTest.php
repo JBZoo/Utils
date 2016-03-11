@@ -35,6 +35,16 @@ class TimerTest extends PHPUnit
         isSame($string, Timer::format($seconds));
     }
 
+    /**
+     * @dataProvider milliSecondsProvider
+     * @param string $string
+     * @param mixed  $seconds
+     */
+    public function testSecondsToTimeStringInMillisecond($string, $seconds)
+    {
+        isSame($string, Timer::formatMS($seconds));
+    }
+
     public function testGetRequestTime()
     {
         isTrue(Timer::getRequestTime());
@@ -43,6 +53,24 @@ class TimerTest extends PHPUnit
     public function testTimeSinceStart()
     {
         isTrue(Timer::timeSinceStart());
+    }
+
+    /**
+     * @return array
+     */
+    public function milliSecondsProvider()
+    {
+        return array(
+            array('1 000 ms', 1),
+            array('100 ms', 0.1),
+            array('10 ms', 0.01),
+            array('0 ms', 0),
+            array('1 ms', 0.001),
+            array('0.100 ms', 0.0001),
+            array('0.010 ms', 0.00001),
+            array('0.001 ms', 0.000001),
+            array('0.000 ms', 0.0000001),
+        );
     }
 
     /**
