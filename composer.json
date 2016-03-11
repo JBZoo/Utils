@@ -21,9 +21,7 @@
         }
     ],
     "require"           : {
-        "php"                       : ">=5.3.10",
-        "symfony/process"           : "^3.0",
-        "symfony/polyfill-mbstring" : "^1.1"
+        "php" : ">=5.3.10"
     },
     "require-dev"       : {
         "jbzoo/phpunit" : "^1.3"
