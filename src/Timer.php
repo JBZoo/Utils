@@ -63,15 +63,18 @@ class Timer
      */
     public static function formatMS($time)
     {
-        $decimals = 3;
+        $time = round($time * 1000, 3);
+        $dec  = 3;
 
-        if ($time >= 0.001 || $time == 0) {
-            $decimals = 0;
+        if (!$time || $time >= 10 || $time >= 100) {
+            $dec = 0;
+        } elseif ($time < 10 && $time >= 0.1) {
+            $dec = 1;
+        } elseif ($time <= 0.01) {
+            $dec = 3;
         }
 
-        $time *= round(1000, 3);
-
-        return number_format($time, $decimals, '.', ' ') . ' ms';
+        return number_format($time, $dec, '.', ' ') . ' ms';
     }
 
     /**

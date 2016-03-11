@@ -62,14 +62,18 @@ class TimerTest extends PHPUnit
     {
         return array(
             array('1 000 ms', 1),
-            array('100 ms', 0.1),
+            array('100 ms', 0.100),
+            array('106 ms', 0.1056),
             array('10 ms', 0.01),
+            array('15 ms', 0.015),
             array('0 ms', 0),
-            array('1 ms', 0.001),
-            array('0.100 ms', 0.0001),
+            array('1.0 ms', 0.001),
+            array('9.9 ms', 0.0099),
+            array('10.0 ms', 0.00999),
+            array('0.6 ms', 0.00055),
             array('0.010 ms', 0.00001),
             array('0.001 ms', 0.000001),
-            array('0.000 ms', 0.0000001),
+            array('0 ms', 0.0000001),
         );
     }
 
