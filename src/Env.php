@@ -51,6 +51,7 @@ class Env
      *
      * @SuppressWarnings(PHPMD.NPathComplexity)
      * @SuppressWarnings(PHPMD.Superglobals)
+     * @codeCoverageIgnore
      */
     public static function getBinary()
     {
@@ -189,6 +190,7 @@ class Env
      * Returns true when the runtime used is PHP with the PHPDBG SAPI.
      *
      * @return bool
+     * @codeCoverageIgnore
      */
     public static function isPHPDBG()
     {
@@ -200,6 +202,7 @@ class Env
      * and the phpdbg_*_oplog() functions are available (PHP >= 7.0).
      *
      * @return bool
+     * @codeCoverageIgnore
      */
     public static function hasPHPDBGCodeCoverage()
     {

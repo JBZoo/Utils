@@ -93,7 +93,7 @@ class Cli
     public static function exec($command, $args = array(), $cwd = null, $verbose = false)
     {
         if (!class_exists('\Symfony\Component\Process\Process')) {
-            throw new \Exception("Symfony/Process package required for Cli::exec() method");
+            throw new \Exception("Symfony/Process package required for Cli::exec() method"); // @codeCoverageIgnore
         }
 
         $cmd = self::build($command, $args);
@@ -174,11 +174,17 @@ class Cli
      * Symfony\Component\Console\Output\OutputStream.
      *
      * @return bool
+     * @codeCoverageIgnore
      */
     public static function hasColorSupport()
     {
         if (DIRECTORY_SEPARATOR == '\\') {
-            return false !== getenv('ANSICON') || 'ON' === getenv('ConEmuANSI') || 'xterm' === getenv('TERM');
+
+            $winColor = Env::get('ANSICON', Env::VAR_BOOL)
+                || 'ON' === Env::get('ConEmuANSI')
+                || 'xterm' === Env::get('TERM');
+
+            return $winColor;
         }
 
         if (!defined('STDOUT')) {
@@ -192,6 +198,7 @@ class Cli
      * Returns the number of columns of the terminal.
      *
      * @return int
+     * @codeCoverageIgnore
      */
     public static function getNumberOfColumns()
     {

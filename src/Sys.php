@@ -42,7 +42,7 @@ class Sys
             return posix_geteuid() === 0;
         }
 
-        return false;
+        return false; // @codeCoverageIgnore
     }
 
     /**
@@ -74,7 +74,7 @@ class Sys
             return Filter::bool(ini_set($varName, $newValue));
         }
 
-        return null;
+        return null; // @codeCoverageIgnore
     }
 
     /**
@@ -89,7 +89,7 @@ class Sys
             return Filter::bool(ini_get($varName));
         }
 
-        return null;
+        return null; // @codeCoverageIgnore
     }
 
     /**
@@ -205,7 +205,7 @@ class Sys
         $result = FS::real($result);
 
         if (!$result) {
-            $result = FS::real('.');
+            $result = FS::real('.'); // @codeCoverageIgnore
         }
 
         return $result;
