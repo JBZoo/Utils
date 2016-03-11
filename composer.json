@@ -7,7 +7,7 @@
     "keywords"          : [
         "helpers", "helper", "utility", "utils", "collection", "environment", "image", "filesystem",
         "array", "cli", "command line", "dates", "email", "env", "filter", "http", "url", "serialize",
-        "slugiffy", "string", "mbstring", "timer", "misc"
+        "slugif", "string", "mbstring", "timer", "misc"
     ],
     "authors"           : [
         {
