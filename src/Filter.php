@@ -410,8 +410,7 @@ class Filter
      */
     public static function stripQuotes($value)
     {
-        if (
-            ($value[0] === '"' && substr($value, -1) === '"') ||
+        if (($value[0] === '"' && substr($value, -1) === '"') ||
             ($value[0] === "'" && substr($value, -1) === "'")
         ) {
             return substr($value, 1, -1);
