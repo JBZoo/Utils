@@ -675,6 +675,7 @@ use JBZoo\Utils\Timer;
 
 // Formats the elapsed time as a string.
 Timer::format($time);
+Timer::formatMS($time); // Only ms format
 
 // Formats the elapsed time since the start of the request as a string.
 Timer::timeSinceStart();
