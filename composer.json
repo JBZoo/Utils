@@ -32,6 +32,9 @@
         "symfony/polyfill-mbstring" : "For UTF-8 if ext-mbstring disabled"
     },
     "autoload"          : {
+        "files"  : [
+            "src/defines.php"
+        ],
         "psr-4" : {
             "JBZoo\\Utils\\" : "src"
         }

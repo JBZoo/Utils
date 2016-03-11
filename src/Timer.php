@@ -70,17 +70,11 @@ class Timer
      * Get request time
      *
      * @return float
+     *
+     * @SuppressWarnings(PHPMD.Superglobals)
      */
     public static function getRequestTime()
     {
-        return self::$requestTime;
+        return $_SERVER['REQUEST_TIME_FLOAT'];
     }
-}
-
-if (isset($_SERVER['REQUEST_TIME_FLOAT'])) {
-    Timer::$requestTime = $_SERVER['REQUEST_TIME_FLOAT'];
-} elseif (isset($_SERVER['REQUEST_TIME'])) {
-    Timer::$requestTime = $_SERVER['REQUEST_TIME'];
-} else {
-    Timer::$requestTime = microtime(true);
 }
