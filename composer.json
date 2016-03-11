@@ -4,7 +4,11 @@
     "description"       : "A collection of useful PHP functions, mini classes and snippets that you need every day.",
     "license"           : "MIT",
     "minimum-stability" : "stable",
-    "keywords"          : ["php", "helpers", "helper", "utility", "utils", "collection"],
+    "keywords"          : [
+        "helpers", "helper", "utility", "utils", "collection", "environment", "image", "filesystem",
+        "array", "cli", "command line", "dates", "email", "env", "filter", "http", "url", "serialize",
+        "slugiffy", "string", "mbstring", "timer", "misc"
+    ],
     "authors"           : [
         {
             "name"  : "SmetDenis",
@@ -32,7 +36,7 @@
         "symfony/polyfill-mbstring" : "For UTF-8 if ext-mbstring disabled"
     },
     "autoload"          : {
-        "files"  : [
+        "files" : [
             "src/defines.php"
         ],
         "psr-4" : {
