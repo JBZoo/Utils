@@ -157,6 +157,6 @@ class VarsTest extends PHPUnit
         isSame('100', Vars::relativePercent(100, 100));
         isSame('10 000', Vars::relativePercent(1, 100));
         isSame('1', Vars::relativePercent(100, 1));
-        isSame('~', Vars::relativePercent(0, 1));
+        isSame('100', Vars::relativePercent(0, 1));
     }
 }

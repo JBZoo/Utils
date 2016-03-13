@@ -245,21 +245,21 @@ class Vars
     /**
      * Get relative percent
      *
-     * @param float $current
      * @param float $normal
+     * @param float $current
      * @return string
      */
-    public static function relativePercent($current, $normal)
+    public static function relativePercent($normal, $current)
     {
-        $current = (float)$current;
         $normal  = (float)$normal;
+        $current = (float)$current;
 
-        if (!$current) {
-            return '~';
+        if (!$normal || $normal == $current) {
+            return '100';
 
         } else {
-            $current = abs($current);
-            $percent = round($normal / $current * 100);
+            $normal  = abs($normal);
+            $percent = round($current / $normal * 100);
 
             return number_format($percent, 0, '.', ' ');
         }
