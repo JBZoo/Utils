@@ -1,10 +1,14 @@
 {
     "name"              : "jbzoo/utils",
     "type"              : "library",
-    "description"       : "A collection of useful PHP functions, mini classes and snippets that you need or could use every day.",
+    "description"       : "A collection of useful PHP functions, mini classes and snippets that you need every day.",
     "license"           : "MIT",
     "minimum-stability" : "stable",
-    "keywords"          : ["php", "helpers", "helper", "utility", "utils", "collection"],
+    "keywords"          : [
+        "helpers", "helper", "utility", "utils", "collection", "environment", "image", "filesystem",
+        "array", "cli", "command line", "dates", "email", "env", "filter", "http", "url", "serialize",
+        "slugif", "string", "mbstring", "timer", "misc"
+    ],
     "authors"           : [
         {
             "name"  : "SmetDenis",
@@ -21,14 +25,20 @@
         }
     ],
     "require"           : {
-        "php"             : ">=5.3.10",
-        "ext-mbstring"    : "*",
-        "symfony/process" : "^2.7|^3.0"
+        "php" : ">=5.3.10"
     },
     "require-dev"       : {
-        "jbzoo/phpunit"   : "^1.2"
+        "jbzoo/phpunit" : "^1.4"
+    },
+    "suggest"           : {
+        "ext-mbstring"              : "Provides multibyte specific string functions",
+        "symfony/process"           : "For Cli::exec() method only",
+        "symfony/polyfill-mbstring" : "For UTF-8 if ext-mbstring disabled"
     },
     "autoload"          : {
+        "files" : [
+            "src/defines.php"
+        ],
         "psr-4" : {
             "JBZoo\\Utils\\" : "src"
         }

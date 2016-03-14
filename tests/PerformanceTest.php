@@ -74,7 +74,7 @@ class PerformanceTest extends PHPUnit
             'Slug::filter(4)'     => function () use ($_this) {
                 return Slug::filter($_this->getRandomString(4));
             },
-        ), array('count' => 10000, 'name' => 'Random slug'));
+        ), array('count' => 1000, 'name' => 'Random slug'));
     }
 
     public function testSlugSpeed()

@@ -272,7 +272,7 @@ class FS
      * @param   integer $decimals The number of decimal points to include
      * @return  string
      */
-    public static function format($bytes, $decimals = 0)
+    public static function format($bytes, $decimals = 2)
     {
         $exp    = 0;
         $value  = 0;
@@ -283,6 +283,10 @@ class FS
         if ($bytes > 0) {
             $exp   = floor(log($bytes) / log(1024));
             $value = ($bytes / pow(1024, floor($exp)));
+        }
+
+        if ($symbol[$exp] === 'B') {
+            $decimals = 0;
         }
 
         return number_format($value, $decimals, '.', '') . ' ' . $symbol[$exp];
@@ -425,8 +429,8 @@ class FS
      */
     public static function clean($path, $dirSep = DIRECTORY_SEPARATOR)
     {
-        if (!is_string($path) && empty($path)) {
-            $path = null;
+        if (!is_string($path) || empty($path)) {
+            return '';
         }
 
         $path = trim((string)$path);
@@ -486,12 +490,13 @@ class FS
      * @param string      $filePath
      * @param string|null $rootPath
      * @param string      $forceDS
+     * @param bool        $toRealpath
      * @return mixed
      */
-    public static function getRelative($filePath, $rootPath = null, $forceDS = DIRECTORY_SEPARATOR)
+    public static function getRelative($filePath, $rootPath = null, $forceDS = DIRECTORY_SEPARATOR, $toRealpath = true)
     {
         // Cleanup file path
-        if (!self::isReal($filePath)) {
+        if ($toRealpath && !self::isReal($filePath)) {
             $filePath = self::real($filePath);
         }
         $filePath = self::clean($filePath, $forceDS);
@@ -499,7 +504,7 @@ class FS
 
         // Cleanup root path
         $rootPath = $rootPath ?: Sys::getDocRoot();
-        if (!self::isReal($rootPath)) {
+        if ($toRealpath && !self::isReal($rootPath)) {
             $rootPath = self::real($rootPath);
         }
         $rootPath = self::clean($rootPath, $forceDS);

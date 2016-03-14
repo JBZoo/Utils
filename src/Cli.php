@@ -10,6 +10,7 @@
  * @license   MIT
  * @copyright Copyright (C) JBZoo.com,  All rights reserved.
  * @link      https://github.com/JBZoo/Utils
+ * @author    Sebastian Bergmann <sebastian@phpunit.de>
  * @author    Denis Smetannikov <denis@jbzoo.com>
  */
 
@@ -24,6 +25,10 @@ use Symfony\Component\Process\Process;
  */
 class Cli
 {
+    const STDIN  = 0;
+    const STDOUT = 1;
+    const STDERR = 2;
+
     /**
      * Is command line
      *
@@ -83,9 +88,14 @@ class Cli
      * @param bool   $verbose
      * @return string
      * @throws ProcessFailedException
+     * @throws \Exception
      */
     public static function exec($command, $args = array(), $cwd = null, $verbose = false)
     {
+        if (!class_exists('\Symfony\Component\Process\Process')) {
+            throw new \Exception("Symfony/Process package required for Cli::exec() method"); // @codeCoverageIgnore
+        }
+
         $cmd = self::build($command, $args);
         $cwd = $cwd ? $cwd = realpath($cwd) : null;
 
@@ -155,5 +165,103 @@ class Cli
         }
 
         return $realCommand;
+    }
+
+    /**
+     * Returns true if STDOUT supports colorization.
+     *
+     * This code has been copied and adapted from
+     * Symfony\Component\Console\Output\OutputStream.
+     *
+     * @return bool
+     * @codeCoverageIgnore
+     */
+    public static function hasColorSupport()
+    {
+        if (DIRECTORY_SEPARATOR == '\\') {
+
+            $winColor = Env::get('ANSICON', Env::VAR_BOOL)
+                || 'ON' === Env::get('ConEmuANSI')
+                || 'xterm' === Env::get('TERM');
+
+            return $winColor;
+        }
+
+        if (!defined('STDOUT')) {
+            return false;
+        }
+
+        return self::isInteractive(STDOUT);
+    }
+
+    /**
+     * Returns the number of columns of the terminal.
+     *
+     * @return int
+     * @codeCoverageIgnore
+     */
+    public static function getNumberOfColumns()
+    {
+        if (DIRECTORY_SEPARATOR == '\\') {
+            $columns = 80;
+
+            if (preg_match('/^(\d+)x\d+ \(\d+x(\d+)\)$/', trim(getenv('ANSICON')), $matches)) {
+                $columns = $matches[1];
+
+            } elseif (function_exists('proc_open')) {
+                $process = proc_open(
+                    'mode CON',
+                    array(
+                        1 => array('pipe', 'w'),
+                        2 => array('pipe', 'w'),
+                    ),
+                    $pipes,
+                    null,
+                    null,
+                    array('suppress_errors' => true)
+                );
+
+                if (is_resource($process)) {
+                    $info = stream_get_contents($pipes[1]);
+                    fclose($pipes[1]);
+                    fclose($pipes[2]);
+                    proc_close($process);
+                    if (preg_match('/--------+\r?\n.+?(\d+)\r?\n.+?(\d+)\r?\n/', $info, $matches)) {
+                        $columns = $matches[2];
+                    }
+                }
+            }
+
+            return $columns - 1;
+        }
+
+        if (!self::isInteractive(self::STDIN)) {
+            return 80;
+        }
+
+        if (preg_match('#\d+ (\d+)#', shell_exec('stty size'), $match) === 1) {
+            if ((int)$match[1] > 0) {
+                return (int)$match[1];
+            }
+        }
+
+        if (preg_match('#columns = (\d+);#', shell_exec('stty'), $match) === 1) {
+            if ((int)$match[1] > 0) {
+                return (int)$match[1];
+            }
+        }
+
+        return 80;
+    }
+
+    /**
+     * Returns if the file descriptor is an interactive terminal or not.
+     *
+     * @param int|resource $fileDescriptor
+     * @return bool
+     */
+    public static function isInteractive($fileDescriptor = self::STDOUT)
+    {
+        return function_exists('posix_isatty') && @posix_isatty($fileDescriptor);
     }
 }

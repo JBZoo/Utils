@@ -61,9 +61,13 @@ class CliTest extends PHPUnit
 
     public function testExec()
     {
-        $output1 = Cli::exec('php -v');
-        $output2 = Cli::exec('php', array('v' => ''));
-        isSame($output1, $output2);
+        if (class_exists('\Symfony\Component\Process\Process')) {
+            $output1 = Cli::exec('php -v');
+            $output2 = Cli::exec('php', array('v' => ''));
+            isSame($output1, $output2);
+        } else {
+            skip('Symfony/Process required to test Cli::exec() method');
+        }
     }
 
     /**
@@ -72,5 +76,39 @@ class CliTest extends PHPUnit
     public function testExecFail()
     {
         Cli::exec('undefined-command');
+    }
+
+    /**
+     * @covers \JBZoo\Utils\Cli::isInteractive
+     */
+    public function testCanDetectIfStdoutIsInteractiveByDefault()
+    {
+        $this->assertInternalType('boolean', Cli::isInteractive());
+    }
+
+    /**
+     * @covers \JBZoo\Utils\Cli::isInteractive
+     */
+    public function testCanDetectIfFileDescriptorIsInteractive()
+    {
+        $this->assertInternalType('boolean', Cli::isInteractive(STDOUT));
+    }
+
+    /**
+     * @covers \JBZoo\Utils\Cli::hasColorSupport
+     * @uses   \JBZoo\Utils\Cli::isInteractive
+     */
+    public function testCanDetectColorSupport()
+    {
+        $this->assertInternalType('boolean', Cli::hasColorSupport());
+    }
+
+    /**
+     * @covers \JBZoo\Utils\Cli::getNumberOfColumns
+     * @uses   \JBZoo\Utils\Cli::isInteractive
+     */
+    public function testCanDetectNumberOfColumns()
+    {
+        $this->assertInternalType('integer', Cli::getNumberOfColumns());
     }
 }

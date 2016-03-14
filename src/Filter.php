@@ -190,7 +190,7 @@ class Filter
      */
     public static function trim($value)
     {
-        return Str::trim($value);
+        return Str::trim($value, true);
     }
 
     /**
@@ -222,14 +222,11 @@ class Filter
      */
     public static function cmd($value)
     {
-        $value = Str::trim($value);
         $value = Str::low($value);
+        $value = preg_replace('#[^a-z0-9\_\-\.]#', '', $value);
+        $value = Str::trim($value);
 
-        $pattern = '/^[A-Za-z0-9_\/-]+[A-Za-z0-9_\.-]*([\\\\\/][A-Za-z0-9_-]+[A-Za-z0-9_\.-]*)*$/';
-        preg_match($pattern, $value, $matches);
-        $result = isset($matches[0]) ? (string)$matches[0] : '';
-
-        return $result;
+        return $value;
     }
 
     /**
@@ -367,5 +364,60 @@ class Filter
     public static function raw($string)
     {
         return $string;
+    }
+
+    /**
+     * First char to upper, other to lower
+     *
+     * @param $input
+     * @return string
+     */
+    public static function ucfirst($input)
+    {
+        $string = Str::low($input);
+        $string = ucfirst($string);
+
+        return $string;
+    }
+
+    /**
+     * Convert words to PHP Class name
+     *
+     * @param $input
+     * @return string
+     */
+    public static function className($input)
+    {
+        $output = preg_replace(array('#(?<=[^A-Z\s])([A-Z\s])#i'), ' $0', $input);
+        $output = explode(' ', $output);
+
+        $output = array_map(function ($item) {
+            $item = preg_replace('#[^a-z0-9]#i', '', $item);
+            $item = Filter::ucfirst($item);
+            return $item;
+        }, $output);
+
+        $output = array_filter($output);
+
+        return implode('', $output);
+    }
+
+    /**
+     * Strip quotes.
+     *
+     * @param string $value
+     * @return string
+     */
+    public static function stripQuotes($value)
+    {
+        if ($value[0] === '"' && substr($value, -1) === '"') {
+            $value = trim($value, '"');
+        }
+
+        if ($value[0] === "'" && substr($value, -1) === "'") {
+            $value = trim($value, "'");
+        }
+
+        return $value;
     }
 }

@@ -21,7 +21,6 @@ namespace JBZoo\Utils;
  */
 class Email
 {
-
     /**
      * Check if email(s) is(are) valid. You can send one or an array of emails.
      *
@@ -39,7 +38,7 @@ class Email
         $emails = self::_handleEmailsInput($emails);
 
         foreach ($emails as $email) {
-            if (self::_isValid($email) === false) {
+            if (!self::_isValid($email)) {
                 continue;
             }
             if (!in_array($email, $result)) {
@@ -62,8 +61,7 @@ class Email
      */
     public static function checkDns($email)
     {
-
-        if (empty($email) || self::_isValid($email) === false) {
+        if (!self::_isValid($email)) {
             return false;
         }
 
@@ -94,9 +92,10 @@ class Email
         $emails = self::_handleEmailsInput($emails);
 
         foreach ($emails as $email) {
-            if (self::_isValid($email) === false) {
+            if (!self::_isValid($email)) {
                 continue;
             }
+
             $domain = self::_extractDomain($email);
             if (!empty($domain) && !in_array($domain, $result)) {
                 $result[] = $domain;
@@ -112,13 +111,16 @@ class Email
      * @param array $emails
      * @return array
      */
-    public static function getDomainInAlphabeticalOrder(array $emails)
+    public static function getDomainSorted(array $emails)
     {
         $domains = self::getDomain($emails);
+
         if (count($domains) < 2) {
             return $domains;
         }
+
         sort($domains, SORT_STRING);
+
         return $domains;
     }
 
@@ -215,6 +217,9 @@ class Email
      */
     private static function _isValid($email)
     {
+        if (empty($email)) {
+            return false;
+        }
 
         $email = filter_var($email, FILTER_SANITIZE_STRING);
 
@@ -231,8 +236,14 @@ class Email
      */
     private static function _extractDomain($email)
     {
-        $parts = explode('@', $email);
-        return idn_to_ascii(array_pop($parts));
+        $parts  = explode('@', $email);
+        $domain = array_pop($parts);
+
+        if (Sys::isFunc('idn_to_ascii')) {
+            return idn_to_ascii($domain);
+        }
+
+        return $domain;
     }
 
     /**
@@ -247,7 +258,6 @@ class Email
      */
     private static function _handleEmailsInput($emails)
     {
-
         if (is_array($emails)) {
             $result = array_keys(array_flip($emails));
         } else {

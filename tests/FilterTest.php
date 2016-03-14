@@ -234,7 +234,7 @@ class FilterTest extends PHPUnit
     public function testCmd()
     {
         $excepted = '0123456789-abcdefghijklmnopqrstuvwxyz_abcdefghijklmnopqrstuvwxyz';
-        $string   = ' 0123456789-ABCDEFGHIJKLMNOPQRSTUVWXYZ_abcdefghijklmnopqrstuvwxyz ';
+        $string   = ' 0123456789-ABCDEFGHIJKLMNOPQRSTUVWXYZ_abcdefghijklmnopqrstuvwxyz  йцуке ';
 
         isSame($excepted, Filter::_($string, 'cmd'));
     }
@@ -305,5 +305,46 @@ class FilterTest extends PHPUnit
             $value = str_replace('-', '_', $value);
             return $value;
         }));
+    }
+
+    public function testUcfirst()
+    {
+        isSame('Test', Filter::ucfirst('test'));
+        isSame('Test', Filter::ucfirst('Test'));
+        isSame('Test', Filter::ucfirst('TEST'));
+        isSame('Test', Filter::ucfirst('tEST'));
+    }
+
+    public function testClassname()
+    {
+        isSame('Class123Name456', Filter::className('Class123Name456'));
+        isSame('Class123Name456', Filter::className('Class123 Name456'));
+        isSame('Class123Name456', Filter::className('CLASS123 NAME456'));
+        isSame('Class123Name456', Filter::className('class123 name456'));
+        isSame('Class123Name456', Filter::className('class123Name456'));
+        isSame('Class123Name456', Filter::className('class123_Name456'));
+        isSame('Class123Name456', Filter::className('class123_name456'));
+        isSame('Class123Name456', Filter::className('class123-name456'));
+        isSame('Class123Name456', Filter::className('class123|name456'));
+        isSame('Class123Name456', Filter::className('class123.name456'));
+        isSame('Class123Name456', Filter::className('class123name456'));
+        isSame('Class123Name456', Filter::className('CLASS123NAME456'));
+        isSame('Classname', Filter::className('CLASSNAME'));
+    }
+
+    public function tstStripQuotes()
+    {
+        isSame('qwerty', Filter::stripQuotes('qwerty'));
+        isSame('qwerty"', Filter::stripQuotes('qwerty"'));
+        isSame('"qwerty', Filter::stripQuotes('"qwerty'));
+        isSame('"qwerty"', Filter::stripQuotes('"qwerty"'));
+
+        isSame("qwerty", Filter::stripQuotes('qwerty'));
+        isSame("qwerty'", Filter::stripQuotes('qwerty\''));
+        isSame("'qwerty", Filter::stripQuotes('\'qwerty'));
+        isSame("'qwerty'", Filter::stripQuotes('\'qwerty\''));
+
+        isSame("'qwerty\"", Filter::stripQuotes('\'qwerty"'));
+        isSame("\"qwerty'", Filter::stripQuotes('"qwerty\''));
     }
 }

@@ -68,18 +68,18 @@ class EmailTest extends PHPUnit
     }
 
     /**
-     * @dataProvider getDomainsInAlphabeticalOrderProvider
+     * @dataProvider getDomainsSortedProvider
      * @param $input
      * @param $outcome
      */
     public function testGetDomainsInAlphabeticalOrder($input, $outcome)
     {
-        is($outcome, Email::getDomainInAlphabeticalOrder($input));
+        is($outcome, Email::getDomainSorted($input));
     }
 
     public function testGetDomainsInAlphabeticalOrderWithOneSizeArray()
     {
-        is(array('test.pt'), Email::getDomainInAlphabeticalOrder(array('test@test.pt')));
+        is(array('test.pt'), Email::getDomainSorted(array('test@test.pt')));
     }
 
     /**
@@ -122,100 +122,100 @@ class EmailTest extends PHPUnit
     public function getCheckProvider()
     {
         return array(
-          array(
-              array(
-                  'test@gmail.com',
-                  'test@hotmail.com'
-              ),
-              array(
-                  'test@gmail.com',
-                  'test@hotmail.com'
-              )
-          ),
-          array(
-              array(
-                  'test@gmail@.com',
-                  'test@gmailcom',
-                  'test@',
-                  'test@hotmail.com',
-                  'test',
-                  '@test@gmail.com',
-              ),
-              array(
-                  'test@hotmail.com'
-              )
-          ),
+            array(
+                array(
+                    'test@gmail.com',
+                    'test@hotmail.com',
+                ),
+                array(
+                    'test@gmail.com',
+                    'test@hotmail.com',
+                ),
+            ),
+            array(
+                array(
+                    'test@gmail@.com',
+                    'test@gmailcom',
+                    'test@',
+                    'test@hotmail.com',
+                    'test',
+                    '@test@gmail.com',
+                ),
+                array(
+                    'test@hotmail.com',
+                ),
+            ),
         );
     }
 
     public function getDomainsProvider()
     {
         return array(
-          array(
-              array(
-                  'test@test.pt',
-                  'test@test.pt'
-              ),
-              array(
-                  'test.pt'
-              )
-          ),
-          array(
-              array(
-                  'test@gmail.com',
-                  'test@hotmail.com'
-              ),
-              array(
-                  'gmail.com',
-                  'hotmail.com'
-              )
-          ),
-          array(
-              array(
-                  'test@gmail@.com',
-                  'test@gmailcom',
-                  'test@',
-                  'test@hotmail.com',
-                  'test',
-                  '@test@gmail.com',
-              ),
-              array(
-                  'hotmail.com'
-              )
-          ),
+            array(
+                array(
+                    'test@test.pt',
+                    'test@test.pt',
+                ),
+                array(
+                    'test.pt',
+                ),
+            ),
+            array(
+                array(
+                    'test@gmail.com',
+                    'test@hotmail.com',
+                ),
+                array(
+                    'gmail.com',
+                    'hotmail.com',
+                ),
+            ),
+            array(
+                array(
+                    'test@gmail@.com',
+                    'test@gmailcom',
+                    'test@',
+                    'test@hotmail.com',
+                    'test',
+                    '@test@gmail.com',
+                ),
+                array(
+                    'hotmail.com',
+                ),
+            ),
         );
     }
 
-    public function getDomainsInAlphabeticalOrderProvider()
+    public function getDomainsSortedProvider()
     {
         return array(
-          array(
-              array(
-                  'test@abc.pt',
-                  'test@cbc.pt'
-              ),
-              array(
-                  'abc.pt',
-                  'cbc.pt'
-              )
-          ),
-          array(
-              array(
-                  'test@gmail.com',
-                  'test@hotmail.com'
-              ),
-              array(
-                  'gmail.com',
-                  'hotmail.com'
-              )
-          ),
-          array(
-              array(
-                  'test@zzzzzzcom',
-                  'test@aaacom'
-              ),
-              array()
-          ),
+            array(
+                array(
+                    'test@abc.pt',
+                    'test@cbc.pt',
+                ),
+                array(
+                    'abc.pt',
+                    'cbc.pt',
+                ),
+            ),
+            array(
+                array(
+                    'test@gmail.com',
+                    'test@hotmail.com',
+                ),
+                array(
+                    'gmail.com',
+                    'hotmail.com',
+                ),
+            ),
+            array(
+                array(
+                    'test@zzzzzzcom',
+                    'test@aaacom',
+                ),
+                array(),
+            ),
         );
     }
 
@@ -223,17 +223,17 @@ class EmailTest extends PHPUnit
     {
         return array(
             array(
-                array()
+                array(),
             ),
             array(
-                false
+                false,
             ),
             array(
-                ""
+                "",
             ),
             array(
-                0
-            )
+                0,
+            ),
         );
     }
 
