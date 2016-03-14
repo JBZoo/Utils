@@ -208,7 +208,7 @@ class Email
      */
     public static function getGravatarBuiltInDefaultImage()
     {
-        return self::getGravatarBuiltInImages()[2];
+        return Arr::key(2, self::getGravatarBuiltInImages(), true);
     }
 
     /**
