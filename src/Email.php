@@ -52,10 +52,12 @@ class Email
     /**
      * Check for DNS MX records of the email domain. Notice that a
      * (temporary) DNS error will have the same result as no records
-     * were found.
+     * were found. Code coverage ignored because this method requires
+     * DNS requests that could not be reliable.
      *
      * @param string $email
      * @return bool
+     * @codeCoverageIgnore
      */
     public static function checkDns($email)
     {
@@ -123,17 +125,25 @@ class Email
     }
 
     /**
-     * Generates an Gravatar URL. The default size is 32px, and it
-     * can be anywhere between 1px up to 2048px. If requested any value
-     * above the allowed range, then the maximum is applied. If requested
-     * any value bellow the minimum, then the default is applied.
+     * Generates an Gravatar URL.
+     *
+     * Size of the image:
+     * * The default size is 32px, and it can be anywhere between 1px up to 2048px.
+     * * If requested any value above the allowed range, then the maximum is applied.
+     * * If requested any value bellow the minimum, then the default is applied.
+     *
+     * Default image:
+     * * It can be an URL to an image.
+     * * Or one of built in options that Gravatar has. See Email::getGravatarBuiltInImages().
+     * * If none is defined then a built in default is used. See Email::getGravatarBuiltInDefaultImage().
      *
      * @param string $email
      * @param int $size
+     * @param string $defaultImage
      * @return null|string
      * @link http://en.gravatar.com/site/implement/images/
      */
-    public static function getGravatarUrl($email, $size = 32)
+    public static function getGravatarUrl($email, $size = 32, $defaultImage = null)
     {
 
         if (empty($email) || self::_isValid($email) === false) {
@@ -141,6 +151,8 @@ class Email
         }
 
         $hash = md5(strtolower(trim($email)));
+        $url = 'http://www.gravatar.com';
+        $parts = array();
 
         $size = Filter::int($size);
         if ($size > 2048) {
@@ -149,11 +161,54 @@ class Email
             $size = 32;
         }
 
-        return sprintf(
-            'http://www.gravatar.com/avatar/%s?s=%s',
-            $hash,
-            $size
+        if (Url::isHttps()) {
+            $parts = array(
+                'scheme' => 'https',
+                'host' => 'secure.gravatar.com'
+            );
+        }
+
+        $defaultImage = strtolower($defaultImage);
+        if (preg_match('/(http|https)./', $defaultImage)) {
+            $defaultImage = urlencode($defaultImage);
+        } elseif (!(Arr::in((string)$defaultImage, self::getGravatarBuiltInImages()))) {
+            $defaultImage = self::getGravatarBuiltInDefaultImage();
+        }
+
+        return Url::buildAll(
+            sprintf(
+                '%s/avatar/%s?s=%d&d=%s',
+                $url,
+                $hash,
+                $size,
+                $defaultImage
+            ),
+            $parts
         );
+    }
+
+    /**
+     * @return array
+     */
+    public static function getGravatarBuiltInImages()
+    {
+        return array(
+            '404',
+            'mm',
+            'identicon',
+            'monsterid',
+            'wavatar',
+            'retro',
+            'blank'
+        );
+    }
+
+    /**
+     * @return string
+     */
+    public static function getGravatarBuiltInDefaultImage()
+    {
+        return Arr::key(2, self::getGravatarBuiltInImages(), true);
     }
 
     /**
