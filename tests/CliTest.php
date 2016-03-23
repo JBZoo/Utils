@@ -57,6 +57,10 @@ class CliTest extends PHPUnit
         is('ls --option="qwert\"y"', Cli::build('ls', array(
             'option' => 'qwert"y',
         )));
+
+        is('ls --option="0"', Cli::build('ls', array(
+            'option' => 0,
+        )));
     }
 
     public function testExec()
