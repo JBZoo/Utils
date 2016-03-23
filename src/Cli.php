@@ -152,7 +152,7 @@ class Cli
                     }
                 }
 
-                if ($value) {
+                if (strlen($value) > 0) {
                     $stringArgs[] = $key . '="' . addcslashes($value, '"') . '"';
                 } else {
                     $stringArgs[] = $key;
