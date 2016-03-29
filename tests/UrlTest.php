@@ -172,7 +172,12 @@ class UrlTest extends PHPUnit
         isTrue(Url::isAbsolute('https://site.com'));
         isTrue(Url::isAbsolute('http://site.com'));
         isTrue(Url::isAbsolute('//site.com'));
+        isTrue(Url::isAbsolute('ftp://site.com'));
+
         isFalse(Url::isAbsolute('/path/to/file'));
+        isFalse(Url::isAbsolute('w:/path/to/file'));
+        isFalse(Url::isAbsolute('W:/path/to/file'));
+        isFalse(Url::isAbsolute('W:\path\to\file'));
     }
 
     public function testEmpty()

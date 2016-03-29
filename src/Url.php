@@ -521,7 +521,8 @@ class Url
      */
     public static function isAbsolute($path)
     {
-        $result = preg_match('#^(?:[a-z-]+:|\/\/)#i', $path);
+        $result = strpos($path, '//') === 0
+            || preg_match('#^[a-z-]{3,}:\/\/#i', $path);
 
         return $result;
     }
