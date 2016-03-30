@@ -41,9 +41,13 @@ class UrlTest extends PHPUnit
         // Test server auth.
         $_SERVER['PHP_AUTH_USER'] = 'admin';
         $_SERVER['PHP_AUTH_PW']   = '123456';
-        is('http://admin:123456@test.dev', Url::root());
+        is('http://admin:123456@test.dev', Url::root(true));
+        is('http://test.dev', Url::root(false));
+        is('http://test.dev', Url::root());
         is('/test.php?foo=bar', Url::path());
-        is('http://admin:123456@test.dev/test.php?foo=bar', Url::current());
+        is('http://admin:123456@test.dev/test.php?foo=bar', Url::current(true));
+        is('http://test.dev/test.php?foo=bar', Url::current(false));
+        is('http://test.dev/test.php?foo=bar', Url::current());
 
         // Test port.
         unset($_SERVER['PHP_AUTH_USER']);
