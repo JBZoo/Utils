@@ -228,6 +228,6 @@ class StringTest extends PHPUnit
 
     public function testGenerateUUID()
     {
-        isNotSame(Str::generateUUID(), Str::generateUUID());
+        isNotSame(Str::uuid(), Str::uuid());
     }
 }
