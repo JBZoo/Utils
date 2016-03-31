@@ -538,6 +538,9 @@ Str::esc($string)
 
 // Convert camel case to human readable format
 Str::splitCamelCase($input, $separator = '_', $toLower = true)
+
+// Generates a universally unique identifier (UUID v4) according to RFC 4122
+Str::generateUUID()
 ```
 
 

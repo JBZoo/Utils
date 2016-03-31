@@ -225,4 +225,9 @@ class StringTest extends PHPUnit
         isSame('word number', Str::splitCamelCase('wordNumber', ' '));
         isSame('word Number', Str::splitCamelCase('wordNumber', ' ', false));
     }
+
+    public function testGenerateUUID()
+    {
+        isNotSame(Str::generateUUID(), Str::generateUUID());
+    }
 }
