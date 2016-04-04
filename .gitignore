@@ -2,3 +2,6 @@ build/*
 vendor/*
 phpunit.xml
 composer.lock
+
+# phpstorm
+.idea

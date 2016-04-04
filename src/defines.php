@@ -13,23 +13,10 @@
  * @author    Denis Smetannikov <denis@jbzoo.com>
  */
 
-namespace JBZoo\PHPUnit;
+if (!isset($_SERVER['REQUEST_TIME_FLOAT'])) {
+    $_SERVER['REQUEST_TIME_FLOAT'] = microtime(true);
+}
 
-/**
- * Class CodeStyleTest
- * @package JBZoo\PHPUnit
- */
-class CodestyleTest extends Codestyle
-{
-    protected $_packageName = 'Utils';
-    protected $_packageAuthor = 'Denis Smetannikov <denis@jbzoo.com>';
-
-    /**
-     * @SuppressWarnings(PHPMD.Superglobals)
-     * @backupGlobals
-     */
-    public function testCyrillic()
-    {
-        isTrue(true); // Don't check it
-    }
+if (!isset($_SERVER['REQUEST_TIME'])) {
+    $_SERVER['REQUEST_TIME'] = $_SERVER['REQUEST_TIME_FLOAT'];
 }

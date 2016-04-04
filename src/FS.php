@@ -272,7 +272,7 @@ class FS
      * @param   integer $decimals The number of decimal points to include
      * @return  string
      */
-    public static function format($bytes, $decimals = 0)
+    public static function format($bytes, $decimals = 2)
     {
         $exp    = 0;
         $value  = 0;
@@ -283,6 +283,10 @@ class FS
         if ($bytes > 0) {
             $exp   = floor(log($bytes) / log(1024));
             $value = ($bytes / pow(1024, floor($exp)));
+        }
+
+        if ($symbol[$exp] === 'B') {
+            $decimals = 0;
         }
 
         return number_format($value, $decimals, '.', '') . ' ' . $symbol[$exp];

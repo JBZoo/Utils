@@ -19,7 +19,7 @@ use \DateTime;
 use \DateTimeZone;
 
 /**
- * Class Time
+ * Class Dates
  * @package JBZoo\Utils
  */
 class Dates

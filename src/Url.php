@@ -105,11 +105,12 @@ class Url
     /**
      * Return the current URL.
      *
+     * @param bool $addAuth
      * @return string
      */
-    public static function current()
+    public static function current($addAuth = false)
     {
-        $current = (string)self::root() . (string)self::path();
+        $current = (string)self::root($addAuth) . (string)self::path();
         return $current ? $current : null;
     }
 
@@ -142,11 +143,12 @@ class Url
     /**
      * Return current root URL
      *
-     * @return string
+     * @param bool $addAuth
+     * @return null|string
      *
      * @SuppressWarnings(PHPMD.Superglobals)
      */
-    public static function root()
+    public static function root($addAuth = false)
     {
         $url = '';
 
@@ -154,7 +156,9 @@ class Url
         $isHttps = self::isHttps();
 
         // Was a username or password passed?
-        $url .= self::getAuth();
+        if ($addAuth) {
+            $url .= self::getAuth();
+        }
 
         // We want the user to stay on the same host they are currently on,
         // but beware of security issues
@@ -521,7 +525,8 @@ class Url
      */
     public static function isAbsolute($path)
     {
-        $result = preg_match('#^(?:[a-z-]+:|\/\/)#i', $path);
+        $result = strpos($path, '//') === 0
+            || preg_match('#^[a-z-]{3,}:\/\/#i', $path);
 
         return $result;
     }

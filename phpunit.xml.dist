@@ -1,4 +1,16 @@
 <?xml version="1.0" encoding="UTF-8" ?>
+<!--
+    JBZoo Utils
+
+    This file is part of the JBZoo CCK package.
+    For the full copyright and license information, please view the LICENSE
+    file that was distributed with this source code.
+
+    @package    Utils
+    @license    MIT
+    @copyright  Copyright (C) JBZoo.com,  All rights reserved.
+    @link       https://github.com/JBZoo/Utils
+-->
 <phpunit bootstrap="tests/autoload.php"
          colors="true"
          convertErrorsToExceptions="true"
@@ -29,7 +41,7 @@
     <logging>
         <log type="coverage-clover" target="build/logs/clover.xml"/>
         <log type="coverage-html" target="build/phpunit" lowUpperBound="80" highLowerBound="95"/>
-        <log type="coverage-text" target="php://stdout" showUncoveredFiles="false" showOnlySummary="true"/>
+        <log type="coverage-text" target="php://stdout" showUncoveredFiles="true" showOnlySummary="false"/>
     </logging>
 
 </phpunit>

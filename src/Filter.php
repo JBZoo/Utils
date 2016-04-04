@@ -401,4 +401,23 @@ class Filter
 
         return implode('', $output);
     }
+
+    /**
+     * Strip quotes.
+     *
+     * @param string $value
+     * @return string
+     */
+    public static function stripQuotes($value)
+    {
+        if ($value[0] === '"' && substr($value, -1) === '"') {
+            $value = trim($value, '"');
+        }
+
+        if ($value[0] === "'" && substr($value, -1) === "'") {
+            $value = trim($value, "'");
+        }
+
+        return $value;
+    }
 }

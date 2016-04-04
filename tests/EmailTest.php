@@ -35,16 +35,6 @@ class EmailTest extends PHPUnit
     }
 
     /**
-     * @dataProvider getCheckDnsProvider
-     * @param $input
-     * @param $outcome
-     */
-    public function testCheckDns($input, $outcome)
-    {
-        is($outcome, Email::checkDns($input));
-    }
-
-    /**
      * @dataProvider getEmptyProvider
      * @param $input
      */
@@ -78,7 +68,7 @@ class EmailTest extends PHPUnit
     }
 
     /**
-     * @dataProvider getDomainsInAlphabeticalOrderProvider
+     * @dataProvider getDomainsSortedProvider
      * @param $input
      * @param $outcome
      */
@@ -95,13 +85,28 @@ class EmailTest extends PHPUnit
     /**
      * @dataProvider getGravatarUrlProvider
      * @param $input
-     * @param $size
+     * @param int $size
+     * @param string $defaultImage
      */
-    public function testGetGravatarUrl($input, $size)
+    public function testGetGravatarUrl($input, $size, $defaultImage)
     {
         isLike(
-            sprintf('/http:\/\/www\.gravatar\.com\/avatar\/.*\?s=%s/', $size),
-            Email::getGravatarUrl($input[0], $input[1])
+            sprintf(
+                '/http:\/\/www\.gravatar\.com\/avatar\/.*\?s=%d&d=%s/',
+                $size,
+                $defaultImage
+            ),
+            Email::getGravatarUrl($input[0], $input[1], $input[2])
+        );
+
+        $_SERVER['HTTPS'] = 'on';
+        isLike(
+            sprintf(
+                '/https:\/\/secure\.gravatar\.com\/avatar\/.*\?s=%d&d=%s/',
+                $size,
+                $defaultImage
+            ),
+            Email::getGravatarUrl($input[0], $input[1], $input[2])
         );
     }
 
@@ -139,32 +144,6 @@ class EmailTest extends PHPUnit
                 array(
                     'test@hotmail.com',
                 ),
-            ),
-        );
-    }
-
-    public function getCheckDnsProvider()
-    {
-        return array(
-            array(
-                'test@gmail.com',
-                true,
-            ),
-            array(
-                'test@zzzzzzzzzzzzzzzzzzzzzz',
-                false,
-            ),
-            array(
-                '@test@',
-                false,
-            ),
-            array(
-                'fake.com@fake.commmmmmmmmm',
-                false,
-            ),
-            array(
-                '',
-                false,
             ),
         );
     }
@@ -207,7 +186,7 @@ class EmailTest extends PHPUnit
         );
     }
 
-    public function getDomainsInAlphabeticalOrderProvider()
+    public function getDomainsSortedProvider()
     {
         return array(
             array(
@@ -264,51 +243,65 @@ class EmailTest extends PHPUnit
             array(
                 array(
                     'test@test.pt',
-                    32
+                    32,
+                    null
                 ),
-                32
+                32,
+                Email::getGravatarBuiltInDefaultImage()
             ),
             array(
                 array(
                     'test@test.pt',
-                    5000
+                    5000,
+                    null
                 ),
-                2048
+                2048,
+                Email::getGravatarBuiltInDefaultImage()
             ),
             array(
                 array(
                     'test@test.pt',
-                    2047
+                    2047,
+                    'monsterid'
                 ),
-                2047
+                2047,
+                'monsterid'
             ),
             array(
                 array(
                     'test@test.pt',
-                    -1
+                    -1,
+                    null
                 ),
-                32
+                32,
+                Email::getGravatarBuiltInDefaultImage()
             ),
             array(
                 array(
                     'test@test.pt',
-                    8.1
+                    8.1,
+                    'http://example.com/images/avatar.jpg'
                 ),
-                8
+                8,
+                'http%3A%2F%2Fexample.com%2Fimages%2Favatar.jpg'
             ),
             array(
                 array(
                     'test@test.pt',
-                    15.5
+                    15.5,
+                    null
                 ),
-                15
+                15,
+                Email::getGravatarBuiltInDefaultImage()
             ),
             array(
                 array(
                     'test@test.pt',
-                    "9000"
+                    "9000",
+                    'IDEnticon'
                 ),
-                2048
+                2048,
+                'identicon'
             )
         );
     }

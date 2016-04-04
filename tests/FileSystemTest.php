@@ -290,6 +290,9 @@ class FileSystemTest extends PHPUnit
         $size = FS::format(512, 0);
         is('512 B', $size);
 
+        $size = FS::format(512, 2);
+        is('512 B', $size);
+
         $size = FS::format(2048, 1);
         is('2.0 KB', $size);
 

@@ -57,6 +57,10 @@ class CliTest extends PHPUnit
         is('ls --option="qwert\"y"', Cli::build('ls', array(
             'option' => 'qwert"y',
         )));
+
+        is('ls --option="0"', Cli::build('ls', array(
+            'option' => 0,
+        )));
     }
 
     public function testExec()
@@ -76,5 +80,39 @@ class CliTest extends PHPUnit
     public function testExecFail()
     {
         Cli::exec('undefined-command');
+    }
+
+    /**
+     * @covers \JBZoo\Utils\Cli::isInteractive
+     */
+    public function testCanDetectIfStdoutIsInteractiveByDefault()
+    {
+        $this->assertInternalType('boolean', Cli::isInteractive());
+    }
+
+    /**
+     * @covers \JBZoo\Utils\Cli::isInteractive
+     */
+    public function testCanDetectIfFileDescriptorIsInteractive()
+    {
+        $this->assertInternalType('boolean', Cli::isInteractive(STDOUT));
+    }
+
+    /**
+     * @covers \JBZoo\Utils\Cli::hasColorSupport
+     * @uses   \JBZoo\Utils\Cli::isInteractive
+     */
+    public function testCanDetectColorSupport()
+    {
+        $this->assertInternalType('boolean', Cli::hasColorSupport());
+    }
+
+    /**
+     * @covers \JBZoo\Utils\Cli::getNumberOfColumns
+     * @uses   \JBZoo\Utils\Cli::isInteractive
+     */
+    public function testCanDetectNumberOfColumns()
+    {
+        $this->assertInternalType('integer', Cli::getNumberOfColumns());
     }
 }

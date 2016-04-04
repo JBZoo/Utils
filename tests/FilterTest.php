@@ -331,4 +331,20 @@ class FilterTest extends PHPUnit
         isSame('Class123Name456', Filter::className('CLASS123NAME456'));
         isSame('Classname', Filter::className('CLASSNAME'));
     }
+
+    public function tstStripQuotes()
+    {
+        isSame('qwerty', Filter::stripQuotes('qwerty'));
+        isSame('qwerty"', Filter::stripQuotes('qwerty"'));
+        isSame('"qwerty', Filter::stripQuotes('"qwerty'));
+        isSame('"qwerty"', Filter::stripQuotes('"qwerty"'));
+
+        isSame("qwerty", Filter::stripQuotes('qwerty'));
+        isSame("qwerty'", Filter::stripQuotes('qwerty\''));
+        isSame("'qwerty", Filter::stripQuotes('\'qwerty'));
+        isSame("'qwerty'", Filter::stripQuotes('\'qwerty\''));
+
+        isSame("'qwerty\"", Filter::stripQuotes('\'qwerty"'));
+        isSame("\"qwerty'", Filter::stripQuotes('"qwerty\''));
+    }
 }
