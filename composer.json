@@ -7,7 +7,7 @@
     "keywords"          : [
         "helpers", "helper", "utility", "utils", "collection", "environment", "image", "filesystem",
         "array", "cli", "command line", "dates", "email", "env", "filter", "http", "url", "serialize",
-        "slugif", "string", "mbstring", "timer", "misc"
+        "slugify", "string", "mbstring", "timer", "misc"
     ],
     "authors"           : [
         {
@@ -28,7 +28,7 @@
         "php" : ">=5.3.10"
     },
     "require-dev"       : {
-        "jbzoo/phpunit" : "^1.5"
+        "jbzoo/phpunit" : "^1.0"
     },
     "suggest"           : {
         "ext-mbstring"              : "Provides multibyte specific string functions",
