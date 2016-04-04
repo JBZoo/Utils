@@ -430,7 +430,7 @@ class Arr
     {
         if (is_null($object)) {
             return array();
-        } elseif (is_array($object)) {
+        } elseif (is_array($object) && !self::isAssoc($object)) {
             return $object;
         }
 
