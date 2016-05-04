@@ -388,6 +388,10 @@ class Filter
      */
     public static function parseLines($input)
     {
+        if (is_array($input)) {
+            $input = implode(PHP_EOL, $input);
+        }
+
         return Str::parseLines($input, true);
     }
 
