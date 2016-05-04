@@ -272,7 +272,7 @@ class FilterTest extends PHPUnit
         );
 
         isSame($expected, Filter::parseLines($source));
-        isSame($expected, Filter::parseLines([$source]));
+        isSame($expected, Filter::parseLines(array($source)));
     }
 
     public function testOthers()
