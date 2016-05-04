@@ -263,13 +263,13 @@ class FilterTest extends PHPUnit
     public function testParseLines()
     {
         $source = " qw\rer\n ty \r\n12\n\r34 ";
-        isSame([
+        isSame(array(
             'qw' => 'qw',
             'er' => 'er',
             'ty' => 'ty',
             '12' => '12',
             '34' => '34'
-        ], Filter::parseLines($source));
+        ), Filter::parseLines($source));
     }
 
     public function testOthers()
