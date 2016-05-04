@@ -47,48 +47,30 @@ class Str
      */
     public static function parseLines($text, $toAssoc = true)
     {
-        static $cache = array();
+        $text = htmlspecialchars_decode($text);
+        $text = self::clean($text, false, false);
 
-        $key = $text . '|' . $toAssoc;
+        $text  = str_replace(array("\n", "\r", "\r\n", PHP_EOL), "\n", $text);
+        $lines = explode("\n", $text);
 
-        if (!Arr::key($key, $cache)) {
-            $text = htmlspecialchars_decode($text);
-            $text = self::clean($text, false, false);
+        $result = array();
+        if (!empty($lines)) {
+            foreach ($lines as $line) {
+                $line = trim($line);
 
-            $delimeters = array("\n", "\r", "\r\n", PHP_EOL);
+                if ($line === '') {
+                    continue;
+                }
 
-            $deliChar = "\n";
-            foreach ($delimeters as $delimeter) {
-                if (self::pos($text, $delimeter) !== false) {
-                    $deliChar = $delimeter;
-                    break;
+                if ($toAssoc) {
+                    $result[$line] = $line;
+                } else {
+                    $result[] = $line;
                 }
             }
-
-            $lines = explode($deliChar, $text);
-
-            $result = array();
-
-            if (!empty($lines)) {
-                foreach ($lines as $line) {
-                    $line = trim($line);
-
-                    if ($line === '') {
-                        continue;
-                    }
-
-                    if ($toAssoc) {
-                        $result[$line] = $line;
-                    } else {
-                        $result[] = $line;
-                    }
-                }
-            }
-
-            $cache[$key] = $result;
         }
 
-        return $cache[$key];
+        return $result;
     }
 
     /**

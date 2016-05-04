@@ -381,6 +381,17 @@ class Filter
     }
 
     /**
+     * Parse lines to assoc list
+     *
+     * @param $input
+     * @return string
+     */
+    public static function parseLines($input)
+    {
+        return Str::parseLines($input, true);
+    }
+
+    /**
      * Convert words to PHP Class name
      *
      * @param $input

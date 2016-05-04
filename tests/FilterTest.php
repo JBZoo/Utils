@@ -260,6 +260,18 @@ class FilterTest extends PHPUnit
         isSame($source, Filter::_($source, ' R A W '));
     }
 
+    public function testParseLines()
+    {
+        $source = " qw\rer\n ty \r\n12\n\r34 ";
+        isSame([
+            'qw' => 'qw',
+            'er' => 'er',
+            'ty' => 'ty',
+            '12' => '12',
+            '34' => '34'
+        ], Filter::parseLines($source));
+    }
+
     public function testOthers()
     {
         isSame('low', Filter::_(' LOW ', 'low'));
