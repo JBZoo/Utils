@@ -15,6 +15,9 @@
 
 namespace JBZoo\Utils;
 
+use JBZoo\Data\Data;
+use JBZoo\Data\JSON;
+
 /**
  * Class Filter
  * @package JBZoo\Utils
@@ -353,6 +356,19 @@ class Filter
     public static function esc($string)
     {
         return Str::esc($string);
+    }
+
+    /**
+     * @param array $data
+     * @return JSON
+     */
+    public static function data($data)
+    {
+        if ($data instanceof Data) {
+            return $data;
+        }
+
+        return new JSON($data);
     }
 
     /**

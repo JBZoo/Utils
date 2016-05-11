@@ -15,6 +15,7 @@
 
 namespace JBZoo\PHPUnit;
 
+use JBZoo\Data\JSON;
 use JBZoo\Utils\Filter;
 
 /**
@@ -361,5 +362,18 @@ class FilterTest extends PHPUnit
 
         isSame("'qwerty\"", Filter::stripQuotes('\'qwerty"'));
         isSame("\"qwerty'", Filter::stripQuotes('"qwerty\''));
+    }
+
+    public function testData()
+    {
+        $data = array(
+            'key' => 'value',
+        );
+
+        $obj = new JSON($data);
+
+        isSame($obj, Filter::data($obj));
+        isSame($data, (array)Filter::data($obj));
+        isSame($data, (array)Filter::data($data));
     }
 }

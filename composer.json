@@ -25,7 +25,8 @@
         }
     ],
     "require"           : {
-        "php" : ">=5.3.10"
+        "php"        : ">=5.3.10",
+        "jbzoo/data" : "^1.0"
     },
     "require-dev"       : {
         "jbzoo/phpunit" : "^1.5"
