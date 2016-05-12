@@ -359,7 +359,7 @@ class Filter
     }
 
     /**
-     * @param array $data
+     * @param array|Data $data
      * @return JSON
      */
     public static function data($data)

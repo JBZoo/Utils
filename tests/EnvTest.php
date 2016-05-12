@@ -159,5 +159,7 @@ class EnvTest extends PHPUnit
         putenv('FOO= 123 ');
         isSame('123', Env::get('FOO'));
         isSame(null, Env::get('UNDEFINED_VAR'));
+        isSame(42, Env::get('UNDEFINED_VAR', 42));
+        isSame(42, Env::get('UNDEFINED_VAR', 42, Env::VAR_STRING));
     }
 }

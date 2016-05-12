@@ -213,15 +213,16 @@ class Env
      * Returns an environment variable.
      *
      * @param string $name
+     * @param string $default
      * @param int    $options
      * @return mixed
      */
-    public static function get($name, $options = self::VAR_STRING)
+    public static function get($name, $default = null, $options = self::VAR_STRING)
     {
         $value = getenv(trim($name));
 
         if ($value === false) {
-            return null;
+            return $default;
         }
 
         return self::convert($value, $options);
