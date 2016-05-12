@@ -127,7 +127,6 @@ class Url
 
         // Get the rest of the URL
         if (!Arr::key('REQUEST_URI', $_SERVER)) {
-
             // Microsoft IIS doesn't set REQUEST_URI by default
             if ($queryString = Arr::key('QUERY_STRING', $_SERVER, true)) {
                 $url .= '?' . $queryString;
@@ -335,7 +334,7 @@ class Url
         }
 
         if (Arr::key('fragment', $url) && $url['fragment']) {
-            $parsedString .= '#' . $url['fragment'];
+            $parsedString .= '#' . trim($url['fragment'], '#');
         }
 
         $newUrl = $url;
@@ -529,5 +528,23 @@ class Url
             || preg_match('#^[a-z-]{3,}:\/\/#i', $path);
 
         return $result;
+    }
+
+    /**
+     * @param array $parts
+     * @return string
+     */
+    public static function create(array $parts = array())
+    {
+        $parts = array_merge(array(
+            'scheme' => 'http',
+            'query'  => array(),
+        ), $parts);
+
+        if (is_array($parts['query'])) {
+            $parts['query'] = self::build($parts['query']);
+        }
+
+        return self::buildAll('', $parts, self::URL_REPLACE);
     }
 }

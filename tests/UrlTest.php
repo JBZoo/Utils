@@ -190,4 +190,39 @@ class UrlTest extends PHPUnit
         isSame(null, Url::path());
         isSame(null, Url::current());
     }
+
+    public function testCreate()
+    {
+        isSame('http://example.com/?foo=bar', Url::create(array(
+            'host'  => 'example.com',
+            'user'  => '',
+            'pass'  => '123456',
+            'query' => array(
+                'foo' => 'bar'
+            )
+        )));
+
+        isSame('http://example.com/', Url::create(array(
+            'host' => 'example.com',
+            'part' => '',
+        )));
+
+        isSame('http://example.com/page#hash', Url::create(array(
+            'host'     => 'example.com',
+            'path'     => 'page',
+            'fragment' => 'hash'
+        )));
+
+        isSame('https://user:123456@example.com/page?foo=bar#hash', Url::create(array(
+            'scheme'   => 'https',
+            'host'     => 'example.com',
+            'user'     => 'user',
+            'pass'     => '123456',
+            'path'     => 'page',
+            'query'    => array(
+                'foo' => 'bar'
+            ),
+            'fragment' => '#hash'
+        )));
+    }
 }
