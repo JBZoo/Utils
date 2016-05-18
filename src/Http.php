@@ -34,7 +34,7 @@ class Http
     {
         if (!headers_sent()) {
             while (@ob_end_clean()) {
-                // do nothing
+                // noop
             }
 
             // required for IE, otherwise Content-disposition is ignored
@@ -42,10 +42,7 @@ class Http
                 Sys::iniSet('zlib.output_compression', 'Off');
             }
 
-            // set_time_limit doesn't work in safe mode
-            if (!ini_get('safe_mode')) {
-                @set_time_limit(0);
-            }
+            Sys::setTime(0);
 
             // Set headers
             header('Pragma: public');
