@@ -25,41 +25,47 @@ class Http
      * Transmit headers that force a browser to display the download file dialog.
      * Cross browser compatible. Only fires if headers have not already been sent.
      *
-     * @param string      $filename The name of the filename to display to browsers
-     * @param string|bool $content  The content to output for the download. If empty just the headers will be sent
+     * @param string $filename The name of the filename to display to browsers
      * @return boolean
      *
      * @codeCoverageIgnore
      */
-    public static function download($filename, $content = false)
+    public static function download($filename)
     {
         if (!headers_sent()) {
-            // Required for some browsers
+            while (@ob_end_clean());
+            
+            // required for IE, otherwise Content-disposition is ignored
             if (Sys::iniGet('zlib.output_compression')) {
                 Sys::iniSet('zlib.output_compression', 'Off');
             }
-
+            
+		    // set_time_limit doesn't work in safe mode
+		    if (!ini_get('safe_mode')) {
+                @set_time_limit(0);
+            }            
+            
+            // Set headers
             header('Pragma: public');
             header('Expires: 0');
             header('Cache-Control: must-revalidate, post-check=0, pre-check=0');
-
-            // Required for certain browsers
             header('Cache-Control: private', false);
             header('Content-Disposition: attachment; filename="' . basename(str_replace('"', '', $filename)) . '";');
             header('Content-Type: application/force-download');
             header('Content-Transfer-Encoding: binary');
+            header('Content-Length: ' . filesize($filename));
+            
+    		// output file
+    		if (Sys::isFunc('fpassthru')) {
+    		    $handle = fopen($file, 'rb');
+    		    fpassthru($handle);
+    		    fclose($handle);
 
-            if ($content) {
-                header('Content-Length: ' . strlen($content));
-            }
-            ob_clean();
-            flush();
-
-            if ($content) {
-                echo $content;
-            }
-
-            return true;
+    		} else {
+    		    echo file_get_contents($filename);
+    		}
+    		
+    		return true;
         }
 
         return false;
