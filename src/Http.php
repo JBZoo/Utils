@@ -33,18 +33,20 @@ class Http
     public static function download($filename)
     {
         if (!headers_sent()) {
-            while (@ob_end_clean());
-            
+            while (@ob_end_clean()) {
+                // do nothing
+            }
+
             // required for IE, otherwise Content-disposition is ignored
             if (Sys::iniGet('zlib.output_compression')) {
                 Sys::iniSet('zlib.output_compression', 'Off');
             }
-            
-		    // set_time_limit doesn't work in safe mode
-		    if (!ini_get('safe_mode')) {
+
+            // set_time_limit doesn't work in safe mode
+            if (!ini_get('safe_mode')) {
                 @set_time_limit(0);
-            }            
-            
+            }
+
             // Set headers
             header('Pragma: public');
             header('Expires: 0');
@@ -54,18 +56,18 @@ class Http
             header('Content-Type: application/force-download');
             header('Content-Transfer-Encoding: binary');
             header('Content-Length: ' . filesize($filename));
-            
-    		// output file
-    		if (Sys::isFunc('fpassthru')) {
-    		    $handle = fopen($file, 'rb');
-    		    fpassthru($handle);
-    		    fclose($handle);
 
-    		} else {
-    		    echo file_get_contents($filename);
-    		}
-    		
-    		return true;
+            // output file
+            if (Sys::isFunc('fpassthru')) {
+                $handle = fopen($filename, 'rb');
+                fpassthru($handle);
+                fclose($handle);
+
+            } else {
+                echo file_get_contents($filename);
+            }
+
+            return true;
         }
 
         return false;
