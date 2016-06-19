@@ -102,16 +102,17 @@ class Sys
     }
 
     /**
-     * Set PHP execution time limit
+     * Set PHP execution time limit (doesn't work in safe mode)
      *
      * @param int $newLimit
      */
-    public static function setTime($newLimit = -1)
+    public static function setTime($newLimit = 0)
     {
         $newLimit = (int)$newLimit;
 
         self::iniSet('set_time_limit', $newLimit);
-        if (self::isFunc('set_time_limit')) {
+        self::iniSet('max_execution_time', $newLimit);
+        if (self::isFunc('set_time_limit') && !ini_get('safe_mode')) {
             set_time_limit($newLimit);
         }
     }

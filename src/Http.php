@@ -25,38 +25,43 @@ class Http
      * Transmit headers that force a browser to display the download file dialog.
      * Cross browser compatible. Only fires if headers have not already been sent.
      *
-     * @param string      $filename The name of the filename to display to browsers
-     * @param string|bool $content  The content to output for the download. If empty just the headers will be sent
+     * @param string $filename The name of the filename to display to browsers
      * @return boolean
      *
      * @codeCoverageIgnore
      */
-    public static function download($filename, $content = false)
+    public static function download($filename)
     {
         if (!headers_sent()) {
-            // Required for some browsers
+            while (@ob_end_clean()) {
+                // noop
+            }
+
+            // required for IE, otherwise Content-disposition is ignored
             if (Sys::iniGet('zlib.output_compression')) {
                 Sys::iniSet('zlib.output_compression', 'Off');
             }
 
+            Sys::setTime(0);
+
+            // Set headers
             header('Pragma: public');
             header('Expires: 0');
             header('Cache-Control: must-revalidate, post-check=0, pre-check=0');
-
-            // Required for certain browsers
             header('Cache-Control: private', false);
             header('Content-Disposition: attachment; filename="' . basename(str_replace('"', '', $filename)) . '";');
             header('Content-Type: application/force-download');
             header('Content-Transfer-Encoding: binary');
+            header('Content-Length: ' . filesize($filename));
 
-            if ($content) {
-                header('Content-Length: ' . strlen($content));
-            }
-            ob_clean();
-            flush();
+            // output file
+            if (Sys::isFunc('fpassthru')) {
+                $handle = fopen($filename, 'rb');
+                fpassthru($handle);
+                fclose($handle);
 
-            if ($content) {
-                echo $content;
+            } else {
+                echo file_get_contents($filename);
             }
 
             return true;
