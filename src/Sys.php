@@ -98,7 +98,7 @@ class Sys
      */
     public static function isFunc($funcName)
     {
-        return is_string($funcName) && function_exists($funcName) && is_callable($funcName);
+        return is_callable($funcName) || (is_string($funcName) && function_exists($funcName) && is_callable($funcName));
     }
 
     /**

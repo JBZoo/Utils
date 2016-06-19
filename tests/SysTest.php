@@ -28,6 +28,11 @@ class SysTest extends PHPUnit
     {
         isFalse(Sys::isFunc('qwerty'));
         isTrue(Sys::isFunc('trim'));
+
+        $func = function () {
+        };
+
+        isTrue(Sys::isFunc($func));
     }
 
     public function testSetTimeAndMemory()
