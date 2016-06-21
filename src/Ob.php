@@ -22,7 +22,7 @@ namespace JBZoo\Utils;
 class Ob
 {
     /**
-     * Clean ll ob_* buffers
+     * Clean all ob_* buffers
      */
     public static function clean()
     {
