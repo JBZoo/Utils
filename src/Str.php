@@ -141,7 +141,7 @@ class Str
     public static function unique($prefix = 'unique')
     {
         $prefix = rtrim(trim($prefix), '-');
-        $random = mt_rand(100000, 999999);
+        $random = mt_rand(10000000, 99999999);
 
         $result = $random;
         if ($prefix) {
@@ -158,7 +158,7 @@ class Str
      * @param bool $isReadable
      * @return string
      */
-    public static function random($length = 6, $isReadable = true)
+    public static function random($length = 10, $isReadable = true)
     {
         $result = '';
 
@@ -166,14 +166,16 @@ class Str
             $vocal = array('a', 'e', 'i', 'o', 'u');
             $conso = array('b', 'c', 'd', 'f', 'g',
                 'h', 'j', 'k', 'l', 'm', 'n', 'p',
-                'r', 's', 't', 'v', 'w', 'x', 'y', 'z');
+                'r', 's', 't', 'v', 'w', 'x', 'y', 'z',
+                '1', '2', '3', '4', '5', '6', '7', '8', '9',
+            );
 
             srand((double)microtime() * 1000000);
             $max = $length / 2;
 
             for ($pos = 1; $pos <= $max; $pos++) {
-                $result .= $conso[rand(0, 19)];
-                $result .= $vocal[rand(0, 4)];
+                $result .= $conso[mt_rand(0, count($conso) - 1)];
+                $result .= $vocal[mt_rand(0, count($vocal) - 1)];
             }
 
         } else {
@@ -181,7 +183,7 @@ class Str
 
             srand((double)microtime() * 1000000);
             for ($pos = 0; $pos < $length; $pos++) {
-                $result .= $chars[rand() % strlen($chars)];
+                $result .= $chars[mt_rand() % strlen($chars)];
             }
         }
 

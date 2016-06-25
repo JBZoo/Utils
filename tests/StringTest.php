@@ -79,16 +79,20 @@ class StringTest extends PHPUnit
 
     public function testUnique()
     {
-        is(13, strlen(Str::unique()));
-        is(6, strlen(Str::unique(null)));
-        is(8, strlen(Str::unique('t-')));
+        is(15, strlen(Str::unique()));
+        is(8, strlen(Str::unique(null)));
+        is(10, strlen(Str::unique('t-')));
+        isNotSame(Str::unique(), Str::unique());
     }
 
     public function testRandom()
     {
+        is(10, strlen(Str::random()));
         is(10, strlen(Str::random(10)));
         is(10, strlen(Str::random(10, true)));
         is(10, strlen(Str::random(10, false)));
+
+        isNotSame(Str::random(), Str::random());
     }
 
     public function testZeroPad()
