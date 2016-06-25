@@ -170,7 +170,6 @@ class Str
                 '1', '2', '3', '4', '5', '6', '7', '8', '9',
             );
 
-            srand((double)microtime() * 1000000);
             $max = $length / 2;
 
             for ($pos = 1; $pos <= $max; $pos++) {
@@ -181,7 +180,6 @@ class Str
         } else {
             $chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
 
-            srand((double)microtime() * 1000000);
             for ($pos = 0; $pos < $length; $pos++) {
                 $result .= $chars[mt_rand() % strlen($chars)];
             }
