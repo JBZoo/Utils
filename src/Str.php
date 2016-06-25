@@ -163,7 +163,7 @@ class Str
         $result = '';
 
         if ($isReadable) {
-            $vocal = array('a', 'e', 'i', 'o', 'u');
+            $vocal = array('a', 'e', 'i', 'o', 'u', '0');
             $conso = array('b', 'c', 'd', 'f', 'g',
                 'h', 'j', 'k', 'l', 'm', 'n', 'p',
                 'r', 's', 't', 'v', 'w', 'x', 'y', 'z',
