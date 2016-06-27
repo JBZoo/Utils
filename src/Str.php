@@ -677,6 +677,48 @@ class Str
     }
 
     /**
+     * Convert test name to human readable string
+     *
+     * @param string $input
+     * @return mixed|string
+     */
+    public static function testName2Human($input)
+    {
+        $original = $input;
+        if (strpos($input, '\\') !== false) {
+            $input = explode('\\', $input);
+            reset($input);
+            $input = end($input);
+        }
+
+        if (!preg_match('#^tests#i', $input)) {
+            $input = preg_replace('#^(test)#i', '', $input);
+        }
+
+        $input  = preg_replace('#(test)$#i', '', $input);
+        $output = preg_replace(array('/(?<=[^A-Z])([A-Z])/', '/(?<=[^0-9])([0-9])/'), ' $0', $input);
+        $output = trim(str_replace('_', ' ', $output));
+
+        $output = implode(' ', array_filter(array_map(function ($item) {
+            $item = ucwords($item);
+            $item = trim($item);
+
+            return $item;
+        }, explode(' ', $output))));
+
+
+        if (strcasecmp($original, $output) === 0) {
+            return $original;
+        }
+
+        if (strlen($output) == 0) {
+            return $original;
+        }
+
+        return $output;
+    }
+
+    /**
      * Generates a universally unique identifier (UUID v4) according to RFC 4122
      * Version 4 UUIDs are pseudo-random!
      *

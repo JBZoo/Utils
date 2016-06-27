@@ -228,6 +228,48 @@ class StringTest extends PHPUnit
         isSame('word_123_number', Str::splitCamelCase('word123Number'));
         isSame('word number', Str::splitCamelCase('wordNumber', ' '));
         isSame('word Number', Str::splitCamelCase('wordNumber', ' ', false));
+        isSame('word_Number', Str::splitCamelCase('wordNumber', '_', false));
+        isSame('Word_Number', Str::splitCamelCase('WordNumber', '_', false));
+    }
+
+    public function testTestName2Human()
+    {
+        isSame('test', Str::testName2Human('test'));
+        isSame('testTest', Str::testName2Human('testTest'));
+        isSame('test_Test', Str::testName2Human('test_Test'));
+        isSame('test_test', Str::testName2Human('test_test'));
+        isSame('test test', Str::testName2Human('test test'));
+        isSame('test Test', Str::testName2Human('test Test'));
+
+        isSame('Function', Str::testName2Human('testFunctionTest'));
+        isSame('Function', Str::testName2Human('testFunction_Test'));
+        isSame('Function', Str::testName2Human('Function_Test'));
+
+        isSame('Function Trim', Str::testName2Human('FunctionTrim_Test'));
+        isSame('Function Trim', Str::testName2Human('Function_Trim_Test'));
+        isSame('Function Trim', Str::testName2Human('Function_ Trim _Test'));
+        isSame('Function Trim', Str::testName2Human('Function _ Trim_ Test'));
+        isSame('Function Trim', Str::testName2Human('Function _ trim_ Test'));
+        isSame('Function Trim', Str::testName2Human('Function _Trim_ Test'));
+        isSame('Function Trim', Str::testName2Human('Function_trim_Test'));
+        isSame('Function Trim', Str::testName2Human('Function _trim_ Test'));
+        isSame('Function Trim', Str::testName2Human('Function_ trim _Test'));
+        isSame('Function Trim', Str::testName2Human('Function _ trim _ Test'));
+        isSame('Function Trim', Str::testName2Human('testFunction _ trim _ Test'));
+        isSame('Function Trim', Str::testName2Human('TestFunction _ trim _ Test'));
+        isSame('Function Trim', Str::testName2Human('Test_Function _ trim _ Test'));
+        isSame('Function Trim', Str::testName2Human('Test_ Function _ trim _ Test'));
+        isSame('Function Trim', Str::testName2Human('Test _ Function _ trim _ Test'));
+        isSame('Function Trim', Str::testName2Human('Test_ Function _ trim _ Test'));
+        isSame('Function Test', Str::testName2Human('Test_Function_test_Test'));
+        isSame('Function Test', Str::testName2Human('Test_Function_Test_Test'));
+        isSame('Function JQuery', Str::testName2Human('Test_FunctionJQuery_Test'));
+        isSame('Function IE', Str::testName2Human('Test_FunctionIE_Test'));
+
+        isSame('Function IE', Str::testName2Human('\\JBZoo\\Test_FunctionIE_Test'));
+        isSame('Function IE', Str::testName2Human('\\JBZoo\\PHPHunit\\Test_FunctionIE_Test'));
+        isSame('Function IE', Str::testName2Human('\\JBZoo\\PHPHunit\\Some\\Test_FunctionIE_Test'));
+        isSame('Function IE', Str::testName2Human('\\JBZoo\\PHPHunit\\Some\\Some\\Test_FunctionIE_Test'));
     }
 
     public function testGenerateUUID()
