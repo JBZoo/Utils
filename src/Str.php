@@ -685,11 +685,7 @@ class Str
     public static function testName2Human($input)
     {
         $original = $input;
-        if (strpos($input, '\\') !== false) {
-            $input = explode('\\', $input);
-            reset($input);
-            $input = end($input);
-        }
+        $input    = self::getClassName($input, false);
 
         if (!preg_match('#^tests#i', $input)) {
             $input = preg_replace('#^(test)#i', '', $input);
@@ -750,5 +746,34 @@ class Str
             mt_rand(0, 0xffff),
             mt_rand(0, 0xffff)
         );
+    }
+
+    /**
+     * Get class name without namespace
+     *
+     * @param mixed $object
+     * @param bool  $toLower
+     * @return mixed|string
+     */
+    public static function getClassName($object, $toLower = false)
+    {
+        if (is_object($object)) {
+            $className = get_class($object);
+        } else {
+            $className = $object;
+        }
+
+        $result = $className;
+        if (strpos($className, '\\') !== false) {
+            $className = explode('\\', $className);
+            reset($className);
+            $result = end($className);
+        }
+
+        if ($toLower) {
+            $result = strtolower($result);
+        }
+
+        return $result;
     }
 }

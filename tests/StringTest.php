@@ -93,6 +93,8 @@ class StringTest extends PHPUnit
         is(10, strlen(Str::random(10, false)));
 
         isNotSame(Str::random(), Str::random());
+        isNotSame(Str::random(), Str::random());
+        isNotSame(Str::random(), Str::random());
     }
 
     public function testZeroPad()
@@ -256,6 +258,7 @@ class StringTest extends PHPUnit
         isSame('Function Trim', Str::testName2Human('Function_ trim _Test'));
         isSame('Function Trim', Str::testName2Human('Function _ trim _ Test'));
         isSame('Function Trim', Str::testName2Human('testFunction _ trim _ Test'));
+        isSame('Function Trim', Str::testName2Human('testfunction _ trim _ Test'));
         isSame('Function Trim', Str::testName2Human('TestFunction _ trim _ Test'));
         isSame('Function Trim', Str::testName2Human('Test_Function _ trim _ Test'));
         isSame('Function Trim', Str::testName2Human('Test_ Function _ trim _ Test'));
@@ -265,6 +268,8 @@ class StringTest extends PHPUnit
         isSame('Function Test', Str::testName2Human('Test_Function_Test_Test'));
         isSame('Function JQuery', Str::testName2Human('Test_FunctionJQuery_Test'));
         isSame('Function IE', Str::testName2Human('Test_FunctionIE_Test'));
+        isSame('Function IE Test', Str::testName2Human('Test_FunctionIE_TestTest'));
+        isSame('Test Function IE Test', Str::testName2Human('Test_testFunctionIE_TestTest'));
 
         isSame('Function IE', Str::testName2Human('\\JBZoo\\Test_FunctionIE_Test'));
         isSame('Function IE', Str::testName2Human('\\JBZoo\\PHPHunit\\Test_FunctionIE_Test'));
@@ -275,5 +280,21 @@ class StringTest extends PHPUnit
     public function testGenerateUUID()
     {
         isNotSame(Str::uuid(), Str::uuid());
+        isNotSame(Str::uuid(), Str::uuid());
+        isNotSame(Str::uuid(), Str::uuid());
+    }
+
+    public function testGetClassName()
+    {
+        isSame('JBZoo', Str::getClassName('JBZoo'));
+        isSame('JBZoo', Str::getClassName('\JBZoo'));
+        isSame('CCK', Str::getClassName('\JBZoo\CCK'));
+        isSame('Element', Str::getClassName('\JBZoo\CCK\Element'));
+        isSame('Repeatable', Str::getClassName('\JBZoo\CCK\Element\Repeatable'));
+        isSame('StringTest', Str::getClassName($this));
+
+        isSame('StringTest', Str::getClassName($this, false));
+        isSame('StringTest', Str::getClassName($this, false));
+        isSame('phpunit', Str::getClassName(__NAMESPACE__, true));
     }
 }
