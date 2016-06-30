@@ -776,4 +776,57 @@ class Str
 
         return $result;
     }
+
+    /**
+     * Increments a trailing number in a string.
+     * Used to easily create distinct labels when copying objects. The method has the following styles:
+     *  - default: "Label" becomes "Label (2)"
+     *  - dash:    "Label" becomes "Label-2"
+     *
+     * @param   string  $string The source string.
+     * @param   string  $style  The the style (default|dash).
+     * @param   integer $next   If supplied, this number is used for the copy, otherwise it is the 'next' number.
+     * @return  string
+     */
+    public static function inc($string, $style = 'default', $next = 0)
+    {
+        $styles = array(
+            'dash'    => array(
+                '#-(\d+)$#', '-%d'
+            ),
+            'default' => array(
+                array('#\((\d+)\)$#', '#\(\d+\)$#'),
+                array(' (%d)', '(%d)'),
+            ),
+        );
+
+        $styleSpec = isset($styles[$style]) ? $styles[$style] : $styles['default'];
+
+        // Regular expression search and replace patterns.
+        if (is_array($styleSpec[0])) {
+            $rxSearch  = $styleSpec[0][0];
+            $rxReplace = $styleSpec[0][1];
+        } else {
+            $rxSearch = $rxReplace = $styleSpec[0];
+        }
+
+        // New and old (existing) sprintf formats.
+        if (is_array($styleSpec[1])) {
+            $newFormat = $styleSpec[1][0];
+            $oldFormat = $styleSpec[1][1];
+        } else {
+            $newFormat = $oldFormat = $styleSpec[1];
+        }
+
+        // Check if we are incrementing an existing pattern, or appending a new one.
+        if (preg_match($rxSearch, $string, $matches)) {
+            $next   = empty($next) ? ($matches[1] + 1) : $next;
+            $string = preg_replace($rxReplace, sprintf($oldFormat, $next), $string);
+        } else {
+            $next = empty($next) ? 2 : $next;
+            $string .= sprintf($newFormat, $next);
+        }
+
+        return $string;
+    }
 }
