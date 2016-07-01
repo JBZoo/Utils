@@ -66,7 +66,7 @@ class DatesTest extends PHPUnit
 
     public function testSql()
     {
-        $format = Dates::SQL;
+        $format = Dates::SQL_FORMAT;
 
         is(date($format, time()), Dates::sql());
         is(date($format, time()), Dates::sql(''));
@@ -142,5 +142,11 @@ class DatesTest extends PHPUnit
         isTrue(Dates::isYesterday('-1 day'));
         isFalse(Dates::isYesterday('+0 day'));
         isFalse(Dates::isYesterday('+1 day'));
+    }
+
+    public function testConst()
+    {
+        isSame('Y-m-d H:i:s', Dates::SQL_FORMAT);
+        isSame('0000-00-00 00:00:00', Dates::SQL_NULL);
     }
 }

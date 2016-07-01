@@ -27,11 +27,12 @@ class Dates
     const MINUTE = 60;
     const HOUR   = 3600;
     const DAY    = 86400;
-    const WEEK   = 604800;
-    const MONTH  = 2592000; // 30 days
-    const YEAR   = 31536000;
+    const WEEK   = 604800;      // 7 days
+    const MONTH  = 2592000;     // 30 days
+    const YEAR   = 31536000;    // 365 days
 
-    const SQL = 'Y-m-d H:i:s';
+    const SQL_FORMAT = 'Y-m-d H:i:s';
+    const SQL_NULL   = '0000-00-00 00:00:00';
 
     /**
      * Convert to timestamp
@@ -123,7 +124,7 @@ class Dates
      */
     public static function sql($time = null)
     {
-        return self::factory($time)->format(self::SQL);
+        return self::factory($time)->format(self::SQL_FORMAT);
     }
 
     /**
