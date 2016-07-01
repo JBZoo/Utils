@@ -307,4 +307,28 @@ class StringTest extends PHPUnit
         isSame('title (4)', Str::inc('title', null, 4));
         isSame('title (2)', Str::inc('title', 'foo', 0));
     }
+
+    public function test()
+    {
+        $queries = Str::splitSql('SELECT * FROM #__foo;SELECT * FROM #__bar;');
+
+        isSame(array(
+            'SELECT * FROM #__foo;',
+            'SELECT * FROM #__bar;'
+        ), $queries);
+
+        $queries = Str::splitSql('ALTER TABLE `#__redirect_links` DROP INDEX `idx_link_old`;
+        ALTER TABLE `#__redirect_links` MODIFY `old_url` VARCHAR(2048) NOT NULL;
+        ALTER TABLE `#__redirect_links` MODIFY `new_url` VARCHAR(2048) NOT NULL;
+        ALTER TABLE `#__redirect_links` MODIFY `referer` VARCHAR(2048) NOT NULL;
+        ALTER TABLE `#__redirect_links` ADD INDEX `idx_old_url` (`old_url`(100));');
+
+        isSame(array(
+            'ALTER TABLE `#__redirect_links` DROP INDEX `idx_link_old`;',
+            'ALTER TABLE `#__redirect_links` MODIFY `old_url` VARCHAR(2048) NOT NULL;',
+            'ALTER TABLE `#__redirect_links` MODIFY `new_url` VARCHAR(2048) NOT NULL;',
+            'ALTER TABLE `#__redirect_links` MODIFY `referer` VARCHAR(2048) NOT NULL;',
+            'ALTER TABLE `#__redirect_links` ADD INDEX `idx_old_url` (`old_url`(100));'
+        ), $queries);
+    }
 }
