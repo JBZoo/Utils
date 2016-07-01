@@ -37,8 +37,9 @@ class DatesTest extends PHPUnit
 
         isTrue(is_numeric(Dates::toStamp(null)));
 
-        $t = time();
-        is($t, Dates::toStamp($t));
+        $time = time();
+        is($time, Dates::toStamp());
+        is($time, Dates::toStamp($time));
         isTrue(is_numeric(Dates::toStamp('+1 week')));
         isTrue(is_numeric(Dates::toStamp(new DateTime())));
     }

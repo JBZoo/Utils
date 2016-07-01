@@ -41,7 +41,7 @@ class Dates
      * @param bool            $currentIsDefault
      * @return int
      */
-    public static function toStamp($time, $currentIsDefault = true)
+    public static function toStamp($time = null, $currentIsDefault = true)
     {
         if ($time instanceof DateTime) {
             return $time->format('U');
