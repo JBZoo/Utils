@@ -118,7 +118,6 @@ class Filter
         $result = isset($matches[0]) ? $matches[0] : 0;
 
         return (int)$result;
-
     }
 
     /**
