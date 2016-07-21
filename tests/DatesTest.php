@@ -87,6 +87,7 @@ class DatesTest extends PHPUnit
         isFalse(Dates::is(''));
         isFalse(Dates::is(null));
         isFalse(Dates::is(false));
+        // isFalse(Dates::is('-0100')); // WAT????
         isFalse(Dates::is('string'));
         isFalse(Dates::is('1446203259'));
         isFalse(Dates::is(1446203259));
