@@ -192,6 +192,17 @@ class Filter
      */
     public static function trim($value)
     {
+        return Str::trim($value, false);
+    }
+
+    /**
+     * Remove whitespaces
+     *
+     * @param $value
+     * @return string
+     */
+    public static function trimExtend($value)
+    {
         return Str::trim($value, true);
     }
 

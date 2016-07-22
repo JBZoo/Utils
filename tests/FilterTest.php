@@ -205,10 +205,10 @@ class FilterTest extends PHPUnit
         isSame($string, Filter::_($string, 'base64'));
     }
 
-    public function testTrim()
+    public function testTrimExtend()
     {
-        isSame('multi', Filter::_("\n\r" . ' multi　' . chr(0xE3) . chr(0x80) . chr(0x80), 'trim'));
-        isSame('multi', Filter::_(chr(0xC2) . chr(0xA0) . "\n\r" . ' multi　' . "\t", 'trim'));
+        isSame('multi', Filter::_("\n\r" . ' multi　' . chr(0xE3) . chr(0x80) . chr(0x80), 'trimExtend'));
+        isSame('multi', Filter::_(chr(0xC2) . chr(0xA0) . "\n\r" . ' multi　' . "\t", 'trimExtend'));
 
         isSame('clean', Filter::_('clean', 'trim'));
     }
