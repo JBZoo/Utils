@@ -69,7 +69,7 @@ class Filter
     {
         $yesList = array('affirmative', 'all right', 'aye', 'indubitably', 'most assuredly', 'ok', 'of course', 'oui',
             'okay', 'sure thing', 'y', 'yes', 'yea', 'yep', 'sure', 'yeah', 'true', 't', 'on', '1', 'vrai',
-            'да', 'д', '+', '++', '+++', '++++', '+++++');
+            'да', 'д', '+', '++', '+++', '++++', '+++++', '*');
 
         $noList = array('no*', 'no way', 'nope', 'nah', 'na', 'never', 'absolutely not', 'by no means', 'negative',
             'never ever', 'false', 'f', 'off', '0', 'non', 'faux', 'нет', 'н', 'немає', '-');

@@ -138,6 +138,7 @@ class FilterTest extends PHPUnit
             array(true, 'vrai'),
             array(true, 'ДА'),
             array(true, 'Д'),
+            array(true, '*'),
             array(true, '+'),
             array(true, '++'),
             array(true, '+++'),
