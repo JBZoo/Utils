@@ -302,6 +302,12 @@ class Url
             }
         }
 
+        if (Arr::key('port', $url, true) === self::PORT_HTTPS) {
+            $url['scheme'] = 'https';
+        } elseif (Arr::key('port', $url, true) === self::PORT_HTTP) {
+            $url['scheme'] = 'http';
+        }
+
         $parsedString = '';
         if (Arr::key('scheme', $url)) {
             $parsedString .= $url['scheme'] . '://';
@@ -319,7 +325,10 @@ class Url
             $parsedString .= $url['host'];
         }
 
-        if (Arr::key('port', $url) && $url['port']) {
+        if (Arr::key('port', $url) && $url['port']
+            && $url['port'] !== self::PORT_HTTP
+            && $url['port'] !== self::PORT_HTTPS
+        ) {
             $parsedString .= ':' . $url['port'];
         }
 

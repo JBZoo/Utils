@@ -207,6 +207,22 @@ class UrlTest extends PHPUnit
             'part' => '',
         )));
 
+        isSame('ssh://example.com/', Url::create(array(
+            'host'   => 'example.com',
+            'scheme' => 'ssh',
+            'part'   => '',
+        )));
+
+        isSame('http://example.com/', Url::create(array(
+            'host' => 'example.com',
+            'port' => 80,
+        )));
+
+        isSame('https://example.com/', Url::create(array(
+            'host' => 'example.com',
+            'port' => 443,
+        )));
+
         isSame('http://example.com/page#hash', Url::create(array(
             'host'     => 'example.com',
             'path'     => 'page',
