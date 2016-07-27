@@ -22,7 +22,7 @@ before_script:
   - if [[ $XDEBUG_OFF = yes ]]; then phpenv config-rm xdebug.ini; fi;
 
 script:
-  - make build
+  - make
   - make test-all
 
 after_script:
