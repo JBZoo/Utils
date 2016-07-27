@@ -26,4 +26,4 @@ script:
   - make test-all
 
 after_script:
-  - composer coveralls
+  - make coveralls
