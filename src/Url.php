@@ -162,8 +162,9 @@ class Url
         // We want the user to stay on the same host they are currently on,
         // but beware of security issues
         // see http://shiflett.org/blog/2006/mar/server-name-versus-http-host
-        $url .= Arr::key('HTTP_HOST', $_SERVER, true);
+        $host = Arr::key('HTTP_HOST', $_SERVER, true);
         $port = Arr::key('SERVER_PORT', $_SERVER, true);
+        $url .= str_replace(':' . $port, '', $host);
 
         // Is it on a non standard port?
         if ($isHttps && ($port != self::PORT_HTTPS)) {

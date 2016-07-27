@@ -241,4 +241,28 @@ class UrlTest extends PHPUnit
             'fragment' => '#hash'
         )));
     }
+
+    public function testRootBugWithPost()
+    {
+        $_SERVER['HTTP_HOST']   = '127.0.0.1:8081';
+        $_SERVER['SERVER_PORT'] = 8081;
+
+        isSame('http://127.0.0.1:8081', Url::root());
+    }
+
+    public function testRootBugWithPost2()
+    {
+        $_SERVER['HTTP_HOST']   = '127.0.0.1:80';
+        $_SERVER['SERVER_PORT'] = 80;
+
+        isSame('http://127.0.0.1', Url::root());
+    }
+
+    public function testRootBugWithPost3()
+    {
+        $_SERVER['HTTP_HOST']   = '127.0.0.1';
+        $_SERVER['SERVER_PORT'] = 80;
+
+        isSame('http://127.0.0.1', Url::root());
+    }
 }
