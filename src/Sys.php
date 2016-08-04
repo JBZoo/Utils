@@ -139,6 +139,24 @@ class Sys
     }
 
     /**
+     * @param string $current
+     * @return bool
+     */
+    public static function isPHP53($current = PHP_VERSION)
+    {
+        return self::isPHP('5.3', $current);
+    }
+
+    /**
+     * @param string $current
+     * @return bool
+     */
+    public static function isPHP7($current = PHP_VERSION)
+    {
+        return self::isPHP('7', $current);
+    }
+
+    /**
      * Get usage memory
      *
      * @param bool $isPeak
