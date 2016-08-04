@@ -39,6 +39,10 @@ class SysTest extends PHPUnit
     {
         Sys::setTime(1800);
         Sys::setMemory('128M');
+
+        isSame('128M', Sys::iniGet('memory_limit'));
+        //isSame('1800', Sys::iniGet('set_time_limit'));
+        //isSame('1800', Sys::iniGet('max_execution_time'));
     }
 
     public function testIsPHPVersion()

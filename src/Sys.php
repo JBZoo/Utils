@@ -86,7 +86,7 @@ class Sys
     public static function iniGet($varName)
     {
         if (self::isFunc('ini_get')) {
-            return Filter::bool(ini_get($varName));
+            return ini_get($varName);
         }
 
         return null; // @codeCoverageIgnore
