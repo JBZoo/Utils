@@ -27,5 +27,5 @@ script:
   - make
   - make test-all
 
-after_script:
+after_success:
   - make coveralls
