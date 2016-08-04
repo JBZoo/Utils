@@ -132,7 +132,7 @@ class Sys
      * @param string $current
      * @return bool
      */
-    public static function isPHP($version, $current = PHP_VERSION)
+    public static function isPhp($version, $current = PHP_VERSION)
     {
         $version = trim($version, '.');
         return preg_match('#^' . preg_quote($version) . '#i', $current);
@@ -142,18 +142,18 @@ class Sys
      * @param string $current
      * @return bool
      */
-    public static function isPHP53($current = PHP_VERSION)
+    public static function Php53($current = PHP_VERSION)
     {
-        return self::isPHP('5.3', $current);
+        return self::isPhp('5.3', $current);
     }
 
     /**
      * @param string $current
      * @return bool
      */
-    public static function isPHP7($current = PHP_VERSION)
+    public static function isPhp7($current = PHP_VERSION)
     {
-        return self::isPHP('7', $current);
+        return self::isPhp('7', $current);
     }
 
     /**
