@@ -39,28 +39,56 @@ class SysTest extends PHPUnit
     {
         Sys::setTime(1800);
         Sys::setMemory('128M');
+
+        isSame('128M', Sys::iniGet('memory_limit'));
+        //isSame('1800', Sys::iniGet('set_time_limit'));
+        //isSame('1800', Sys::iniGet('max_execution_time'));
     }
 
     public function testIsPHPVersion()
     {
-        isFalse(Sys::isPHP('5.3', '4'));
-        isFalse(Sys::isPHP('5.3', '4.0'));
-        isFalse(Sys::isPHP('5.3', '5'));
-        isFalse(Sys::isPHP('5.3', '5.0'));
-        isFalse(Sys::isPHP('5.3', '5.2'));
+        isFalse(Sys::isPhp('5.3', '4'));
+        isFalse(Sys::isPhp('5.3', '4.0'));
+        isFalse(Sys::isPhp('5.3', '5'));
+        isFalse(Sys::isPhp('5.3', '5.0'));
+        isFalse(Sys::isPhp('5.3', '5.2'));
 
-        isTrue(Sys::isPHP('5.3.', '5.3'));
-        isTrue(Sys::isPHP('5.3', '5.3'));
-        isTrue(Sys::isPHP('5.3', '5.3.0'));
-        isTrue(Sys::isPHP('5.3', '5.3.1'));
-        isTrue(Sys::isPHP('5.3', '5.3.17'));
+        isTrue(Sys::isPhp('5.3.', '5.3'));
+        isTrue(Sys::isPhp('5.3', '5.3'));
+        isTrue(Sys::isPhp('5.3', '5.3.0'));
+        isTrue(Sys::isPhp('5.3', '5.3.1'));
+        isTrue(Sys::isPhp('5.3', '5.3.17'));
 
-        isFalse(Sys::isPHP('5.3', '5.4'));
-        isFalse(Sys::isPHP('5.3', '5.4.0'));
-        isFalse(Sys::isPHP('5.3', '5.4.1'));
+        isFalse(Sys::isPhp('5.3', '5.4'));
+        isFalse(Sys::isPhp('5.3', '5.4.0'));
+        isFalse(Sys::isPhp('5.3', '5.4.1'));
 
-        isFalse(Sys::isPHP('5.3', '5.5'));
-        isFalse(Sys::isPHP('5.3', '5.5.0'));
+        isFalse(Sys::isPhp('5.3', '5.5'));
+        isFalse(Sys::isPhp('5.3', '5.5.0'));
+    }
+
+    public function testIsPHP53()
+    {
+        isTrue(Sys::Php53('5.3'));
+        isTrue(Sys::Php53('5.3.0'));
+        isTrue(Sys::Php53('5.3.1'));
+
+        isFalse(Sys::Php53('5.2'));
+        isFalse(Sys::Php53('5.2.3'));
+        isFalse(Sys::Php53('5.4'));
+        isFalse(Sys::Php53('7.3'));
+    }
+
+    public function testIsPHP7()
+    {
+        isTrue(Sys::isPhp7('7'));
+        isTrue(Sys::isPhp7('7.0'));
+        isTrue(Sys::isPhp7('7.0.9'));
+        isTrue(Sys::isPhp7('7.1'));
+        isTrue(Sys::isPhp7('7.1.0alpha1'));
+
+        isFalse(Sys::isPhp7('5.7'));
+        isFalse(Sys::isPhp7('5.3'));
     }
 
     public function testGetIP()
