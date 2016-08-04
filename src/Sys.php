@@ -135,7 +135,7 @@ class Sys
     public static function isPHP($version, $current = PHP_VERSION)
     {
         $version = trim($version, '.');
-        return strpos($current, $version) === 0;
+        return preg_match('#^' . preg_quote($version) . '#i', $current);
     }
 
     /**
