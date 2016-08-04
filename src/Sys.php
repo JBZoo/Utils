@@ -86,7 +86,7 @@ class Sys
     public static function iniGet($varName)
     {
         if (self::isFunc('ini_get')) {
-            return Filter::bool(ini_get($varName));
+            return ini_get($varName);
         }
 
         return null; // @codeCoverageIgnore
@@ -132,10 +132,28 @@ class Sys
      * @param string $current
      * @return bool
      */
-    public static function isPHP($version, $current = PHP_VERSION)
+    public static function isPhp($version, $current = PHP_VERSION)
     {
         $version = trim($version, '.');
-        return strpos($current, $version) === 0;
+        return preg_match('#^' . preg_quote($version) . '#i', $current);
+    }
+
+    /**
+     * @param string $current
+     * @return bool
+     */
+    public static function Php53($current = PHP_VERSION)
+    {
+        return self::isPhp('5.3', $current);
+    }
+
+    /**
+     * @param string $current
+     * @return bool
+     */
+    public static function isPhp7($current = PHP_VERSION)
+    {
+        return self::isPhp('7', $current);
     }
 
     /**
