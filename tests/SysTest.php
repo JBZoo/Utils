@@ -47,48 +47,48 @@ class SysTest extends PHPUnit
 
     public function testIsPHPVersion()
     {
-        isFalse(Sys::isPhp('5.3', '4'));
-        isFalse(Sys::isPhp('5.3', '4.0'));
-        isFalse(Sys::isPhp('5.3', '5'));
-        isFalse(Sys::isPhp('5.3', '5.0'));
-        isFalse(Sys::isPhp('5.3', '5.2'));
+        isFalse(Sys::isPHP('5.3', '4'));
+        isFalse(Sys::isPHP('5.3', '4.0'));
+        isFalse(Sys::isPHP('5.3', '5'));
+        isFalse(Sys::isPHP('5.3', '5.0'));
+        isFalse(Sys::isPHP('5.3', '5.2'));
 
-        isTrue(Sys::isPhp('5.3.', '5.3'));
-        isTrue(Sys::isPhp('5.3', '5.3'));
-        isTrue(Sys::isPhp('5.3', '5.3.0'));
-        isTrue(Sys::isPhp('5.3', '5.3.1'));
-        isTrue(Sys::isPhp('5.3', '5.3.17'));
+        isTrue(Sys::isPHP('5.3.', '5.3'));
+        isTrue(Sys::isPHP('5.3', '5.3'));
+        isTrue(Sys::isPHP('5.3', '5.3.0'));
+        isTrue(Sys::isPHP('5.3', '5.3.1'));
+        isTrue(Sys::isPHP('5.3', '5.3.17'));
 
-        isFalse(Sys::isPhp('5.3', '5.4'));
-        isFalse(Sys::isPhp('5.3', '5.4.0'));
-        isFalse(Sys::isPhp('5.3', '5.4.1'));
+        isFalse(Sys::isPHP('5.3', '5.4'));
+        isFalse(Sys::isPHP('5.3', '5.4.0'));
+        isFalse(Sys::isPHP('5.3', '5.4.1'));
 
-        isFalse(Sys::isPhp('5.3', '5.5'));
-        isFalse(Sys::isPhp('5.3', '5.5.0'));
+        isFalse(Sys::isPHP('5.3', '5.5'));
+        isFalse(Sys::isPHP('5.3', '5.5.0'));
     }
 
     public function testIsPHP53()
     {
-        isTrue(Sys::isPhp53('5.3'));
-        isTrue(Sys::isPhp53('5.3.0'));
-        isTrue(Sys::isPhp53('5.3.1'));
+        isTrue(Sys::isPHP53('5.3'));
+        isTrue(Sys::isPHP53('5.3.0'));
+        isTrue(Sys::isPHP53('5.3.1'));
 
-        isFalse(Sys::isPhp53('5.2'));
-        isFalse(Sys::isPhp53('5.2.3'));
-        isFalse(Sys::isPhp53('5.4'));
-        isFalse(Sys::isPhp53('7.3'));
+        isFalse(Sys::isPHP53('5.2'));
+        isFalse(Sys::isPHP53('5.2.3'));
+        isFalse(Sys::isPHP53('5.4'));
+        isFalse(Sys::isPHP53('7.3'));
     }
 
     public function testIsPHP7()
     {
-        isTrue(Sys::isPhp7('7'));
-        isTrue(Sys::isPhp7('7.0'));
-        isTrue(Sys::isPhp7('7.0.9'));
-        isTrue(Sys::isPhp7('7.1'));
-        isTrue(Sys::isPhp7('7.1.0alpha1'));
+        isTrue(Sys::isPHP7('7'));
+        isTrue(Sys::isPHP7('7.0'));
+        isTrue(Sys::isPHP7('7.0.9'));
+        isTrue(Sys::isPHP7('7.1'));
+        isTrue(Sys::isPHP7('7.1.0alpha1'));
 
-        isFalse(Sys::isPhp7('5.7'));
-        isFalse(Sys::isPhp7('5.3'));
+        isFalse(Sys::isPHP7('5.7'));
+        isFalse(Sys::isPHP7('5.3'));
     }
 
     public function testGetIP()
@@ -131,5 +131,91 @@ class SysTest extends PHPUnit
 
         $_SERVER['DOCUMENT_ROOT'] = __DIR__ . '\\..\\';
         isSame(PROJECT_ROOT, Sys::getDocRoot());
+    }
+
+    /**
+     * @covers JBZoo\Utils\Sys::canCollectCodeCoverage
+     * @uses   JBZoo\Utils\Sys::hasXdebug
+     * @uses   JBZoo\Utils\Sys::isHHVM
+     * @uses   JBZoo\Utils\Sys::isPHP
+     */
+    public function testAbilityToCollectCodeCoverageCanBeAssessed()
+    {
+        $this->assertInternalType('boolean', Sys::canCollectCodeCoverage());
+    }
+
+    /**
+     * @covers JBZoo\Utils\Sys::getBinary
+     * @uses   JBZoo\Utils\Sys::isHHVM
+     */
+    public function testBinaryCanBeRetrieved()
+    {
+        $this->assertInternalType('string', Sys::getBinary());
+    }
+
+    /**
+     * @covers JBZoo\Utils\Sys::isHHVM
+     */
+    public function testCanBeDetected()
+    {
+        $this->assertInternalType('boolean', Sys::isHHVM());
+    }
+
+    /**
+     * @covers JBZoo\Utils\Sys::isRealPHP
+     * @uses   JBZoo\Utils\Sys::isHHVM
+     */
+    public function testCanBeDetected2()
+    {
+        $this->assertInternalType('boolean', Sys::isRealPHP());
+    }
+
+    /**
+     * @covers JBZoo\Utils\Sys::hasXdebug
+     * @uses   JBZoo\Utils\Sys::isHHVM
+     * @uses   JBZoo\Utils\Sys::isPHP
+     */
+    public function testXdebugCanBeDetected()
+    {
+        $this->assertInternalType('boolean', Sys::hasXdebug());
+    }
+
+    /**
+     * @covers JBZoo\Utils\Sys::getNameWithVersion
+     * @uses   JBZoo\Utils\Sys::getName
+     * @uses   JBZoo\Utils\Sys::getVersion
+     * @uses   JBZoo\Utils\Sys::isHHVM
+     * @uses   JBZoo\Utils\Sys::isPHP
+     */
+    public function testNameAndVersionCanBeRetrieved()
+    {
+        $this->assertInternalType('string', Sys::getNameWithVersion());
+    }
+
+    /**
+     * @covers JBZoo\Utils\Sys::getName
+     * @uses   JBZoo\Utils\Sys::isHHVM
+     */
+    public function testNameCanBeRetrieved()
+    {
+        $this->assertInternalType('string', Sys::getName());
+    }
+
+    /**
+     * @covers JBZoo\Utils\Sys::getVersion
+     * @uses   JBZoo\Utils\Sys::isHHVM
+     */
+    public function testVersionCanBeRetrieved()
+    {
+        $this->assertInternalType('string', Sys::getVersion());
+    }
+
+    /**
+     * @covers JBZoo\Utils\Sys::getVendorUrl
+     * @uses   JBZoo\Utils\Sys::isHHVM
+     */
+    public function testVendorUrlCanBeRetrieved()
+    {
+        $this->assertInternalType('string', Sys::getVendorUrl());
     }
 }

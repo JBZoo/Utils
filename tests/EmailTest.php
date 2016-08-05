@@ -84,30 +84,17 @@ class EmailTest extends PHPUnit
 
     /**
      * @dataProvider getGravatarUrlProvider
-     * @param $input
-     * @param int $size
-     * @param string $defaultImage
+     * @param        $input
+     * @param string $expectedHttp
+     * @param string $expectedHttps
      */
-    public function testGetGravatarUrl($input, $size, $defaultImage)
+    public function testGetGravatarUrl($input, $expectedHttp, $expectedHttps)
     {
-        isLike(
-            sprintf(
-                '/http:\/\/www\.gravatar\.com\/avatar\/.*\?s=%d&d=%s/',
-                $size,
-                $defaultImage
-            ),
-            Email::getGravatarUrl($input[0], $input[1], $input[2])
-        );
+        $_SERVER['HTTPS'] = 'off';
+        isSame($expectedHttp, Email::getGravatarUrl($input[0], $input[1], $input[2]));
 
         $_SERVER['HTTPS'] = 'on';
-        isLike(
-            sprintf(
-                '/https:\/\/secure\.gravatar\.com\/avatar\/.*\?s=%d&d=%s/',
-                $size,
-                $defaultImage
-            ),
-            Email::getGravatarUrl($input[0], $input[1], $input[2])
-        );
+        isSame($expectedHttps, Email::getGravatarUrl($input[0], $input[1], $input[2]));
     }
 
     /**
@@ -240,68 +227,45 @@ class EmailTest extends PHPUnit
     public function getGravatarUrlProvider()
     {
         return array(
-            array(
-                array(
-                    'test@test.pt',
-                    32,
-                    null
-                ),
-                32,
-                Email::getGravatarBuiltInDefaultImage()
+            0 => array(
+                array('test@test.pt', 32, null),
+                'http://www.gravatar.com/avatar/7c2cf316efa3b541b3ac76a950aea671/?s=32&d=identicon',
+                'https://secure.gravatar.com/avatar/7c2cf316efa3b541b3ac76a950aea671/?s=32&d=identicon'
             ),
-            array(
-                array(
-                    'test@test.pt',
-                    5000,
-                    null
-                ),
-                2048,
-                Email::getGravatarBuiltInDefaultImage()
+            1 => array(
+                array('test@test.pt', 5000, null),
+                'http://www.gravatar.com/avatar/7c2cf316efa3b541b3ac76a950aea671/?s=2048&d=identicon',
+                'https://secure.gravatar.com/avatar/7c2cf316efa3b541b3ac76a950aea671/?s=2048&d=identicon',
             ),
-            array(
-                array(
-                    'test@test.pt',
-                    2047,
-                    'monsterid'
-                ),
-                2047,
-                'monsterid'
+            2 => array(
+                array('test@test.pt', 2047, 'monsterid'),
+                'http://www.gravatar.com/avatar/7c2cf316efa3b541b3ac76a950aea671/?s=2047&d=monsterid',
+                'https://secure.gravatar.com/avatar/7c2cf316efa3b541b3ac76a950aea671/?s=2047&d=monsterid',
             ),
-            array(
-                array(
-                    'test@test.pt',
-                    -1,
-                    null
-                ),
-                32,
-                Email::getGravatarBuiltInDefaultImage()
+            3 => array(
+                array('test@test.pt', -1, null),
+                'http://www.gravatar.com/avatar/7c2cf316efa3b541b3ac76a950aea671/?s=32&d=identicon',
+                'https://secure.gravatar.com/avatar/7c2cf316efa3b541b3ac76a950aea671/?s=32&d=identicon',
             ),
-            array(
-                array(
-                    'test@test.pt',
-                    8.1,
-                    'http://example.com/images/avatar.jpg'
-                ),
-                8,
-                'http%3A%2F%2Fexample.com%2Fimages%2Favatar.jpg'
+            4 => array(
+                array('test@test.pt', 8.1, 'https://example.com/images/avatar.jpg'),
+                'http://www.gravatar.com/avatar/7c2cf316efa3b541b3ac76a950aea671/?s=32&d=https%3A%2F%2Fexample.com%2Fimages%2Favatar.jpg',
+                'https://secure.gravatar.com/avatar/7c2cf316efa3b541b3ac76a950aea671/?s=32&d=https%3A%2F%2Fexample.com%2Fimages%2Favatar.jpg',
             ),
-            array(
-                array(
-                    'test@test.pt',
-                    15.5,
-                    null
-                ),
-                15,
-                Email::getGravatarBuiltInDefaultImage()
+            5 => array(
+                array('test@test.pt', 15.5, null),
+                'http://www.gravatar.com/avatar/7c2cf316efa3b541b3ac76a950aea671/?s=32&d=identicon',
+                'https://secure.gravatar.com/avatar/7c2cf316efa3b541b3ac76a950aea671/?s=32&d=identicon',
             ),
-            array(
-                array(
-                    'test@test.pt',
-                    "9000",
-                    'IDEnticon'
-                ),
-                2048,
-                'identicon'
+            6 => array(
+                array('test@test.pt', " 9000 ", 'IDEnticon'),
+                'http://www.gravatar.com/avatar/7c2cf316efa3b541b3ac76a950aea671/?s=2048&d=identicon',
+                'https://secure.gravatar.com/avatar/7c2cf316efa3b541b3ac76a950aea671/?s=2048&d=identicon',
+            ),
+            7 => array(
+                array('admin@jbzoo.com', "9000", 'IDEnticon'),
+                'http://www.gravatar.com/avatar/f27f28ab2158cd2cccc78c364d6247fe/?s=2048&d=identicon',
+                'https://secure.gravatar.com/avatar/f27f28ab2158cd2cccc78c364d6247fe/?s=2048&d=identicon',
             )
         );
     }

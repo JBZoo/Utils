@@ -29,7 +29,7 @@
         "jbzoo/data" : "^1.0"
     },
     "require-dev"       : {
-        "jbzoo/phpunit"             : "^1.6",
+        "jbzoo/phpunit"             : "^1.6|1.x-dev",
         "jbzoo/profiler"            : "^1.0",
         "symfony/process"           : "^2.8|^3.1",
         "symfony/polyfill-mbstring" : "^1.2"

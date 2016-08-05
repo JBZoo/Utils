@@ -66,6 +66,13 @@ reset:
 	@echo -e "\033[0;33m>>> >>> >>> >>> >>> >>> >>> >>> \033[0;30;46m Hard reset \033[0m"
 	@git reset --hard
 
+clean:
+	@echo -e "\033[0;33m>>> >>> >>> >>> >>> >>> >>> >>> \033[0;30;46m Hard reset \033[0m"
+	@rm -fr     ./build
+	@mkdir -vp  ./build
+	@rm -fr     ./vendor
+	@rm -vf     ./composer.lock
+
 coveralls:
 	@echo -e "\033[0;33m>>> >>> >>> >>> >>> >>> >>> >>> \033[0;30;46m Send coverage to coveralls.io \033[0m"
 	@php ./vendor/satooshi/php-coveralls/bin/coveralls --verbose

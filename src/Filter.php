@@ -370,7 +370,7 @@ class Filter
 
     /**
      * @param array|Data $data
-     * @return JSON
+     * @return Data
      */
     public static function data($data)
     {

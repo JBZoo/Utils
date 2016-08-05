@@ -101,7 +101,6 @@ class Cli
 
         //@codeCoverageIgnoreStart
         if ($verbose) {
-
             // Only in testing mode
             if (function_exists('\JBZoo\PHPUnit\cliMessage')) {
                 \JBZoo\PHPUnit\cliMessage('Process: ' . $cmd);
@@ -139,7 +138,6 @@ class Cli
         $realCommand = $command;
 
         if (count($args) > 0) {
-
             foreach ($args as $key => $value) {
                 $value = trim($value);
                 $key   = trim($key);
@@ -179,7 +177,6 @@ class Cli
     public static function hasColorSupport()
     {
         if (DIRECTORY_SEPARATOR == '\\') {
-
             $winColor = Env::get('ANSICON', Env::VAR_BOOL)
                 || 'ON' === Env::get('ConEmuANSI')
                 || 'xterm' === Env::get('TERM');

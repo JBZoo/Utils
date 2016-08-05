@@ -24,29 +24,11 @@ use JBZoo\Utils\Env;
  */
 class EnvTest extends PHPUnit
 {
-    /**
-     * @covers JBZoo\Utils\Env::canCollectCodeCoverage
-     * @uses   JBZoo\Utils\Env::hasXdebug
-     * @uses   JBZoo\Utils\Env::isHHVM
-     * @uses   JBZoo\Utils\Env::isPHP
-     */
-    public function testAbilityToCollectCodeCoverageCanBeAssessed()
-    {
-        $this->assertInternalType('boolean', Env::canCollectCodeCoverage());
-    }
-
-    /**
-     * @covers JBZoo\Utils\Env::getBinary
-     * @uses   JBZoo\Utils\Env::isHHVM
-     */
     public function testBinaryCanBeRetrieved()
     {
         $this->assertInternalType('string', Env::getBinary());
     }
 
-    /**
-     * @covers JBZoo\Utils\Env::isHHVM
-     */
     public function testCanBeDetected()
     {
         $this->assertInternalType('boolean', Env::isHHVM());
