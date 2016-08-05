@@ -138,12 +138,12 @@ class Email
      * * If none is defined then a built in default is used. See Email::getGravatarBuiltInDefaultImage().
      *
      * @param string $email
-     * @param int $size
+     * @param int    $size
      * @param string $defaultImage
      * @return null|string
      * @link http://en.gravatar.com/site/implement/images/
      */
-    public static function getGravatarUrl($email, $size = 32, $defaultImage = null)
+    public static function getGravatarUrl($email, $size = 32, $defaultImage = 'identicon')
     {
 
         if (empty($email) || self::_isValid($email) === false) {
@@ -151,40 +151,37 @@ class Email
         }
 
         $hash = md5(strtolower(trim($email)));
-        $url = 'http://www.gravatar.com';
-        $parts = array();
 
-        $size = Filter::int($size);
-        if ($size > 2048) {
-            $size = 2048;
-        } elseif ($size < 1) {
-            $size = 32;
-        }
-
+        $parts = array('scheme' => 'http', 'host' => 'www.gravatar.com');
         if (Url::isHttps()) {
-            $parts = array(
-                'scheme' => 'https',
-                'host' => 'secure.gravatar.com'
-            );
+            $parts = array('scheme' => 'https', 'host' => 'secure.gravatar.com');
         }
 
-        $defaultImage = strtolower($defaultImage);
-        if (preg_match('/(http|https)./', $defaultImage)) {
-            $defaultImage = urlencode($defaultImage);
-        } elseif (!(Arr::in((string)$defaultImage, self::getGravatarBuiltInImages()))) {
-            $defaultImage = self::getGravatarBuiltInDefaultImage();
+        // Get size
+        $size = Vars::limit(Filter::int($size), 32, 2048);
+
+        // Prepare default images
+        $defaultImage = trim($defaultImage);
+        if (preg_match('/^(http|https)./', $defaultImage)) {
+            $defaultImage = urldecode($defaultImage);
+
+        } else {
+            $defaultImage = strtolower($defaultImage);
+            if (!(Arr::in((string)$defaultImage, self::getGravatarBuiltInImages()))) {
+                $defaultImage = self::getGravatarBuiltInDefaultImage();
+            }
         }
 
-        return Url::buildAll(
-            sprintf(
-                '%s/avatar/%s?s=%d&d=%s',
-                $url,
-                $hash,
-                $size,
-                $defaultImage
-            ),
-            $parts
+        // Build full url
+        $parts['path']  = '/avatar/' . $hash . '/';
+        $parts['query'] = array(
+            's' => $size,
+            'd' => $defaultImage,
         );
+
+        $url = Url::create($parts);
+
+        return $url;
     }
 
     /**
