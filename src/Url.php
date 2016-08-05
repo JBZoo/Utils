@@ -128,7 +128,8 @@ class Url
         // Get the rest of the URL
         if (!Arr::key('REQUEST_URI', $_SERVER)) {
             // Microsoft IIS doesn't set REQUEST_URI by default
-            if ($queryString = Arr::key('QUERY_STRING', $_SERVER, true)) {
+            $queryString = Arr::key('QUERY_STRING', $_SERVER, true);
+            if ($queryString) {
                 $url .= '?' . $queryString;
             }
 
@@ -195,10 +196,12 @@ class Url
     public static function getAuth()
     {
         $result = null;
-        if ($user = Arr::key('PHP_AUTH_USER', $_SERVER, true)) {
+        $user = Arr::key('PHP_AUTH_USER', $_SERVER, true);
+        if ($user) {
             $result .= $user;
 
-            if ($password = Arr::key('PHP_AUTH_PW', $_SERVER, true)) {
+            $password = Arr::key('PHP_AUTH_PW', $_SERVER, true);
+            if ($password) {
                 $result .= ':' . $password;
             }
 

@@ -655,6 +655,7 @@ class Str
      *
      * @param string $input
      * @param string $separator
+     * @param bool   $toLower*
      * @return string
      */
     public static function splitCamelCase($input, $separator = '_', $toLower = true)
