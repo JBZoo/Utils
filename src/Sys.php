@@ -142,7 +142,7 @@ class Sys
      * @param string $current
      * @return bool
      */
-    public static function Php53($current = PHP_VERSION)
+    public static function isPhp53($current = PHP_VERSION)
     {
         return self::isPhp('5.3', $current);
     }

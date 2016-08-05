@@ -69,14 +69,14 @@ class SysTest extends PHPUnit
 
     public function testIsPHP53()
     {
-        isTrue(Sys::Php53('5.3'));
-        isTrue(Sys::Php53('5.3.0'));
-        isTrue(Sys::Php53('5.3.1'));
+        isTrue(Sys::isPhp53('5.3'));
+        isTrue(Sys::isPhp53('5.3.0'));
+        isTrue(Sys::isPhp53('5.3.1'));
 
-        isFalse(Sys::Php53('5.2'));
-        isFalse(Sys::Php53('5.2.3'));
-        isFalse(Sys::Php53('5.4'));
-        isFalse(Sys::Php53('7.3'));
+        isFalse(Sys::isPhp53('5.2'));
+        isFalse(Sys::isPhp53('5.2.3'));
+        isFalse(Sys::isPhp53('5.4'));
+        isFalse(Sys::isPhp53('7.3'));
     }
 
     public function testIsPHP7()
