@@ -444,7 +444,7 @@ class Arr
      */
     public static function implode($glue, array $array)
     {
-        $result = '';
+        $result = null;
 
         foreach ($array as $item) {
             if (is_array($item)) {
@@ -455,7 +455,7 @@ class Arr
         }
 
         if ($glue) {
-            $result = substr($result, 0, 0 - strlen($glue));
+            $result = Str::sub($result, 0, 0 - Str::len($glue));
         }
 
         return $result;
