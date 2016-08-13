@@ -401,4 +401,19 @@ class ArrayTest extends PHPUnit
         is(array(0), Arr::wrap(0));
         is(array(array('key' => 'value')), Arr::wrap(array('key' => 'value')));
     }
+
+    public function testImplodeNested()
+    {
+        isSame('1,2,3', Arr::implode(',', array(1, 2, 3)));
+        isSame('123', Arr::implode('', array(1, 2, 3)));
+        isSame('1,2,3,4,5,6', Arr::implode(',', array(1, 2, 3, array(4, 5, 6))));
+        isSame('123456', Arr::implode('', array(1, 2, 3, array(4, 5, 6))));
+
+        isSame(
+            '1|||||||2|||||||3|||||||4|||||||5|||||||6|||||||7|||||||8|||||||9',
+            Arr::implode('|||||||', array(1, 2, 3, array(4, 5, 6, array(7, 8, 9))))
+        );
+
+        isSame('1,2,3', Arr::implode(',', array('key1' => 1, 'key2' => 2, 'key3' => 3)));
+    }
 }
