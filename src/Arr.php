@@ -436,4 +436,28 @@ class Arr
 
         return array($object);
     }
+
+    /**
+     * @param string $glue
+     * @param array  $array
+     * @return string
+     */
+    public static function implode($glue, array $array)
+    {
+        $result = '';
+
+        foreach ($array as $item) {
+            if (is_array($item)) {
+                $result .= self::implode($glue, $item) . $glue;
+            } else {
+                $result .= $item . $glue;
+            }
+        }
+
+        if ($glue) {
+            $result = Str::sub($result, 0, 0 - Str::len($glue));
+        }
+
+        return $result;
+    }
 }
