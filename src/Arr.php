@@ -442,7 +442,7 @@ class Arr
      * @param array  $array
      * @return string
      */
-    public static function implode($glue, $array)
+    public static function implode($glue, array $array)
     {
         $result = '';
 
