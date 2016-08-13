@@ -444,7 +444,7 @@ class Arr
      */
     public static function implode($glue, array $array)
     {
-        $result = null;
+        $result = '';
 
         foreach ($array as $item) {
             if (is_array($item)) {
