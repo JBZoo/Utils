@@ -29,3 +29,4 @@ script:
 
 after_success:
   - make coveralls
+  - bash <(curl -s https://codecov.io/bash)
