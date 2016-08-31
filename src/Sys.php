@@ -176,35 +176,17 @@ class Sys
     }
 
     /**
-     * Returns the IP address of the client.
+     * Get remote IP
      *
-     * @param   boolean $trustProxy Whether or not to trust the proxy headers HTTP_CLIENT_IP and HTTP_X_FORWARDED_FOR.
-     *                              ONLY use if your server is behind a proxy that sets these values
-     * @return  string
-     *
-     * @SuppressWarnings(PHPMD.Superglobals)
      * @SuppressWarnings(PHPMD.ShortMethodName)
+     * @deprecated use IP::getRemote()
+     *
+     * @param bool $trustProxy
+     * @return string
      */
     public static function IP($trustProxy = false)
     {
-        if (!$trustProxy) {
-            return $_SERVER['REMOTE_ADDR'];
-        }
-
-        if (!empty($_SERVER['HTTP_CLIENT_IP'])) {
-            $ipAddress = $_SERVER['HTTP_CLIENT_IP'];
-
-        } elseif (!empty($_SERVER['HTTP_X_REAL_IP'])) {
-            $ipAddress = $_SERVER['HTTP_X_REAL_IP'];
-
-        } elseif (!empty($_SERVER['HTTP_X_FORWARDED_FOR'])) {
-            $ipAddress = $_SERVER['HTTP_X_FORWARDED_FOR'];
-
-        } else {
-            $ipAddress = $_SERVER['REMOTE_ADDR'];
-        }
-
-        return $ipAddress;
+        return IP::getRemote($trustProxy);
     }
 
     /**
@@ -216,7 +198,9 @@ class Sys
     public static function getDocRoot()
     {
         $result = '.';
-        if ($root = Arr::key('DOCUMENT_ROOT', $_SERVER, true)) {
+        $root   = Arr::key('DOCUMENT_ROOT', $_SERVER, true);
+
+        if ($root) {
             $result = $root;
         }
 

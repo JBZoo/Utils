@@ -91,26 +91,6 @@ class SysTest extends PHPUnit
         isFalse(Sys::isPHP7('5.3'));
     }
 
-    public function testGetIP()
-    {
-        $_SERVER['REMOTE_ADDR']          = '192.168.0.1';
-        $_SERVER['HTTP_CLIENT_IP']       = '192.168.0.2';
-        $_SERVER['HTTP_X_REAL_IP']       = '192.168.0.3';
-        $_SERVER['HTTP_X_FORWARDED_FOR'] = '192.168.0.4';
-
-        is('192.168.0.1', Sys::IP());
-        is('192.168.0.2', Sys::IP(true));
-
-        unset($_SERVER['HTTP_CLIENT_IP']);
-        is('192.168.0.3', Sys::IP(true));
-
-        unset($_SERVER['HTTP_X_REAL_IP']);
-        is('192.168.0.4', Sys::IP(true));
-
-        unset($_SERVER['HTTP_X_FORWARDED_FOR']);
-        is('192.168.0.1', Sys::IP(true));
-    }
-
     public function testGetMemory()
     {
         isTrue(Sys::getMemory());
