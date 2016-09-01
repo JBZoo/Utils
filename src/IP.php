@@ -16,7 +16,7 @@
 namespace JBZoo\Utils;
 
 /**
- * Class Arr
+ * Class IP
  * @package JBZoo\Utils
  */
 class IP
