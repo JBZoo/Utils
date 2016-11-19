@@ -242,6 +242,13 @@ class Sys
      */
     public static function getBinary()
     {
+        // Custom PHP path
+        if (self::$_binary === null) {
+            if ((self::$_binary = getenv('PHP_BINARY_CUSTOM')) === false) {
+                self::$_binary = PHP_BINARY;
+            }
+        }
+
         // HHVM
         if (self::$_binary === null && self::isHHVM()) {
             if ((self::$_binary = getenv('PHP_BINARY')) === false) {
