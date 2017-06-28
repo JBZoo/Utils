@@ -114,7 +114,7 @@ class Cli
         //@codeCoverageIgnoreEnd
 
         // execute command
-        $process = new Process($cmd, $cwd);
+        $process = new Process($cmd, $cwd, null, null, 3600);
         $process->run();
 
         // executes after the command finishes
