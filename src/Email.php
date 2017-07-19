@@ -22,6 +22,14 @@ namespace JBZoo\Utils;
 class Email
 {
     /**
+     * Create random email
+     */
+    public static function random($length = 10)
+    {
+        return Str::random($length) . '@' . Str::random(5) . '.com';
+    }
+
+    /**
      * Check if email(s) is(are) valid. You can send one or an array of emails.
      *
      * @param string|array $emails
