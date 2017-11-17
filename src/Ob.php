@@ -26,6 +26,7 @@ class Ob
      */
     public static function clean(): void
     {
+        /** @noinspection MissingOrEmptyGroupStatementInspection */
         while (@ob_end_clean()) {
             // noop
         }

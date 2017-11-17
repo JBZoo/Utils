@@ -143,7 +143,7 @@ class Arr
      *
      * @param  array   $array         The array to flatten
      * @param  boolean $preserveKeys  Whether or not to preserve array keys. Keys from deeply nested arrays will
-     *                                overwrite keys from shallowy nested arrays
+     *                                overwrite keys from shallow nested arrays
      * @return array
      */
     public static function flat(array $array, $preserveKeys = true): array
@@ -214,7 +214,7 @@ class Arr
      *
      * @param  string  $callback   Callback function to run for each element in each array
      * @param  array   $array      An array to run through the callback function
-     * @param  boolean $onNoScalar Whether or not to call the callback function on nonscalar values
+     * @param  boolean $onNoScalar Whether or not to call the callback function on non scalar values
      *                             (Objects, resources, etc)
      * @return array
      */

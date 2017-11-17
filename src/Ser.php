@@ -56,7 +56,7 @@ class Ser
             return false;
         }
 
-        return @unserialize($data) !== false;
+        return @unserialize($data, null) !== false;
     }
 
     /**
@@ -107,11 +107,11 @@ class Ser
         }
 
         // Don't attempt to unserialize data that isn't serialized
-        $uns = @unserialize($data);
+        $uns = @unserialize($data, null);
 
         // Data failed to unserialize?
         if ($uns === false) {
-            $uns = @unserialize(self::fix($data));
+            $uns = @unserialize(self::fix($data), null);
 
             if ($uns === false) {
                 return $data;

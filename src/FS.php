@@ -96,7 +96,7 @@ class FS
      * @return bool
      * @throws \RuntimeException
      */
-    public static function rmdir($dir, $traverseSymlinks = false): bool
+    public static function rmDir($dir, $traverseSymlinks = false): bool
     {
         if (!file_exists($dir)) {
             return true;
@@ -115,7 +115,7 @@ class FS
                 $currentPath = $dir . '/' . $file;
 
                 if (is_dir($currentPath)) {
-                    self::rmdir($currentPath, $traverseSymlinks);
+                    self::rmDir($currentPath, $traverseSymlinks);
 
                 } elseif (!unlink($currentPath)) {
                     // @codeCoverageIgnoreStart
@@ -255,9 +255,9 @@ class FS
             | \FilesystemIterator::CURRENT_AS_FILEINFO
             | \FilesystemIterator::SKIP_DOTS;
 
-        $dirIter = new \RecursiveIteratorIterator(new \RecursiveDirectoryIterator($dir, $flags));
+        $dirIterator = new \RecursiveIteratorIterator(new \RecursiveDirectoryIterator($dir, $flags));
 
-        foreach ($dirIter as $path => $fi) {
+        foreach ($dirIterator as $path => $fi) {
             $contents[] = $path;
         }
 
@@ -268,8 +268,8 @@ class FS
     /**
      * Nice formatting for computer sizes (Bytes).
      *
-     * @param   integer $bytes    The number in bytes to format
-     * @param   integer $decimals The number of decimal points to include
+     * @param   integer|float $bytes    The number in bytes to format
+     * @param   integer       $decimals The number of decimal points to include
      * @return  string
      */
     public static function format($bytes, $decimals = 2): string
@@ -404,7 +404,7 @@ class FS
      * @param string $path
      * @return string
      */
-    public static function dirname($path): string
+    public static function dirName($path): string
     {
         return pathinfo($path, PATHINFO_DIRNAME);
     }

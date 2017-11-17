@@ -184,14 +184,14 @@ class StringTest extends PHPUnit
 
         isSame(1, Str::pos('Денис', 'е'));
         isSame(false, Str::pos('Денис', 'Е'));
-        isSame(3, Str::rpos('Денис', 'и'));
-        isSame(1, Str::ipos('Денис', 'Е'));
-        isSame(1, Str::ipos('Денис', 'Е'));
+        isSame(3, Str::rPos('Денис', 'и'));
+        isSame(1, Str::iPos('Денис', 'Е'));
+        isSame(1, Str::iPos('Денис', 'Е'));
 
-        isSame('енис', Str::strstr('Денис', 'е'));
-        isSame('енис', Str::istr('Денис', 'Е'));
+        isSame('енис', Str::strStr('Денис', 'е'));
+        isSame('енис', Str::iStr('Денис', 'Е'));
 
-        isSame('ис', Str::rchr('Денис', 'и'));
+        isSame('ис', Str::rChr('Денис', 'и'));
 
         isSame('нис', Str::sub('Денис', 2));
         isSame('ени', Str::sub('Денис', 1, 3));

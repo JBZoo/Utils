@@ -34,6 +34,7 @@ class Http
     public static function download($filename): bool
     {
         if (!headers_sent()) {
+            /** @noinspection MissingOrEmptyGroupStatementInspection */
             while (@ob_end_clean()) {
                 // noop
             }

@@ -33,7 +33,7 @@ class FileSystemTest extends PHPUnit
 
         // Test deleting a non-existant directory
         isFalse(file_exists($dirname . '/test1'));
-        isTrue(FS::rmdir($dirname . '/test1'));
+        isTrue(FS::rmDir($dirname . '/test1'));
 
         // Test deleting an empty directory
         $dir = $dirname . '/test2';
@@ -42,7 +42,7 @@ class FileSystemTest extends PHPUnit
         isTrue(is_dir($dir));
 
         if (is_dir($dir)) {
-            FS::rmdir($dir);
+            FS::rmDir($dir);
             isFalse(is_dir($dir));
         }
 
@@ -56,7 +56,7 @@ class FileSystemTest extends PHPUnit
         isTrue(is_file($file));
 
         if (is_dir($dir)) {
-            FS::rmdir($dir);
+            FS::rmDir($dir);
             isFalse(is_dir($dir));
             isFalse(is_file($file));
         }
@@ -66,7 +66,7 @@ class FileSystemTest extends PHPUnit
         touch($file);
 
         try {
-            FS::rmdir($file);
+            FS::rmDir($file);
             isTrue(false);
         } catch (\Exception $e) {
             isTrue(true);
@@ -90,7 +90,7 @@ class FileSystemTest extends PHPUnit
         isTrue(is_file($file2));
 
         if (is_dir($dir1)) {
-            FS::rmdir($dir1);
+            FS::rmDir($dir1);
             isFalse(is_dir($dir1));
             isFalse(is_dir($dir2));
             isFalse(is_file($file1));
@@ -115,10 +115,10 @@ class FileSystemTest extends PHPUnit
                 return;
             }
 
-            isTrue(FS::rmdir($symlink, true), 'Could not delete a symlinked directory.');
+            isTrue(FS::rmDir($symlink, true), 'Could not delete a symlinked directory.');
             isFalse(file_exists($symlink), 'Could not delete a symlinked directory.');
 
-            FS::rmdir($dir, true);
+            FS::rmDir($dir, true);
             isFalse(is_dir($dir), 'Could not delete a directory with a symlinked directory inside of it.');
         }
     }
@@ -270,7 +270,7 @@ class FileSystemTest extends PHPUnit
 
         is(10 + 26, FS::dirSize($dir));
 
-        FS::rmdir($dir);
+        FS::rmDir($dir);
     }
 
     public function testLS()
@@ -283,7 +283,7 @@ class FileSystemTest extends PHPUnit
 
         is([$file1], FS::ls($dir));
 
-        FS::rmdir($dir);
+        FS::rmDir($dir);
     }
 
     public function testFormat()
@@ -357,13 +357,13 @@ class FileSystemTest extends PHPUnit
 
     public function testDirname()
     {
-        isSame('.', FS::dirname('image.png'));
-        isSame('.', FS::dirname('image.jpg.png'));
-        isSame('/file/path', FS::dirname('/file/path/image.jpg.png'));
-        isSame('.', FS::dirname('image'));
-        isSame('', FS::dirname(''));
-        isSame('', FS::dirname(null));
-        isSame('', FS::dirname(false));
+        isSame('.', FS::dirName('image.png'));
+        isSame('.', FS::dirName('image.jpg.png'));
+        isSame('/file/path', FS::dirName('/file/path/image.jpg.png'));
+        isSame('.', FS::dirName('image'));
+        isSame('', FS::dirName(''));
+        isSame('', FS::dirName(null));
+        isSame('', FS::dirName(false));
     }
 
     public function testReal()

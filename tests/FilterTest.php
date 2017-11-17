@@ -333,10 +333,10 @@ class FilterTest extends PHPUnit
 
     public function testUcfirst()
     {
-        isSame('Test', Filter::ucfirst('test'));
-        isSame('Test', Filter::ucfirst('Test'));
-        isSame('Test', Filter::ucfirst('TEST'));
-        isSame('Test', Filter::ucfirst('tEST'));
+        isSame('Test', Filter::ucFirst('test'));
+        isSame('Test', Filter::ucFirst('Test'));
+        isSame('Test', Filter::ucFirst('TEST'));
+        isSame('Test', Filter::ucFirst('tEST'));
     }
 
     public function testClassname()

@@ -30,7 +30,7 @@ class Str
     public static $encoding = 'UTF-8';
 
     /**
-     * Strip all witespaces from the given string.
+     * Strip all whitespaces from the given string.
      *
      * @param  string $string The string to strip
      * @return string
@@ -80,7 +80,7 @@ class Str
      * - Remove UTF-8 chars
      * - Remove all tags
      * - Trim
-     * - Addslashes (opt)
+     * - Add Slashes (opt)
      * - To lower (opt)
      *
      * @param string $string
@@ -154,7 +154,7 @@ class Str
     }
 
     /**
-     * Generate ridable random string
+     * Generate readable random string
      *
      * @param int  $length
      * @param bool $isReadable
@@ -165,8 +165,8 @@ class Str
         $result = '';
 
         if ($isReadable) {
-            $vocal = ['a', 'e', 'i', 'o', 'u', '0'];
-            $conso = [
+            $vowels = ['a', 'e', 'i', 'o', 'u', '0'];
+            $consonants = [
                 'b',
                 'c',
                 'd',
@@ -201,8 +201,8 @@ class Str
             $max = $length / 2;
 
             for ($pos = 1; $pos <= $max; $pos++) {
-                $result .= $conso[random_int(0, count($conso) - 1)];
-                $result .= $vocal[random_int(0, count($vocal) - 1)];
+                $result .= $consonants[random_int(0, count($consonants) - 1)];
+                $result .= $vowels[random_int(0, count($vowels) - 1)];
             }
 
         } else {
@@ -239,7 +239,7 @@ class Str
     public static function truncateSafe($string, $length, $append = '...'): string
     {
         $result = self::sub($string, 0, $length);
-        $lastSpace = self::rpos($result, ' ');
+        $lastSpace = self::rPos($result, ' ');
 
         if ($lastSpace !== false && $string !== $result) {
             $result = self::sub($result, 0, $lastSpace);
@@ -291,7 +291,7 @@ class Str
     /**
      * Check if a given string matches a given pattern.
      *
-     * @param  string $pattern Parttern of string exptected
+     * @param  string $pattern Pattern of string expected
      * @param  string $string  String that need to be matched
      * @param  bool   $caseSensitive
      * @return bool
@@ -337,7 +337,7 @@ class Str
     }
 
     /**
-     * Check is mbstring oeverload standard functions
+     * Check is mbstring overload standard functions
      *
      * @return int
      */
@@ -412,7 +412,7 @@ class Str
      * @param int    $offset
      * @return int
      */
-    public static function rpos($haystack, $needle, $offset = 0): ?int
+    public static function rPos($haystack, $needle, $offset = 0): ?int
     {
         if (self::isMBString()) {
             return mb_strrpos($haystack, $needle, $offset, self::$encoding);
@@ -429,7 +429,7 @@ class Str
      * @param int    $offset
      * @return int
      */
-    public static function ipos($haystack, $needle, $offset = 0): int
+    public static function iPos($haystack, $needle, $offset = 0): int
     {
         if (self::isMBString()) {
             return mb_stripos($haystack, $needle, $offset, self::$encoding);
@@ -446,7 +446,7 @@ class Str
      * @param bool   $beforeNeedle
      * @return string
      */
-    public static function strstr($haystack, $needle, $beforeNeedle = false): ?string
+    public static function strStr($haystack, $needle, $beforeNeedle = false): ?string
     {
         if (self::isMBString()) {
             return mb_strstr($haystack, $needle, $beforeNeedle, self::$encoding);
@@ -463,7 +463,7 @@ class Str
      * @param bool   $beforeNeedle
      * @return string
      */
-    public static function istr($haystack, $needle, $beforeNeedle = false): ?string
+    public static function iStr($haystack, $needle, $beforeNeedle = false): ?string
     {
         if (self::isMBString()) {
             return mb_stristr($haystack, $needle, $beforeNeedle, self::$encoding);
@@ -480,7 +480,7 @@ class Str
      * @param bool   $part
      * @return string
      */
-    public static function rchr($haystack, $needle, $part = null): string
+    public static function rChr($haystack, $needle, $part = null): string
     {
         if (self::isMBString()) {
             return mb_strrchr($haystack, $needle, $part, self::$encoding);
@@ -501,7 +501,7 @@ class Str
     {
         if (self::isMBString()) {
             if (0 === $length) {
-                $length = self::len($string);
+                $length = (int)self::len($string);
             }
 
             return mb_substr($string, $start, $length, self::$encoding);
@@ -572,7 +572,7 @@ class Str
             return $needle === '' || self::pos($haystack, $needle) === 0;
         }
 
-        return $needle === '' || self::ipos($haystack, $needle) === 0;
+        return $needle === '' || self::iPos($haystack, $needle) === 0;
     }
 
     /**

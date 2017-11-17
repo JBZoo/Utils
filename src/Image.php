@@ -119,13 +119,13 @@ class Image
         $color = trim($color);
 
         if (strlen($color) === 6) {
-            [$red, $green, $blue] = [
+            list($red, $green, $blue) = [
                 $color[0] . $color[1],
                 $color[2] . $color[3],
                 $color[4] . $color[5],
             ];
         } elseif (strlen($color) === 3) {
-            [$red, $green, $blue] = [
+            list($red, $green, $blue) = [
                 $color[0] . $color[0],
                 $color[1] . $color[1],
                 $color[2] . $color[2],
@@ -210,9 +210,9 @@ class Image
         array $srcSizes,
         $opacity
     ): void {
-        [$dstX, $dstY] = $dist;
-        [$srcX, $srcY] = $src;
-        [$srcWidth, $srcHeight] = $srcSizes;
+        list($dstX, $dstY) = $dist;
+        list($srcX, $srcY) = $src;
+        list($srcWidth, $srcHeight) = $srcSizes;
 
         // Get image width and height and percentage
         $opacity /= 100;
@@ -236,7 +236,7 @@ class Image
         // Loop through image pixels and modify alpha for each
         for ($x = 0; $x < $width; $x++) {
             for ($y = 0; $y < $height; $y++) {
-                // Get current alpha value (represents the TANSPARENCY!)
+                // Get current alpha value (represents the TRANSPARENCY!)
                 $colorXY = imagecolorat($srcImg, $x, $y);
                 $alpha = ($colorXY >> 24) & 0xFF;
 
@@ -511,9 +511,9 @@ class Image
     public static function getInnerCoords($position, array $canvas, array $box, array $offset = [0, 0]): ?array
     {
         $positionCode = self::position($position);
-        [$canvasW, $canvasH] = $canvas;
-        [$boxW, $boxH] = $box;
-        [$offsetX, $offsetY] = $offset;
+        list($canvasW, $canvasH) = $canvas;
+        list($boxW, $boxH) = $box;
+        list($offsetX, $offsetY) = $offset;
 
         // Coords map:
         // 00  10  20  =>  tl  t   tr

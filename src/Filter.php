@@ -213,18 +213,18 @@ class Filter
      * @param $value
      * @return string
      */
-    public static function base64($value)
+    public static function base64($value): string
     {
         return (string)preg_replace('#[^A-Z0-9\/+=]#i', '', $value);
     }
 
     /**
-     * Rmove whitespaces
+     * Remove whitespaces
      *
      * @param $value
      * @return string
      */
-    public static function path($value)
+    public static function path($value): string
     {
         $pattern = '#^[A-Za-z0-9_\/-]+[A-Za-z0-9_\.-]*([\\\\\/][A-Za-z0-9_-]+[A-Za-z0-9_\.-]*)*$#';
 
@@ -267,7 +267,7 @@ class Filter
     {
         $array = (array)$value;
 
-        if ($filter === 'noempty') {
+        if (strtolower($filter) === 'noempty') {
             $array = Arr::clean($array);
 
         } elseif ($filter instanceof \Closure) {
@@ -448,7 +448,7 @@ class Filter
      * @param $input
      * @return string
      */
-    public static function ucfirst($input): string
+    public static function ucFirst($input): string
     {
         $string = Str::low($input);
         $string = ucfirst($string);
@@ -460,9 +460,9 @@ class Filter
      * Parse lines to assoc list
      *
      * @param string|array $input
-     * @return string
+     * @return array
      */
-    public static function parseLines($input): string
+    public static function parseLines($input): array
     {
         if (is_array($input)) {
             $input = implode(PHP_EOL, $input);
@@ -484,7 +484,7 @@ class Filter
 
         $output = array_map(function ($item) {
             $item = preg_replace('#[^a-z0-9]#i', '', $item);
-            $item = Filter::ucfirst($item);
+            $item = Filter::ucFirst($item);
             return $item;
         }, $output);
 

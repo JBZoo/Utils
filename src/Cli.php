@@ -108,8 +108,8 @@ class Cli
                 \JBZoo\PHPUnit\cliMessage('Process: ' . $cmd);
                 \JBZoo\PHPUnit\cliMessage('CWD: ' . $cwd);
             } else {
-                Cli::out('Process: ' . $cmd);
-                Cli::out('CWD: ' . $cwd);
+                self::out('Process: ' . $cmd);
+                self::out('CWD: ' . $cwd);
             }
 
         }
@@ -134,7 +134,7 @@ class Cli
      * @param array  $args
      * @return string
      */
-    public static function build($command, $args = [])
+    public static function build($command, array $args = []): string
     {
         $stringArgs = [];
         $realCommand = $command;

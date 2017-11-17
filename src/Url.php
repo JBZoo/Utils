@@ -47,8 +47,8 @@ class Url
     /**
      * Add or remove query arguments to the URL.
      *
-     * @param  mixed $newParams Either newkey or an associative array
-     * @param  mixed $uri       URI or URL to append the queru/queries to.
+     * @param  mixed $newParams Either new key or an associative array
+     * @param  mixed $uri       URI or URL to append the query/queries to.
      * @return string
      *
      * @SuppressWarnings(PHPMD.NPathComplexity)
