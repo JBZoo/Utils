@@ -238,7 +238,7 @@ class Url
      */
     public static function buildAll($sourceUrl, $destParts = [], $flags = self::URL_REPLACE, &$newUrl = []): string
     {
-        is_array($sourceUrl) || $url = parse_url($sourceUrl);
+        is_array($sourceUrl) || $sourceUrl = parse_url($sourceUrl);
         is_array($destParts) || $destParts = parse_url($destParts);
 
         $url = data((array)$sourceUrl);

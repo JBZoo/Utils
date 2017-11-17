@@ -143,9 +143,7 @@ class UrlTest extends PHPUnit
     {
         $url = 'http://user:pass@example.com:8080/path/?query#fragment';
 
-        $expected = 'http://example.com/';
-        $actual = Url::buildAll($url, [], Url::URL_STRIP_ALL);
-        is($expected, $actual);
+        is('http://example.com/', Url::buildAll($url, [], Url::URL_STRIP_ALL));
 
         $expected = 'http://example.com:8080/path/?query#fragment';
         $actual = Url::buildAll($url, [], Url::URL_STRIP_AUTH);

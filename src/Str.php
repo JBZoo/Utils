@@ -377,7 +377,7 @@ class Str
      * @param $string
      * @return int
      */
-    public static function len($string): ?int
+    public static function len($string): int
     {
         if (self::isMBString()) {
             return mb_strlen($string, self::$encoding);
@@ -394,7 +394,7 @@ class Str
      * @param int    $offset
      * @return int
      */
-    public static function pos($haystack, $needle, $offset = 0): int
+    public static function pos($haystack, $needle, $offset = 0)
     {
         if (self::isMBString()) {
             return mb_strpos($haystack, $needle, $offset, self::$encoding);
@@ -411,7 +411,7 @@ class Str
      * @param int    $offset
      * @return int
      */
-    public static function rPos($haystack, $needle, $offset = 0): ?int
+    public static function rPos($haystack, $needle, $offset = 0)
     {
         if (self::isMBString()) {
             return mb_strrpos($haystack, $needle, $offset, self::$encoding);
@@ -428,7 +428,7 @@ class Str
      * @param int    $offset
      * @return int
      */
-    public static function iPos($haystack, $needle, $offset = 0): int
+    public static function iPos($haystack, $needle, $offset = 0)
     {
         if (self::isMBString()) {
             return mb_stripos($haystack, $needle, $offset, self::$encoding);
@@ -445,7 +445,7 @@ class Str
      * @param bool   $beforeNeedle
      * @return string
      */
-    public static function strStr($haystack, $needle, $beforeNeedle = false): ?string
+    public static function strStr($haystack, $needle, $beforeNeedle = false)
     {
         if (self::isMBString()) {
             return mb_strstr($haystack, $needle, $beforeNeedle, self::$encoding);
@@ -479,7 +479,7 @@ class Str
      * @param bool   $part
      * @return string
      */
-    public static function rChr($haystack, $needle, $part = null): string
+    public static function rChr($haystack, $needle, $part = null)
     {
         if (self::isMBString()) {
             return mb_strrchr($haystack, $needle, $part, self::$encoding);
@@ -500,7 +500,7 @@ class Str
     {
         if (self::isMBString()) {
             if (0 === $length) {
-                $length = (int)self::len($string);
+                $length = self::len($string);
             }
 
             return mb_substr($string, $start, $length, self::$encoding);
@@ -548,7 +548,7 @@ class Str
      * @param string $needle
      * @return int
      */
-    public static function subCount($haystack, $needle): int
+    public static function subCount($haystack, $needle): ?int
     {
         if (self::isMBString()) {
             return mb_substr_count($haystack, $needle, self::$encoding);
@@ -786,28 +786,24 @@ class Str
     public static function inc($string, $style = 'default', $next = 0): string
     {
         $styles = [
-            'dash'    => [
-                '#-(\d+)$#',
-                '-%d',
-            ],
-            'default' => [
-                ['#\((\d+)\)$#', '#\(\d+\)$#'],
-                [' (%d)', '(%d)'],
-            ],
+            'dash'    => ['#-(\d+)$#', '-%d'],
+            'default' => [['#\((\d+)\)$#', '#\(\d+\)$#'], [' (%d)', '(%d)']],
         ];
 
         $styleSpec = $styles[$style] ?? $styles['default'];
 
         // Regular expression search and replace patterns.
         if (is_array($styleSpec[0])) {
-            list($rxSearch, $rxReplace) = $styleSpec[0];
+            $rxSearch = $styleSpec[0][0];
+            $rxReplace = $styleSpec[0][1];
         } else {
             $rxSearch = $rxReplace = $styleSpec[0];
         }
 
         // New and old (existing) sprintf formats.
         if (is_array($styleSpec[1])) {
-            list($newFormat, $oldFormat) = $styleSpec[0];
+            $newFormat = $styleSpec[1][0];
+            $oldFormat = $styleSpec[1][1];
         } else {
             $newFormat = $oldFormat = $styleSpec[1];
         }

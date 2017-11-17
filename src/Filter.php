@@ -256,9 +256,9 @@ class Filter
      *
      * @param mixed           $value
      * @param string|\Closure $filter
-     * @return string
+     * @return array
      */
-    public static function arr($value, $filter = null): string
+    public static function arr($value, $filter = null): array
     {
         $array = (array)$value;
 
