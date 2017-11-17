@@ -24,7 +24,7 @@ class Ob
     /**
      * Clean all ob_* buffers
      */
-    public static function clean()
+    public static function clean(): void
     {
         while (@ob_end_clean()) {
             // noop

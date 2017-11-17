@@ -19,6 +19,7 @@ use JBZoo\Utils\Sys;
 
 /**
  * Class SysTest
+ *
  * @package JBZoo\PHPUnit
  * @SuppressWarnings(PHPMD.Superglobals)
  */

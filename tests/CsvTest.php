@@ -19,6 +19,7 @@ use JBZoo\Utils\Csv;
 
 /**
  * Class CsvTest
+ *
  * @package JBZoo\PHPUnit
  */
 class CsvTest extends PHPUnit
@@ -27,24 +28,24 @@ class CsvTest extends PHPUnit
     {
         $result = Csv::parse(__DIR__ . '/resources/parse.csv', ';', '"', true);
 
-        isSame(array(
-            array(
+        isSame([
+            [
                 'id'       => '1',
                 'name'     => 'qwerty',
                 'some num' => '42',
-            ),
-            array(
+            ],
+            [
                 'id'       => '2',
                 'name'     => 'Some word',
                 'some num' => '4242',
-            ),
-        ), $result);
+            ],
+        ], $result);
 
         $result = Csv::parse(__DIR__ . '/resources/parse.csv', ';', '"', false);
-        isSame(array(
-            array('id', 'name', 'some num'),
-            array('1', 'qwerty', '42'),
-            array('2', 'Some word', '4242'),
-        ), $result);
+        isSame([
+            ['id', 'name', 'some num'],
+            ['1', 'qwerty', '42'],
+            ['2', 'Some word', '4242'],
+        ], $result);
     }
 }

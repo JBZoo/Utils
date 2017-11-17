@@ -20,6 +20,7 @@ use JBZoo\Data\JSON;
 
 /**
  * Class Filter
+ *
  * @package JBZoo\Utils
  */
 class Filter
@@ -53,7 +54,7 @@ class Filter
             }
 
         } elseif ($filters instanceof \Closure) {
-            $value = call_user_func($filters, $value);
+            $value = $filters($value);
         }
 
         return $value;
@@ -65,21 +66,70 @@ class Filter
      * @param  string $string The string to convert to boolean
      * @return boolean
      */
-    public static function bool($string)
+    public static function bool($string): bool
     {
-        $yesList = array('affirmative', 'all right', 'aye', 'indubitably', 'most assuredly', 'ok', 'of course', 'oui',
-            'okay', 'sure thing', 'y', 'yes', 'yea', 'yep', 'sure', 'yeah', 'true', 't', 'on', '1', 'vrai',
-            'да', 'д', '+', '++', '+++', '++++', '+++++', '*');
+        $yesList = [
+            'affirmative',
+            'all right',
+            'aye',
+            'indubitably',
+            'most assuredly',
+            'ok',
+            'of course',
+            'oui',
+            'okay',
+            'sure thing',
+            'y',
+            'yes',
+            'yea',
+            'yep',
+            'sure',
+            'yeah',
+            'true',
+            't',
+            'on',
+            '1',
+            'vrai',
+            'да',
+            'д',
+            '+',
+            '++',
+            '+++',
+            '++++',
+            '+++++',
+            '*',
+        ];
 
-        $noList = array('no*', 'no way', 'nope', 'nah', 'na', 'never', 'absolutely not', 'by no means', 'negative',
-            'never ever', 'false', 'f', 'off', '0', 'non', 'faux', 'нет', 'н', 'немає', '-');
+        $noList = [
+            'no*',
+            'no way',
+            'nope',
+            'nah',
+            'na',
+            'never',
+            'absolutely not',
+            'by no means',
+            'negative',
+            'never ever',
+            'false',
+            'f',
+            'off',
+            '0',
+            'non',
+            'faux',
+            'нет',
+            'н',
+            'немає',
+            '-',
+        ];
 
         $string = Str::low($string);
 
         if (Arr::in($string, $yesList) || self::float($string) !== 0.0) {
             return true;
+        }
 
-        } elseif (Arr::in($string, $noList)) {
+        if (Arr::in($string, $noList)) {
             return false;
         }
 
@@ -97,7 +147,7 @@ class Filter
         $cleaned = str_replace(',', '.', $cleaned);
 
         preg_match('#[-+]?[0-9]+(\.[0-9]+)?([eE][-+]?[0-9]+)?#', $cleaned, $matches);
-        $result = isset($matches[0]) ? $matches[0] : 0.0;
+        $result = $matches[0] ?? 0.0;
 
         $result = round($result, $round);
 
@@ -115,7 +165,7 @@ class Filter
         $cleaned = preg_replace('#[^0-9-+.,]#', '', $value);
 
         preg_match('#[-+]?[0-9]+#', $cleaned, $matches);
-        $result = isset($matches[0]) ? $matches[0] : 0;
+        $result = $matches[0] ?? 0;
 
         return (int)$result;
     }
@@ -129,7 +179,7 @@ class Filter
     public static function digits($value)
     {
         // we need to remove - and + because they're allowed in the filter
-        $cleaned = str_replace(array('-', '+'), '', $value);
+        $cleaned = str_replace(['-', '+'], '', $value);
         $cleaned = filter_var($cleaned, FILTER_SANITIZE_NUMBER_INT);
 
         return $cleaned;
@@ -230,7 +280,7 @@ class Filter
     /**
      * Cleanup system command
      *
-     * @param array $value
+     * @param string $value
      * @return string
      */
     public static function cmd($value)
@@ -256,7 +306,7 @@ class Filter
         $regex = chr(1) . '^[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$' . chr(1) . 'u';
 
         $cleaned = filter_var($email, FILTER_VALIDATE_EMAIL);
-        if (preg_match($regex, $email) && $cleaned) {
+        if ($cleaned && preg_match($regex, $email)) {
             return $cleaned;
         }
 
@@ -285,7 +335,7 @@ class Filter
      */
     public static function alias($string)
     {
-        $cleaned = Filter::strip($string);
+        $cleaned = self::strip($string);
         $cleaned = Str::slug($cleaned);
 
         return $cleaned;
@@ -297,7 +347,7 @@ class Filter
      * @param $string
      * @return string
      */
-    public static function low($string)
+    public static function low($string): string
     {
         $cleaned = Str::low($string);
         $cleaned = Str::trim($cleaned);
@@ -313,7 +363,7 @@ class Filter
      *
      * @SuppressWarnings(PHPMD.ShortMethodName)
      */
-    public static function up($string)
+    public static function up($string): string
     {
         $cleaned = Str::up($string);
         $cleaned = Str::trim($cleaned);
@@ -327,7 +377,7 @@ class Filter
      * @param $string
      * @return string
      */
-    public static function stripSpace($string)
+    public static function stripSpace($string): string
     {
         return Str::stripSpace($string);
     }
@@ -336,7 +386,7 @@ class Filter
      * @param $string
      * @return string
      */
-    public static function clean($string)
+    public static function clean($string): string
     {
         return Str::clean($string, true, true);
     }
@@ -345,7 +395,7 @@ class Filter
      * @param $string
      * @return string
      */
-    public static function html($string)
+    public static function html($string): string
     {
         return Str::htmlEnt($string);
     }
@@ -354,7 +404,7 @@ class Filter
      * @param $string
      * @return string
      */
-    public static function xml($string)
+    public static function xml($string): string
     {
         return Str::escXml($string);
     }
@@ -363,7 +413,7 @@ class Filter
      * @param $string
      * @return string
      */
-    public static function esc($string)
+    public static function esc($string): string
     {
         return Str::esc($string);
     }
@@ -372,7 +422,7 @@ class Filter
      * @param array|Data $data
      * @return Data
      */
-    public static function data($data)
+    public static function data($data): Data
     {
         if ($data instanceof Data) {
             return $data;
@@ -398,7 +448,7 @@ class Filter
      * @param $input
      * @return string
      */
-    public static function ucfirst($input)
+    public static function ucfirst($input): string
     {
         $string = Str::low($input);
         $string = ucfirst($string);
@@ -409,16 +459,16 @@ class Filter
     /**
      * Parse lines to assoc list
      *
-     * @param $input
+     * @param string|array $input
      * @return string
      */
-    public static function parseLines($input)
+    public static function parseLines($input): string
     {
         if (is_array($input)) {
             $input = implode(PHP_EOL, $input);
         }
 
-        return Str::parseLines($input, true);
+        return Str::parseLines($input);
     }
 
     /**
@@ -427,9 +477,9 @@ class Filter
      * @param $input
      * @return string
      */
-    public static function className($input)
+    public static function className($input): string
     {
-        $output = preg_replace(array('#(?<=[^A-Z\s])([A-Z\s])#i'), ' $0', $input);
+        $output = preg_replace(['#(?<=[^A-Z\s])([A-Z\s])#i'], ' $0', $input);
         $output = explode(' ', $output);
 
         $output = array_map(function ($item) {
@@ -449,7 +499,7 @@ class Filter
      * @param string $value
      * @return string
      */
-    public static function stripQuotes($value)
+    public static function stripQuotes($value): string
     {
         if ($value[0] === '"' && substr($value, -1) === '"') {
             $value = trim($value, '"');

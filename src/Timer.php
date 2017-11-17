@@ -17,6 +17,7 @@ namespace JBZoo\Utils;
 
 /**
  * Class Timer
+ *
  * @see     https://github.com/sebastianbergmann/php-timer
  * @package JBZoo\Utils
  */
@@ -30,11 +31,11 @@ class Timer
     /**
      * @var array
      */
-    private static $_times = array(
+    private static $times = [
         'hour' => 3600000,
         'min'  => 60000,
         'sec'  => 1000,
-    );
+    ];
 
     /**
      * Formats the elapsed time as a string.
@@ -42,13 +43,13 @@ class Timer
      * @param  float $time
      * @return string
      */
-    public static function format($time)
+    public static function format($time): string
     {
         $time = round($time * 1000);
-        foreach (self::$_times as $unit => $value) {
+        foreach (self::$times as $unit => $value) {
             if ($time >= $value) {
                 $time = floor($time / $value * 100.0) / 100.0;
-                return $time . ' ' . $unit . ($time == 1 ? '' : 's');
+                return $time . ' ' . $unit . ($time === 1 ? '' : 's');
             }
         }
 
@@ -61,10 +62,10 @@ class Timer
      * @param  float $time
      * @return string
      */
-    public static function formatMS($time)
+    public static function formatMS($time): string
     {
         $time = round($time * 1000, 3);
-        $dec  = 3;
+        $dec = 3;
 
         if (!$time || $time >= 10 || $time >= 100) {
             $dec = 0;
@@ -82,7 +83,7 @@ class Timer
      *
      * @return float
      */
-    public static function timeSinceStart()
+    public static function timeSinceStart(): float
     {
         return microtime(true) - self::getRequestTime();
     }
@@ -94,7 +95,7 @@ class Timer
      *
      * @SuppressWarnings(PHPMD.Superglobals)
      */
-    public static function getRequestTime()
+    public static function getRequestTime(): float
     {
         return $_SERVER['REQUEST_TIME_FLOAT'];
     }

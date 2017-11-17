@@ -19,6 +19,7 @@ use JBZoo\Utils\Env;
 
 /**
  * Class EnvTest
+ *
  * @package JBZoo\PHPUnit
  * @SuppressWarnings(PHPMD.Superglobals)
  */
@@ -97,32 +98,32 @@ class EnvTest extends PHPUnit
      */
     public function dataProvider()
     {
-        return array(
-            array('', null, ''),
+        return [
+            ['', null, ''],
 
-            array('NULL', Env::VAR_NULL, null),
-            array('null', Env::VAR_NULL, null),
+            ['NULL', Env::VAR_NULL, null],
+            ['null', Env::VAR_NULL, null],
 
-            array('false', Env::VAR_BOOL, false),
-            array('FALSE', Env::VAR_BOOL, false),
-            array(0, Env::VAR_BOOL, false),
-            array('true', Env::VAR_BOOL, true),
-            array('True', Env::VAR_BOOL, true),
-            array(1, Env::VAR_BOOL, true),
+            ['false', Env::VAR_BOOL, false],
+            ['FALSE', Env::VAR_BOOL, false],
+            [0, Env::VAR_BOOL, false],
+            ['true', Env::VAR_BOOL, true],
+            ['True', Env::VAR_BOOL, true],
+            [1, Env::VAR_BOOL, true],
 
-            array('42', Env::VAR_INT, 42),
-            array('FALSE', Env::VAR_INT, 0),
+            ['42', Env::VAR_INT, 42],
+            ['FALSE', Env::VAR_INT, 0],
 
-            array('42.42', Env::VAR_FLOAT, 42.42),
-            array('42', Env::VAR_FLOAT, 42.0),
-            array('FALSE', Env::VAR_FLOAT, 0.),
+            ['42.42', Env::VAR_FLOAT, 42.42],
+            ['42', Env::VAR_FLOAT, 42.0],
+            ['FALSE', Env::VAR_FLOAT, 0.],
 
-            array('"hello"', Env::VAR_STRING, 'hello'),
-            array("'hello'", Env::VAR_STRING, 'hello'),
+            ['"hello"', Env::VAR_STRING, 'hello'],
+            ["'hello'", Env::VAR_STRING, 'hello'],
 
-            array('"hello"', 0, '"hello"'),
-            array("'hello'", 0, "'hello'"),
-        );
+            ['"hello"', 0, '"hello"'],
+            ["'hello'", 0, "'hello'"],
+        ];
     }
 
     /**

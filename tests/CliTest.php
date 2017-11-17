@@ -19,6 +19,7 @@ use JBZoo\Utils\Cli;
 
 /**
  * Class CliTest
+ *
  * @package JBZoo\PHPUnit
  */
 class CliTest extends PHPUnit
@@ -33,41 +34,41 @@ class CliTest extends PHPUnit
     {
         is('ls', Cli::build('ls'));
 
-        is('ls -a', Cli::build('ls', array(
+        is('ls -a', Cli::build('ls', [
             'a' => '',
-        )));
+        ]));
 
-        is('ls -a -l', Cli::build('ls', array(
+        is('ls -a -l', Cli::build('ls', [
             'a' => '',
             'l' => '',
-        )));
+        ]));
 
-        is('ls --help', Cli::build('ls', array(
+        is('ls --help', Cli::build('ls', [
             'help' => '',
-        )));
+        ]));
 
-        is('ls --option="qwerty"', Cli::build('ls', array(
+        is('ls --option="qwerty"', Cli::build('ls', [
             'option' => 'qwerty',
-        )));
+        ]));
 
-        is('ls --option="qwert\'y"', Cli::build('ls', array(
+        is('ls --option="qwert\'y"', Cli::build('ls', [
             'option' => 'qwert\'y',
-        )));
+        ]));
 
-        is('ls --option="qwert\"y"', Cli::build('ls', array(
+        is('ls --option="qwert\"y"', Cli::build('ls', [
             'option' => 'qwert"y',
-        )));
+        ]));
 
-        is('ls --option="0"', Cli::build('ls', array(
+        is('ls --option="0"', Cli::build('ls', [
             'option' => 0,
-        )));
+        ]));
     }
 
     public function testExec()
     {
         if (class_exists('\Symfony\Component\Process\Process')) {
             $output1 = Cli::exec('php -v');
-            $output2 = Cli::exec('php', array('v' => ''));
+            $output2 = Cli::exec('php', ['v' => '']);
             isSame($output1, $output2);
         } else {
             skip('Symfony/Process required to test Cli::exec() method');

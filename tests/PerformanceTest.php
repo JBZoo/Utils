@@ -20,13 +20,14 @@ use JBZoo\Utils\Str;
 
 /**
  * Class PerformanceTest
+ *
  * @package JBZoo\PHPUnit
  */
 class PerformanceTest extends PHPUnit
 {
     public function getRandomString($length = 6)
     {
-        $chars       = 'абвгд';
+        $chars = 'абвгд';
         $charsLength = strlen($chars);
 
         $result = '';
@@ -41,7 +42,7 @@ class PerformanceTest extends PHPUnit
     {
         $_this = $this;
 
-        runBench(array(
+        runBench([
             // 2
             'Str::slug(2, false)' => function () use ($_this) {
                 return Str::slug($_this->getRandomString(2), false);
@@ -65,7 +66,7 @@ class PerformanceTest extends PHPUnit
             },
 
             // 4
-            'Str::slug(4, false)'        => function () use ($_this) {
+            'Str::slug(4, false)' => function () use ($_this) {
                 return Str::slug($_this->getRandomString(4), false);
             },
             'Str::slug(4, true)'  => function () use ($_this) {
@@ -74,17 +75,17 @@ class PerformanceTest extends PHPUnit
             'Slug::filter(4)'     => function () use ($_this) {
                 return Slug::filter($_this->getRandomString(4));
             },
-        ), array('count' => 1000, 'name' => 'Random slug'));
+        ], ['count' => 1000, 'name' => 'Random slug']);
     }
 
     public function testSlugSpeed()
     {
         $_this = $this;
 
-        runBench(array(
-            'Slug::filter'     => function () use ($_this) {
+        runBench([
+            'Slug::filter' => function () use ($_this) {
                 return Slug::filter($_this->getRandomString(15));
             },
-        ), array('count' => 1000, 'name' => 'Slug speed'));
+        ], ['count' => 1000, 'name' => 'Slug speed']);
     }
 }

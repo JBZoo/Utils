@@ -17,6 +17,7 @@ namespace JBZoo\Utils;
 
 /**
  * Class FS
+ *
  * @package JBZoo\Utils
  */
 class FS
@@ -31,7 +32,7 @@ class FS
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
      */
-    public static function perms($file, $perms = null)
+    public static function perms($file, $perms = null): string
     {
         if (null === $perms) {
             if (!file_exists($file)) {
@@ -42,25 +43,25 @@ class FS
         }
 
         //@codeCoverageIgnoreStart
-        if (($perms & 0xC000) == 0xC000) { // Socket
+        if (($perms & 0xC000) === 0xC000) { // Socket
             $info = 's';
 
-        } elseif (($perms & 0xA000) == 0xA000) { // Symbolic Link
+        } elseif (($perms & 0xA000) === 0xA000) { // Symbolic Link
             $info = 'l';
 
-        } elseif (($perms & 0x8000) == 0x8000) { // Regular
+        } elseif (($perms & 0x8000) === 0x8000) { // Regular
             $info = '-';
 
-        } elseif (($perms & 0x6000) == 0x6000) { // Block special
+        } elseif (($perms & 0x6000) === 0x6000) { // Block special
             $info = 'b';
 
-        } elseif (($perms & 0x4000) == 0x4000) { // Directory
+        } elseif (($perms & 0x4000) === 0x4000) { // Directory
             $info = 'd';
 
-        } elseif (($perms & 0x2000) == 0x2000) { // Character special
+        } elseif (($perms & 0x2000) === 0x2000) { // Character special
             $info = 'c';
 
-        } elseif (($perms & 0x1000) == 0x1000) { // FIFO pipe
+        } elseif (($perms & 0x1000) === 0x1000) { // FIFO pipe
             $info = 'p';
 
         } else { // Unknown
@@ -95,17 +96,18 @@ class FS
      * @return bool
      * @throws \RuntimeException
      */
-    public static function rmdir($dir, $traverseSymlinks = false)
+    public static function rmdir($dir, $traverseSymlinks = false): bool
     {
         if (!file_exists($dir)) {
             return true;
+        }
 
-        } elseif (!is_dir($dir)) {
+        if (!is_dir($dir)) {
             throw new \RuntimeException('Given path is not a directory');
         }
 
-        if (!is_link($dir) || $traverseSymlinks) {
-            foreach (scandir($dir) as $file) {
+        if ($traverseSymlinks || !is_link($dir)) {
+            foreach (scandir($dir, SCANDIR_SORT_NONE) as $file) {
                 if ($file === '.' || $file === '..') {
                     continue;
                 }
@@ -125,11 +127,10 @@ class FS
 
         // @codeCoverageIgnoreStart
         // Windows treats removing directory symlinks identically to removing directories.
-        if (is_link($dir) && !defined('PHP_WINDOWS_VERSION_MAJOR')) {
+        if (!defined('PHP_WINDOWS_VERSION_MAJOR') && is_link($dir)) {
             if (!unlink($dir)) {
                 throw new \RuntimeException('Unable to delete ' . $dir);
             }
-
         } else {
             if (!rmdir($dir)) {
                 throw new \RuntimeException('Unable to delete ' . $dir);
@@ -146,12 +147,12 @@ class FS
      * @param $filepath
      * @return null|string
      */
-    public static function openFile($filepath)
+    public static function openFile($filepath): ?string
     {
         $contents = null;
 
         if ($realPath = realpath($filepath)) {
-            $handle   = fopen($realPath, "rb");
+            $handle = fopen($realPath, 'rb');
             $contents = fread($handle, filesize($realPath));
             fclose($handle);
         }
@@ -165,10 +166,10 @@ class FS
      * @param string $filepath
      * @return string
      */
-    public static function firstLine($filepath)
+    public static function firstLine($filepath): string
     {
         if (file_exists($filepath)) {
-            $cacheRes  = fopen($filepath, 'r');
+            $cacheRes = fopen($filepath, 'rb');
             $firstLine = fgets($cacheRes);
             fclose($cacheRes);
 
@@ -185,9 +186,9 @@ class FS
      * @param  boolean $writable Whether to make the file writable or not
      * @return boolean
      */
-    public static function writable($filename, $writable = true)
+    public static function writable($filename, $writable = true): bool
     {
-        return self::_setPerms($filename, $writable, 2);
+        return self::setPerms($filename, $writable, 2);
     }
 
     /**
@@ -197,9 +198,9 @@ class FS
      * @param  boolean $readable Whether to make the file readable or not
      * @return boolean
      */
-    public static function readable($filename, $readable = true)
+    public static function readable($filename, $readable = true): bool
     {
-        return self::_setPerms($filename, $readable, 4);
+        return self::setPerms($filename, $readable, 4);
     }
 
     /**
@@ -209,9 +210,9 @@ class FS
      * @param  boolean $executable Whether to make the file executable or not
      * @return boolean
      */
-    public static function executable($filename, $executable = true)
+    public static function executable($filename, $executable = true): bool
     {
-        return self::_setPerms($filename, $executable, 1);
+        return self::setPerms($filename, $executable, 1);
     }
 
     /**
@@ -220,16 +221,15 @@ class FS
      * @param string $dir
      * @return integer
      */
-    public static function dirSize($dir)
+    public static function dirSize($dir): int
     {
         $size = 0;
 
-        $flags = \FilesystemIterator::CURRENT_AS_FILEINFO
-            | \FilesystemIterator::SKIP_DOTS;
+        $flags = \FilesystemIterator::CURRENT_AS_FILEINFO | \FilesystemIterator::SKIP_DOTS;
 
-        $dirIter = new \RecursiveIteratorIterator(new \RecursiveDirectoryIterator($dir, $flags));
+        $dirIterator = new \RecursiveIteratorIterator(new \RecursiveDirectoryIterator($dir, $flags));
 
-        foreach ($dirIter as $key) {
+        foreach ($dirIterator as $key) {
             if ($key->isFile()) {
                 $size += $key->getSize();
             }
@@ -247,9 +247,9 @@ class FS
      * @SuppressWarnings(PHPMD.UnusedLocalVariable)
      * @SuppressWarnings(PHPMD.ShortMethodName)
      */
-    public static function ls($dir)
+    public static function ls($dir): array
     {
-        $contents = array();
+        $contents = [];
 
         $flags = \FilesystemIterator::KEY_AS_PATHNAME
             | \FilesystemIterator::CURRENT_AS_FILEINFO
@@ -272,17 +272,17 @@ class FS
      * @param   integer $decimals The number of decimal points to include
      * @return  string
      */
-    public static function format($bytes, $decimals = 2)
+    public static function format($bytes, $decimals = 2): string
     {
-        $exp    = 0;
-        $value  = 0;
-        $symbol = array('B', 'KB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB');
+        $exp = 0;
+        $value = 0;
+        $symbol = ['B', 'KB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB'];
 
-        $bytes = floatval($bytes);
+        $bytes = (float)$bytes;
 
         if ($bytes > 0) {
-            $exp   = floor(log($bytes) / log(1024));
-            $value = ($bytes / pow(1024, floor($exp)));
+            $exp = floor(log($bytes) / log(1024));
+            $value = ($bytes / (1024 ** floor($exp)));
         }
 
         if ($symbol[$exp] === 'B') {
@@ -298,7 +298,7 @@ class FS
      * @param int    $perm
      * @return bool
      */
-    protected static function _setPerms($filename, $isFlag, $perm)
+    protected static function setPerms($filename, $isFlag, $perm): ?bool
     {
         $stat = @stat($filename);
 
@@ -313,10 +313,10 @@ class FS
             //@codeCoverageIgnoreEnd
         }
 
-        list($myuid, $mygid) = array(posix_geteuid(), posix_getgid());
+        list($myuid, $mygid) = [posix_geteuid(), posix_getgid()];
 
-        $isMyUid = $stat['uid'] == $myuid;
-        $isMyGid = $stat['gid'] == $mygid;
+        $isMyUid = $stat['uid'] === $myuid;
+        $isMyGid = $stat['gid'] === $mygid;
 
         //@codeCoverageIgnoreStart
         if ($isFlag) {
@@ -333,23 +333,23 @@ class FS
             // Set the world writable bit (file isn't owned or grouped by us)
             return chmod($filename, fileperms($filename) | intval('0' . $perm . $perm . $perm, 8));
 
-        } else {
-            // Set only the user writable bit (file is owned by us)
-            if ($isMyUid) {
-                $add = intval('0' . $perm . $perm . $perm, 8);
-                return self::_chmod($filename, $perm, $add);
-            }
-
-            // Set only the group writable bit (file group is the same as us)
-            if ($isMyGid) {
-                $add = intval('00' . $perm . $perm, 8);
-                return self::_chmod($filename, $perm, $add);
-            }
-
-            // Set the world writable bit (file isn't owned or grouped by us)
-            $add = intval('000' . $perm, 8);
-            return self::_chmod($filename, $perm, $add);
         }
+
+        // Set only the user writable bit (file is owned by us)
+        if ($isMyUid) {
+            $add = intval('0' . $perm . $perm . $perm, 8);
+            return self::chmod($filename, $perm, $add);
+        }
+
+        // Set only the group writable bit (file group is the same as us)
+        if ($isMyGid) {
+            $add = intval('00' . $perm . $perm, 8);
+            return self::chmod($filename, $perm, $add);
+        }
+
+        // Set the world writable bit (file isn't owned or grouped by us)
+        $add = intval('000' . $perm, 8);
+        return self::chmod($filename, $perm, $add);
         //@codeCoverageIgnoreEnd
     }
 
@@ -361,7 +361,7 @@ class FS
      * @param int    $add
      * @return bool
      */
-    protected static function _chmod($filename, $perm, $add)
+    protected static function chmod($filename, $perm, $add): bool
     {
         return chmod($filename, (fileperms($filename) | intval('0' . $perm . $perm . $perm, 8)) ^ $add);
     }
@@ -370,7 +370,7 @@ class FS
      * @param string $path
      * @return string
      */
-    public static function ext($path)
+    public static function ext($path): string
     {
         if (strpos($path, '?') !== false) {
             $path = preg_replace('#\?(.*)#', '', $path);
@@ -386,7 +386,7 @@ class FS
      * @param string $path
      * @return string
      */
-    public static function base($path)
+    public static function base($path): string
     {
         return pathinfo($path, PATHINFO_BASENAME);
     }
@@ -395,7 +395,7 @@ class FS
      * @param string $path
      * @return string
      */
-    public static function filename($path)
+    public static function filename($path): string
     {
         return pathinfo($path, PATHINFO_FILENAME);
     }
@@ -404,7 +404,7 @@ class FS
      * @param string $path
      * @return string
      */
-    public static function dirname($path)
+    public static function dirname($path): string
     {
         return pathinfo($path, PATHINFO_DIRNAME);
     }
@@ -413,7 +413,7 @@ class FS
      * @param string $path
      * @return string
      */
-    public static function real($path)
+    public static function real($path): string
     {
         return realpath($path);
     }
@@ -427,7 +427,7 @@ class FS
      *
      * @SuppressWarnings(PHPMD.Superglobals)
      */
-    public static function clean($path, $dirSep = DIRECTORY_SEPARATOR)
+    public static function clean($path, $dirSep = DIRECTORY_SEPARATOR): string
     {
         if (!is_string($path) || empty($path)) {
             return '';
@@ -438,7 +438,7 @@ class FS
         if (empty($path)) {
             $path = Vars::get($_SERVER['DOCUMENT_ROOT'], '');
 
-        } elseif (($dirSep == '\\') && ($path[0] == '\\') && ($path[1] == '\\')) {
+        } elseif (($dirSep === '\\') && ($path[0] === '\\') && ($path[1] === '\\')) {
             $path = "\\" . preg_replace('#[/\\\\]+#', $dirSep, $path);
 
         } else {
@@ -454,9 +454,9 @@ class FS
      * @param string $path
      * @return string
      */
-    public static function stripExt($path)
+    public static function stripExt($path): string
     {
-        $reg  = '/\.' . preg_quote(self::ext($path)) . '$/';
+        $reg = '/\.' . preg_quote(self::ext($path), null) . '$/';
         $path = preg_replace($reg, '', $path);
 
         return $path;
@@ -464,10 +464,11 @@ class FS
 
     /**
      * Check is current path directory
+     *
      * @param string $path
      * @return bool
      */
-    public static function isDir($path)
+    public static function isDir($path): bool
     {
         $path = self::clean($path);
         return is_dir($path);
@@ -475,10 +476,11 @@ class FS
 
     /**
      * Check is current path regular file
+     *
      * @param string $path
      * @return bool
      */
-    public static function isFile($path)
+    public static function isFile($path): bool
     {
         $path = self::clean($path);
         return file_exists($path) && is_file($path);
@@ -511,7 +513,7 @@ class FS
 
 
         // Remove root part
-        $relPath = preg_replace('#^' . preg_quote($rootPath) . '#i', '', $filePath);
+        $relPath = preg_replace('#^' . preg_quote($rootPath, null) . '#i', '', $filePath);
         $relPath = ltrim($relPath, $forceDS);
 
         return $relPath;
@@ -521,10 +523,10 @@ class FS
      * @param $path
      * @return bool
      */
-    public static function isReal($path)
+    public static function isReal($path): bool
     {
         $expected = self::clean(self::real($path));
-        $actual   = self::clean($path);
+        $actual = self::clean($path);
 
         return $expected === $actual;
     }

@@ -17,6 +17,7 @@ namespace JBZoo\Utils;
 
 /**
  * Class Http
+ *
  * @package JBZoo\Utils
  */
 class Http
@@ -30,7 +31,7 @@ class Http
      *
      * @codeCoverageIgnore
      */
-    public static function download($filename)
+    public static function download($filename): bool
     {
         if (!headers_sent()) {
             while (@ob_end_clean()) {
@@ -42,7 +43,7 @@ class Http
                 Sys::iniSet('zlib.output_compression', 'Off');
             }
 
-            Sys::setTime(0);
+            Sys::setTime();
 
             // Set headers
             header('Pragma: public');
@@ -79,7 +80,7 @@ class Http
      *
      * @codeCoverageIgnore
      */
-    public static function nocache()
+    public static function nocache(): bool
     {
         if (!headers_sent()) {
             header('Expires: Wed, 11 Jan 1984 05:00:00 GMT');
@@ -96,15 +97,15 @@ class Http
     /**
      * Transmit UTF-8 content headers if the headers haven't already been sent.
      *
-     * @param  string $content_type The content type to send out
+     * @param  string $contentType The content type to send out
      * @return boolean
      *
      * @codeCoverageIgnore
      */
-    public static function utf8($content_type = 'text/html')
+    public static function utf8($contentType = 'text/html'): bool
     {
         if (!headers_sent()) {
-            header('Content-type: ' . $content_type . '; charset=utf-8');
+            header('Content-type: ' . $contentType . '; charset=utf-8');
 
             return true;
         }
@@ -114,6 +115,7 @@ class Http
 
     /**
      * Get all HTTP headers
+     *
      * @see https://github.com/symfony/http-foundation/blob/master/ServerBag.php
      *
      * @return array
@@ -121,11 +123,11 @@ class Http
      * @SuppressWarnings(PHPMD.Superglobals)
      * @SuppressWarnings(PHPMD.NPathComplexity)
      */
-    public static function getHeaders()
+    public static function getHeaders(): array
     {
-        $headers = array();
+        $headers = [];
 
-        $contentHeaders = array('CONTENT_LENGTH' => true, 'CONTENT_MD5' => true, 'CONTENT_TYPE' => true);
+        $contentHeaders = ['CONTENT_LENGTH' => true, 'CONTENT_MD5' => true, 'CONTENT_TYPE' => true];
 
         foreach ($_SERVER as $key => $value) {
             if (0 === strpos($key, 'HTTP_')) {
@@ -137,7 +139,7 @@ class Http
 
         if (isset($_SERVER['PHP_AUTH_USER'])) {
             $headers['PHP_AUTH_USER'] = $_SERVER['PHP_AUTH_USER'];
-            $headers['PHP_AUTH_PW']   = isset($_SERVER['PHP_AUTH_PW']) ? $_SERVER['PHP_AUTH_PW'] : '';
+            $headers['PHP_AUTH_PW'] = isset($_SERVER['PHP_AUTH_PW']) ? $_SERVER['PHP_AUTH_PW'] : '';
 
         } else {
             /*
@@ -165,7 +167,7 @@ class Http
                 if (0 === stripos($authorizationHeader, 'basic ')) {
                     // Decode AUTHORIZATION header into PHP_AUTH_USER and PHP_AUTH_PW when authorization header is basic
                     $exploded = explode(':', base64_decode(substr($authorizationHeader, 6)), 2);
-                    if (count($exploded) == 2) {
+                    if (count($exploded) === 2) {
                         list($headers['PHP_AUTH_USER'], $headers['PHP_AUTH_PW']) = $exploded;
                     }
 

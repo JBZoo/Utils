@@ -17,12 +17,14 @@ namespace JBZoo\Utils;
 
 /**
  * Class Str
+ *
  * @package JBZoo\Utils
  */
 class Str
 {
     /**
      * Default charset is UTF-8
+     *
      * @var string
      */
     public static $encoding = 'UTF-8';
@@ -33,7 +35,7 @@ class Str
      * @param  string $string The string to strip
      * @return string
      */
-    public static function stripSpace($string)
+    public static function stripSpace($string): string
     {
         return preg_replace('/\s+/', '', $string);
     }
@@ -45,15 +47,15 @@ class Str
      * @param bool   $toAssoc
      * @return array
      */
-    public static function parseLines($text, $toAssoc = true)
+    public static function parseLines($text, $toAssoc = true): array
     {
         $text = htmlspecialchars_decode($text);
-        $text = self::clean($text, false, false);
+        $text = self::clean($text);
 
-        $text  = str_replace(array("\n", "\r", "\r\n", PHP_EOL), "\n", $text);
+        $text = str_replace(["\n", "\r", "\r\n", PHP_EOL], "\n", $text);
         $lines = explode("\n", $text);
 
-        $result = array();
+        $result = [];
         if (!empty($lines)) {
             foreach ($lines as $line) {
                 $line = trim($line);
@@ -83,16 +85,16 @@ class Str
      *
      * @param string $string
      * @param bool   $toLower
-     * @param bool   $addslashes
+     * @param bool   $addSlashes
      * @return string
      */
-    public static function clean($string, $toLower = false, $addslashes = false)
+    public static function clean($string, $toLower = false, $addSlashes = false): string
     {
         $string = Slug::removeAccents($string);
         $string = strip_tags($string);
         $string = trim($string);
 
-        if ($addslashes) {
+        if ($addSlashes) {
             $string = addslashes($string);
         }
 
@@ -110,7 +112,7 @@ class Str
      * @param bool   $encodedEntities
      * @return string
      */
-    public static function htmlEnt($string, $encodedEntities = false)
+    public static function htmlEnt($string, $encodedEntities = false): string
     {
         if ($encodedEntities) {
             // @codeCoverageIgnoreStart
@@ -124,7 +126,7 @@ class Str
 
             $transTable[chr(38)] = '&';
 
-            $regExp = '/&(?![A-Za-z]{0,4}\w{2,3};|#[0-9]{2,3};)/';
+            $regExp = '/&(?![A-Za-z]{0,4}\w{2,3};|#[\d]{2,3};)/';
 
             return preg_replace($regExp, '&amp;', strtr($string, $transTable));
         }
@@ -141,7 +143,7 @@ class Str
     public static function unique($prefix = 'unique')
     {
         $prefix = rtrim(trim($prefix), '-');
-        $random = mt_rand(10000000, 99999999);
+        $random = random_int(10000000, 99999999);
 
         $result = $random;
         if ($prefix) {
@@ -158,27 +160,53 @@ class Str
      * @param bool $isReadable
      * @return string
      */
-    public static function random($length = 10, $isReadable = true)
+    public static function random($length = 10, $isReadable = true): string
     {
         $result = '';
 
         if ($isReadable) {
-            $vocal = array('a', 'e', 'i', 'o', 'u', '0');
-            $conso = array('b', 'c', 'd', 'f', 'g',
-                'h', 'j', 'k', 'l', 'm', 'n', 'p',
-                'r', 's', 't', 'v', 'w', 'x', 'y', 'z',
-                '1', '2', '3', '4', '5', '6', '7', '8', '9',
-            );
+            $vocal = ['a', 'e', 'i', 'o', 'u', '0'];
+            $conso = [
+                'b',
+                'c',
+                'd',
+                'f',
+                'g',
+                'h',
+                'j',
+                'k',
+                'l',
+                'm',
+                'n',
+                'p',
+                'r',
+                's',
+                't',
+                'v',
+                'w',
+                'x',
+                'y',
+                'z',
+                '1',
+                '2',
+                '3',
+                '4',
+                '5',
+                '6',
+                '7',
+                '8',
+                '9',
+            ];
 
             $max = $length / 2;
 
             for ($pos = 1; $pos <= $max; $pos++) {
-                $result .= $conso[mt_rand(0, count($conso) - 1)];
-                $result .= $vocal[mt_rand(0, count($vocal) - 1)];
+                $result .= $conso[random_int(0, count($conso) - 1)];
+                $result .= $vocal[random_int(0, count($vocal) - 1)];
             }
 
         } else {
-            $chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+            $chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
 
             for ($pos = 0; $pos < $length; $pos++) {
                 $result .= $chars[mt_rand() % strlen($chars)];
@@ -195,7 +223,7 @@ class Str
      * @param  int $length The total length of the desired string
      * @return string
      */
-    public static function zeroPad($number, $length)
+    public static function zeroPad($number, $length): string
     {
         return str_pad($number, $length, '0', STR_PAD_LEFT);
     }
@@ -208,16 +236,16 @@ class Str
      * @param   string  $append Text to append to the string IF it gets truncated, defaults to '...'
      * @return  string
      */
-    public static function truncateSafe($string, $length, $append = '...')
+    public static function truncateSafe($string, $length, $append = '...'): string
     {
-        $result    = self::sub($string, 0, $length);
+        $result = self::sub($string, 0, $length);
         $lastSpace = self::rpos($result, ' ');
 
-        if ($lastSpace !== false && $string != $result) {
+        if ($lastSpace !== false && $string !== $result) {
             $result = self::sub($result, 0, $lastSpace);
         }
 
-        if ($result != $string) {
+        if ($result !== $string) {
             $result .= $append;
         }
 
@@ -232,7 +260,7 @@ class Str
      * @param string  $append Text to append to the string IF it gets truncated, defaults to '...'
      * @return string
      */
-    public static function limitChars($string, $limit = 100, $append = '...')
+    public static function limitChars($string, $limit = 100, $append = '...'): string
     {
         if (self::len($string) <= $limit) {
             return $string;
@@ -249,7 +277,7 @@ class Str
      * @param string $append
      * @return string
      */
-    public static function limitWords($string, $limit = 100, $append = '...')
+    public static function limitWords($string, $limit = 100, $append = '...'): string
     {
         preg_match('/^\s*+(?:\S++\s*+){1,' . $limit . '}/u', $string, $matches);
 
@@ -268,9 +296,9 @@ class Str
      * @param  bool   $caseSensitive
      * @return bool
      */
-    public static function like($pattern, $string, $caseSensitive = true)
+    public static function like($pattern, $string, $caseSensitive = true): bool
     {
-        if ($pattern == $string) {
+        if ($pattern === $string) {
             return true;
         }
 
@@ -280,7 +308,7 @@ class Str
         // Escape any regex special characters
         $pattern = preg_quote($pattern, '#');
 
-        // Unescape * which is our wildcard character and change it to .*
+        // Unescaped * which is our wildcard character and change it to .*
         $pattern = str_replace('\*', '.*', $pattern);
 
         return (bool)preg_match('#^' . $pattern . '$#' . $flags, $string);
@@ -293,14 +321,15 @@ class Str
      * @param bool   $isCache
      * @return string
      */
-    public static function slug($text = '', $isCache = false)
+    public static function slug($text = '', $isCache = false): string
     {
-        static $cache = array();
+        static $cache = [];
 
         if (!$isCache) {
             return Slug::filter($text);
+        }
 
-        } elseif (!array_key_exists($text, $cache)) { // Not Arr::key() for performance
+        if (!array_key_exists($text, $cache)) { // Not Arr::key() for performance
             $cache[$text] = Slug::filter($text);
         }
 
@@ -312,7 +341,7 @@ class Str
      *
      * @return int
      */
-    public static function isOverload()
+    public static function isOverload(): int
     {
         if (self::isMBString()) {
             return (int)Sys::iniGet('mbstring.func_overload') & MB_OVERLOAD_STRING;
@@ -328,7 +357,7 @@ class Str
      *
      * @return bool
      */
-    public static function isMBString()
+    public static function isMBString(): bool
     {
         static $isLoaded;
 
@@ -349,16 +378,13 @@ class Str
      * @param $string
      * @return int
      */
-    public static function len($string)
+    public static function len($string): ?int
     {
         if (self::isMBString()) {
             return mb_strlen($string, self::$encoding);
-
-        } else {
-            // @codeCoverageIgnoreStart
-            return strlen($string);
-            // @codeCoverageIgnoreEnd
         }
+
+        return strlen($string); // @codeCoverageIgnore
     }
 
     /**
@@ -369,16 +395,13 @@ class Str
      * @param int    $offset
      * @return int
      */
-    public static function pos($haystack, $needle, $offset = 0)
+    public static function pos($haystack, $needle, $offset = 0): int
     {
         if (self::isMBString()) {
             return mb_strpos($haystack, $needle, $offset, self::$encoding);
-
-        } else {
-            // @codeCoverageIgnoreStart
-            return strpos($haystack, $needle, $offset);
-            // @codeCoverageIgnoreEnd
         }
+
+        return strpos($haystack, $needle, $offset); // @codeCoverageIgnore
     }
 
     /**
@@ -389,16 +412,13 @@ class Str
      * @param int    $offset
      * @return int
      */
-    public static function rpos($haystack, $needle, $offset = 0)
+    public static function rpos($haystack, $needle, $offset = 0): ?int
     {
         if (self::isMBString()) {
             return mb_strrpos($haystack, $needle, $offset, self::$encoding);
-
-        } else {
-            // @codeCoverageIgnoreStart
-            return strrpos($haystack, $needle, $offset);
-            // @codeCoverageIgnoreEnd
         }
+
+        return strrpos($haystack, $needle, $offset); // @codeCoverageIgnore
     }
 
     /**
@@ -409,16 +429,13 @@ class Str
      * @param int    $offset
      * @return int
      */
-    public static function ipos($haystack, $needle, $offset = 0)
+    public static function ipos($haystack, $needle, $offset = 0): int
     {
         if (self::isMBString()) {
             return mb_stripos($haystack, $needle, $offset, self::$encoding);
-
-        } else {
-            // @codeCoverageIgnoreStart
-            return stripos($haystack, $needle, $offset);
-            // @codeCoverageIgnoreEnd
         }
+
+        return stripos($haystack, $needle, $offset); // @codeCoverageIgnore
     }
 
     /**
@@ -429,16 +446,13 @@ class Str
      * @param bool   $beforeNeedle
      * @return string
      */
-    public static function strstr($haystack, $needle, $beforeNeedle = false)
+    public static function strstr($haystack, $needle, $beforeNeedle = false): ?string
     {
         if (self::isMBString()) {
             return mb_strstr($haystack, $needle, $beforeNeedle, self::$encoding);
-
-        } else {
-            // @codeCoverageIgnoreStart
-            return strstr($haystack, $needle, $beforeNeedle);
-            // @codeCoverageIgnoreEnd
         }
+
+        return strstr($haystack, $needle, $beforeNeedle); // @codeCoverageIgnore
     }
 
     /**
@@ -449,16 +463,13 @@ class Str
      * @param bool   $beforeNeedle
      * @return string
      */
-    public static function istr($haystack, $needle, $beforeNeedle = false)
+    public static function istr($haystack, $needle, $beforeNeedle = false): ?string
     {
         if (self::isMBString()) {
             return mb_stristr($haystack, $needle, $beforeNeedle, self::$encoding);
-
-        } else {
-            // @codeCoverageIgnoreStart
-            return stristr($haystack, $needle, $beforeNeedle);
-            // @codeCoverageIgnoreEnd
         }
+
+        return stristr($haystack, $needle, $beforeNeedle); // @codeCoverageIgnore
     }
 
     /**
@@ -469,16 +480,13 @@ class Str
      * @param bool   $part
      * @return string
      */
-    public static function rchr($haystack, $needle, $part = null)
+    public static function rchr($haystack, $needle, $part = null): string
     {
         if (self::isMBString()) {
             return mb_strrchr($haystack, $needle, $part, self::$encoding);
-
-        } else {
-            // @codeCoverageIgnoreStart
-            return strrchr($haystack, $needle);
-            // @codeCoverageIgnoreEnd
         }
+
+        return strrchr($haystack, $needle); // @codeCoverageIgnore
     }
 
     /**
@@ -489,20 +497,17 @@ class Str
      * @param int    $length
      * @return string
      */
-    public static function sub($string, $start, $length = 0)
+    public static function sub($string, $start, $length = 0): ?string
     {
         if (self::isMBString()) {
-            if (0 == $length) {
+            if (0 === $length) {
                 $length = self::len($string);
             }
 
             return mb_substr($string, $start, $length, self::$encoding);
-
-        } else {
-            // @codeCoverageIgnoreStart
-            return substr($string, $start, $length);
-            // @codeCoverageIgnoreEnd
         }
+
+        return substr($string, $start, $length); // @codeCoverageIgnore
     }
 
     /**
@@ -511,16 +516,13 @@ class Str
      * @param string $string
      * @return string
      */
-    public static function low($string)
+    public static function low($string): string
     {
         if (self::isMBString()) {
             return mb_strtolower($string, self::$encoding);
-
-        } else {
-            // @codeCoverageIgnoreStart
-            return strtolower($string);
-            // @codeCoverageIgnoreEnd
         }
+
+        return strtolower($string); // @codeCoverageIgnore
     }
 
     /**
@@ -531,16 +533,13 @@ class Str
      *
      * @SuppressWarnings(PHPMD.ShortMethodName)
      */
-    public static function up($string)
+    public static function up($string): string
     {
         if (self::isMBString()) {
             return mb_strtoupper($string, self::$encoding);
-
-        } else {
-            // @codeCoverageIgnoreStart
-            return strtoupper($string);
-            // @codeCoverageIgnoreEnd
         }
+
+        return strtoupper($string); // @codeCoverageIgnore
     }
 
     /**
@@ -550,16 +549,13 @@ class Str
      * @param string $needle
      * @return int
      */
-    public static function subCount($haystack, $needle)
+    public static function subCount($haystack, $needle): int
     {
         if (self::isMBString()) {
             return mb_substr_count($haystack, $needle, self::$encoding);
-
-        } else {
-            // @codeCoverageIgnoreStart
-            return substr_count($haystack, $needle);
-            // @codeCoverageIgnoreEnd
         }
+
+        return substr_count($haystack, $needle); // @codeCoverageIgnore
     }
 
     /**
@@ -570,13 +566,13 @@ class Str
      * @param bool   $caseSensitive
      * @return bool
      */
-    public static function isStart($haystack, $needle, $caseSensitive = false)
+    public static function isStart($haystack, $needle, $caseSensitive = false): bool
     {
         if ($caseSensitive) {
             return $needle === '' || self::pos($haystack, $needle) === 0;
-        } else {
-            return $needle === '' || self::ipos($haystack, $needle) === 0;
         }
+
+        return $needle === '' || self::ipos($haystack, $needle) === 0;
     }
 
     /**
@@ -587,17 +583,16 @@ class Str
      * @param bool   $caseSensitive
      * @return bool
      */
-    public static function isEnd($haystack, $needle, $caseSensitive = false)
+    public static function isEnd($haystack, $needle, $caseSensitive = false): bool
     {
         if ($caseSensitive) {
             return $needle === '' || self::sub($haystack, -self::len($needle)) === $needle;
-
-        } else {
-            $haystack = self::low($haystack);
-            $needle   = self::low($needle);
-
-            return $needle === '' || self::sub($haystack, -self::len($needle)) === $needle;
         }
+
+        $haystack = self::low($haystack);
+        $needle = self::low($needle);
+
+        return $needle === '' || self::sub($haystack, -self::len($needle)) === $needle;
     }
 
     /**
@@ -607,7 +602,7 @@ class Str
      * @param bool   $extendMode
      * @return string
      */
-    public static function trim($value, $extendMode = false)
+    public static function trim($value, $extendMode = false): string
     {
         $result = (string)trim($value);
 
@@ -631,8 +626,8 @@ class Str
         $string = preg_replace('/[^\x{0009}\x{000a}\x{000d}\x{0020}-\x{D7FF}\x{E000}-\x{FFFD}]+/u', ' ', $string);
 
         $string = str_replace(
-            array("&", "<", ">", '"', "'"),
-            array("&amp;", "&lt;", "&gt;", "&quot;", "&apos;"),
+            ['&', '<', '>', '"', "'"],
+            ['&amp;', '&lt;', '&gt;', '&quot;', '&apos;'],
             $string
         );
 
@@ -645,7 +640,7 @@ class Str
      * @param string $string
      * @return string
      */
-    public static function esc($string)
+    public static function esc($string): string
     {
         return htmlspecialchars($string, ENT_NOQUOTES, self::$encoding);
     }
@@ -655,14 +650,14 @@ class Str
      *
      * @param string $input
      * @param string $separator
-     * @param bool   $toLower*
+     * @param bool   $toLower *
      * @return string
      */
-    public static function splitCamelCase($input, $separator = '_', $toLower = true)
+    public static function splitCamelCase($input, $separator = '_', $toLower = true): string
     {
         $original = $input;
 
-        $output = preg_replace(array('/(?<=[^A-Z])([A-Z])/', '/(?<=[^0-9])([0-9])/'), '_$0', $input);
+        $output = preg_replace(['/(?<=[^A-Z])([A-Z])/', '/(?<=[^0-9])([0-9])/'], '_$0', $input);
         $output = preg_replace('#_{1,}#', $separator, $output);
 
         $output = trim($output);
@@ -670,7 +665,7 @@ class Str
             $output = strtolower($output);
         }
 
-        if (strlen($output) == 0) {
+        if ('' === $output) {
             return $original;
         }
 
@@ -686,14 +681,14 @@ class Str
     public static function testName2Human($input)
     {
         $original = $input;
-        $input    = self::getClassName($input, false);
+        $input = self::getClassName($input, false);
 
-        if (!preg_match('#^tests#i', $input)) {
+        if (!0 === stripos($input, 'tests')) {
             $input = preg_replace('#^(test)#i', '', $input);
         }
 
-        $input  = preg_replace('#(test)$#i', '', $input);
-        $output = preg_replace(array('/(?<=[^A-Z])([A-Z])/', '/(?<=[^0-9])([0-9])/'), ' $0', $input);
+        $input = preg_replace('#(test)$#i', '', $input);
+        $output = preg_replace(['/(?<=[^A-Z])([A-Z])/', '/(?<=[^0-9])([0-9])/'], ' $0', $input);
         $output = trim(str_replace('_', ' ', $output));
 
         $output = implode(' ', array_filter(array_map(function ($item) {
@@ -708,7 +703,7 @@ class Str
             return $original;
         }
 
-        if (strlen($output) == 0) {
+        if ('' === $output) {
             return $original;
         }
 
@@ -726,26 +721,26 @@ class Str
      *
      * @return string
      */
-    public static function uuid()
+    public static function uuid(): string
     {
         return sprintf(
             '%04x%04x-%04x-%04x-%04x-%04x%04x%04x',
             // 32 bits for "time_low"
-            mt_rand(0, 0xffff),
-            mt_rand(0, 0xffff),
+            random_int(0, 0xffff),
+            random_int(0, 0xffff),
             // 16 bits for "time_mid"
-            mt_rand(0, 0xffff),
+            random_int(0, 0xffff),
             // 16 bits for "time_hi_and_version",
             // four most significant bits holds version number 4
-            mt_rand(0, 0x0fff) | 0x4000,
+            random_int(0, 0x0fff) | 0x4000,
             // 16 bits, 8 bits for "clk_seq_hi_res",
             // 8 bits for "clk_seq_low",
             // two most significant bits holds zero and one for variant DCE1.1
-            mt_rand(0, 0x3fff) | 0x8000,
+            random_int(0, 0x3fff) | 0x8000,
             // 48 bits for "node"
-            mt_rand(0, 0xffff),
-            mt_rand(0, 0xffff),
-            mt_rand(0, 0xffff)
+            random_int(0, 0xffff),
+            random_int(0, 0xffff),
+            random_int(0, 0xffff)
         );
     }
 
@@ -789,23 +784,24 @@ class Str
      * @param   integer $next   If supplied, this number is used for the copy, otherwise it is the 'next' number.
      * @return  string
      */
-    public static function inc($string, $style = 'default', $next = 0)
+    public static function inc($string, $style = 'default', $next = 0): string
     {
-        $styles = array(
-            'dash'    => array(
-                '#-(\d+)$#', '-%d'
-            ),
-            'default' => array(
-                array('#\((\d+)\)$#', '#\(\d+\)$#'),
-                array(' (%d)', '(%d)'),
-            ),
-        );
+        $styles = [
+            'dash'    => [
+                '#-(\d+)$#',
+                '-%d',
+            ],
+            'default' => [
+                ['#\((\d+)\)$#', '#\(\d+\)$#'],
+                [' (%d)', '(%d)'],
+            ],
+        ];
 
-        $styleSpec = isset($styles[$style]) ? $styles[$style] : $styles['default'];
+        $styleSpec = $styles[$style] ?? $styles['default'];
 
         // Regular expression search and replace patterns.
         if (is_array($styleSpec[0])) {
-            $rxSearch  = $styleSpec[0][0];
+            $rxSearch = $styleSpec[0][0];
             $rxReplace = $styleSpec[0][1];
         } else {
             $rxSearch = $rxReplace = $styleSpec[0];
@@ -821,7 +817,7 @@ class Str
 
         // Check if we are incrementing an existing pattern, or appending a new one.
         if (preg_match($rxSearch, $string, $matches)) {
-            $next   = empty($next) ? ($matches[1] + 1) : $next;
+            $next = empty($next) ? ($matches[1] + 1) : $next;
             $string = preg_replace($rxReplace, sprintf($oldFormat, $next), $string);
         } else {
             $next = empty($next) ? 2 : $next;
@@ -842,39 +838,39 @@ class Str
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
      */
-    public static function splitSql($sql)
+    public static function splitSql($sql): array
     {
-        $start     = 0;
-        $open      = false;
-        $comment   = false;
+        $start = 0;
+        $open = false;
+        $comment = false;
         $endString = '';
-        $end       = strlen($sql);
-        $queries   = array();
-        $query     = '';
+        $end = strlen($sql);
+        $queries = [];
+        $query = '';
 
         for ($i = 0; $i < $end; $i++) {
-            $current      = substr($sql, $i, 1);
-            $current2     = substr($sql, $i, 2);
-            $current3     = substr($sql, $i, 3);
+            $current = $sql[$i];
+            $current2 = substr($sql, $i, 2);
+            $current3 = substr($sql, $i, 3);
             $lenEndString = strlen($endString);
-            $testEnd      = substr($sql, $i, $lenEndString);
+            $testEnd = substr($sql, $i, $lenEndString);
 
-            if ($current == '"' || $current == "'" || $current2 == '--'
-                || ($current2 == '/*' && $current3 != '/*!' && $current3 != '/*+')
-                || ($current == '#' && $current3 != '#__')
-                || ($comment && $testEnd == $endString)
+            if ($current === '"' || $current === "'" || $current2 === '--'
+                || ($current2 === '/*' && $current3 !== '/*!' && $current3 !== '/*+')
+                || ($current === '#' && $current3 !== '#__')
+                || ($comment && $testEnd === $endString)
             ) {
                 // Check if quoted with previous backslash
                 $num = 2;
 
-                while (substr($sql, $i - $num + 1, 1) == '\\' && $num < $i) {
+                while ($sql[$i - $num + 1] === '\\' && $num < $i) {
                     $num++;
                 }
 
                 // Not quoted
-                if ($num % 2 == 0) {
+                if ($num % 2 === 0) {
                     if ($open) {
-                        if ($testEnd == $endString) {
+                        if ($testEnd === $endString) {
                             if ($comment) {
                                 $comment = false;
                                 if ($lenEndString > 1) {
@@ -883,25 +879,25 @@ class Str
                                 }
                                 $start = $i + 1;
                             }
-                            $open      = false;
+                            $open = false;
                             $endString = '';
                         }
                     } else {
                         $open = true;
-                        if ($current2 == '--') {
+                        if ('--' === $current2) {
                             $endString = "\n";
-                            $comment   = true;
-                        } elseif ($current2 == '/*') {
+                            $comment = true;
+                        } elseif ('/*' === $current2) {
                             $endString = '*/';
-                            $comment   = true;
-                        } elseif ($current == '#') {
+                            $comment = true;
+                        } elseif ('#' === $current) {
                             $endString = "\n";
-                            $comment   = true;
+                            $comment = true;
                         } else {
                             $endString = $current;
                         }
                         if ($comment && $start < $i) {
-                            $query = $query . substr($sql, $start, ($i - $start));
+                            $query .= substr($sql, $start, $i - $start);
                         }
                     }
                 }
@@ -911,15 +907,15 @@ class Str
                 $start = $i + 1;
             }
 
-            if (($current == ';' && !$open) || $i == $end - 1) {
+            if (($current === ';' && !$open) || $i === $end - 1) {
                 if ($start <= $i) {
-                    $query = $query . substr($sql, $start, ($i - $start + 1));
+                    $query .= substr($sql, $start, $i - $start + 1);
                 }
                 $query = trim($query);
 
                 if ($query) {
-                    if (($i == $end - 1) && ($current != ';')) {
-                        $query = $query . ';';
+                    if (($i === $end - 1) && ($current !== ';')) {
+                        $query .= ';';
                     }
                     $queries[] = $query;
                 }

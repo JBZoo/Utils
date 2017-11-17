@@ -17,6 +17,7 @@ namespace JBZoo\Utils;
 
 /**
  * Class Serialize
+ *
  * @package JBZoo\Utils
  */
 class Ser
@@ -30,7 +31,7 @@ class Ser
      *
      * @SuppressWarnings(PHPMD.ShortMethodName)
      */
-    public static function is($data)
+    public static function is($data): bool
     {
         // If it isn't a string, it isn't serialized
         if (!is_string($data)) {
@@ -42,15 +43,16 @@ class Ser
         // Is it the serialized NULL value?
         if ($data === 'N;') {
             return true;
+        }
 
-        } elseif ($data === 'b:0;' || $data === 'b:1;') { // Is it a serialized boolean?
+        if ($data === 'b:0;' || $data === 'b:1;') { // Is it a serialized boolean?
             return true;
         }
 
         $length = strlen($data);
 
         // Check some basic requirements of all serialized strings
-        if (self::_checkBasic($data, $length)) {
+        if (self::checkBasic($data, $length)) {
             return false;
         }
 
@@ -95,7 +97,7 @@ class Ser
         $length = strlen($data);
 
         // Check some basic requirements of all serialized strings
-        if (self::_checkBasic($data, $length)) {
+        if (self::checkBasic($data, $length)) {
             return $data;
         }
 
@@ -113,14 +115,11 @@ class Ser
 
             if ($uns === false) {
                 return $data;
-
-            } else {
-                return $uns;
             }
-
-        } else {
             return $uns;
         }
+
+        return $uns;
     }
 
     /**
@@ -133,14 +132,14 @@ class Ser
      * @param  string $brokenSerializedData
      * @return string
      */
-    public static function fix($brokenSerializedData)
+    public static function fix($brokenSerializedData): string
     {
-        $fixdSerializedData = preg_replace_callback('!s:(\d+):"(.*?)";!', function ($matches) {
+        $fixedSerializedData = preg_replace_callback('!s:(\d+):"(.*?)";!', function ($matches) {
             $snip = $matches[2];
             return 's:' . strlen($snip) . ':"' . $snip . '";';
         }, $brokenSerializedData);
 
-        return $fixdSerializedData;
+        return $fixedSerializedData;
     }
 
     /**
@@ -150,7 +149,7 @@ class Ser
      * @param int    $length
      * @return bool
      */
-    protected static function _checkBasic($data, $length)
+    protected static function checkBasic($data, $length): bool
     {
         return $length < 4 || $data[1] !== ':' || ($data[$length - 1] !== ';' && $data[$length - 1] !== '}');
     }

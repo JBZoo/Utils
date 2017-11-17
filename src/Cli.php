@@ -21,6 +21,7 @@ use Symfony\Component\Process\Process;
 
 /**
  * Class Cli
+ *
  * @package JBZoo\Utils
  */
 class Cli
@@ -34,7 +35,7 @@ class Cli
      *
      * @return bool
      */
-    public static function check()
+    public static function check(): bool
     {
         return PHP_SAPI === 'cli' || defined('STDOUT');
     }
@@ -46,7 +47,7 @@ class Cli
      * @param bool   $addEol
      * @codeCoverageIgnore
      */
-    public static function out($message, $addEol = true)
+    public static function out($message, $addEol = true): void
     {
         if ($addEol) {
             $message .= PHP_EOL;
@@ -66,7 +67,7 @@ class Cli
      * @param bool   $addEol
      * @codeCoverageIgnore
      */
-    public static function err($message, $addEol = true)
+    public static function err($message, $addEol = true): void
     {
         if ($addEol) {
             $message .= PHP_EOL;
@@ -87,17 +88,18 @@ class Cli
      * @param null   $cwd
      * @param bool   $verbose
      * @return string
+     * @throws \Symfony\Component\Process\Exception\LogicException
      * @throws ProcessFailedException
      * @throws \Exception
      */
-    public static function exec($command, $args = array(), $cwd = null, $verbose = false)
+    public static function exec($command, array $args = [], $cwd = null, $verbose = false): string
     {
-        if (!class_exists('\Symfony\Component\Process\Process')) {
-            throw new \Exception("Symfony/Process package required for Cli::exec() method"); // @codeCoverageIgnore
+        if (!class_exists(Process::class)) {
+            throw new \Exception('Symfony/Process package required for Cli::exec() method'); // @codeCoverageIgnore
         }
 
         $cmd = self::build($command, $args);
-        $cwd = $cwd ? $cwd = realpath($cwd) : null;
+        $cwd = $cwd ? realpath($cwd) : null;
 
         //@codeCoverageIgnoreStart
         if ($verbose) {
@@ -132,22 +134,18 @@ class Cli
      * @param array  $args
      * @return string
      */
-    public static function build($command, $args = array())
+    public static function build($command, $args = [])
     {
-        $stringArgs  = array();
+        $stringArgs = [];
         $realCommand = $command;
 
         if (count($args) > 0) {
             foreach ($args as $key => $value) {
                 $value = trim($value);
-                $key   = trim($key);
+                $key = trim($key);
 
                 if (strpos($key, '-') !== 0) {
-                    if (strlen($key) == 1) {
-                        $key = '-' . $key;
-                    } else {
-                        $key = '--' . $key;
-                    }
+                    $key = strlen($key) === 1 ? '-' . $key : '--' . $key;
                 }
 
                 if (strlen($value) > 0) {
@@ -176,7 +174,7 @@ class Cli
      */
     public static function hasColorSupport()
     {
-        if (DIRECTORY_SEPARATOR == '\\') {
+        if (DIRECTORY_SEPARATOR === '\\') {
             $winColor = Env::get('ANSICON', Env::VAR_BOOL)
                 || 'ON' === Env::get('ConEmuANSI')
                 || 'xterm' === Env::get('TERM');
@@ -197,9 +195,9 @@ class Cli
      * @return int
      * @codeCoverageIgnore
      */
-    public static function getNumberOfColumns()
+    public static function getNumberOfColumns(): int
     {
-        if (DIRECTORY_SEPARATOR == '\\') {
+        if (DIRECTORY_SEPARATOR === '\\') {
             $columns = 80;
 
             if (preg_match('/^(\d+)x\d+ \(\d+x(\d+)\)$/', trim(getenv('ANSICON')), $matches)) {
@@ -208,14 +206,14 @@ class Cli
             } elseif (function_exists('proc_open')) {
                 $process = proc_open(
                     'mode CON',
-                    array(
-                        1 => array('pipe', 'w'),
-                        2 => array('pipe', 'w'),
-                    ),
+                    [
+                        1 => ['pipe', 'w'],
+                        2 => ['pipe', 'w'],
+                    ],
                     $pipes,
                     null,
                     null,
-                    array('suppress_errors' => true)
+                    ['suppress_errors' => true]
                 );
 
                 if (is_resource($process)) {

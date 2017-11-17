@@ -19,63 +19,11 @@ use JBZoo\Utils\Vars;
 
 /**
  * Class VarsTest
+ *
  * @package JBZoo\PHPUnit
  */
 class VarsTest extends PHPUnit
 {
-    /**
-     * @deprecated
-     */
-    public function testCompatibility()
-    {
-        isSame(0, Vars::int(null));
-        isSame(0, Vars::int(0));
-        isSame(1, Vars::int(1));
-        isSame(1, Vars::int('1'));
-        isSame(1, Vars::int('01'));
-        isSame(-1, Vars::int('-01'));
-        isSame(-10, Vars::int(' - 1 0 '));
-
-        isSame(0.0, Vars::float(null));
-        isSame(0.0, Vars::float(0));
-        isSame(1.0, Vars::float(1));
-        isSame(1.0, Vars::float('1'));
-        isSame(1.0, Vars::float('01'));
-        isSame(-1.0, Vars::float('-01'));
-        isSame(-10.0, Vars::float(' - 1 0 '));
-        isSame(-1.5, Vars::float(' - 1,5 '));
-        isSame(-1.5, Vars::float(' - 1.5 '));
-        isSame(-1.512, Vars::float(' - 1.5123 ', 3));
-
-        isTrue(Vars::bool('true'));
-        isTrue(Vars::bool('yes'));
-        isTrue(Vars::bool('y'));
-        isTrue(Vars::bool('oui'));
-        isTrue(Vars::bool('vrai'));
-        isTrue(Vars::bool('ДА'));
-        isTrue(Vars::bool('Д'));
-
-        isFalse(Vars::bool('false'));
-        isFalse(Vars::bool('no'));
-        isFalse(Vars::bool('n'));
-        isFalse(Vars::bool('non'));
-        isFalse(Vars::bool('faux'));
-        isFalse(Vars::bool('НЕТ'));
-
-        isFalse(Vars::bool('test', false));
-
-        isTrue(Vars::email('john.smith@gmail.com'));
-        isTrue(Vars::email('john.smith+label@gmail.com'));
-        isTrue(Vars::email('john.smith@gmail.co.uk'));
-        isFalse(Vars::email('русская@почта.рф')); // madness...
-
-        $string = " 0 1 a2b 3c!@#$%^&*()-= <>\t";
-
-        is('0123', Vars::digits($string));
-        is('abc', Vars::alpha($string));
-        is('01a2b3c', Vars::alphaDigets($string));
-    }
-
     public function testIn()
     {
         isTrue(Vars::isIn(0.5, 0, 5));

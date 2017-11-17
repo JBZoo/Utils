@@ -20,6 +20,7 @@ use \DateTimeZone;
 
 /**
  * Class Dates
+ *
  * @package JBZoo\Utils
  */
 class Dates
@@ -41,26 +42,18 @@ class Dates
      * @param bool            $currentIsDefault
      * @return int
      */
-    public static function toStamp($time = null, $currentIsDefault = true)
+    public static function toStamp($time = null, $currentIsDefault = true): int
     {
         if ($time instanceof DateTime) {
             return $time->format('U');
         }
 
-        if (!empty($time)) {
-            if (is_numeric($time)) {
-                $time = (int)$time;
-            } else {
-                $time = strtotime($time);
-            }
+        if (null !== $time) {
+            $time = is_numeric($time) ? (int)$time : strtotime($time);
         }
 
         if (!$time) {
-            if ($currentIsDefault) {
-                $time = time();
-            } else {
-                $time = 0;
-            }
+            $time = $currentIsDefault ? time() : 0;
         }
 
         return $time;
@@ -71,7 +64,7 @@ class Dates
      * @param null  $timeZone
      * @return DateTime
      */
-    public static function factory($time = null, $timeZone = null)
+    public static function factory($time = null, $timeZone = null): \DateTime
     {
         $timeZone = self::timezone($timeZone);
 
@@ -91,7 +84,7 @@ class Dates
      * @param mixed $timezone
      * @return \DateTimeZone
      */
-    public static function timezone($timezone = null)
+    public static function timezone($timezone = null): \DateTimeZone
     {
         if ($timezone instanceof DateTimeZone) {
             return $timezone;
@@ -110,7 +103,7 @@ class Dates
      *
      * @SuppressWarnings(PHPMD.ShortMethodName)
      */
-    public static function is($date)
+    public static function is($date): bool
     {
         $time = strtotime($date);
         return $time > 0;
@@ -122,7 +115,7 @@ class Dates
      * @param null|int $time
      * @return string
      */
-    public static function sql($time = null)
+    public static function sql($time = null): string
     {
         return self::factory($time)->format(self::SQL_FORMAT);
     }
@@ -132,7 +125,7 @@ class Dates
      * @param string     $format
      * @return string
      */
-    public static function human($date, $format = 'd M Y H:i')
+    public static function human($date, $format = 'd M Y H:i'): string
     {
         return self::factory($date)->format($format);
     }
@@ -143,7 +136,7 @@ class Dates
      * @param string|int $time
      * @return bool
      */
-    public static function isThisWeek($time)
+    public static function isThisWeek($time): bool
     {
         return (self::factory($time)->format('W-Y') === self::factory()->format('W-Y'));
     }
@@ -154,7 +147,7 @@ class Dates
      * @param string|int $time
      * @return bool
      */
-    public static function isThisMonth($time)
+    public static function isThisMonth($time): bool
     {
         return (self::factory($time)->format('m-Y') === self::factory()->format('m-Y'));
     }
@@ -165,7 +158,7 @@ class Dates
      * @param string|int $time
      * @return bool
      */
-    public static function isThisYear($time)
+    public static function isThisYear($time): bool
     {
         return (self::factory($time)->format('Y') === self::factory()->format('Y'));
     }
@@ -176,7 +169,7 @@ class Dates
      * @param string|int $time
      * @return bool
      */
-    public static function isTomorrow($time)
+    public static function isTomorrow($time): bool
     {
         return (self::factory($time)->format('Y-m-d') === self::factory('tomorrow')->format('Y-m-d'));
     }
@@ -187,7 +180,7 @@ class Dates
      * @param string|int $time
      * @return bool
      */
-    public static function isToday($time)
+    public static function isToday($time): bool
     {
         return (self::factory($time)->format('Y-m-d') === self::factory()->format('Y-m-d'));
     }
@@ -198,7 +191,7 @@ class Dates
      * @param string|int $time
      * @return bool
      */
-    public static function isYesterday($time)
+    public static function isYesterday($time): bool
     {
         return (self::factory($time)->format('Y-m-d') === self::factory('yesterday')->format('Y-m-d'));
     }

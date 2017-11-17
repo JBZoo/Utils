@@ -17,11 +17,12 @@ namespace JBZoo\PHPUnit;
 
 /**
  * Class CodeStyleTest
+ *
  * @package JBZoo\PHPUnit
  */
 class CodestyleTest extends Codestyle
 {
-    protected $_packageName = 'Utils';
+    protected $_packageName   = 'Utils';
     protected $_packageAuthor = 'Denis Smetannikov <denis@jbzoo.com>';
 
     /**

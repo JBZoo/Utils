@@ -17,6 +17,7 @@ namespace JBZoo\Utils;
 
 /**
  * Class Arr
+ *
  * @package JBZoo\Utils
  */
 class Arr
@@ -28,7 +29,7 @@ class Arr
      * @param bool  $keepKeys
      * @return array
      */
-    public static function unique($array, $keepKeys = false)
+    public static function unique($array, $keepKeys = false): array
     {
         if ($keepKeys) {
             $array = array_unique($array);
@@ -141,16 +142,16 @@ class Arr
      * Flatten a multi-dimensional array into a one dimensional array.
      *
      * @param  array   $array         The array to flatten
-     * @param  boolean $preserve_keys Whether or not to preserve array keys. Keys from deeply nested arrays will
+     * @param  boolean $preserveKeys  Whether or not to preserve array keys. Keys from deeply nested arrays will
      *                                overwrite keys from shallowy nested arrays
      * @return array
      */
-    public static function flat(array $array, $preserve_keys = true)
+    public static function flat(array $array, $preserveKeys = true): array
     {
-        $flattened = array();
+        $flattened = [];
 
-        array_walk_recursive($array, function ($value, $key) use (&$flattened, $preserve_keys) {
-            if ($preserve_keys && !is_int($key)) {
+        array_walk_recursive($array, function ($value, $key) use (&$flattened, $preserveKeys) {
+            if ($preserveKeys && !is_int($key)) {
                 $flattened[$key] = $value;
             } else {
                 $flattened[] = $value;
@@ -181,24 +182,23 @@ class Arr
             if ($field) {
                 if (is_object($elem) && $elem->{$field} === $search) {
                     return $key;
+                }
 
-                } elseif (is_array($elem) && $elem[$field] === $search) {
-                    return $key;
-
-                } elseif (is_scalar($elem) && $elem === $search) {
+                if (is_array($elem) && $elem[$field] === $search) {
                     return $key;
                 }
 
+                if (is_scalar($elem) && $elem === $search) {
+                    return $key;
+                }
             } else {
                 if (is_object($elem)) {
                     $elem = (array)$elem;
-                    if (in_array($search, $elem)) {
+                    if (in_array($search, $elem, false)) {
                         return $key;
                     }
-
-                } elseif (is_array($elem) && in_array($search, $elem)) {
+                } elseif (is_array($elem) && in_array($search, $elem, false)) {
                     return $key;
-
                 } elseif (is_scalar($elem) && $elem === $search) {
                     return $key;
                 }
@@ -218,15 +218,14 @@ class Arr
      *                             (Objects, resources, etc)
      * @return array
      */
-    public static function mapDeep(array $array, $callback, $onNoScalar = false)
+    public static function mapDeep(array $array, $callback, $onNoScalar = false): array
     {
         foreach ($array as $key => $value) {
             if (is_array($value)) {
-                $args        = array($value, $callback, $onNoScalar);
-                $array[$key] = call_user_func_array(array(__CLASS__, __FUNCTION__), $args);
-
+                $args = [$value, $callback, $onNoScalar];
+                $array[$key] = call_user_func_array([__CLASS__, __FUNCTION__], $args);
             } elseif (is_scalar($value) || $onNoScalar) {
-                $array[$key] = call_user_func($callback, $value);
+                $array[$key] = $callback($value);
             }
         }
 
@@ -239,7 +238,7 @@ class Arr
      * @param array $haystack
      * @return array
      */
-    public static function clean($haystack)
+    public static function clean($haystack): array
     {
         return array_filter($haystack);
     }
@@ -250,14 +249,14 @@ class Arr
      * @param array $array
      * @return array
      */
-    public static function cleanBeforeJson(array $array)
+    public static function cleanBeforeJson(array $array): array
     {
         foreach ($array as $key => $value) {
             if (is_array($value)) {
                 $array[$key] = self::cleanBeforeJson($array[$key]);
             }
 
-            if ($array[$key] === '' || is_null($array[$key])) {
+            if ($array[$key] === '' || null === $array[$key]) {
                 unset($array[$key]);
             }
         }
@@ -271,7 +270,7 @@ class Arr
      * @param $array
      * @return bool
      */
-    public static function isAssoc($array)
+    public static function isAssoc($array): bool
     {
         return array_keys($array) !== range(0, count($array) - 1);
     }
@@ -284,11 +283,11 @@ class Arr
      * @param mixed  $value
      * @return array
      */
-    public static function unshiftAssoc(array &$array, $key, $value)
+    public static function unshiftAssoc(array &$array, $key, $value): array
     {
-        $array       = array_reverse($array, true);
+        $array = array_reverse($array, true);
         $array[$key] = $value;
-        $array       = array_reverse($array, true);
+        $array = array_reverse($array, true);
 
         return $array;
     }
@@ -300,15 +299,14 @@ class Arr
      * @param string $fieldName
      * @return array
      */
-    public static function getField($arrayList, $fieldName = 'id')
+    public static function getField($arrayList, $fieldName = 'id'): array
     {
-        $result = array();
+        $result = [];
 
         if (!empty($arrayList) && is_array($arrayList)) {
             foreach ($arrayList as $option) {
                 if (is_array($option)) {
                     $result[] = $option[$fieldName];
-
                 } elseif (is_object($option)) {
                     if (isset($option->{$fieldName})) {
                         $result[] = $option->{$fieldName};
@@ -327,18 +325,17 @@ class Arr
      * @param string $key
      * @return array
      */
-    public static function groupByKey(array $arrayList, $key = 'id')
+    public static function groupByKey(array $arrayList, $key = 'id'): array
     {
-        $result = array();
+        $result = [];
 
         foreach ($arrayList as $item) {
             if (is_object($item)) {
                 if (isset($item->{$key})) {
                     $result[$item->{$key}][] = $item;
                 }
-
             } elseif (is_array($item)) {
-                if (Arr::key($key, $item)) {
+                if (self::key($key, $item)) {
                     $result[$item[$key]][] = $item;
                 }
             }
@@ -354,15 +351,15 @@ class Arr
      * @param array    $array
      * @return array
      */
-    public static function map($function, $array)
+    public static function map($function, $array): array
     {
-        $result = array();
+        $result = [];
 
         foreach ($array as $key => $value) {
             if (is_array($value)) {
                 $result[$key] = self::map($function, $value);
             } else {
-                $result[$key] = call_user_func($function, $value);
+                $result[$key] = $function($value);
             }
         }
 
@@ -376,7 +373,7 @@ class Arr
      * @param array $orderArray
      * @return array
      */
-    public static function sortByArray(array $array, array $orderArray)
+    public static function sortByArray(array $array, array $orderArray): array
     {
         return array_merge(array_flip($orderArray), $array);
     }
@@ -388,9 +385,9 @@ class Arr
      * @param string $prefix
      * @return array
      */
-    public static function addEachKey(array $array, $prefix)
+    public static function addEachKey(array $array, $prefix): array
     {
-        $result = array();
+        $result = [];
 
         foreach ($array as $key => $item) {
             $result[$prefix . $key] = $item;
@@ -405,9 +402,9 @@ class Arr
      * @param array $data
      * @return string
      */
-    public static function toComment(array $data)
+    public static function toComment(array $data): string
     {
-        $result = array();
+        $result = [];
         foreach ($data as $key => $value) {
             $result[] = $key . ': ' . $value . ';';
         }
@@ -426,15 +423,17 @@ class Arr
      * @param mixed $object
      * @return array
      */
-    public static function wrap($object)
+    public static function wrap($object): array
     {
-        if (is_null($object)) {
-            return array();
-        } elseif (is_array($object) && !self::isAssoc($object)) {
+        if (null === $object) {
+            return [];
+        }
+
+        if (is_array($object) && !self::isAssoc($object)) {
             return $object;
         }
 
-        return array($object);
+        return [$object];
     }
 
     /**
@@ -442,7 +441,7 @@ class Arr
      * @param array  $array
      * @return string
      */
-    public static function implode($glue, array $array)
+    public static function implode($glue, array $array): string
     {
         $result = '';
 

@@ -19,6 +19,7 @@ use JBZoo\Utils\Slug;
 
 /**
  * Class SlugTest
+ *
  * @package JBZoo\PHPUnit
  */
 class SlugTest extends PHPUnit
@@ -35,7 +36,7 @@ class SlugTest extends PHPUnit
         is('OEoeAEDHTHssaedhth', Slug::removeAccents(chr(140) . chr(156) . chr(198) . chr(208) . chr(222)
             . chr(223) . chr(230) . chr(240) . chr(254)));
 
-        $input  = 'Benoit! à New-York? j’ai perçu 1 % : Qu’as-tu "gagné" chez M. V. Noël? Dix francs.';
+        $input = 'Benoit! à New-York? j’ai perçu 1 % : Qu’as-tu "gagné" chez M. V. Noël? Dix francs.';
         $expect = 'Benoit! a New-York? j’ai percu 1 % : Qu’as-tu "gagne" chez M. V. Noel? Dix francs.';
         is($expect, Slug::removeAccents($input));
     }

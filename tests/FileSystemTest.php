@@ -21,6 +21,7 @@ use JBZoo\Utils\Vars;
 
 /**
  * Class FileSystemTest
+ *
  * @package JBZoo\PHPUnit
  */
 class FileSystemTest extends PHPUnit
@@ -46,7 +47,7 @@ class FileSystemTest extends PHPUnit
         }
 
         // Test deleting a non-empty directory
-        $dir  = $dirname . '/test3';
+        $dir = $dirname . '/test3';
         $file = $dirname . '/test3/test.txt';
         mkdir($dir);
         touch($file);
@@ -74,8 +75,8 @@ class FileSystemTest extends PHPUnit
         unlink($file);
 
         // Test deleting a nested directory
-        $dir1  = $dirname . '/test5';
-        $dir2  = $dirname . '/test5/nested_dir';
+        $dir1 = $dirname . '/test5';
+        $dir2 = $dirname . '/test5/nested_dir';
         $file1 = $dir1 . '/file1.txt';
         $file2 = $dir2 . '/file2.txt';
         mkdir($dir1);
@@ -101,9 +102,9 @@ class FileSystemTest extends PHPUnit
             //skip('Windows does not correctly support symlinks :(');
 
         } else {
-            $dir       = $dirname . '/test6';
+            $dir = $dirname . '/test6';
             $nestedDir = "$dir/nested";
-            $symlink   = "$dir/nested-symlink";
+            $symlink = "$dir/nested-symlink";
             @mkdir($dir);
             @mkdir($nestedDir);
 
@@ -153,7 +154,7 @@ class FileSystemTest extends PHPUnit
 
         // Create a file to test with
         $dirname = dirname(__FILE__);
-        $file    = $dirname . '/test7';
+        $file = $dirname . '/test7';
         touch($file);
         chmod($file, 0644);
 
@@ -190,7 +191,7 @@ class FileSystemTest extends PHPUnit
         isFalse(FS::readable('/no/such/file'));
 
         $dirname = dirname(__FILE__);
-        $file    = $dirname . '/test8';
+        $file = $dirname . '/test8';
         touch($file);
 
         isTrue(is_readable($file));
@@ -220,7 +221,7 @@ class FileSystemTest extends PHPUnit
         isFalse(FS::executable('/no/such/file'));
 
         $dirname = dirname(__FILE__);
-        $file    = $dirname . '/test9';
+        $file = $dirname . '/test9';
         touch($file);
 
         isFalse(is_executable($file));
@@ -250,9 +251,9 @@ class FileSystemTest extends PHPUnit
         unset($_SERVER);
 
         // Test for Windows.
-        $expected             = 'X:\Users\ThisUser';
+        $expected = 'X:\Users\ThisUser';
         $_SERVER['HOMEDRIVE'] = 'X:';
-        $_SERVER['HOMEPATH']  = '\Users\ThisUser';
+        $_SERVER['HOMEPATH'] = '\Users\ThisUser';
         is($expected, Sys::getHome(), 'Could not get the user\'s home directory in Windows.');
 
         // In case the tests are not being run in isolation.
@@ -280,7 +281,7 @@ class FileSystemTest extends PHPUnit
         $file1 = $dir . DIRECTORY_SEPARATOR . 'file1';
         touch($file1);
 
-        is(array($file1), FS::ls($dir));
+        is([$file1], FS::ls($dir));
 
         FS::rmdir($dir);
     }
@@ -322,8 +323,10 @@ class FileSystemTest extends PHPUnit
         // URl
         isSame('txt', FS::ext('file.txt?some_var=123456'));
         isSame('txt', FS::ext('file.txt?some_var=123456?invalid=param'));
-        isSame('php', FS::ext('http://demo.jbzoo.com/sites/phones/smartfony.php?logic=and&exact=0&controller=search&option=com_zoo&task=filter&type=phone&app_id=1&Itemid=101'));
-        isSame('', FS::ext('http://demo.jbzoo.com/sites/phones/smartfony?logic=and&exact=0&controller=search&option=com_zoo&task=filter&type=phone&app_id=1&Itemid=101'));
+        isSame('php',
+            FS::ext('http://demo.jbzoo.com/sites/phones/smartfony.php?logic=and&exact=0&controller=search&option=com_zoo&task=filter&type=phone&app_id=1&Itemid=101'));
+        isSame('',
+            FS::ext('http://demo.jbzoo.com/sites/phones/smartfony?logic=and&exact=0&controller=search&option=com_zoo&task=filter&type=phone&app_id=1&Itemid=101'));
 
         // to lower
         isSame('png', FS::ext('image.PNG'));
@@ -371,7 +374,7 @@ class FileSystemTest extends PHPUnit
     public function testClean()
     {
         $dirSep = DIRECTORY_SEPARATOR;
-        $empty  = Vars::get($_SERVER['DOCUMENT_ROOT'], '');
+        $empty = Vars::get($_SERVER['DOCUMENT_ROOT'], '');
 
         isSame($empty, FS::clean(''));
         isSame($empty, FS::clean(false));
@@ -416,7 +419,7 @@ class FileSystemTest extends PHPUnit
     public function testIsReal()
     {
         isTrue(FS::isReal(__FILE__));
-        isFalse(FS::isReal(__DIR__.'/../'));
+        isFalse(FS::isReal(__DIR__ . '/../'));
     }
 
     public function testGetRelative()

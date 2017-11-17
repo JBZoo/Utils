@@ -21,6 +21,7 @@ use JBZoo\Utils\Dates;
 
 /**
  * Class DatesTest
+ *
  * @package JBZoo\PHPUnit
  */
 class DatesTest extends PHPUnit

@@ -17,6 +17,7 @@ namespace JBZoo\Utils;
 
 /**
  * Class Csv
+ *
  * @package JBZoo\Utils
  */
 class Csv
@@ -32,19 +33,19 @@ class Csv
      */
     public static function parse($csvFile, $delimiter = ';', $enclosure = '"', $hasHeader = true)
     {
-        $result = array();
+        $result = [];
 
-        $headerKeys = array();
+        $headerKeys = [];
         $rowCounter = 0;
 
-        if (($handle = fopen($csvFile, "r")) !== false) {
+        if (($handle = fopen($csvFile, 'rb')) !== false) {
             while (($row = fgetcsv($handle, self::LENGTH_LIMIT, $delimiter, $enclosure)) !== false) {
                 if ($rowCounter === 0 && $hasHeader) {
                     $headerKeys = $row;
 
                 } else {
                     if ($hasHeader) {
-                        $assocRow = array();
+                        $assocRow = [];
                         foreach ($headerKeys as $colIndex => $colName) {
                             $assocRow[$colName] = $row[$colIndex];
                         }

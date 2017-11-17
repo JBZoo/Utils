@@ -17,14 +17,18 @@ namespace JBZoo\Utils;
 
 /**
  * Class Email
+ *
  * @package JBZoo\Utils
  */
 class Email
 {
     /**
      * Create random email
+     *
+     * @param int $length
+     * @return string
      */
-    public static function random($length = 10)
+    public static function random($length = 10): string
     {
         return Str::random($length) . '@' . Str::random(5) . '.com';
     }
@@ -35,21 +39,21 @@ class Email
      * @param string|array $emails
      * @return array
      */
-    public static function check($emails)
+    public static function check($emails): array
     {
-        $result = array();
+        $result = [];
 
         if (empty($emails)) {
             return $result;
         }
 
-        $emails = self::_handleEmailsInput($emails);
+        $emails = self::handleEmailsInput($emails);
 
         foreach ($emails as $email) {
-            if (!self::_isValid($email)) {
+            if (!self::isValid($email)) {
                 continue;
             }
-            if (!in_array($email, $result)) {
+            if (!in_array($email, $result, true)) {
                 $result[] = $email;
             }
         }
@@ -67,15 +71,15 @@ class Email
      * @return bool
      * @codeCoverageIgnore
      */
-    public static function checkDns($email)
+    public static function checkDns($email): bool
     {
-        if (!self::_isValid($email)) {
+        if (!self::isValid($email)) {
             return false;
         }
 
-        $domain = self::_extractDomain($email);
+        $domain = self::extractDomain($email);
 
-        if (checkdnsrr($domain, "MX") === false) {
+        if (checkdnsrr($domain, 'MX') === false) {
             return false;
         }
 
@@ -89,22 +93,22 @@ class Email
      * @param string|array $emails
      * @return array
      */
-    public static function getDomain($emails)
+    public static function getDomain($emails): array
     {
-        $result = array();
+        $result = [];
 
         if (empty($emails)) {
             return $result;
         }
 
-        $emails = self::_handleEmailsInput($emails);
+        $emails = self::handleEmailsInput($emails);
 
         foreach ($emails as $email) {
-            if (!self::_isValid($email)) {
+            if (!self::isValid($email)) {
                 continue;
             }
 
-            $domain = self::_extractDomain($email);
+            $domain = self::extractDomain($email);
             if (!empty($domain) && !in_array($domain, $result)) {
                 $result[] = $domain;
             }
@@ -119,7 +123,7 @@ class Email
      * @param array $emails
      * @return array
      */
-    public static function getDomainSorted(array $emails)
+    public static function getDomainSorted(array $emails): array
     {
         $domains = self::getDomain($emails);
 
@@ -151,18 +155,18 @@ class Email
      * @return null|string
      * @link http://en.gravatar.com/site/implement/images/
      */
-    public static function getGravatarUrl($email, $size = 32, $defaultImage = 'identicon')
+    public static function getGravatarUrl($email, $size = 32, $defaultImage = 'identicon'): ?string
     {
 
-        if (empty($email) || self::_isValid($email) === false) {
+        if (empty($email) || self::isValid($email) === false) {
             return null;
         }
 
         $hash = md5(strtolower(trim($email)));
 
-        $parts = array('scheme' => 'http', 'host' => 'www.gravatar.com');
+        $parts = ['scheme' => 'http', 'host' => 'www.gravatar.com'];
         if (Url::isHttps()) {
-            $parts = array('scheme' => 'https', 'host' => 'secure.gravatar.com');
+            $parts = ['scheme' => 'https', 'host' => 'secure.gravatar.com'];
         }
 
         // Get size
@@ -175,17 +179,17 @@ class Email
 
         } else {
             $defaultImage = strtolower($defaultImage);
-            if (!(Arr::in((string)$defaultImage, self::getGravatarBuiltInImages()))) {
+            if (!Arr::in((string)$defaultImage, self::getGravatarBuiltInImages())) {
                 $defaultImage = self::getGravatarBuiltInDefaultImage();
             }
         }
 
         // Build full url
-        $parts['path']  = '/avatar/' . $hash . '/';
-        $parts['query'] = array(
+        $parts['path'] = '/avatar/' . $hash . '/';
+        $parts['query'] = [
             's' => $size,
             'd' => $defaultImage,
-        );
+        ];
 
         $url = Url::create($parts);
 
@@ -197,15 +201,15 @@ class Email
      */
     public static function getGravatarBuiltInImages()
     {
-        return array(
+        return [
             '404',
             'mm',
             'identicon',
             'monsterid',
             'wavatar',
             'retro',
-            'blank'
-        );
+            'blank',
+        ];
     }
 
     /**
@@ -220,7 +224,7 @@ class Email
      * @param string $email
      * @return bool
      */
-    private static function _isValid($email)
+    private static function isValid($email)
     {
         if (empty($email)) {
             return false;
@@ -239,9 +243,9 @@ class Email
      * @param string $email
      * @return string
      */
-    private static function _extractDomain($email)
+    private static function extractDomain($email)
     {
-        $parts  = explode('@', $email);
+        $parts = explode('@', $email);
         $domain = array_pop($parts);
 
         if (Sys::isFunc('idn_to_ascii')) {
@@ -261,12 +265,12 @@ class Email
      * @param string|array $emails
      * @return array
      */
-    private static function _handleEmailsInput($emails)
+    private static function handleEmailsInput($emails)
     {
         if (is_array($emails)) {
             $result = array_keys(array_flip($emails));
         } else {
-            $result = array($emails);
+            $result = [$emails];
         }
 
         return $result;

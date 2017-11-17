@@ -20,15 +20,16 @@ use JBZoo\Utils\Sys;
 
 /**
  * Class ArrayTest
+ *
  * @package JBZoo\PHPUnit
  */
 class IpTest extends PHPUnit
 {
     public function testGetRemote()
     {
-        $_SERVER['REMOTE_ADDR']          = '192.168.0.1';
-        $_SERVER['HTTP_CLIENT_IP']       = '192.168.0.2';
-        $_SERVER['HTTP_X_REAL_IP']       = '192.168.0.3';
+        $_SERVER['REMOTE_ADDR'] = '192.168.0.1';
+        $_SERVER['HTTP_CLIENT_IP'] = '192.168.0.2';
+        $_SERVER['HTTP_X_REAL_IP'] = '192.168.0.3';
         $_SERVER['HTTP_X_FORWARDED_FOR'] = '192.168.0.4';
 
         is('192.168.0.1', Sys::IP()); // Check deprecated method

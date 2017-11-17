@@ -20,6 +20,7 @@ use JBZoo\Utils\Filter;
 
 /**
  * Class FilterTest
+ *
  * @package JBZoo\PHPUnit
  */
 class FilterTest extends PHPUnit
@@ -36,25 +37,25 @@ class FilterTest extends PHPUnit
 
     public function providerInt()
     {
-        return array(
-            array(0, null),
-            array(0, false),
-            array(0, ''),
-            array(0, 0),
-            array(1, 1),
-            array(1, '1'),
-            array(1, '01'),
-            array(-1, '-01'),
-            array(-15, ' - 1 5 '),
-            array(-17, ' - 1 asd 7 '),
-            array(-1, ' - 1 . 0 '),
-            array(-1, ' - 1 , 5 '),
-            array(-1, ' - 1 - 0 '),
-            array(3, ' + 3'),
-            array(-4, ' - 4'),
-            array(-5, ' +- 5'),
-            array(6, ' -+ 6'),
-        );
+        return [
+            [0, null],
+            [0, false],
+            [0, ''],
+            [0, 0],
+            [1, 1],
+            [1, '1'],
+            [1, '01'],
+            [-1, '-01'],
+            [-15, ' - 1 5 '],
+            [-17, ' - 1 asd 7 '],
+            [-1, ' - 1 . 0 '],
+            [-1, ' - 1 , 5 '],
+            [-1, ' - 1 - 0 '],
+            [3, ' + 3'],
+            [-4, ' - 4'],
+            [-5, ' +- 5'],
+            [6, ' -+ 6'],
+        ];
     }
 
     /**
@@ -74,32 +75,32 @@ class FilterTest extends PHPUnit
 
     public function providerFloat()
     {
-        return array(
-            array(0.0, null),
-            array(0.0, false),
-            array(0.0, ''),
-            array(0.0, 'asdasd'),
-            array(0.0, 0),
-            array(1.0, 1),
-            array(123456789.0, 123456789),
-            array(1.0, '1'),
-            array(1.0, '01'),
-            array(-1.0, '-01'),
-            array(-10.0, ' - 1 0 '),
-            array(-1.5, ' - 1,5 '),
-            array(-1.5, ' - 1.5 '),
-            array(-1.512, ' - 1.5123 ', 3),
-            array(-15123.0, ' - 1 asd 5123 ', 3),
-            array(15123.0, ' + 1 asd 5123 ', 3),
+        return [
+            [0.0, null],
+            [0.0, false],
+            [0.0, ''],
+            [0.0, 'asdasd'],
+            [0.0, 0],
+            [1.0, 1],
+            [123456789.0, 123456789],
+            [1.0, '1'],
+            [1.0, '01'],
+            [-1.0, '-01'],
+            [-10.0, ' - 1 0 '],
+            [-1.5, ' - 1,5 '],
+            [-1.5, ' - 1.5 '],
+            [-1.512, ' - 1.5123 ', 3],
+            [-15123.0, ' - 1 asd 5123 ', 3],
+            [15123.0, ' + 1 asd 5123 ', 3],
 
-            array(-12.451, 'abc-12,451'),
-            array(-12.452, 'abc-12.452'),
-            array(-12.453, '-abc12.453'),
-            array(-12.454, 'abc-12.454abc'),
-            array(-12.455, 'abc-12. 455'),
-            array(-12.456, 'abc-12. 456 .7'),
-            array(27.3e-34, '27.3e-34'),
-        );
+            [-12.451, 'abc-12,451'],
+            [-12.452, 'abc-12.452'],
+            [-12.453, '-abc12.453'],
+            [-12.454, 'abc-12.454abc'],
+            [-12.455, 'abc-12. 455'],
+            [-12.456, 'abc-12. 456 .7'],
+            [27.3e-34, '27.3e-34'],
+        ];
     }
 
     /**
@@ -114,56 +115,56 @@ class FilterTest extends PHPUnit
 
     public function providerBool()
     {
-        return array(
-            array(true, '1'),
-            array(true, ' 1'),
-            array(true, '1 '),
-            array(true, '10'),
-            array(true, '-1'),
-            array(true, true),
-            array(true, 27),
-            array(true, 1.0),
-            array(true, -1),
-            array(true, -1.0),
-            array(true, 10),
-            array(true, 10.0),
-            array(true, 10.0),
-            array(true, 'true'),
-            array(true, 'TRUE'),
-            array(true, 'yes'),
-            array(true, 'YES'),
-            array(true, 'y'),
-            array(true, 'Y'),
-            array(true, 'oui'),
-            array(true, 'vrai'),
-            array(true, 'ДА'),
-            array(true, 'Д'),
-            array(true, '*'),
-            array(true, '+'),
-            array(true, '++'),
-            array(true, '+++'),
-            array(true, '++++'),
-            array(true, '+++++'),
+        return [
+            [true, '1'],
+            [true, ' 1'],
+            [true, '1 '],
+            [true, '10'],
+            [true, '-1'],
+            [true, true],
+            [true, 27],
+            [true, 1.0],
+            [true, -1],
+            [true, -1.0],
+            [true, 10],
+            [true, 10.0],
+            [true, 10.0],
+            [true, 'true'],
+            [true, 'TRUE'],
+            [true, 'yes'],
+            [true, 'YES'],
+            [true, 'y'],
+            [true, 'Y'],
+            [true, 'oui'],
+            [true, 'vrai'],
+            [true, 'ДА'],
+            [true, 'Д'],
+            [true, '*'],
+            [true, '+'],
+            [true, '++'],
+            [true, '+++'],
+            [true, '++++'],
+            [true, '+++++'],
 
-            array(false, ''),
-            array(false, ' '),
-            array(false, ' 0'),
-            array(false, '0 '),
-            array(false, false),
-            array(false, null),
-            array(false, 0),
-            array(false, '0'),
-            array(false, '0.'),
-            array(false, '0.0'),
-            array(false, '0.00'),
-            array(false, 'false'),
-            array(false, 'no'),
-            array(false, 'n'),
-            array(false, 'non'),
-            array(false, 'faux'),
-            array(false, 'НЕТ'),
-            array(false, '-'),
-        );
+            [false, ''],
+            [false, ' '],
+            [false, ' 0'],
+            [false, '0 '],
+            [false, false],
+            [false, null],
+            [false, 0],
+            [false, '0'],
+            [false, '0.'],
+            [false, '0.0'],
+            [false, '0.00'],
+            [false, 'false'],
+            [false, 'no'],
+            [false, 'n'],
+            [false, 'non'],
+            [false, 'faux'],
+            [false, 'НЕТ'],
+            [false, '-'],
+        ];
     }
 
     /**
@@ -182,19 +183,19 @@ class FilterTest extends PHPUnit
 
     public function providerEmail()
     {
-        return array(
-            array(true, 'john.smith@gmail.com'),
-            array(true, 'john.smith+label@gmail.com'),
-            array(true, 'john.smith@gmail.co.uk'),
-            array(true, '_somename@example.com'),
+        return [
+            [true, 'john.smith@gmail.com'],
+            [true, 'john.smith+label@gmail.com'],
+            [true, 'john.smith@gmail.co.uk'],
+            [true, '_somename@example.com'],
 
-            array(false, 'русская@почта.рф'), // madness..
-            array(false, '"Abc\@def"@example.com'),
-            array(false, '"Fred Bloggs"@example.com'),
-            array(false, '"Joe\\Blow"@example.com'),
-            array(false, '"Abc@def"@example.com'),
-            array(false, '\$A12345@example.com'),
-        );
+            [false, 'русская@почта.рф'], // madness..
+            [false, '"Abc\@def"@example.com'],
+            [false, '"Fred Bloggs"@example.com'],
+            [false, '"Joe\\Blow"@example.com'],
+            [false, '"Abc@def"@example.com'],
+            [false, '\$A12345@example.com'],
+        ];
     }
 
     public function testDigets()
@@ -230,11 +231,11 @@ class FilterTest extends PHPUnit
 
     public function testArray()
     {
-        $object = (object)array('p' => 'PPP', 'i' => 'III', 'z' => '', 'w' => 123);
+        $object = (object)['p' => 'PPP', 'i' => 'III', 'z' => '', 'w' => 123];
 
-        isSame(array('p' => 'PPP', 'i' => 'III', 'z' => '', 'w' => 123), Filter::_($object, 'arr'));
-        isSame(array('p' => 'PPP', 'i' => 'III', 'w' => 123), Filter::arr($object, 'noempty'));
-        isSame(array('w' => 123), Filter::arr($object, function ($value) {
+        isSame(['p' => 'PPP', 'i' => 'III', 'z' => '', 'w' => 123], Filter::_($object, 'arr'));
+        isSame(['p' => 'PPP', 'i' => 'III', 'w' => 123], Filter::arr($object, 'noempty'));
+        isSame(['w' => 123], Filter::arr($object, function ($value) {
             return ($value === 123) ? true : false;
         }));
     }
@@ -242,7 +243,7 @@ class FilterTest extends PHPUnit
     public function testCmd()
     {
         $excepted = '0123456789-abcdefghijklmnopqrstuvwxyz_abcdefghijklmnopqrstuvwxyz';
-        $string   = ' 0123456789-ABCDEFGHIJKLMNOPQRSTUVWXYZ_abcdefghijklmnopqrstuvwxyz  йцуке ';
+        $string = ' 0123456789-ABCDEFGHIJKLMNOPQRSTUVWXYZ_abcdefghijklmnopqrstuvwxyz  йцуке ';
 
         isSame($excepted, Filter::_($string, 'cmd'));
     }
@@ -270,17 +271,17 @@ class FilterTest extends PHPUnit
 
     public function testParseLines()
     {
-        $source   = " qw\rer\n ty \r\n12\n\r34 ";
-        $expected = array(
+        $source = " qw\rer\n ty \r\n12\n\r34 ";
+        $expected = [
             'qw' => 'qw',
             'er' => 'er',
             'ty' => 'ty',
             '12' => '12',
-            '34' => '34'
-        );
+            '34' => '34',
+        ];
 
         isSame($expected, Filter::parseLines($source));
-        isSame($expected, Filter::parseLines(array($source)));
+        isSame($expected, Filter::parseLines([$source]));
     }
 
     public function testOthers()
@@ -373,9 +374,9 @@ class FilterTest extends PHPUnit
 
     public function testData()
     {
-        $data = array(
+        $data = [
             'key' => 'value',
-        );
+        ];
 
         $obj = new JSON($data);
 

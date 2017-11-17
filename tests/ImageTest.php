@@ -19,6 +19,7 @@ use JBZoo\Utils\Image;
 
 /**
  * Class ImageTest
+ *
  * @package JBZoo\PHPUnit
  */
 class ImageTest extends PHPUnit
@@ -62,59 +63,59 @@ class ImageTest extends PHPUnit
     public function testNormalizeColor()
     {
         isSame(
-            array(0, 136, 204, 0),
+            [0, 136, 204, 0],
             Image::normalizeColor('#0088cc')
         );
 
         isSame(
-            array(0, 136, 204, 0),
+            [0, 136, 204, 0],
             Image::normalizeColor('0088cc')
         );
 
         isSame(
-            array(0, 136, 204, 0),
+            [0, 136, 204, 0],
             Image::normalizeColor('08c')
         );
 
         isSame(
-            array(0, 136, 204, 0),
+            [0, 136, 204, 0],
             Image::normalizeColor('#08c')
         );
 
 
         isSame(
-            array(0, 136, 204, 0),
-            Image::normalizeColor(array('r' => 0, 'g' => '136', 'b' => '204'))
+            [0, 136, 204, 0],
+            Image::normalizeColor(['r' => 0, 'g' => '136', 'b' => '204'])
         );
 
         isSame(
-            array(0, 136, 204, 0),
-            Image::normalizeColor(array('r' => '0', 'g' => '   136   ', 'b' => ' 204 '))
+            [0, 136, 204, 0],
+            Image::normalizeColor(['r' => '0', 'g' => '   136   ', 'b' => ' 204 '])
         );
 
         isSame(
-            array(0, 136, 204, 0),
-            Image::normalizeColor(array('r' => '0', 'g' => '   136   ', 'b' => ' 204 ', 'a' => '0'))
+            [0, 136, 204, 0],
+            Image::normalizeColor(['r' => '0', 'g' => '   136   ', 'b' => ' 204 ', 'a' => '0'])
         );
 
         isSame(
-            array(0, 136, 204, 0),
-            Image::normalizeColor(array('r' => '0', 'g' => '   136   ', 'b' => ' 204 ', 'a' => '0'))
+            [0, 136, 204, 0],
+            Image::normalizeColor(['r' => '0', 'g' => '   136   ', 'b' => ' 204 ', 'a' => '0'])
         );
 
         isSame(
-            array(0, 136, 204, 1),
-            Image::normalizeColor(array('0', '   136   ', ' 204 ', '1'))
+            [0, 136, 204, 1],
+            Image::normalizeColor(['0', '   136   ', ' 204 ', '1'])
         );
 
         isSame(
-            array(255, 255, 255, 127),
-            Image::normalizeColor(array('1000', '   1036   ', ' 2004 ', '1000'))
+            [255, 255, 255, 127],
+            Image::normalizeColor(['1000', '   1036   ', ' 2004 ', '1000'])
         );
 
         isSame(
-            array(0, 136, 204, 0),
-            Image::normalizeColor(array(0, 136, 204, 0))
+            [0, 136, 204, 0],
+            Image::normalizeColor([0, 136, 204, 0])
         );
 
     }
@@ -230,9 +231,9 @@ class ImageTest extends PHPUnit
 
     public function testStrToBin()
     {
-        $str    = 'R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAICRAEAOw==';
+        $str = 'R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAICRAEAOw==';
         $base64 = 'data:image/gif;base64,' . $str;
-        $bin    = base64_decode($str, true);
+        $bin = base64_decode($str, true);
 
         isSame($bin, Image::strToBin($str));
         isSame($bin, Image::strToBin($base64));
@@ -335,18 +336,18 @@ class ImageTest extends PHPUnit
 
     public function testGetInnerCoords()
     {
-        isSame(array(18, 6), Image::getInnerCoords('c', array(72, 36), array(36, 24), array(0, 0)));
-        isSame(array(18, 0), Image::getInnerCoords('t', array(72, 36), array(36, 24), array(0, 0)));
-        isSame(array(36, 0), Image::getInnerCoords('tr', array(72, 36), array(36, 24), array(0, 0)));
-        isSame(array(36, 6), Image::getInnerCoords('r', array(72, 36), array(36, 24), array(0, 0)));
-        isSame(array(36, 12), Image::getInnerCoords('br', array(72, 36), array(36, 24), array(0, 0)));
-        isSame(array(18, 12), Image::getInnerCoords('b', array(72, 36), array(36, 24), array(0, 0)));
-        isSame(array(0, 12), Image::getInnerCoords('bl', array(72, 36), array(36, 24), array(0, 0)));
-        isSame(array(0, 6), Image::getInnerCoords('l', array(72, 36), array(36, 24), array(0, 0)));
-        isSame(array(0, 0), Image::getInnerCoords('tl', array(72, 36), array(36, 24), array(0, 0)));
+        isSame([18, 6], Image::getInnerCoords('c', [72, 36], [36, 24], [0, 0]));
+        isSame([18, 0], Image::getInnerCoords('t', [72, 36], [36, 24], [0, 0]));
+        isSame([36, 0], Image::getInnerCoords('tr', [72, 36], [36, 24], [0, 0]));
+        isSame([36, 6], Image::getInnerCoords('r', [72, 36], [36, 24], [0, 0]));
+        isSame([36, 12], Image::getInnerCoords('br', [72, 36], [36, 24], [0, 0]));
+        isSame([18, 12], Image::getInnerCoords('b', [72, 36], [36, 24], [0, 0]));
+        isSame([0, 12], Image::getInnerCoords('bl', [72, 36], [36, 24], [0, 0]));
+        isSame([0, 6], Image::getInnerCoords('l', [72, 36], [36, 24], [0, 0]));
+        isSame([0, 0], Image::getInnerCoords('tl', [72, 36], [36, 24], [0, 0]));
 
-        isSame(array(19, 7), Image::getInnerCoords('с', array(72, 36), array(36, 24), array(1, 1)));
-        isSame(array(17, 5), Image::getInnerCoords('с', array(72, 36), array(36, 24), array(-1, -1)));
+        isSame([19, 7], Image::getInnerCoords('с', [72, 36], [36, 24], [1, 1]));
+        isSame([17, 5], Image::getInnerCoords('с', [72, 36], [36, 24], [-1, -1]));
     }
 
     public function testAddAlpha()
@@ -361,7 +362,7 @@ class ImageTest extends PHPUnit
     {
         $image = imagecreatefromgif(PROJECT_TESTS . '/resources/1x1.gif');
 
-        $width  = imagesx($image);
+        $width = imagesx($image);
         $height = imagesy($image);
 
         $newImage = imagecreatetruecolor($width, $height);
@@ -374,9 +375,9 @@ class ImageTest extends PHPUnit
         Image::imageCopyMergeAlpha(
             $newImage,
             $image,
-            array(0, 0),
-            array(0, 0),
-            array($width, $height),
+            [0, 0],
+            [0, 0],
+            [$width, $height],
             50
         );
 

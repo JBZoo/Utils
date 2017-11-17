@@ -17,16 +17,22 @@ namespace JBZoo\Utils;
 
 /**
  * Class Sys
+ *
  * @package JBZoo\Utils
  */
 class Sys
 {
     /**
+     * @var string
+     */
+    private static $binary;
+
+    /**
      * Check is current OS Windows
      *
      * @return bool
      */
-    public static function isWin()
+    public static function isWin(): bool
     {
         return strncasecmp(PHP_OS, 'WIN', 3) === 0;
     }
@@ -36,7 +42,7 @@ class Sys
      *
      * @return bool
      */
-    public static function isRoot()
+    public static function isRoot(): bool
     {
         if (self::isFunc('posix_geteuid')) {
             return posix_geteuid() === 0;
@@ -52,7 +58,7 @@ class Sys
      *
      * @SuppressWarnings(PHPMD.Superglobals)
      */
-    public static function getHome()
+    public static function getHome(): string
     {
         if (Arr::key('HOMEDRIVE', $_SERVER)) {
             return $_SERVER['HOMEDRIVE'] . $_SERVER['HOMEPATH'];
@@ -96,7 +102,7 @@ class Sys
      * @param $funcName
      * @return bool
      */
-    public static function isFunc($funcName)
+    public static function isFunc($funcName): bool
     {
         return is_callable($funcName) || (is_string($funcName) && function_exists($funcName) && is_callable($funcName));
     }
@@ -106,13 +112,13 @@ class Sys
      *
      * @param int $newLimit
      */
-    public static function setTime($newLimit = 0)
+    public static function setTime($newLimit = 0): void
     {
         $newLimit = (int)$newLimit;
 
         self::iniSet('set_time_limit', $newLimit);
         self::iniSet('max_execution_time', $newLimit);
-        if (self::isFunc('set_time_limit') && !ini_get('safe_mode')) {
+        if (self::isFunc('set_time_limit')) {
             set_time_limit($newLimit);
         }
     }
@@ -122,7 +128,7 @@ class Sys
      *
      * @param string $newLimit
      */
-    public static function setMemory($newLimit = '256M')
+    public static function setMemory($newLimit = '256M'): void
     {
         self::iniSet('memory_limit', $newLimit);
     }
@@ -132,17 +138,17 @@ class Sys
      * @param string $current
      * @return bool
      */
-    public static function isPHP($version, $current = PHP_VERSION)
+    public static function isPHP($version, $current = PHP_VERSION): bool
     {
         $version = trim($version, '.');
-        return preg_match('#^' . preg_quote($version) . '#i', $current);
+        return preg_match('#^' . preg_quote($version, null) . '#i', $current);
     }
 
     /**
      * @param string $current
      * @return bool
      */
-    public static function isPHP53($current = PHP_VERSION)
+    public static function isPHP53($current = PHP_VERSION): bool
     {
         return self::isPHP('5.3', $current);
     }
@@ -151,7 +157,7 @@ class Sys
      * @param string $current
      * @return bool
      */
-    public static function isPHP7($current = PHP_VERSION)
+    public static function isPHP7($current = PHP_VERSION): bool
     {
         return self::isPHP('7', $current);
     }
@@ -162,7 +168,7 @@ class Sys
      * @param bool $isPeak
      * @return string
      */
-    public static function getMemory($isPeak = true)
+    public static function getMemory($isPeak = true): string
     {
         if ($isPeak) {
             $memory = memory_get_peak_usage(false);
@@ -170,9 +176,7 @@ class Sys
             $memory = memory_get_usage(false);
         }
 
-        $result = FS::format($memory, 2);
-
-        return $result;
+        return FS::format($memory);
     }
 
     /**
@@ -184,7 +188,7 @@ class Sys
      * @param bool $trustProxy
      * @return string
      */
-    public static function IP($trustProxy = false)
+    public static function ip($trustProxy = false): string
     {
         return IP::getRemote($trustProxy);
     }
@@ -195,10 +199,10 @@ class Sys
      * @SuppressWarnings(PHPMD.Superglobals)
      * @return string
      */
-    public static function getDocRoot()
+    public static function getDocRoot(): string
     {
         $result = '.';
-        $root   = Arr::key('DOCUMENT_ROOT', $_SERVER, true);
+        $root = Arr::key('DOCUMENT_ROOT', $_SERVER, true);
 
         if ($root) {
             $result = $root;
@@ -220,15 +224,10 @@ class Sys
      *
      * @return bool
      */
-    public static function canCollectCodeCoverage()
+    public static function canCollectCodeCoverage(): bool
     {
         return self::hasXdebug() || self::hasPHPDBGCodeCoverage();
     }
-
-    /**
-     * @var string
-     */
-    private static $_binary;
 
     /**
      * Returns the path to the binary of the current runtime.
@@ -240,73 +239,72 @@ class Sys
      * @SuppressWarnings(PHPMD.Superglobals)
      * @codeCoverageIgnore
      */
-    public static function getBinary()
+    public static function getBinary(): string
     {
         // Custom PHP path
-        if (self::$_binary === null) {
-            if ((self::$_binary = getenv('PHP_BINARY_CUSTOM')) === false) {
-                self::$_binary = PHP_BINARY;
+        if (self::$binary === null) {
+            if ((self::$binary = getenv('PHP_BINARY_CUSTOM')) === false) {
+                self::$binary = PHP_BINARY;
             }
         }
 
         // HHVM
-        if (self::$_binary === null && self::isHHVM()) {
-            if ((self::$_binary = getenv('PHP_BINARY')) === false) {
-                self::$_binary = PHP_BINARY;
+        if (self::$binary === null && self::isHHVM()) {
+            if ((self::$binary = getenv('PHP_BINARY')) === false) {
+                self::$binary = PHP_BINARY;
             }
-            self::$_binary = escapeshellarg(self::$_binary) . ' --php';
+            self::$binary = escapeshellarg(self::$binary) . ' --php';
         }
 
         // PHP >= 5.4.0
-        if (self::$_binary === null && defined('PHP_BINARY')) {
-            self::$_binary = escapeshellarg(PHP_BINARY);
+        if (self::$binary === null && defined('PHP_BINARY')) {
+            self::$binary = escapeshellarg(PHP_BINARY);
         }
 
         // PHP < 5.4.0
-        if (self::$_binary === null) {
-            if (PHP_SAPI == 'cli' && isset($_SERVER['_'])) {
+        if (self::$binary === null) {
+            if (PHP_SAPI === 'cli' && isset($_SERVER['_'])) {
                 if (strpos($_SERVER['_'], 'phpunit') !== false) {
                     $file = file($_SERVER['_']);
 
                     if (strpos($file[0], ' ') !== false) {
-                        $tmp           = explode(' ', $file[0]);
-                        self::$_binary = escapeshellarg(trim($tmp[1]));
+                        $tmp = explode(' ', $file[0]);
+                        self::$binary = escapeshellarg(trim($tmp[1]));
                     } else {
-                        self::$_binary = escapeshellarg(ltrim(trim($file[0]), '#!'));
+                        self::$binary = escapeshellarg(ltrim(trim($file[0]), '#!'));
                     }
-
                 } elseif (strpos(basename($_SERVER['_']), 'php') !== false) {
-                    self::$_binary = escapeshellarg($_SERVER['_']);
+                    self::$binary = escapeshellarg($_SERVER['_']);
                 }
             }
         }
 
-        if (self::$_binary === null) {
-            $binaryLocations = array(
+        if (self::$binary === null) {
+            $binaryLocations = [
                 PHP_BINDIR . '/php',
                 PHP_BINDIR . '/php-cli.exe',
                 PHP_BINDIR . '/php.exe',
-            );
+            ];
 
             foreach ($binaryLocations as $binary) {
                 if (is_readable($binary)) {
-                    self::$_binary = escapeshellarg($binary);
+                    self::$binary = escapeshellarg($binary);
                     break;
                 }
             }
         }
 
-        if (self::$_binary === null) {
-            self::$_binary = 'php';
+        if (self::$binary === null) {
+            self::$binary = 'php';
         }
 
-        return self::$_binary;
+        return self::$binary;
     }
 
     /**
      * @return string
      */
-    public static function getNameWithVersion()
+    public static function getNameWithVersion(): string
     {
         return self::getName() . ' ' . self::getVersion();
     }
@@ -314,12 +312,13 @@ class Sys
     /**
      * @return string
      */
-    public static function getName()
+    public static function getName(): string
     {
         if (self::isHHVM()) {
             return 'HHVM';
+        }
 
-        } elseif (self::isPHPDBG()) {
+        if (self::isPHPDBG()) {
             return 'PHPDBG';
         }
 
@@ -329,25 +328,25 @@ class Sys
     /**
      * @return string
      */
-    public static function getVendorUrl()
+    public static function getVendorUrl(): string
     {
         if (self::isHHVM()) {
             return 'http://hhvm.com/';
-        } else {
-            return 'http://php.net/';
         }
+
+        return 'http://php.net/';
     }
 
     /**
      * @return string
      */
-    public static function getVersion()
+    public static function getVersion(): ?string
     {
         if (self::isHHVM()) {
             return HHVM_VERSION;
-        } else {
-            return PHP_VERSION;
         }
+
+        return PHP_VERSION;
     }
 
     /**
@@ -355,7 +354,7 @@ class Sys
      *
      * @return bool
      */
-    public static function hasXdebug()
+    public static function hasXdebug(): bool
     {
         return (self::isRealPHP() || self::isHHVM()) && extension_loaded('xdebug');
     }
@@ -375,7 +374,7 @@ class Sys
      *
      * @return bool
      */
-    public static function isRealPHP()
+    public static function isRealPHP(): bool
     {
         return !self::isHHVM() && !self::isPHPDBG();
     }
@@ -386,7 +385,7 @@ class Sys
      * @return bool
      * @codeCoverageIgnore
      */
-    public static function isPHPDBG()
+    public static function isPHPDBG(): bool
     {
         return PHP_SAPI === 'phpdbg' && !self::isHHVM();
     }
@@ -398,7 +397,7 @@ class Sys
      * @return bool
      * @codeCoverageIgnore
      */
-    public static function hasPHPDBGCodeCoverage()
+    public static function hasPHPDBGCodeCoverage(): bool
     {
         return self::isPHPDBG() && function_exists('phpdbg_start_oplog');
     }

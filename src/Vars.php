@@ -17,100 +17,11 @@ namespace JBZoo\Utils;
 
 /**
  * Class Filter
+ *
  * @package JBZoo\Utils
  */
 class Vars
 {
-    /**
-     * Converts many english words that equate to true or false to boolean.
-     *
-     * @param  string $string The string to convert to boolean
-     * @return boolean
-     *
-     * @deprecated See JBZoo\Utils\Filter
-     */
-    public static function bool($string)
-    {
-        return Filter::bool($string);
-    }
-
-    /**
-     * @param string $value
-     * @param int    $round
-     * @return float
-     *
-     * @deprecated See JBZoo\Utils\Filter
-     */
-    public static function float($value, $round = 10)
-    {
-        return Filter::float($value, $round);
-    }
-
-    /**
-     * Smart convert any string to int
-     *
-     * @param string $value
-     * @return int
-     *
-     * @deprecated See JBZoo\Utils\Filter
-     */
-    public static function int($value)
-    {
-        return Filter::int($value);
-    }
-
-    /**
-     * Return only digits chars
-     *
-     * @param $value
-     * @return mixed
-     *
-     * @deprecated See JBZoo\Utils\Filter
-     */
-    public static function digits($value)
-    {
-        return Filter::digits($value);
-    }
-
-    /**
-     * Return only alpha chars
-     *
-     * @param $value
-     * @return mixed
-     *
-     * @deprecated See JBZoo\Utils\Filter
-     */
-    public static function alpha($value)
-    {
-        return Filter::alpha($value);
-    }
-
-    /**
-     * Return only alpha and digits chars
-     *
-     * @param $value
-     * @return mixed
-     *
-     * @deprecated See JBZoo\Utils\Filter
-     */
-    public static function alphaDigets($value)
-    {
-        return Filter::alphanum($value);
-    }
-
-    /**
-     * Validate emil
-     *
-     * @param $email
-     * @return mixed
-     *
-     * @deprecated See JBZoo\Utils\Email
-     */
-    public static function email($email)
-    {
-        return Filter::email($email);
-    }
-
     /**
      * Access an array index, retrieving the value stored there if it exists or a default if it does not.
      * This function allows you to concisely access an index which may or may not exist without raising a warning.
@@ -136,7 +47,7 @@ class Vars
      * @param int|float $max
      * @return bool
      */
-    public static function isIn($number, $min, $max)
+    public static function isIn($number, $min, $max): bool
     {
         return ($number >= $min && $number <= $max);
     }
@@ -147,7 +58,7 @@ class Vars
      * @param int $number
      * @return bool
      */
-    public static function isEven($number)
+    public static function isEven($number): bool
     {
         return ($number % 2 === 0);
     }
@@ -158,7 +69,7 @@ class Vars
      * @param int $number
      * @return bool
      */
-    public static function isNegative($number)
+    public static function isNegative($number): bool
     {
         return ($number < 0);
     }
@@ -169,7 +80,7 @@ class Vars
      * @param int $number
      * @return bool
      */
-    public static function isOdd($number)
+    public static function isOdd($number): bool
     {
         return !self::isEven($number);
     }
@@ -181,7 +92,7 @@ class Vars
      * @param bool $zero
      * @return bool
      */
-    public static function isPositive($number, $zero = true)
+    public static function isPositive($number, $zero = true): bool
     {
         return ($zero ? ($number >= 0) : ($number > 0));
     }
@@ -194,7 +105,7 @@ class Vars
      * @param int $max
      * @return int
      */
-    public static function limit($number, $min, $max)
+    public static function limit($number, $min, $max): int
     {
         return self::max(self::min($number, $min), $max);
     }
@@ -206,7 +117,7 @@ class Vars
      * @param int $min
      * @return int
      */
-    public static function min($number, $min)
+    public static function min($number, $min): int
     {
         if ($number < $min) {
             $number = $min;
@@ -221,7 +132,7 @@ class Vars
      * @param int $max
      * @return int
      */
-    public static function max($number, $max)
+    public static function max($number, $max): int
     {
         if ($number > $max) {
             $number = $max;
@@ -237,7 +148,7 @@ class Vars
      * @param int $max
      * @return bool
      */
-    public static function out($number, $min, $max)
+    public static function out($number, $min, $max): bool
     {
         return ($number < $min || $number > $max);
     }
@@ -245,23 +156,22 @@ class Vars
     /**
      * Get relative percent
      *
-     * @param float $normal
-     * @param float $current
+     * @param float|int $normal
+     * @param float|int $current
      * @return string
      */
-    public static function relativePercent($normal, $current)
+    public static function relativePercent($normal, $current): ?string
     {
-        $normal  = (float)$normal;
+        $normal = (float)$normal;
         $current = (float)$current;
 
-        if (!$normal || $normal == $current) {
+        if (!$normal || $normal === $current) {
             return '100';
-
-        } else {
-            $normal  = abs($normal);
-            $percent = round($current / $normal * 100);
-
-            return number_format($percent, 0, '.', ' ');
         }
+
+        $normal = abs($normal);
+        $percent = round($current / $normal * 100);
+
+        return number_format($percent, 0, '.', ' ');
     }
 }

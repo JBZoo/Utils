@@ -17,6 +17,7 @@ namespace JBZoo\Utils;
 
 /**
  * Class Env
+ *
  * @package JBZoo\Utils
  */
 class Env
@@ -31,7 +32,7 @@ class Env
      * @return string
      * @deprecated
      */
-    public static function getBinary()
+    public static function getBinary(): string
     {
         return Sys::getBinary();
     }
@@ -40,7 +41,7 @@ class Env
      * @return string
      * @deprecated
      */
-    public static function getNameWithVersion()
+    public static function getNameWithVersion(): string
     {
         return Sys::getNameWithVersion();
     }
@@ -49,7 +50,7 @@ class Env
      * @return string
      * @deprecated
      */
-    public static function getName()
+    public static function getName(): string
     {
         return Sys::getName();
     }
@@ -58,7 +59,7 @@ class Env
      * @return string
      * @deprecated
      */
-    public static function getVendorUrl()
+    public static function getVendorUrl(): string
     {
         return Sys::getVendorUrl();
     }
@@ -67,7 +68,7 @@ class Env
      * @return string
      * @deprecated
      */
-    public static function getVersion()
+    public static function getVersion(): string
     {
         return Sys::getVersion();
     }
@@ -76,7 +77,7 @@ class Env
      * @return bool
      * @deprecated
      */
-    public static function hasXdebug()
+    public static function hasXdebug(): bool
     {
         return Sys::hasXdebug();
     }
@@ -85,7 +86,7 @@ class Env
      * @return bool
      * @deprecated
      */
-    public static function isHHVM()
+    public static function isHHVM(): bool
     {
         return Sys::isHHVM();
     }
@@ -94,7 +95,7 @@ class Env
      * @return bool
      * @deprecated
      */
-    public static function isPHP()
+    public static function isPHP(): bool
     {
         return Sys::isRealPHP();
     }
@@ -103,7 +104,7 @@ class Env
      * @return bool
      * @deprecated
      */
-    public static function isPHPDBG()
+    public static function isPHPDBG(): bool
     {
         return Sys::isPHPDBG();
     }
@@ -112,7 +113,7 @@ class Env
      * @return bool
      * @deprecated
      */
-    public static function hasPHPDBGCodeCoverage()
+    public static function hasPHPDBGCodeCoverage(): bool
     {
         return Sys::hasPHPDBGCodeCoverage();
     }

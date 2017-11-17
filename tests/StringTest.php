@@ -20,6 +20,7 @@ use JBZoo\Utils\Slug;
 
 /**
  * Class StringTest
+ *
  * @package JBZoo\PHPUnit
  */
 class StringTest extends PHPUnit
@@ -27,7 +28,7 @@ class StringTest extends PHPUnit
 
     public function testStrip()
     {
-        $input  = ' The quick brown fox jumps over the lazy dog ';
+        $input = ' The quick brown fox jumps over the lazy dog ';
         $expect = 'Thequickbrownfoxjumpsoverthelazydog';
         is($expect, Str::stripSpace($input));
     }
@@ -42,33 +43,33 @@ class StringTest extends PHPUnit
 
     public function testParseLines()
     {
-        isSame(array('asd'), Str::parseLines('asd', false));
-        isSame(array('asd' => 'asd'), Str::parseLines('asd', true));
-        isSame(array('asd' => 'asd'), Str::parseLines('asd'));
+        isSame(['asd'], Str::parseLines('asd', false));
+        isSame(['asd' => 'asd'], Str::parseLines('asd', true));
+        isSame(['asd' => 'asd'], Str::parseLines('asd'));
 
-        $lines = array('', false, 123, 456, ' 123   ', '      ', 'ASD', '0');
+        $lines = ['', false, 123, 456, ' 123   ', '      ', 'ASD', '0'];
 
-        isSame(array(
+        isSame([
             '123' => '123',
             '456' => '456',
             'ASD' => 'ASD',
             '0'   => '0',
-        ), Str::parseLines(implode("\r", $lines), true));
+        ], Str::parseLines(implode("\r", $lines), true));
 
-        isSame(array(
+        isSame([
             '123' => '123',
             '456' => '456',
             'ASD' => 'ASD',
             '0'   => '0',
-        ), Str::parseLines(implode("\n", $lines), true));
+        ], Str::parseLines(implode("\n", $lines), true));
 
-        isSame(array(
+        isSame([
             '123',
             '456',
             '123',
             'ASD',
             '0',
-        ), Str::parseLines(implode("\r\n", $lines), false));
+        ], Str::parseLines(implode("\r\n", $lines), false));
     }
 
     public function testHtmlentities()
@@ -108,7 +109,8 @@ class StringTest extends PHPUnit
     public function testTruncateSafe()
     {
         is('The quick brown fox...', Str::truncateSafe('The quick brown fox jumps over the lazy dog', 24));
-        is('The quick brown fox jumps over the lazy dog', Str::truncateSafe('The quick brown fox jumps over the lazy dog', 55));
+        is('The quick brown fox jumps over the lazy dog',
+            Str::truncateSafe('The quick brown fox jumps over the lazy dog', 55));
         is('Th...', Str::truncateSafe('The quick brown fox jumps over the lazy dog', 2));
         is('The...', Str::truncateSafe('The quick brown fox jumps over the lazy dog', 3));
         is('The...', Str::truncateSafe('The quick brown fox jumps over the lazy dog', 7));
@@ -117,11 +119,13 @@ class StringTest extends PHPUnit
     public function testLimitChars()
     {
         is('The quick brown fox jump...', Str::limitChars('The quick brown fox jumps over the lazy dog', 24));
-        is('The quick brown fox jumps over the lazy dog', Str::limitChars('The quick brown fox jumps over the lazy dog', 55));
+        is('The quick brown fox jumps over the lazy dog',
+            Str::limitChars('The quick brown fox jumps over the lazy dog', 55));
         is('Th...', Str::limitChars('The quick brown fox jumps over the lazy dog', 2));
         is('The...', Str::limitChars('The quick brown fox jumps over the lazy dog', 3));
         is('The qui...', Str::limitChars('The quick brown fox jumps over the lazy dog', 7));
-        is('The quick brown fox jumps over the lazy dog', Str::limitChars('The quick brown fox jumps over the lazy dog', 150));
+        is('The quick brown fox jumps over the lazy dog',
+            Str::limitChars('The quick brown fox jumps over the lazy dog', 150));
     }
 
     public function testLimitWords()
@@ -129,7 +133,8 @@ class StringTest extends PHPUnit
         is('The quick brown...', Str::limitWords('The quick brown fox jumps over the lazy dog', 3));
         is('The quick brown fox jumps...', Str::limitWords('The quick brown fox jumps over the lazy dog', 5));
         is('The...', Str::limitWords('The quick brown fox jumps over the lazy dog', 1));
-        is('The quick brown fox jumps over the lazy dog', Str::limitWords('The quick brown fox jumps over the lazy dog', 90));
+        is('The quick brown fox jumps over the lazy dog',
+            Str::limitWords('The quick brown fox jumps over the lazy dog', 90));
         is('The quick brown fox jumps over the...', Str::limitWords('The quick brown fox jumps over the lazy dog', 7));
     }
 
@@ -312,10 +317,10 @@ class StringTest extends PHPUnit
     {
         $queries = Str::splitSql('SELECT * FROM #__foo;SELECT * FROM #__bar;');
 
-        isSame(array(
+        isSame([
             'SELECT * FROM #__foo;',
-            'SELECT * FROM #__bar;'
-        ), $queries);
+            'SELECT * FROM #__bar;',
+        ], $queries);
 
         $queries = Str::splitSql('
             ALTER TABLE `#__redirect_links` DROP INDEX `idx_link_old`;
@@ -330,12 +335,12 @@ class StringTest extends PHPUnit
             ALTER TABLE `#__redirect_links` ADD INDEX `idx_old_url` (`old_url`(100));
         ');
 
-        isSame(array(
+        isSame([
             'ALTER TABLE `#__redirect_links` DROP INDEX `idx_link_old`;',
             'ALTER TABLE `#__redirect_links` MODIFY `old_url` VARCHAR(2048) NOT NULL;',
             'ALTER TABLE `#__redirect_links` MODIFY `new_url` VARCHAR(2048) NOT NULL;',
             'ALTER TABLE `#__redirect_links` MODIFY `referer` VARCHAR(2048) NOT NULL;',
-            'ALTER TABLE `#__redirect_links` ADD INDEX `idx_old_url` (`old_url`(100));'
-        ), $queries);
+            'ALTER TABLE `#__redirect_links` ADD INDEX `idx_old_url` (`old_url`(100));',
+        ], $queries);
     }
 }
