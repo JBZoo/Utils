@@ -7,16 +7,14 @@ php:
 
 matrix:
   fast_finish: true
+  include:
     - php: 7.2
       env: XDEBUG_OFF="yes"
 
-before_script:
-  - if [[ $XDEBUG_OFF = yes ]]; then phpenv config-rm xdebug.ini; fi;
-
 script:
+  - if [[ $XDEBUG_OFF = yes ]]; then phpenv config-rm xdebug.ini; fi;
   - make
   - make test-all
 
-after_success:
-  - make coveralls
-  - bash <(curl -s https://codecov.io/bash)
+after_script:
+ - make coveralls
