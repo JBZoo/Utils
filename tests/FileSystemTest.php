@@ -29,9 +29,9 @@ class FileSystemTest extends PHPUnit
 
     public function testRemoveDir()
     {
-        $dirname = dirname(__FILE__);
+        $dirname = __DIR__;
 
-        // Test deleting a non-existant directory
+        // Test deleting a non-existing directory
         isFalse(file_exists($dirname . '/test1'));
         isTrue(FS::rmDir($dirname . '/test1'));
 
@@ -153,7 +153,7 @@ class FileSystemTest extends PHPUnit
         isFalse(FS::writable('/no/such/file'));
 
         // Create a file to test with
-        $dirname = dirname(__FILE__);
+        $dirname = __DIR__;
         $file = $dirname . '/test7';
         touch($file);
         chmod($file, 0644);
@@ -169,6 +169,7 @@ class FileSystemTest extends PHPUnit
         is('-r--r--r--', FS::perms($file));
 
         // Toggle writable bit back on for us
+        /** @noinspection ArgumentEqualsDefaultValueInspection */
         FS::writable($file, true);
         clearstatcache();
         isTrue(is_writable($file));
@@ -190,8 +191,8 @@ class FileSystemTest extends PHPUnit
 
         isFalse(FS::readable('/no/such/file'));
 
-        $dirname = dirname(__FILE__);
-        $file = $dirname . '/test8';
+        $dirName = __DIR__;
+        $file = $dirName . '/test8';
         touch($file);
 
         isTrue(is_readable($file));
@@ -200,6 +201,7 @@ class FileSystemTest extends PHPUnit
         clearstatcache();
         isFalse(is_readable($file));
 
+        /** @noinspection ArgumentEqualsDefaultValueInspection */
         FS::readable($file, true);
         clearstatcache();
         isTrue(is_readable($file));
@@ -220,12 +222,13 @@ class FileSystemTest extends PHPUnit
 
         isFalse(FS::executable('/no/such/file'));
 
-        $dirname = dirname(__FILE__);
+        $dirname = __DIR__;
         $file = $dirname . '/test9';
         touch($file);
 
         isFalse(is_executable($file));
 
+        /** @noinspection ArgumentEqualsDefaultValueInspection */
         FS::executable($file, true);
         clearstatcache();
         isTrue(is_executable($file));
@@ -237,6 +240,9 @@ class FileSystemTest extends PHPUnit
         unlink($file);
     }
 
+    /**
+     * @SuppressWarnings(PHPMD.Superglobals)
+     */
     public function testGetHome()
     {
         // Test for OS Default.
@@ -262,7 +268,7 @@ class FileSystemTest extends PHPUnit
 
     public function testDirSize()
     {
-        $dir = dirname(__FILE__) . '/dir1';
+        $dir = __DIR__ . '/dir1';
 
         @mkdir($dir);
         file_put_contents($dir . '/file1', '1234567890');
@@ -275,7 +281,7 @@ class FileSystemTest extends PHPUnit
 
     public function testLS()
     {
-        $dir = dirname(__FILE__) . DIRECTORY_SEPARATOR . 'dir1';
+        $dir = __DIR__ . DIRECTORY_SEPARATOR . 'dir1';
 
         @mkdir($dir);
         $file1 = $dir . DIRECTORY_SEPARATOR . 'file1';
@@ -291,16 +297,16 @@ class FileSystemTest extends PHPUnit
         $size = FS::format(512, 0);
         is('512 B', $size);
 
-        $size = FS::format(512, 2);
+        $size = FS::format(512);
         is('512 B', $size);
 
         $size = FS::format(2048, 1);
         is('2.0 KB', $size);
 
-        $size = FS::format(25151251, 2);
+        $size = FS::format(25151251);
         is('23.99 MB', $size);
 
-        $size = FS::format(19971597926, 2);
+        $size = FS::format(19971597926);
         is('18.60 GB', $size);
 
         $size = FS::format(2748779069440, 1);
@@ -323,10 +329,16 @@ class FileSystemTest extends PHPUnit
         // URl
         isSame('txt', FS::ext('file.txt?some_var=123456'));
         isSame('txt', FS::ext('file.txt?some_var=123456?invalid=param'));
-        isSame('php',
-            FS::ext('http://demo.jbzoo.com/sites/phones/smartfony.php?logic=and&exact=0&controller=search&option=com_zoo&task=filter&type=phone&app_id=1&Itemid=101'));
-        isSame('',
-            FS::ext('http://demo.jbzoo.com/sites/phones/smartfony?logic=and&exact=0&controller=search&option=com_zoo&task=filter&type=phone&app_id=1&Itemid=101'));
+        isSame(
+            'php',
+            FS::ext('http://demo.jbzoo.com/sites/phones/smartfony.php?'
+                . 'logic=and&exact=0&controller=search&option=com_zoo&task=filter&type=phone&app_id=1&Itemid=101')
+        );
+        isSame(
+            '',
+            FS::ext('http://demo.jbzoo.com/sites/phones/smartfony?'
+                . 'logic=and&exact=0&controller=search&option=com_zoo&task=filter&type=phone&app_id=1&Itemid=101')
+        );
 
         // to lower
         isSame('png', FS::ext('image.PNG'));
@@ -371,6 +383,9 @@ class FileSystemTest extends PHPUnit
         isSame(__FILE__, FS::real(__FILE__));
     }
 
+    /**
+     * @SuppressWarnings(PHPMD.Superglobals)
+     */
     public function testClean()
     {
         $dirSep = DIRECTORY_SEPARATOR;

@@ -146,16 +146,21 @@ class UrlTest extends PHPUnit
         $actual = Url::buildAll($url, [], Url::URL_STRIP_AUTH);
         is($expected, $actual);
 
-        is('https://dev.example.com/',
-            Url::buildAll('http://example.com/', ['scheme' => 'https', 'host' => 'dev.example.com']));
+        is(
+            'https://dev.example.com/',
+            Url::buildAll('http://example.com/', ['scheme' => 'https', 'host' => 'dev.example.com'])
+        );
         is('http://example.com/#hi', Url::buildAll('http://example.com/', ['fragment' => 'hi'], Url::URL_REPLACE));
         is('http://example.com/page', Url::buildAll('http://example.com/', ['path' => 'page'], Url::URL_JOIN_PATH));
         is('http://example.com/page', Url::buildAll('http://example.com', ['path' => 'page'], Url::URL_JOIN_PATH));
-        is('http://example.com/?hi=Bro',
-            Url::buildAll('http://example.com/', ['query' => 'hi=Bro'], Url::URL_JOIN_QUERY));
-        is('http://example.com/?show=1&hi=Bro',
-            Url::buildAll('http://example.com/?show=1', ['query' => 'hi=Bro'], Url::URL_JOIN_QUERY));
-
+        is(
+            'http://example.com/?hi=Bro',
+            Url::buildAll('http://example.com/', ['query' => 'hi=Bro'], Url::URL_JOIN_QUERY)
+        );
+        is(
+            'http://example.com/?show=1&hi=Bro',
+            Url::buildAll('http://example.com/?show=1', ['query' => 'hi=Bro'], Url::URL_JOIN_QUERY)
+        );
         is('http://admin@example.com/', Url::buildAll('http://example.com/', ['user' => 'admin']));
         is('http://admin:1@example.com/', Url::buildAll('http://example.com/', ['user' => 'admin', 'pass' => '1']));
     }

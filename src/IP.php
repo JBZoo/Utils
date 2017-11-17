@@ -126,9 +126,9 @@ class IP
 
     /**
      * @param $ipAddress
-     * @return int
+     * @return string
      */
-    public static function getNetMask($ipAddress): int
+    public static function getNetMask($ipAddress): string
     {
         if (is_string($ipAddress)) {
             $ipAddress = ip2long($ipAddress);

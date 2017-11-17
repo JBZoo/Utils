@@ -264,7 +264,7 @@ class Url
 
         if ($flags & self::URL_REPLACE) {
             foreach ($keys as $key) {
-                if ($parts[$key] && Arr::key($key, $parts)) {
+                if (isset($parts[$key]) && Arr::key($key, $parts)) {
                     $url[$key] = $parts[$key];
                 }
             }
@@ -324,12 +324,11 @@ class Url
             $parsedString .= $url['host'];
         }
 
-        if ($url['port'] &&
-            Arr::key('port', $url) &&
+        if ($urlPort = (Arr::key('port', $url) &&
             $url['port'] !== self::PORT_HTTP &&
-            $url['port'] !== self::PORT_HTTPS
+            $url['port'] !== self::PORT_HTTPS)
         ) {
-            $parsedString .= ':' . $url['port'];
+            $parsedString .= ':' . $urlPort;
         }
 
         if (!empty($url['path'])) {
@@ -338,12 +337,12 @@ class Url
             $parsedString .= '/';
         }
 
-        if ($url['query'] && Arr::key('query', $url)) {
-            $parsedString .= '?' . $url['query'];
+        if ($urlQuery = Arr::key('query', $url)) {
+            $parsedString .= '?' . $urlQuery;
         }
 
-        if ($url['fragment'] && Arr::key('fragment', $url)) {
-            $parsedString .= '#' . trim($url['fragment'], '#');
+        if ($urlFragment = Arr::key('fragment', $url)) {
+            $parsedString .= '#' . trim($urlFragment, '#');
         }
 
         $newUrl = $url;

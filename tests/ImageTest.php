@@ -356,6 +356,7 @@ class ImageTest extends PHPUnit
         Image::addAlpha($imgRes);
         Image::addAlpha($imgRes, false);
         Image::addAlpha($imgRes, true);
+        isTrue(true);
     }
 
     public function testImageCopyMergeAlpha()
@@ -368,8 +369,8 @@ class ImageTest extends PHPUnit
         $newImage = imagecreatetruecolor($width, $height);
 
         // Set a White & Transparent Background Color
-        $bg = imagecolorallocatealpha($newImage, 0, 0, 0, 127);
-        imagefill($newImage, 0, 0, $bg);
+        $background = imagecolorallocatealpha($newImage, 0, 0, 0, 127);
+        imagefill($newImage, 0, 0, $background);
 
         // Copy and merge
         Image::imageCopyMergeAlpha(
@@ -383,5 +384,6 @@ class ImageTest extends PHPUnit
 
         imagedestroy($image);
         imagedestroy($newImage);
+        isTrue(true);
     }
 }

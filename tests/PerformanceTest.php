@@ -15,6 +15,7 @@
 
 namespace JBZoo\PHPUnit;
 
+use JBZoo\Profiler\Benchmark;
 use JBZoo\Utils\Slug;
 use JBZoo\Utils\Str;
 
@@ -32,7 +33,7 @@ class PerformanceTest extends PHPUnit
 
         $result = '';
         for ($i = 0; $i < $length; $i++) {
-            $result .= $chars[mt_rand(0, $charsLength - 1)];
+            $result .= $chars[random_int(0, $charsLength - 1)];
         }
 
         return $result;
@@ -42,7 +43,7 @@ class PerformanceTest extends PHPUnit
     {
         $_this = $this;
 
-        runBench([
+        Benchmark::compare([
             // 2
             'Str::slug(2, false)' => function () use ($_this) {
                 return Str::slug($_this->getRandomString(2), false);
@@ -76,16 +77,18 @@ class PerformanceTest extends PHPUnit
                 return Slug::filter($_this->getRandomString(4));
             },
         ], ['count' => 1000, 'name' => 'Random slug']);
+        isTrue(true);
     }
 
     public function testSlugSpeed()
     {
         $_this = $this;
 
-        runBench([
+        Benchmark::compare([
             'Slug::filter' => function () use ($_this) {
                 return Slug::filter($_this->getRandomString(15));
             },
         ], ['count' => 1000, 'name' => 'Slug speed']);
+        isTrue(true);
     }
 }

@@ -236,7 +236,7 @@ class FilterTest extends PHPUnit
         isSame(['p' => 'PPP', 'i' => 'III', 'z' => '', 'w' => 123], Filter::_($object, 'arr'));
         isSame(['p' => 'PPP', 'i' => 'III', 'w' => 123], Filter::arr($object, 'noempty'));
         isSame(['w' => 123], Filter::arr($object, function ($value) {
-            return ($value === 123) ? true : false;
+            return $value === 123;
         }));
     }
 

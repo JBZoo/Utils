@@ -267,7 +267,7 @@ class Filter
     {
         $array = (array)$value;
 
-        if (strtolower($filter) === 'noempty') {
+        if ($filter === 'noempty') {
             $array = Arr::clean($array);
 
         } elseif ($filter instanceof \Closure) {

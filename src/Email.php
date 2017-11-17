@@ -153,7 +153,6 @@ class Email
      */
     public static function getGravatarUrl($email, $size = 32, $defaultImage = 'identicon'): ?string
     {
-
         if (empty($email) || self::isValid($email) === false) {
             return null;
         }
@@ -239,7 +238,7 @@ class Email
         $domain = array_pop($parts);
 
         if (Sys::isFunc('idn_to_ascii')) {
-            return idn_to_utf8($domain);
+            return idn_to_utf8($domain, INTL_IDNA_VARIANT_UTS46);
         }
 
         return $domain;

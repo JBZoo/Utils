@@ -24,7 +24,6 @@ use JBZoo\Utils\Email;
  */
 class EmailTest extends PHPUnit
 {
-
     /**
      * @dataProvider getCheckProvider
      * @param $input
@@ -88,6 +87,7 @@ class EmailTest extends PHPUnit
      * @param        $input
      * @param string $expectedHttp
      * @param string $expectedHttps
+     * @SuppressWarnings(PHPMD.Superglobals)
      */
     public function testGetGravatarUrl($input, $expectedHttp, $expectedHttps)
     {
@@ -250,8 +250,10 @@ class EmailTest extends PHPUnit
             ],
             4 => [
                 ['test@test.pt', 8.1, 'https://example.com/images/avatar.jpg'],
-                'http://www.gravatar.com/avatar/7c2cf316efa3b541b3ac76a950aea671/?s=32&d=https%3A%2F%2Fexample.com%2Fimages%2Favatar.jpg',
-                'https://secure.gravatar.com/avatar/7c2cf316efa3b541b3ac76a950aea671/?s=32&d=https%3A%2F%2Fexample.com%2Fimages%2Favatar.jpg',
+                'http://www.gravatar.com/avatar/7c2cf316efa3b541b3ac76a950aea671/?'
+                . 's=32&d=https%3A%2F%2Fexample.com%2Fimages%2Favatar.jpg',
+                'https://secure.gravatar.com/avatar/7c2cf316efa3b541b3ac76a950aea671/?'
+                . 's=32&d=https%3A%2F%2Fexample.com%2Fimages%2Favatar.jpg',
             ],
             5 => [
                 ['test@test.pt', 15.5, null],
@@ -259,12 +261,12 @@ class EmailTest extends PHPUnit
                 'https://secure.gravatar.com/avatar/7c2cf316efa3b541b3ac76a950aea671/?s=32&d=identicon',
             ],
             6 => [
-                ['test@test.pt', " 9000 ", 'IDEnticon'],
+                ['test@test.pt', ' 9000 ', 'IDEnticon'],
                 'http://www.gravatar.com/avatar/7c2cf316efa3b541b3ac76a950aea671/?s=2048&d=identicon',
                 'https://secure.gravatar.com/avatar/7c2cf316efa3b541b3ac76a950aea671/?s=2048&d=identicon',
             ],
             7 => [
-                ['admin@jbzoo.com', "9000", 'IDEnticon'],
+                ['admin@jbzoo.com', '9000', 'IDEnticon'],
                 'http://www.gravatar.com/avatar/f27f28ab2158cd2cccc78c364d6247fe/?s=2048&d=identicon',
                 'https://secure.gravatar.com/avatar/f27f28ab2158cd2cccc78c364d6247fe/?s=2048&d=identicon',
             ],

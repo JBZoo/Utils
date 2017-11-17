@@ -395,7 +395,7 @@ class Str
      * @param int    $offset
      * @return int
      */
-    public static function pos($haystack, $needle, $offset = 0): int
+    public static function pos($haystack, $needle, $offset = 0): ?int
     {
         if (self::isMBString()) {
             return mb_strpos($haystack, $needle, $offset, self::$encoding);
@@ -681,9 +681,10 @@ class Str
     public static function testName2Human($input)
     {
         $original = $input;
-        $input = self::getClassName($input, false);
+        $input = self::getClassName($input);
 
-        if (!0 === stripos($input, 'tests')) {
+        /** @noinspection NotOptimalRegularExpressionsInspection */
+        if (!preg_match('#^tests#i', $input)) {
             $input = preg_replace('#^(test)#i', '', $input);
         }
 

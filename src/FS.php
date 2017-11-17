@@ -164,9 +164,9 @@ class FS
      * Quickest way for getting first file line
      *
      * @param string $filepath
-     * @return string
+     * @return string|null
      */
-    public static function firstLine($filepath): string
+    public static function firstLine($filepath): ?string
     {
         if (file_exists($filepath)) {
             $cacheRes = fopen($filepath, 'rb');

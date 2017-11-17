@@ -63,15 +63,21 @@ class SerTest extends PHPUnit
 
         $brokenSerialization = 'a:2:{i:0;s:6:"Normal";i:1;s:23:"High-value Char: ▒a-va?";}';
 
-        $unserializedData = Ser::maybeUn($brokenSerialization);
-        is($expectedData[0], $unserializedData[0], 'Did not properly fix the broken serialized data.');
-        is(substr($expectedData[1], 0, 10), substr($unserializedData[1], 0, 10),
-            'Did not properly fix the broken serialized data.');
+        $unserializeData = Ser::maybeUn($brokenSerialization);
+        is($expectedData[0], $unserializeData[0], 'Did not properly fix the broken serialized data.');
+        is(
+            substr($expectedData[1], 0, 10),
+            substr($unserializeData[1], 0, 10),
+            'Did not properly fix the broken serialized data.'
+        );
 
         // Test unfixable serialization.
-        $unfixableSerialization = 'a:2:{i:0;s:6:"Normal";}';
-        is($unfixableSerialization, Ser::maybeUn($unfixableSerialization),
-            'Somehow the [previously?] impossible happened and utilphp thinks it has unserialized an unfixable serialization.');
+        $unFixableSerialization = 'a:2:{i:0;s:6:"Normal";}';
+        is(
+            $unFixableSerialization,
+            Ser::maybeUn($unFixableSerialization),
+            'Somehow the [previously?] impossible happened and utilphp thinks it has unserialized an unfixable serialization.'
+        );
     }
 
     public function testIs()
@@ -100,32 +106,33 @@ class SerTest extends PHPUnit
         $brokenSerialization = 'a:2:{i:0;s:6:"Normal";i:1;s:23:"High-value Char: ▒a-va?";}';
 
         // Temporarily override error handling to ensure that this is, in fact, [still] a broken serialization.
-        {
-            $expectedError = [
-                'errno'  => 8,
-                'errstr' => 'unserialize(): Error at offset 55 of 60 bytes',
-            ];
+        $expectedError = [
+            'errno'  => 8,
+            'errstr' => 'unserialize(): Error at offset 55 of 60 bytes',
+        ];
 
-            $reportedError = [];
-            set_error_handler(function ($errno, $errstr, $errfile, $errline, $errcontext) use (&$reportedError) {
-                $reportedError = compact('errno', 'errstr');
-            });
+        $reportedError = [];
+        set_error_handler(function ($errno, $errstr) use (&$reportedError) {
+            $reportedError = compact('errno', 'errstr');
+        });
 
-            unserialize($brokenSerialization);
+        unserialize($brokenSerialization, null);
 
-            is($expectedError['errno'], $reportedError['errno']);
-            // Because HHVM's unserialize() error message does not contain enough info to properly test.
-            if (!defined('HHVM_VERSION')) {
-                is($expectedError['errstr'], $reportedError['errstr']);
-            }
-            restore_error_handler();
+        is($expectedError['errno'], $reportedError['errno']);
+        // Because HHVM's unserialize() error message does not contain enough info to properly test.
+        if (!defined('HHVM_VERSION')) {
+            is($expectedError['errstr'], $reportedError['errstr']);
         }
+        restore_error_handler();
 
         $fixedSerialization = Ser::fix($brokenSerialization);
-        $unserializedData = unserialize($fixedSerialization);
-        is($expectedData[0], $unserializedData[0], 'Did not properly fix the broken serialized data.');
+        $unserializeData = unserialize($fixedSerialization, null);
+        is($expectedData[0], $unserializeData[0], 'Did not properly fix the broken serialized data.');
 
-        is(substr($expectedData[1], 0, 10), substr($unserializedData[1], 0, 10),
-            'Did not properly fix the broken serialized data.');
+        is(
+            substr($expectedData[1], 0, 10),
+            substr($unserializeData[1], 0, 10),
+            'Did not properly fix the broken serialized data.'
+        );
     }
 }
