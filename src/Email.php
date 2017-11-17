@@ -171,7 +171,6 @@ class Email
         $defaultImage = trim($defaultImage);
         if (preg_match('/^(http|https)./', $defaultImage)) {
             $defaultImage = urldecode($defaultImage);
-
         } else {
             $defaultImage = strtolower($defaultImage);
             if (!Arr::in((string)$defaultImage, self::getGravatarBuiltInImages())) {

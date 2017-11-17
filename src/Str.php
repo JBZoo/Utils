@@ -140,7 +140,7 @@ class Str
      * @param  string $prefix
      * @return string
      */
-    public static function unique($prefix = 'unique')
+    public static function unique($prefix = 'unique'): string
     {
         $prefix = rtrim(trim($prefix), '-');
         $random = random_int(10000000, 99999999);
@@ -204,7 +204,6 @@ class Str
                 $result .= $consonants[random_int(0, count($consonants) - 1)];
                 $result .= $vowels[random_int(0, count($vowels) - 1)];
             }
-
         } else {
             $chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
 
@@ -395,7 +394,7 @@ class Str
      * @param int    $offset
      * @return int
      */
-    public static function pos($haystack, $needle, $offset = 0)
+    public static function pos($haystack, $needle, $offset = 0): int
     {
         if (self::isMBString()) {
             return mb_strpos($haystack, $needle, $offset, self::$encoding);
@@ -754,10 +753,9 @@ class Str
      */
     public static function getClassName($object, $toLower = false)
     {
+        $className = $object;
         if (is_object($object)) {
             $className = get_class($object);
-        } else {
-            $className = $object;
         }
 
         $result = $className;
@@ -802,16 +800,14 @@ class Str
 
         // Regular expression search and replace patterns.
         if (is_array($styleSpec[0])) {
-            $rxSearch = $styleSpec[0][0];
-            $rxReplace = $styleSpec[0][1];
+            list($rxSearch, $rxReplace) = $styleSpec[0];
         } else {
             $rxSearch = $rxReplace = $styleSpec[0];
         }
 
         // New and old (existing) sprintf formats.
         if (is_array($styleSpec[1])) {
-            $newFormat = $styleSpec[1][0];
-            $oldFormat = $styleSpec[1][1];
+            list($newFormat, $oldFormat) = $styleSpec[0];
         } else {
             $newFormat = $oldFormat = $styleSpec[1];
         }
@@ -849,6 +845,7 @@ class Str
         $queries = [];
         $query = '';
 
+        /** @noinspection ForeachInvariantsInspection */
         for ($i = 0; $i < $end; $i++) {
             $current = $sql[$i];
             $current2 = substr($sql, $i, 2);
@@ -876,7 +873,7 @@ class Str
                                 $comment = false;
                                 if ($lenEndString > 1) {
                                     $i += ($lenEndString - 1);
-                                    $current = substr($sql, $i, 1);
+                                    $current = $sql[$i];
                                 }
                                 $start = $i + 1;
                             }
@@ -915,7 +912,7 @@ class Str
                 $query = trim($query);
 
                 if ($query) {
-                    if (($i === $end - 1) && ($current !== ';')) {
+                    if (($current !== ';') && ($i === $end - 1)) {
                         $query .= ';';
                     }
                     $queries[] = $query;

@@ -33,7 +33,6 @@ class Arr
     {
         if ($keepKeys) {
             $array = array_unique($array);
-
         } else {
             // This is faster version than the builtin array_unique().
             // http://stackoverflow.com/questions/8321620/array-unique-vs-array-flip
@@ -194,6 +193,7 @@ class Arr
             } else {
                 if (is_object($elem)) {
                     $elem = (array)$elem;
+                    /** @noinspection NotOptimalIfConditionsInspection */
                     if (in_array($search, $elem, false)) {
                         return $key;
                     }

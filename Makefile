@@ -17,7 +17,7 @@ build: update
 
 test-all:
 	@echo -e "\033[0;33m>>> >>> >>> >>> >>> >>> >>> >>> \033[0;30;46m Run all tests \033[0m"
-	@make validate test phpmd phpcs phpcpd phploc
+	@make validate test phpcpd phploc
 
 update:
 	@echo -e "\033[0;33m>>> >>> >>> >>> >>> >>> >>> >>> \033[0;30;46m Update project \033[0m"
@@ -46,7 +46,7 @@ phpmd:
 
 phpcs:
 	@echo -e "\033[0;33m>>> >>> >>> >>> >>> >>> >>> >>> \033[0;30;46m Check Code Style \033[0m"
-	@php ./vendor/squizlabs/php_codesniffer/scripts/phpcs ./src  \
+	@php ./vendor/squizlabs/php_codesniffer/bin/phpcs ./src      \
         --extensions=php                                         \
         --standard=./vendor/jbzoo/misc/phpcs/JBZoo/ruleset.xml   \
         --report=full

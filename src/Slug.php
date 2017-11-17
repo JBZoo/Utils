@@ -812,6 +812,7 @@ class Slug
         if (self::seemsUTF8($text)) {
             if (preg_match_all(self::$regex, $text, $matches)) {
                 $matchesCount = count($matches[0]);
+                /** @noinspection ForeachInvariantsInspection */
                 for ($i = 0; $i < $matchesCount; $i++) {
                     $char = $matches[0][$i];
 

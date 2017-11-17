@@ -52,7 +52,6 @@ class Filter
                     }
                 }
             }
-
         } elseif ($filters instanceof \Closure) {
             $value = $filters($value);
         }
@@ -141,12 +140,12 @@ class Filter
      * @param int    $round
      * @return float
      */
-    public static function float($value, $round = 10)
+    public static function float($value, $round = 10): float
     {
-        $cleaned = preg_replace('#[^0-9eE\-\.\,]#ius', '', $value);
+        $cleaned = preg_replace('#[^\deE\-\.\,]#iu', '', $value);
         $cleaned = str_replace(',', '.', $cleaned);
 
-        preg_match('#[-+]?[0-9]+(\.[0-9]+)?([eE][-+]?[0-9]+)?#', $cleaned, $matches);
+        preg_match('#[-+]?[\d]+(\.[\d]+)?([eE][-+]?[\d]+)?#', $cleaned, $matches);
         $result = $matches[0] ?? 0.0;
 
         $result = round($result, $round);
@@ -160,11 +159,10 @@ class Filter
      * @param string $value
      * @return int
      */
-    public static function int($value)
+    public static function int($value): int
     {
         $cleaned = preg_replace('#[^0-9-+.,]#', '', $value);
-
-        preg_match('#[-+]?[0-9]+#', $cleaned, $matches);
+        preg_match('#[-+]?[\d]+#', $cleaned, $matches);
         $result = $matches[0] ?? 0;
 
         return (int)$result;
@@ -227,11 +225,8 @@ class Filter
     public static function path($value): string
     {
         $pattern = '#^[A-Za-z0-9_\/-]+[A-Za-z0-9_\.-]*([\\\\\/][A-Za-z0-9_-]+[A-Za-z0-9_\.-]*)*$#';
-
         preg_match($pattern, $value, $matches);
-        $result = isset($matches[0]) ? (string)$matches[0] : '';
-
-        return $result;
+        return isset($matches[0]) ? (string)$matches[0] : '';
     }
 
     /**
@@ -240,9 +235,9 @@ class Filter
      * @param $value
      * @return string
      */
-    public static function trim($value)
+    public static function trim($value): string
     {
-        return Str::trim($value, false);
+        return Str::trim($value);
     }
 
     /**
@@ -251,7 +246,7 @@ class Filter
      * @param $value
      * @return string
      */
-    public static function trimExtend($value)
+    public static function trimExtend($value): string
     {
         return Str::trim($value, true);
     }
@@ -263,13 +258,12 @@ class Filter
      * @param string|\Closure $filter
      * @return string
      */
-    public static function arr($value, $filter = null)
+    public static function arr($value, $filter = null): string
     {
         $array = (array)$value;
 
         if ($filter === 'noempty') {
             $array = Arr::clean($array);
-
         } elseif ($filter instanceof \Closure) {
             $array = array_filter($array, $filter); // TODO add support both - key + value
         }
@@ -283,7 +277,7 @@ class Filter
      * @param string $value
      * @return string
      */
-    public static function cmd($value)
+    public static function cmd($value): string
     {
         $value = Str::low($value);
         $value = preg_replace('#[^a-z0-9\_\-\.]#', '', $value);

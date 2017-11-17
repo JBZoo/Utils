@@ -15,6 +15,7 @@
 
 namespace JBZoo\Utils;
 
+use function JBZoo\PHPUnit\cliMessage;
 use Symfony\Component\Process\Exception\ProcessFailedException;
 use Symfony\Component\Process\Process;
 
@@ -87,6 +88,7 @@ class Cli
      * @param null   $cwd
      * @param bool   $verbose
      * @return string
+     * @throws \Symfony\Component\Process\Exception\LogicException
      * @throws \Symfony\Component\Process\Exception\ProcessFailedException
      * @throws \RuntimeException
      * @throws Exception
@@ -98,14 +100,15 @@ class Cli
         }
 
         $cmd = self::build($command, $args);
+        /** @noinspection CallableParameterUseCaseInTypeContextInspection */
         $cwd = $cwd ? realpath($cwd) : null;
 
         //@codeCoverageIgnoreStart
         if ($verbose) {
             // Only in testing mode
             if (function_exists('\JBZoo\PHPUnit\cliMessage')) {
-                \JBZoo\PHPUnit\cliMessage('Process: ' . $cmd);
-                \JBZoo\PHPUnit\cliMessage('CWD: ' . $cwd);
+                cliMessage('Process: ' . $cmd);
+                cliMessage('CWD: ' . $cwd);
             } else {
                 self::out('Process: ' . $cmd);
                 self::out('CWD: ' . $cwd);

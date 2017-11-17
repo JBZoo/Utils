@@ -224,25 +224,25 @@ class Url
      * @author       Jake Smith <theman@jakeasmith.com>
      * @see          https://github.com/jakeasmith/http_build_url/
      *
-     * @param array|string $url    (part(s) of) an URL in form of a string
-     *                             or associative array like parse_url() returns
-     * @param array|string $parts  same as the first argument
-     * @param int          $flags  a bitmask of binary or'ed HTTP_URL constants; HTTP_URL_REPLACE is the default
-     * @param array        $newUrl if set, it will be filled with the parts of the composed url like parse_url() would
-     *                             return
+     * @param array|string $sourceUrl (part(s) of) an URL in form of a string
+     *                                or associative array like parse_url() returns
+     * @param array|string $destParts Same as the first argument
+     * @param int          $flags     A bitmask of binary or'ed HTTP_URL constants; HTTP_URL_REPLACE is the default
+     * @param array        $newUrl    If set, it will be filled with the parts of the composed url like parse_url()
+     *                                would return
      * @return string
      *
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
      * @SuppressWarnings(PHPMD.Superglobals)
      */
-    public static function buildAll($url, $parts = [], $flags = self::URL_REPLACE, &$newUrl = []): string
+    public static function buildAll($sourceUrl, $destParts = [], $flags = self::URL_REPLACE, &$newUrl = []): string
     {
-        is_array($url) || $url = parse_url($url);
-        is_array($parts) || $url = parse_url($parts);
+        is_array($sourceUrl) || $url = parse_url($sourceUrl);
+        is_array($destParts) || $destParts = parse_url($destParts);
 
-        $url = data((array)$url);
-        $parts = data((array)$parts);
+        $url = data((array)$sourceUrl);
+        $parts = data((array)$destParts);
         $allKeys = ['user', 'pass', 'port', 'path', 'query', 'fragment'];
 
         // HTTP_URL_STRIP_ALL and HTTP_URL_STRIP_AUTH cover several other flags.

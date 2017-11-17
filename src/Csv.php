@@ -31,7 +31,7 @@ class Csv
      * @param bool   $hasHeader
      * @return array
      */
-    public static function parse($csvFile, $delimiter = ';', $enclosure = '"', $hasHeader = true)
+    public static function parse($csvFile, $delimiter = ';', $enclosure = '"', $hasHeader = true): array
     {
         $result = [];
 
@@ -42,7 +42,6 @@ class Csv
             while (($row = fgetcsv($handle, self::LENGTH_LIMIT, $delimiter, $enclosure)) !== false) {
                 if ($rowCounter === 0 && $hasHeader) {
                     $headerKeys = $row;
-
                 } else {
                     if ($hasHeader) {
                         $assocRow = [];
@@ -51,7 +50,6 @@ class Csv
                         }
 
                         $result[] = $assocRow;
-
                     } else {
                         $result[] = $row;
                     }

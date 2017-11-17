@@ -38,13 +38,10 @@ class IP
 
         if (!empty($_SERVER['HTTP_CLIENT_IP'])) {
             $ipAddress = $_SERVER['HTTP_CLIENT_IP'];
-
         } elseif (!empty($_SERVER['HTTP_X_REAL_IP'])) {
             $ipAddress = $_SERVER['HTTP_X_REAL_IP'];
-
         } elseif (!empty($_SERVER['HTTP_X_FORWARDED_FOR'])) {
             $ipAddress = $_SERVER['HTTP_X_FORWARDED_FOR'];
-
         } else {
             $ipAddress = $_SERVER['REMOTE_ADDR'];
         }
@@ -74,7 +71,6 @@ class IP
                 $netMaskDec = ip2long($netMask);
 
                 return ((ip2long($ipAddress) & $netMaskDec) === (ip2long($range) & $netMaskDec));
-
             }
 
             // $netMask is a CIDR size block
@@ -102,7 +98,6 @@ class IP
             $netMaskDec = ~$wildcardDec;
 
             return (($ipDec & $netMaskDec) === ($rangeDec & $netMaskDec));
-
         }
 
         // range might be 255.255.*.* or 1.2.3.0-1.2.3.255

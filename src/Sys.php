@@ -350,7 +350,7 @@ class Sys
      *
      * @return bool
      */
-    public static function isHHVM()
+    public static function isHHVM(): bool
     {
         return defined('HHVM_VERSION');
     }
