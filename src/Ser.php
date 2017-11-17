@@ -57,7 +57,7 @@ class Ser
         }
 
         /** @noinspection ArgumentEqualsDefaultValueInspection */
-        return @unserialize($data, null) !== false;
+        return @unserialize($data, []) !== false;
     }
 
     /**
@@ -108,13 +108,11 @@ class Ser
         }
 
         // Don't attempt to unserialize data that isn't serialized
-        /** @noinspection ArgumentEqualsDefaultValueInspection */
-        $uns = @unserialize($data, null);
+        $uns = @unserialize($data, []);
 
         // Data failed to unserialize?
         if ($uns === false) {
-            /** @noinspection ArgumentEqualsDefaultValueInspection */
-            $uns = @unserialize(self::fix($data), null);
+            $uns = @unserialize(self::fix($data), []);
 
             if ($uns === false) {
                 return $data;

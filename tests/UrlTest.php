@@ -28,17 +28,7 @@ class UrlTest extends PHPUnit
     protected function setUp()
     {
         parent::setUp();
-
-        $_SERVER['DOCUMENT_ROOT'] = PROJECT_ROOT;
-        unset(
-            $_SERVER['HTTP_HOST'],
-            $_SERVER['SERVER_PORT'],
-            $_SERVER['REQUEST_URI'],
-            $_SERVER['QUERY_STRING'],
-            $_SERVER['PHP_SELF'],
-            $_SERVER['HTTPS'],
-            $_SERVER['X-FORWARDED-PROTO']
-        );
+        revertServerVar();
     }
 
     public function testRootPath()

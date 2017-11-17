@@ -25,12 +25,19 @@ use JBZoo\Utils\Http;
  */
 class HttpTest extends PHPUnit
 {
+    protected function setUp()
+    {
+        parent::setUp();
+        revertServerVar();
+    }
+
     /**
      * @param array $vars
      * @SuppressWarnings(PHPMD.Superglobals)
      */
     protected function setServerVar(array $vars)
     {
+        revertServerVar();
         foreach ($vars as $key => $value) {
             $_SERVER[$key] = $value;
         }

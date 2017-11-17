@@ -27,6 +27,8 @@ class Ob
     public static function clean(): void
     {
         /** @noinspection MissingOrEmptyGroupStatementInspection */
+        /** @noinspection LoopWhichDoesNotLoopInspection */
+        /** @noinspection PhpStatementHasEmptyBodyInspection */
         while (@ob_end_clean()) {
             // noop
         }

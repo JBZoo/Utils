@@ -33,3 +33,34 @@ if ($autoload = realpath(ROOT_PATH . '/vendor/autoload.php')) {
 if ($fixtures = realpath(ROOT_PATH . '/tests/fixtures.php')) {
     require_once $fixtures;
 }
+
+/**
+ * @SuppressWarnings(PHPMD.Superglobals)
+ */
+function revertServerVar()
+{
+    unset(
+        $_SERVER['HTTP_HOST'],
+        $_SERVER['SERVER_PORT'],
+        $_SERVER['REQUEST_URI'],
+        $_SERVER['QUERY_STRING'],
+        $_SERVER['PHP_SELF'],
+        $_SERVER['HTTPS'],
+        $_SERVER['X-FORWARDED-PROTO'],
+        $_SERVER['AUTHORIZATION'],
+        $_SERVER['PHP_AUTH_USER'],
+        $_SERVER['PHP_AUTH_PW'],
+        $_SERVER['CONTENT_TYPE'],
+        $_SERVER['CONTENT_LENGTH'],
+        $_SERVER['ETAG'],
+        $_SERVER['HTTP_CONTENT_TYPE'],
+        $_SERVER['HTTP_CONTENT_LENGTH'],
+        $_SERVER['HTTP_ETAG'],
+        $_SERVER['SOME_SERVER_VARIABLE'],
+        $_SERVER['SOME_SERVER_VARIABLE2'],
+        $_SERVER['ROOT'],
+        $_SERVER['HTTP_AUTHORIZATION'],
+        $_SERVER['REDIRECT_HTTP_AUTHORIZATION'],
+        $_SERVER['PHP_AUTH_DIGEST']
+    );
+}

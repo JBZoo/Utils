@@ -33,43 +33,39 @@ class Http
      */
     public static function download($filename): bool
     {
-        if (!headers_sent()) {
-            /** @noinspection MissingOrEmptyGroupStatementInspection */
-            while (@ob_end_clean()) {
-                // noop
-            }
-
-            // required for IE, otherwise Content-disposition is ignored
-            if (Sys::iniGet('zlib.output_compression')) {
-                Sys::iniSet('zlib.output_compression', 'Off');
-            }
-
-            Sys::setTime();
-
-            // Set headers
-            header('Pragma: public');
-            header('Expires: 0');
-            header('Cache-Control: must-revalidate, post-check=0, pre-check=0');
-            header('Cache-Control: private', false);
-            header('Content-Disposition: attachment; filename="' . basename(str_replace('"', '', $filename)) . '";');
-            header('Content-Type: application/force-download');
-            header('Content-Transfer-Encoding: binary');
-            header('Content-Length: ' . filesize($filename));
-
-            // output file
-            if (Sys::isFunc('fpassthru')) {
-                $handle = fopen($filename, 'rb');
-                fpassthru($handle);
-                fclose($handle);
-
-            } else {
-                echo file_get_contents($filename);
-            }
-
-            return true;
+        if (headers_sent()) {
+            return false;
         }
 
-        return false;
+        Ob::clean();
+
+        // required for IE, otherwise Content-disposition is ignored
+        if (Sys::iniGet('zlib.output_compression')) {
+            Sys::iniSet('zlib.output_compression', 'Off');
+        }
+
+        Sys::setTime();
+
+        // Set headers
+        header('Pragma: public');
+        header('Expires: 0');
+        header('Cache-Control: must-revalidate, post-check=0, pre-check=0');
+        header('Cache-Control: private', false);
+        header('Content-Disposition: attachment; filename="' . basename(str_replace('"', '', $filename)) . '";');
+        header('Content-Type: application/force-download');
+        header('Content-Transfer-Encoding: binary');
+        header('Content-Length: ' . filesize($filename));
+
+        // output file
+        if (Sys::isFunc('fpassthru')) {
+            $handle = fopen($filename, 'rb');
+            fpassthru($handle);
+            fclose($handle);
+        } else {
+            echo file_get_contents($filename);
+        }
+
+        return true;
     }
 
     /**
@@ -140,8 +136,7 @@ class Http
 
         if (isset($_SERVER['PHP_AUTH_USER'])) {
             $headers['PHP_AUTH_USER'] = $_SERVER['PHP_AUTH_USER'];
-            $headers['PHP_AUTH_PW'] = isset($_SERVER['PHP_AUTH_PW']) ? $_SERVER['PHP_AUTH_PW'] : '';
-
+            $headers['PHP_AUTH_PW'] = $_SERVER['PHP_AUTH_PW'] ?? '';
         } else {
             /*
              * php-cgi under Apache does not pass HTTP Basic user/pass to PHP by default
@@ -159,7 +154,6 @@ class Http
             $authorizationHeader = null;
             if (isset($_SERVER['HTTP_AUTHORIZATION'])) {
                 $authorizationHeader = $_SERVER['HTTP_AUTHORIZATION'];
-
             } elseif (isset($_SERVER['REDIRECT_HTTP_AUTHORIZATION'])) {
                 $authorizationHeader = $_SERVER['REDIRECT_HTTP_AUTHORIZATION'];
             }
@@ -171,12 +165,10 @@ class Http
                     if (count($exploded) === 2) {
                         list($headers['PHP_AUTH_USER'], $headers['PHP_AUTH_PW']) = $exploded;
                     }
-
                 } elseif (empty($_SERVER['PHP_AUTH_DIGEST']) && (0 === stripos($authorizationHeader, 'digest '))) {
                     // In some circumstances PHP_AUTH_DIGEST needs to be set
                     $headers['PHP_AUTH_DIGEST'] = $authorizationHeader;
                     $_SERVER['PHP_AUTH_DIGEST'] = $authorizationHeader;
-
                 } elseif (0 === stripos($authorizationHeader, 'bearer ')) {
                     /*
                      * XXX: Since there is no PHP_AUTH_BEARER in PHP predefined variables,
@@ -195,9 +187,7 @@ class Http
         // PHP_AUTH_USER/PHP_AUTH_PW
         if (isset($headers['PHP_AUTH_USER'])) {
             $authorization = 'Basic ' . base64_encode($headers['PHP_AUTH_USER'] . ':' . $headers['PHP_AUTH_PW']);
-
             $headers['AUTHORIZATION'] = $authorization;
-
         } elseif (isset($headers['PHP_AUTH_DIGEST'])) {
             $headers['AUTHORIZATION'] = $headers['PHP_AUTH_DIGEST'];
         }

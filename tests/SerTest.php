@@ -35,8 +35,11 @@ class SerTest extends PHPUnit
         is(5.81, Ser::maybe(5.81));
         is('a:0:{}', Ser::maybe([]));
         is('O:8:"stdClass":2:{s:5:"prop1";s:5:"Hello";s:5:"prop2";s:5:"World";}', Ser::maybe($obj));
-        is('a:4:{i:0;s:4:"test";i:1;s:4:"blah";s:5:"hello";s:5:"world";s:5:"array";O:8:"stdClass":2:{s:5:"prop1";s:5:"Hello";s:5:"prop2";s:5:"World";}}',
-            Ser::maybe(['test', 'blah', 'hello' => 'world', 'array' => $obj]));
+        is(
+            'a:4:{i:0;s:4:"test";i:1;s:4:"blah";s:5:"hello";s:5:"world";s:5:"array";'
+            . 'O:8:"stdClass":2:{s:5:"prop1";s:5:"Hello";s:5:"prop2";s:5:"World";}}',
+            Ser::maybe(['test', 'blah', 'hello' => 'world', 'array' => $obj])
+        );
     }
 
     public function testMaybeUn()
@@ -120,7 +123,7 @@ class SerTest extends PHPUnit
             $reportedError = compact('errno', 'errstr');
         });
 
-        unserialize($brokenSerialization, null);
+        unserialize($brokenSerialization, []);
 
         is($expectedError['errno'], $reportedError['errno']);
         // Because HHVM's unserialize() error message does not contain enough info to properly test.
@@ -130,7 +133,7 @@ class SerTest extends PHPUnit
         restore_error_handler();
 
         $fixedSerialization = Ser::fix($brokenSerialization);
-        $unserializeData = unserialize($fixedSerialization, null);
+        $unserializeData = unserialize($fixedSerialization, []);
         is($expectedData[0], $unserializeData[0], 'Did not properly fix the broken serialized data.');
 
         is(
