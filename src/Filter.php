@@ -303,10 +303,9 @@ class Filter
     public static function email($email)
     {
         $email = Str::trim($email);
-        $regex = chr(1) . '^[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$' . chr(1) . 'u';
-
         $cleaned = filter_var($email, FILTER_VALIDATE_EMAIL);
-        if ($cleaned && preg_match($regex, $email)) {
+
+        if (Email::isValid($cleaned)) {
             return $cleaned;
         }
 

@@ -217,7 +217,7 @@ class Email
      * @param string $email
      * @return bool
      */
-    private static function isValid($email): bool
+    public static function isValid($email): bool
     {
         if (empty($email)) {
             return false;

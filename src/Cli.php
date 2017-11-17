@@ -87,14 +87,14 @@ class Cli
      * @param null   $cwd
      * @param bool   $verbose
      * @return string
-     * @throws \Symfony\Component\Process\Exception\LogicException
-     * @throws ProcessFailedException
-     * @throws \Exception
+     * @throws \Symfony\Component\Process\Exception\ProcessFailedException
+     * @throws \RuntimeException
+     * @throws Exception
      */
     public static function exec($command, array $args = [], $cwd = null, $verbose = false): string
     {
         if (!class_exists(Process::class)) {
-            throw new \Exception('Symfony/Process package required for Cli::exec() method'); // @codeCoverageIgnore
+            throw new Exception('Symfony/Process package required for Cli::exec() method'); // @codeCoverageIgnore
         }
 
         $cmd = self::build($command, $args);
@@ -115,8 +115,12 @@ class Cli
         //@codeCoverageIgnoreEnd
 
         // execute command
-        $process = new Process($cmd, $cwd, null, null, 3600);
-        $process->run();
+        try {
+            $process = new Process($cmd, $cwd, null, null, 3600);
+            $process->run();
+        } catch (\Exception $exception) {
+            throw new Exception($exception, (int)$exception->getCode(), $exception);
+        }
 
         // executes after the command finishes
         if (!$process->isSuccessful()) {
@@ -171,7 +175,7 @@ class Cli
      * @return bool
      * @codeCoverageIgnore
      */
-    public static function hasColorSupport()
+    public static function hasColorSupport(): bool
     {
         if (DIRECTORY_SEPARATOR === '\\') {
             $winColor = Env::get('ANSICON', Env::VAR_BOOL)
@@ -254,7 +258,7 @@ class Cli
      * @param int|resource $fileDescriptor
      * @return bool
      */
-    public static function isInteractive($fileDescriptor = self::STDOUT)
+    public static function isInteractive($fileDescriptor = self::STDOUT): bool
     {
         return function_exists('posix_isatty') && @posix_isatty($fileDescriptor);
     }

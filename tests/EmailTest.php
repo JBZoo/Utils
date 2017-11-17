@@ -209,20 +209,7 @@ class EmailTest extends PHPUnit
 
     public function getEmptyProvider()
     {
-        return [
-            [
-                [],
-            ],
-            [
-                false,
-            ],
-            [
-                "",
-            ],
-            [
-                0,
-            ],
-        ];
+        return [[[]], [false], [''], [0],];
     }
 
     public function getGravatarUrlProvider()

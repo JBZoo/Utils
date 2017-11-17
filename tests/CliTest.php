@@ -66,13 +66,9 @@ class CliTest extends PHPUnit
 
     public function testExec()
     {
-        if (class_exists('\Symfony\Component\Process\Process')) {
-            $output1 = Cli::exec('php -v');
-            $output2 = Cli::exec('php', ['v' => '']);
-            isSame($output1, $output2);
-        } else {
-            skip('Symfony/Process required to test Cli::exec() method');
-        }
+        $output1 = Cli::exec('php -v');
+        $output2 = Cli::exec('php', ['v' => '']);
+        isSame($output1, $output2);
     }
 
     /**

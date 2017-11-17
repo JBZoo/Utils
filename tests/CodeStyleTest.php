@@ -59,4 +59,9 @@ class CodeStyleTest extends Codestyle
     {
         isTrue(true); // Don't check it
     }
+
+    public function testHeadersHtaccess()
+    {
+        isTrue(true); // Don't check it
+    }
 }

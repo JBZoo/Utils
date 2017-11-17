@@ -26,6 +26,7 @@ class CsvTest extends PHPUnit
 {
     public function testParse()
     {
+        /** @noinspection ArgumentEqualsDefaultValueInspection */
         $result = Csv::parse(__DIR__ . '/resources/parse.csv', ';', '"', true);
 
         isSame([

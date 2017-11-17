@@ -25,6 +25,21 @@ use JBZoo\Utils\Url;
  */
 class UrlTest extends PHPUnit
 {
+    protected function setUp()
+    {
+        parent::setUp();
+
+        $_SERVER['DOCUMENT_ROOT'] = PROJECT_ROOT;
+        unset(
+            $_SERVER['HTTP_HOST'],
+            $_SERVER['SERVER_PORT'],
+            $_SERVER['REQUEST_URI'],
+            $_SERVER['QUERY_STRING'],
+            $_SERVER['PHP_SELF'],
+            $_SERVER['HTTPS'],
+            $_SERVER['X-FORWARDED-PROTO']
+        );
+    }
 
     public function testRootPath()
     {
@@ -43,16 +58,17 @@ class UrlTest extends PHPUnit
         $_SERVER['PHP_AUTH_USER'] = 'admin';
         $_SERVER['PHP_AUTH_PW'] = '123456';
         is('http://admin:123456@test.dev', Url::root(true));
+        /** @noinspection ArgumentEqualsDefaultValueInspection */
         is('http://test.dev', Url::root(false));
         is('http://test.dev', Url::root());
         is('/test.php?foo=bar', Url::path());
         is('http://admin:123456@test.dev/test.php?foo=bar', Url::current(true));
+        /** @noinspection ArgumentEqualsDefaultValueInspection */
         is('http://test.dev/test.php?foo=bar', Url::current(false));
         is('http://test.dev/test.php?foo=bar', Url::current());
 
         // Test port.
-        unset($_SERVER['PHP_AUTH_USER']);
-        unset($_SERVER['PHP_AUTH_PW']);
+        unset($_SERVER['PHP_AUTH_USER'], $_SERVER['PHP_AUTH_PW']);
         $_SERVER['SERVER_PORT'] = 8080;
         is('http://test.dev:8080', Url::root());
         is('/test.php?foo=bar', Url::path());
@@ -74,10 +90,6 @@ class UrlTest extends PHPUnit
         // Test no $_SERVER['REQUEST_URI'] (e.g., MS IIS).
         $_SERVER['SERVER_PORT'] = 80;
         is('http://test.dev', Url::root());
-
-        // Only for MS IIS
-        //is('/test.php?foo=bar', Url::path());
-        //is('http://test.dev/test.php?foo=bar', Url::current());
     }
 
     public function testParseLinky()
@@ -156,6 +168,7 @@ class UrlTest extends PHPUnit
         is('http://example.com/#hi', Url::buildAll('http://example.com/', ['fragment' => 'hi'], Url::URL_REPLACE));
         is('http://example.com/page', Url::buildAll('http://example.com/', ['path' => 'page'], Url::URL_JOIN_PATH));
         is('http://example.com/page', Url::buildAll('http://example.com', ['path' => 'page'], Url::URL_JOIN_PATH));
+
         is(
             'http://example.com/?hi=Bro',
             Url::buildAll('http://example.com/', ['query' => 'hi=Bro'], Url::URL_JOIN_QUERY)
@@ -200,9 +213,9 @@ class UrlTest extends PHPUnit
 
     public function testEmpty()
     {
-        isSame(null, Url::root());
-        isSame(null, Url::path());
-        isSame(null, Url::current());
+        isNull(Url::root());
+        isNull(Url::path());
+        isNull(Url::current());
     }
 
     public function testCreate()

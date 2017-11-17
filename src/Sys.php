@@ -180,20 +180,6 @@ class Sys
     }
 
     /**
-     * Get remote IP
-     *
-     * @SuppressWarnings(PHPMD.ShortMethodName)
-     * @deprecated use IP::getRemote()
-     *
-     * @param bool $trustProxy
-     * @return string
-     */
-    public static function ip($trustProxy = false): string
-    {
-        return IP::getRemote($trustProxy);
-    }
-
-    /**
      * Return document root
      *
      * @SuppressWarnings(PHPMD.Superglobals)

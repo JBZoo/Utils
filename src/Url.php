@@ -15,6 +15,8 @@
 
 namespace JBZoo\Utils;
 
+use function JBZoo\Data\data;
+
 /**
  * Class Url
  *
@@ -47,8 +49,8 @@ class Url
     /**
      * Add or remove query arguments to the URL.
      *
-     * @param  mixed $newParams Either new key or an associative array
-     * @param  mixed $uri       URI or URL to append the query/queries to.
+     * @param  mixed $newParams Either newkey or an associative array
+     * @param  mixed $uri       URI or URL to append the queru/queries to.
      * @return string
      *
      * @SuppressWarnings(PHPMD.NPathComplexity)
@@ -56,16 +58,17 @@ class Url
      */
     public static function addArg(array $newParams, $uri = null): string
     {
-        $uri = $uri ?? Vars::get($_SERVER['REQUEST_URI'], '');
+        $uri = $uri ?? ($_SERVER['REQUEST_URI'] ?? '');
 
         // Parse the URI into it's components
-        $parsedUri = parse_url($uri);
-        if (Arr::key('query', $parsedUri)) {
+        $parsedUri = data(parse_url($uri));
+
+        if ($parsedUri->get('query')) {
             parse_str($parsedUri['query'], $queryParams);
             $queryParams = array_merge($queryParams, $newParams);
-        } elseif (Arr::key('path', $parsedUri) && false !== strpos($parsedUri['path'], '=')) {
+        } elseif ($parsedUri->get('path') && false !== strpos($parsedUri['path'], '=')) {
             $parsedUri['query'] = $parsedUri['path'];
-            unset($parsedUri['path']);
+            $parsedUri->remove('path');
             parse_str($parsedUri['query'], $queryParams);
             $queryParams = array_merge($queryParams, $newParams);
         } else {
@@ -89,16 +92,16 @@ class Url
         $parsedUri['query'] = preg_replace('/=(?=&|$)/', '', $parsedUri['query']);
 
         // Re-construct the entire URL
-        $normUri = self::buildAll($parsedUri);
+        $newUri = self::buildAll((array)$parsedUri);
 
         // Make the URI consistent with our input
-        foreach (['/', '?'] as $char) {
-            if ($normUri[0] === $char && false === strpos($uri, $char)) {
-                $normUri = substr($normUri, 1);
+        foreach ([':', '/', '?'] as $char) {
+            if ($newUri[0] === $char && false === strpos($uri, $char)) {
+                $newUri = substr($newUri, 1);
             }
         }
 
-        return rtrim($normUri, '?');
+        return rtrim($newUri, '?');
     }
 
     /**
@@ -107,9 +110,9 @@ class Url
      * @param bool $addAuth
      * @return string
      */
-    public static function current($addAuth = false): string
+    public static function current($addAuth = false): ?string
     {
-        $current = (string)self::root($addAuth) . self::path();
+        $current = (string)self::root($addAuth) . (string)self::path();
         return $current ?: null;
     }
 
@@ -120,15 +123,14 @@ class Url
      *
      * @SuppressWarnings(PHPMD.Superglobals)
      */
-    public static function path(): string
+    public static function path(): ?string
     {
         $url = '';
 
         // Get the rest of the URL
         if (!Arr::key('REQUEST_URI', $_SERVER)) {
             // Microsoft IIS doesn't set REQUEST_URI by default
-            $queryString = Arr::key('QUERY_STRING', $_SERVER, true);
-            if ($queryString) {
+            if ($queryString = Arr::key('QUERY_STRING', $_SERVER, true)) {
                 $url .= '?' . $queryString;
             }
         } else {
@@ -146,7 +148,7 @@ class Url
      *
      * @SuppressWarnings(PHPMD.Superglobals)
      */
-    public static function root($addAuth = false): ?string
+    public static function root($addAuth = false)
     {
         $url = '';
 
@@ -158,25 +160,26 @@ class Url
             $url .= self::getAuth();
         }
 
+        $serverData = data($_SERVER);
+
         // We want the user to stay on the same host they are currently on,
         // but beware of security issues
         // see http://shiflett.org/blog/2006/mar/server-name-versus-http-host
-        $host = Arr::key('HTTP_HOST', $_SERVER, true);
-        $port = Arr::key('SERVER_PORT', $_SERVER, true);
+        $host = $serverData->get('HTTP_HOST');
+        $port = (int)$serverData->get('SERVER_PORT');
         $url .= str_replace(':' . $port, '', $host);
 
         // Is it on a non standard port?
-        if ($isHttps && ($port !== self::PORT_HTTPS)) {
-            $url .= Arr::key('SERVER_PORT', $_SERVER) ? ':' . $_SERVER['SERVER_PORT'] : '';
-        } elseif (!$isHttps && ($port !== self::PORT_HTTP)) {
-            $url .= Arr::key('SERVER_PORT', $_SERVER) ? ':' . $_SERVER['SERVER_PORT'] : '';
+        if ($isHttps && $port !== self::PORT_HTTPS) {
+            $url .= $port ? ":{$port}" : '';
+        } elseif (!$isHttps && $port !== self::PORT_HTTP) {
+            $url .= $port ? ":{$port}" : '';
         }
 
         if ($url) {
             if ($isHttps) {
                 return 'https://' . $url;
             }
-
             return 'http://' . $url;
         }
 
@@ -190,15 +193,13 @@ class Url
      *
      * @SuppressWarnings(PHPMD.Superglobals)
      */
-    public static function getAuth(): ?string
+    public static function getAuth()
     {
         $result = null;
-        $user = Arr::key('PHP_AUTH_USER', $_SERVER, true);
-        if ($user) {
+        if ($user = Arr::key('PHP_AUTH_USER', $_SERVER, true)) {
             $result .= $user;
 
-            $password = Arr::key('PHP_AUTH_PW', $_SERVER, true);
-            if ($password) {
+            if ($password = Arr::key('PHP_AUTH_PW', $_SERVER, true)) {
                 $result .= ':' . $password;
             }
 
@@ -220,132 +221,130 @@ class Url
     /**
      * Build a URL. The parts of the second URL will be merged into the first according to the flags argument.
      *
-     * @author Jake Smith <theman@jakeasmith.com>
-     * @see    https://github.com/jakeasmith/http_build_url/
+     * @author       Jake Smith <theman@jakeasmith.com>
+     * @see          https://github.com/jakeasmith/http_build_url/
      *
-     * @param mixed $url    (part(s) of) an URL in form of a string or associative array like parse_url() returns
-     * @param mixed $parts  same as the first argument
-     * @param int   $flags  a bitmask of binary or'ed HTTP_URL constants; HTTP_URL_REPLACE is the default
-     * @param array $newUrl if set, it will be filled with the parts of the composed url like parse_url() would return
+     * @param array|string $url    (part(s) of) an URL in form of a string
+     *                             or associative array like parse_url() returns
+     * @param array|string $parts  same as the first argument
+     * @param int          $flags  a bitmask of binary or'ed HTTP_URL constants; HTTP_URL_REPLACE is the default
+     * @param array        $newUrl if set, it will be filled with the parts of the composed url like parse_url() would
+     *                             return
      * @return string
      *
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
      * @SuppressWarnings(PHPMD.Superglobals)
      */
-    public static function buildAll($url, array $parts = [], $flags = self::URL_REPLACE, array &$newUrl = []): string
+    public static function buildAll($url, $parts = [], $flags = self::URL_REPLACE, &$newUrl = []): string
     {
         is_array($url) || $url = parse_url($url);
-        is_array($parts) || $parts = parse_url($parts);
+        is_array($parts) || $url = parse_url($parts);
 
-        (Arr::key('query', $url) && is_string($url['query'])) || $url['query'] = null;
-        (Arr::key('query', $parts) && is_string($parts['query'])) || $parts['query'] = null;
-        $keys = ['user', 'pass', 'port', 'path', 'query', 'fragment'];
+        $url = data((array)$url);
+        $parts = data((array)$parts);
+        $allKeys = ['user', 'pass', 'port', 'path', 'query', 'fragment'];
 
         // HTTP_URL_STRIP_ALL and HTTP_URL_STRIP_AUTH cover several other flags.
         if ($flags & self::URL_STRIP_ALL) {
-            $flags |= self::URL_STRIP_USER
-                | self::URL_STRIP_PASS
-                | self::URL_STRIP_PORT
-                | self::URL_STRIP_PATH
-                | self::URL_STRIP_QUERY
-                | self::URL_STRIP_FRAGMENT;
+            $flags |= self::URL_STRIP_USER | self::URL_STRIP_PASS | self::URL_STRIP_PORT | self::URL_STRIP_PATH
+                | self::URL_STRIP_QUERY | self::URL_STRIP_FRAGMENT;
         } elseif ($flags & self::URL_STRIP_AUTH) {
-            $flags |= self::URL_STRIP_USER
-                | self::URL_STRIP_PASS;
+            $flags |= self::URL_STRIP_USER | self::URL_STRIP_PASS;
         }
 
         // Schema and host are always replaced
-        foreach (['scheme', 'host'] as $part) {
-            if (Arr::key($part, $parts)) {
-                $url[$part] = $parts[$part];
-            }
+        if ($parts->has('scheme')) {
+            $url['scheme'] = $parts->get('scheme');
+        }
+
+        if ($parts->has('host')) {
+            $url['host'] = $parts->get('host');
         }
 
         if ($flags & self::URL_REPLACE) {
-            foreach ($keys as $key) {
-                if (isset($parts[$key]) && Arr::key($key, $parts)) {
-                    $url[$key] = $parts[$key];
+            foreach ($allKeys as $key) {
+                if ($parts->has($key)) {
+                    $url[$key] = $parts->get($key);
                 }
             }
         } else {
-            if (($flags & self::URL_JOIN_PATH) && Arr::key('path', $parts)) {
-                if ($parts['path'][0] !== '/' && Arr::key('path', $url)) {
-                    $url['path'] = rtrim(str_replace(basename($url['path']), '', $url['path']), '/')
-                        . '/' . ltrim($parts['path'], '/');
+            // PATH
+            if (($flags & self::URL_JOIN_PATH) && $parts->has('path')) {
+                if ($url->has('path') && $parts->has('path')[0] !== '/') {
+                    $url['path'] =
+                        rtrim(str_replace(basename($url['path']), '', $url['path']), '/')
+                        . '/'
+                        . ltrim($parts['path'], '/');
                 } else {
                     $url['path'] = $parts['path'];
                 }
             }
 
-            if (($flags & self::URL_JOIN_QUERY) &&
-                Arr::key('query', $parts) &&
-                Arr::key('query', $url)
-            ) {
-                parse_str($url['query'], $urlQuery);
-                parse_str($parts['query'], $partsQuery);
+            // QUERY
+            if ($flags & self::URL_JOIN_QUERY && $parts->has('query')) {
+                parse_str($url->get('query', ''), $urlQuery);
+                parse_str($parts->get('query', ''), $partsQuery);
 
                 $queryParams = array_replace_recursive($urlQuery, $partsQuery);
                 $url['query'] = self::build($queryParams);
             }
         }
 
-        if (Arr::key('path', $url) && $url['path'][0] !== '/') {
-            $url['path'] = '/' . $url['path'];
+        if ($url->get('path')) {
+            $url['path'] = '/' . ltrim($url['path'], '/');
         }
 
-        foreach ($keys as $key) {
+        foreach ($allKeys as $key) {
             $strip = 'URL_STRIP_' . strtoupper($key);
             if ($flags & constant(__CLASS__ . '::' . $strip)) {
-                unset($url[$key]);
+                $url->remove($key);
             }
         }
 
-        if (Arr::key('port', $url, true) === self::PORT_HTTPS) {
+        if ($url->get('port', null, 'int') === self::PORT_HTTPS) {
             $url['scheme'] = 'https';
-        } elseif (Arr::key('port', $url, true) === self::PORT_HTTP) {
+        } elseif ($url->get('port', null, 'int') === self::PORT_HTTP) {
             $url['scheme'] = 'http';
         }
 
-        $parsedString = '';
-        if (Arr::key('scheme', $url)) {
-            $parsedString .= $url['scheme'] . '://';
+        if (!$url['port']) {
+            if ($url->get('scheme') === 'https') {
+                $url['port'] = 443;
+            } elseif ($url->get('scheme') === 'http') {
+                $url['port'] = 80;
+            }
         }
 
-        if (Arr::key('user', $url)) {
+        $parsedString = $url->has('scheme') ? ($url['scheme'] . '://') : '';
+
+        if ($url->get('user')) {
             $parsedString .= $url['user'];
-            if (Arr::key('pass', $url)) {
-                $parsedString .= ':' . $url['pass'];
-            }
+            $parsedString .= $url->get('pass') ? (':' . $url->get('pass')) : '';
             $parsedString .= '@';
         }
 
-        if (Arr::key('host', $url)) {
-            $parsedString .= $url['host'];
+        $parsedString .= $url->has('host') ? $url['host'] : '';
+
+        if ((int)$url['port'] !== self::PORT_HTTP && $url['scheme'] === 'http') {
+            $parsedString .= ':' . $url['port'];
         }
 
-        if ($urlPort = (Arr::key('port', $url) &&
-            $url['port'] !== self::PORT_HTTP &&
-            $url['port'] !== self::PORT_HTTPS)
-        ) {
-            $parsedString .= ':' . $urlPort;
-        }
-
-        if (!empty($url['path'])) {
+        if ($url->get('path')) {
             $parsedString .= $url['path'];
         } else {
             $parsedString .= '/';
         }
 
-        if ($urlQuery = Arr::key('query', $url)) {
-            $parsedString .= '?' . $urlQuery;
+        if ($url->get('query')) {
+            $parsedString .= '?' . $url['query'];
         }
 
-        if ($urlFragment = Arr::key('fragment', $url)) {
-            $parsedString .= '#' . trim($urlFragment, '#');
+        if ($url->get('fragment')) {
+            $parsedString .= '#' . trim($url['fragment'], '#');
         }
 
-        $newUrl = $url;
+        $newUrl = $url->getArrayCopy();
 
         return $parsedString;
     }
@@ -369,7 +368,7 @@ class Url
             return $_SERVER['X-FORWARDED-PROTO'] === 'https';
         }
 
-        // Default to not SSL
+        // Default is not SSL
         return false;
     }
 
@@ -532,10 +531,7 @@ class Url
      */
     public static function isAbsolute($path): bool
     {
-        $result = strpos($path, '//') === 0
-            || preg_match('#^[a-z-]{3,}:\/\/#i', $path);
-
-        return $result;
+        return strpos($path, '//') === 0 || preg_match('#^[a-z-]{3,}:\/\/#i', $path);
     }
 
     /**
@@ -553,6 +549,7 @@ class Url
             $parts['query'] = self::build($parts['query']);
         }
 
-        return self::buildAll('', $parts);
+        /** @noinspection ArgumentEqualsDefaultValueInspection */
+        return self::buildAll('', $parts, self::URL_REPLACE);
     }
 }

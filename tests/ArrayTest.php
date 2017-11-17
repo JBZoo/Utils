@@ -32,6 +32,7 @@ class ArrayTest extends PHPUnit
         isSame([10, 100, 1231, 600, 20, 40, 6, 1], Arr::unique($array));
 
         $array = ['hello', 'world', 'this', 'is', 'a', 'test', 'hello', 'is', 'a', 'word'];
+        /** @noinspection ArgumentEqualsDefaultValueInspection */
         isSame(['hello', 'world', 'this', 'is', 'a', 'test', 'word'], Arr::unique($array, false));
 
         $array = [
@@ -49,13 +50,14 @@ class ArrayTest extends PHPUnit
         $array['nested'] = ['key1' => 'val1', 'key2' => 'val2', 'key3' => 'val3'];
 
         // Looks for $array['abc']
+        /** @noinspection PhpParamsInspection */
         is('def', Vars::get($array['abc']));
 
         // Looks for $array['nested']['key2']
         is('val2', Vars::get($array['nested']['key2']));
 
-        // Looks for $array['doesnotexist']
-        is('defaultval', Vars::get($array['doesnotexist'], 'defaultval'));
+        // Looks for $array['not-exist']
+        is('default', Vars::get($array['not-exist'], 'default'));
     }
 
     public function testFirst()
@@ -119,6 +121,7 @@ class ArrayTest extends PHPUnit
 
         is($expectWithKeys, Arr::flat($input));
         is($expectNoKeys, Arr::flat($input, false));
+        /** @noinspection ArgumentEqualsDefaultValueInspection */
         is($expectWithKeys, Arr::flat($input, true));
     }
 
@@ -185,10 +188,10 @@ class ArrayTest extends PHPUnit
     public function testIsAssoc()
     {
         isFalse(Arr::isAssoc(['a', 'b', 'c']));
-        isFalse(Arr::isAssoc(["0" => 'a', "1" => 'b', "2" => 'c']));
+        isFalse(Arr::isAssoc(['0' => 'a', '1' => 'b', '2' => 'c']));
 
-        isTrue(Arr::isAssoc(["1" => 'a', "0" => 'b', "2" => 'c']));
-        isTrue(Arr::isAssoc(["a" => 'a', "b" => 'b', "c" => 'c']));
+        isTrue(Arr::isAssoc(['1' => 'a', '0' => 'b', '2' => 'c']));
+        isTrue(Arr::isAssoc(['a' => 'a', 'b' => 'b', 'c' => 'c']));
     }
 
     public function testUnshiftAssoc()
@@ -300,20 +303,20 @@ class ArrayTest extends PHPUnit
     {
         $array = [1, 2, 3, 4, 5];
         isSame([
-            "prefix_0" => 1,
-            "prefix_1" => 2,
-            "prefix_2" => 3,
-            "prefix_3" => 4,
-            "prefix_4" => 5,
+            'prefix_0' => 1,
+            'prefix_1' => 2,
+            'prefix_2' => 3,
+            'prefix_3' => 4,
+            'prefix_4' => 5,
         ], Arr::addEachKey($array, 'prefix_'));
 
         $array = ['a' => 1, 'b' => 2, 'c' => 3, 'd' => 4, 'e' => 5];
         isSame([
-            "prefix_a" => 1,
-            "prefix_b" => 2,
-            "prefix_c" => 3,
-            "prefix_d" => 4,
-            "prefix_e" => 5,
+            'prefix_a' => 1,
+            'prefix_b' => 2,
+            'prefix_c' => 3,
+            'prefix_d' => 4,
+            'prefix_e' => 5,
         ], Arr::addEachKey($array, 'prefix_'));
     }
 
@@ -378,7 +381,9 @@ class ArrayTest extends PHPUnit
 
         isSame('asd', Arr::key('key', $array, true));
         isSame(null, Arr::key('undefined', $array, true));
+        /** @noinspection ArgumentEqualsDefaultValueInspection */
         isSame(true, Arr::key('key', $array, false));
+        /** @noinspection ArgumentEqualsDefaultValueInspection */
         isSame(false, Arr::key('undefined', $array, false));
 
         isFalse(Arr::key('undefined', $array));
@@ -400,7 +405,9 @@ class ArrayTest extends PHPUnit
         isFalse(Arr::in(0, $array));
         isTrue(Arr::in(false, $array));
 
+        /** @noinspection ArgumentEqualsDefaultValueInspection */
         isFalse(Arr::in(0, $array, false));
+        /** @noinspection ArgumentEqualsDefaultValueInspection */
         isTrue(Arr::in(false, $array, false));
 
         isSame('some-string', Arr::in('1234567890098765432111111', $array, true));

@@ -35,7 +35,6 @@ class IpTest extends PHPUnit
         $_SERVER['HTTP_X_REAL_IP'] = '192.168.0.3';
         $_SERVER['HTTP_X_FORWARDED_FOR'] = '192.168.0.4';
 
-        is('192.168.0.1', Sys::IP()); // Check deprecated method
         is('192.168.0.1', IP::getRemote());
 
         is('192.168.0.2', IP::getRemote(true));

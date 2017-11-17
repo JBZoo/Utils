@@ -395,7 +395,7 @@ class Str
      * @param int    $offset
      * @return int
      */
-    public static function pos($haystack, $needle, $offset = 0): ?int
+    public static function pos($haystack, $needle, $offset = 0)
     {
         if (self::isMBString()) {
             return mb_strpos($haystack, $needle, $offset, self::$encoding);

@@ -49,7 +49,7 @@ class Timer
         foreach (self::$times as $unit => $value) {
             if ($time >= $value) {
                 $time = floor($time / $value * 100.0) / 100.0;
-                return $time . ' ' . $unit . ($time === 1 ? '' : 's');
+                return $time . ' ' . $unit . ((float)$time === 1.0 ? '' : 's');
             }
         }
 

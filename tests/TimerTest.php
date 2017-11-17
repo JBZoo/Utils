@@ -59,7 +59,7 @@ class TimerTest extends PHPUnit
     /**
      * @return array
      */
-    public function milliSecondsProvider()
+    public function milliSecondsProvider(): array
     {
         return [
             ['1 000 ms', 1],
@@ -81,7 +81,7 @@ class TimerTest extends PHPUnit
     /**
      * @return array
      */
-    public function secondsProvider()
+    public function secondsProvider(): array
     {
         return [
             ['0 ms', 0],

@@ -25,74 +25,10 @@ use JBZoo\Utils\Env;
  */
 class EnvTest extends PHPUnit
 {
-    public function testBinaryCanBeRetrieved()
-    {
-        $this->assertInternalType('string', Env::getBinary());
-    }
-
-    public function testCanBeDetected()
-    {
-        $this->assertInternalType('boolean', Env::isHHVM());
-    }
-
-    public function testCanBeDetected2()
-    {
-        $this->assertInternalType('boolean', Env::isPHP());
-    }
-
-    /**
-     * @covers JBZoo\Utils\Env::hasXdebug
-     * @uses   JBZoo\Utils\Env::isHHVM
-     * @uses   JBZoo\Utils\Env::isPHP
-     */
-    public function testXdebugCanBeDetected()
-    {
-        $this->assertInternalType('boolean', Env::hasXdebug());
-    }
-
-    /**
-     * @covers JBZoo\Utils\Env::getNameWithVersion
-     * @uses   JBZoo\Utils\Env::getName
-     * @uses   JBZoo\Utils\Env::getVersion
-     * @uses   JBZoo\Utils\Env::isHHVM
-     * @uses   JBZoo\Utils\Env::isPHP
-     */
-    public function testNameAndVersionCanBeRetrieved()
-    {
-        $this->assertInternalType('string', Env::getNameWithVersion());
-    }
-
-    /**
-     * @covers JBZoo\Utils\Env::getName
-     * @uses   JBZoo\Utils\Env::isHHVM
-     */
-    public function testNameCanBeRetrieved()
-    {
-        $this->assertInternalType('string', Env::getName());
-    }
-
-    /**
-     * @covers JBZoo\Utils\Env::getVersion
-     * @uses   JBZoo\Utils\Env::isHHVM
-     */
-    public function testVersionCanBeRetrieved()
-    {
-        $this->assertInternalType('string', Env::getVersion());
-    }
-
-    /**
-     * @covers JBZoo\Utils\Env::getVendorUrl
-     * @uses   JBZoo\Utils\Env::isHHVM
-     */
-    public function testVendorUrlCanBeRetrieved()
-    {
-        $this->assertInternalType('string', Env::getVendorUrl());
-    }
-
     /**
      * @return array
      */
-    public function dataProvider()
+    public function dataProvider(): array
     {
         return [
             ['', null, ''],
