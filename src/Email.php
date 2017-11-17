@@ -151,7 +151,7 @@ class Email
      * @return null|string
      * @link http://en.gravatar.com/site/implement/images/
      */
-    public static function getGravatarUrl($email, $size = 32, $defaultImage = 'identicon'): ?string
+    public static function getGravatarUrl($email, $size = 32, $defaultImage = 'identicon')
     {
         if (empty($email) || self::isValid($email) === false) {
             return null;

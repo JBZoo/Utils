@@ -908,7 +908,7 @@ class Str
                 $query = trim($query);
 
                 if ($query) {
-                    if (($current !== ';') && ($i === $end - 1)) {
+                    if ($current !== ';') {
                         $query .= ';';
                     }
                     $queries[] = $query;
