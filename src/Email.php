@@ -79,11 +79,7 @@ class Email
 
         $domain = self::extractDomain($email);
 
-        if (checkdnsrr($domain, 'MX') === false) {
-            return false;
-        }
-
-        return true;
+        return !(checkdnsrr($domain, 'MX') === false);
     }
 
     /**
@@ -109,7 +105,7 @@ class Email
             }
 
             $domain = self::extractDomain($email);
-            if (!empty($domain) && !in_array($domain, $result)) {
+            if (!empty($domain) && !in_array($domain, $result, true)) {
                 $result[] = $domain;
             }
         }
@@ -191,15 +187,13 @@ class Email
             'd' => $defaultImage,
         ];
 
-        $url = Url::create($parts);
-
-        return $url;
+        return Url::create($parts);
     }
 
     /**
      * @return array
      */
-    public static function getGravatarBuiltInImages()
+    public static function getGravatarBuiltInImages(): array
     {
         return [
             '404',
@@ -215,7 +209,7 @@ class Email
     /**
      * @return string
      */
-    public static function getGravatarBuiltInDefaultImage()
+    public static function getGravatarBuiltInDefaultImage(): string
     {
         return Arr::key(2, self::getGravatarBuiltInImages(), true);
     }
@@ -224,7 +218,7 @@ class Email
      * @param string $email
      * @return bool
      */
-    private static function isValid($email)
+    private static function isValid($email): bool
     {
         if (empty($email)) {
             return false;
@@ -232,24 +226,20 @@ class Email
 
         $email = filter_var($email, FILTER_SANITIZE_STRING);
 
-        if (filter_var($email, FILTER_VALIDATE_EMAIL) === false) {
-            return false;
-        }
-
-        return true;
+        return !(filter_var($email, FILTER_VALIDATE_EMAIL) === false);
     }
 
     /**
      * @param string $email
      * @return string
      */
-    private static function extractDomain($email)
+    private static function extractDomain($email): string
     {
         $parts = explode('@', $email);
         $domain = array_pop($parts);
 
         if (Sys::isFunc('idn_to_ascii')) {
-            return idn_to_ascii($domain);
+            return idn_to_utf8($domain);
         }
 
         return $domain;
@@ -265,14 +255,8 @@ class Email
      * @param string|array $emails
      * @return array
      */
-    private static function handleEmailsInput($emails)
+    private static function handleEmailsInput($emails): array
     {
-        if (is_array($emails)) {
-            $result = array_keys(array_flip($emails));
-        } else {
-            $result = [$emails];
-        }
-
-        return $result;
+        return is_array($emails) ? array_keys(array_flip($emails)) : [$emails];
     }
 }
