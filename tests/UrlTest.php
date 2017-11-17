@@ -6,11 +6,11 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  *
- * @package   Utils
- * @license   MIT
- * @copyright Copyright (C) JBZoo.com,  All rights reserved.
- * @link      https://github.com/JBZoo/Utils
- * @author    Denis Smetannikov <denis@jbzoo.com>
+ * @package    Utils
+ * @license    MIT
+ * @copyright  Copyright (C) JBZoo.com, All rights reserved.
+ * @link       https://github.com/JBZoo/Utils
+ * @author     Denis Smetannikov <denis@jbzoo.com>
  */
 
 namespace JBZoo\PHPUnit;
@@ -69,10 +69,9 @@ class UrlTest extends PHPUnit
         is('https://test.dev:8888', Url::root());
         is('/test.php?foo=bar', Url::path());
         is('https://test.dev:8888/test.php?foo=bar', Url::current());
-        unset($_SERVER['HTTPS']);
+        unset($_SERVER['HTTPS'], $_SERVER['REQUEST_URI']);
 
         // Test no $_SERVER['REQUEST_URI'] (e.g., MS IIS).
-        unset($_SERVER['REQUEST_URI']);
         $_SERVER['SERVER_PORT'] = 80;
         is('http://test.dev', Url::root());
 
@@ -97,8 +96,10 @@ class UrlTest extends PHPUnit
         is('user=5', Url::addArg(['user' => 5], ''));
         is('/app/admin/users?user=5', Url::addArg(['user' => 5], '/app/admin/users'));
         is('/app/admin/users?action=edit&user=5', Url::addArg(['user' => 5], '/app/admin/users?action=edit'));
-        is('/app/admin/users?action=edit&tab=personal&user=5',
-            Url::addArg(['user' => 5], '/app/admin/users?action=edit&tab=personal'));
+        is(
+            '/app/admin/users?action=edit&tab=personal&user=5',
+            Url::addArg(['user' => 5], '/app/admin/users?action=edit&tab=personal')
+        );
 
         // Ensure strips false.
         is('/index.php', Url::addArg(['debug' => false], '/index.php'));
@@ -130,8 +131,10 @@ class UrlTest extends PHPUnit
     {
         is('/app/admin/users', Url::delArg('user', '/app/admin/users?user=5'));
         is('/app/admin/users?action=edit', Url::delArg('user', '/app/admin/users?action=edit&user=5'));
-        is('/app/admin/users?user=5',
-            Url::delArg(['tab', 'action'], '/app/admin/users?action=edit&tab=personal&user=5'));
+        is(
+            '/app/admin/users?user=5',
+            Url::delArg(['tab', 'action'], '/app/admin/users?action=edit&tab=personal&user=5')
+        );
     }
 
     public function testHttpBuildUrl()

@@ -6,11 +6,11 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  *
- * @package   Utils
- * @license   MIT
- * @copyright Copyright (C) JBZoo.com,  All rights reserved.
- * @link      https://github.com/JBZoo/Utils
- * @author    Denis Smetannikov <denis@jbzoo.com>
+ * @package    Utils
+ * @license    MIT
+ * @copyright  Copyright (C) JBZoo.com, All rights reserved.
+ * @link       https://github.com/JBZoo/Utils
+ * @author     Denis Smetannikov <denis@jbzoo.com>
  */
 
 namespace JBZoo\PHPUnit;
@@ -52,8 +52,11 @@ class SerTest extends PHPUnit
         is(5.81, Ser::maybeUn(5.81));
         is([], Ser::maybeUn('a:0:{}'));
         is($obj, Ser::maybeUn('O:8:"stdClass":2:{s:5:"prop1";s:5:"Hello";s:5:"prop2";s:5:"World";}'));
-        is(['test', 'blah', 'hello' => 'world', 'array' => $obj],
-            Ser::maybeUn('a:4:{i:0;s:4:"test";i:1;s:4:"blah";s:5:"hello";s:5:"world";s:5:"array";O:8:"stdClass":2:{s:5:"prop1";s:5:"Hello";s:5:"prop2";s:5:"World";}}'));
+        is(
+            ['test', 'blah', 'hello' => 'world', 'array' => $obj],
+            Ser::maybeUn('a:4:{i:0;s:4:"test";i:1;s:4:"blah";s:5:"hello";s:5:"world";s:5:"array";'
+                . 'O:8:"stdClass":2:{s:5:"prop1";s:5:"Hello";s:5:"prop2";s:5:"World";}}')
+        );
 
         // Test a broken serialization.
         $expectedData = [
@@ -76,7 +79,8 @@ class SerTest extends PHPUnit
         is(
             $unFixableSerialization,
             Ser::maybeUn($unFixableSerialization),
-            'Somehow the [previously?] impossible happened and utilphp thinks it has unserialized an unfixable serialization.'
+            'Somehow the [previously?] impossible happened and utilphp'
+            . ' thinks it has unserialized an unfixable serialization.'
         );
     }
 

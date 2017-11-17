@@ -6,11 +6,11 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  *
- * @package   Utils
- * @license   MIT
- * @copyright Copyright (C) JBZoo.com,  All rights reserved.
- * @link      https://github.com/JBZoo/Utils
- * @author    Denis Smetannikov <denis@jbzoo.com>
+ * @package    Utils
+ * @license    MIT
+ * @copyright  Copyright (C) JBZoo.com, All rights reserved.
+ * @link       https://github.com/JBZoo/Utils
+ * @author     Denis Smetannikov <denis@jbzoo.com>
  */
 
 namespace JBZoo\PHPUnit;
@@ -25,6 +25,9 @@ use JBZoo\Utils\Sys;
  */
 class IpTest extends PHPUnit
 {
+    /**
+     * @SuppressWarnings(PHPMD.Superglobals)
+     */
     public function testGetRemote()
     {
         $_SERVER['REMOTE_ADDR'] = '192.168.0.1';

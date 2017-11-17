@@ -6,11 +6,11 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  *
- * @package   Utils
- * @license   MIT
- * @copyright Copyright (C) JBZoo.com,  All rights reserved.
- * @link      https://github.com/JBZoo/Utils
- * @author    Denis Smetannikov <denis@jbzoo.com>
+ * @package    Utils
+ * @license    MIT
+ * @copyright  Copyright (C) JBZoo.com, All rights reserved.
+ * @link       https://github.com/JBZoo/Utils
+ * @author     Denis Smetannikov <denis@jbzoo.com>
  */
 
 namespace JBZoo\PHPUnit;
@@ -35,10 +35,6 @@ class EnvTest extends PHPUnit
         $this->assertInternalType('boolean', Env::isHHVM());
     }
 
-    /**
-     * @covers JBZoo\Utils\Env::isPHP
-     * @uses   JBZoo\Utils\Env::isHHVM
-     */
     public function testCanBeDetected2()
     {
         $this->assertInternalType('boolean', Env::isPHP());

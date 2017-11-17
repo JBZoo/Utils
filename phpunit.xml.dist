@@ -8,7 +8,7 @@
 
     @package    Utils
     @license    MIT
-    @copyright  Copyright (C) JBZoo.com,  All rights reserved.
+    @copyright  Copyright (C) JBZoo.com, All rights reserved.
     @link       https://github.com/JBZoo/Utils
 -->
 <phpunit bootstrap="tests/autoload.php"
@@ -24,7 +24,7 @@
          stopOnIncomplete="false"
          stopOnSkipped="false"
          verbose="true"
-        >
+>
 
     <testsuites>
         <testsuite name="JBZoo Utils Suite">
