@@ -32,6 +32,8 @@ class Filter
      * @param string|\Closure $filters
      * @return mixed
      * @throws Exception
+     * @SuppressWarnings(PHPMD.CamelCaseMethodName)
+     * @SuppressWarnings(PHPMD.ShortMethodName)
      */
     public static function _($value, $filters = 'raw')
     {

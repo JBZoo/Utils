@@ -821,7 +821,6 @@ class Slug
                     }
                 }
             }
-
         } else {
             // Not a UTF-8 string so we assume its ISO-8859-1
             $search = "\x80\x83\x8a\x8e\x9a\x9e\x9f\xa2\xa5\xb5\xc0\xc1\xc2\xc3\xc4\xc5\xc7\xc8\xc9\xca\xcb\xcc\xcd";

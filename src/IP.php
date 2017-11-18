@@ -110,10 +110,10 @@ class IP
 
         if (strpos($range, '-') !== false) { // A-B format
             list($lower, $upper) = explode('-', $range, 2);
-            $lower_dec = (float)sprintf('%u', ip2long($lower));
-            $upper_dec = (float)sprintf('%u', ip2long($upper));
+            $lowerDec = (float)sprintf('%u', ip2long($lower));
+            $upperDec = (float)sprintf('%u', ip2long($upper));
             $ipDec = (float)sprintf('%u', ip2long($ipAddress));
-            return (($ipDec >= $lower_dec) && ($ipDec <= $upper_dec));
+            return (($ipDec >= $lowerDec) && ($ipDec <= $upperDec));
         }
 
         return false;
@@ -132,10 +132,8 @@ class IP
         $mask = 0xFFFFFFFF;
         if (($ipAddress & 0x80000000) === 0) {
             $mask = 0xFF000000;
-
         } elseif (($ipAddress & 0xC0000000) === 0x80000000) {
             $mask = 0xFFFF0000;
-
         } elseif (($ipAddress & 0xE0000000) === 0xC0000000) {
             $mask = 0xFFFFFF00;
         }

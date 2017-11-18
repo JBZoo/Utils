@@ -112,7 +112,6 @@ class FS
 
                 if (is_dir($currentPath)) {
                     self::rmDir($currentPath, $traverseSymlinks);
-
                 } elseif (!unlink($currentPath)) {
                     // @codeCoverageIgnoreStart
                     throw new \RuntimeException('Unable to delete ' . $currentPath);
@@ -328,7 +327,6 @@ class FS
 
             // Set the world writable bit (file isn't owned or grouped by us)
             return chmod($filename, fileperms($filename) | intval('0' . $perm . $perm . $perm, 8));
-
         }
 
         // Set only the user writable bit (file is owned by us)

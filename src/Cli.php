@@ -113,7 +113,6 @@ class Cli
                 self::out('Process: ' . $cmd);
                 self::out('CWD: ' . $cwd);
             }
-
         }
         //@codeCoverageIgnoreEnd
 
@@ -208,7 +207,6 @@ class Cli
 
             if (preg_match('/^(\d+)x\d+ \(\d+x(\d+)\)$/', trim(getenv('ANSICON')), $matches)) {
                 $columns = $matches[1];
-
             } elseif (function_exists('proc_open')) {
                 $process = proc_open(
                     'mode CON',
