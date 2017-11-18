@@ -59,7 +59,7 @@ class IP
      * @SuppressWarnings(PHPMD.NPathComplexity)
      * @see https://www.pgregg.com/projects/php/ip_in_range/
      */
-    public static function v4InRange($ipAddress, $range): ?bool
+    public static function v4InRange($ipAddress, $range)
     {
         if (strpos($range, '/') !== false) {
             // $range is in IP/NETMASK format

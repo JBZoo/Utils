@@ -506,9 +506,9 @@ class Image
      * @param array  $canvas   Width and Height of canvas
      * @param array  $box      Width and Height of box that will be located on canvas
      * @param array  $offset   Forced offset X, Y
-     * @return array
+     * @return array|null
      */
-    public static function getInnerCoords($position, array $canvas, array $box, array $offset = [0, 0]): ?array
+    public static function getInnerCoords($position, array $canvas, array $box, array $offset = [0, 0])
     {
         $positionCode = self::position($position);
         list($canvasW, $canvasH) = $canvas;

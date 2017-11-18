@@ -108,9 +108,9 @@ class Url
      * Return the current URL.
      *
      * @param bool $addAuth
-     * @return string
+     * @return string|null
      */
-    public static function current($addAuth = false): ?string
+    public static function current($addAuth = false)
     {
         $current = (string)self::root($addAuth) . (string)self::path();
         return $current ?: null;
@@ -119,11 +119,10 @@ class Url
     /**
      * Return the current path
      *
-     * @return string
-     *
+     * @return string|null
      * @SuppressWarnings(PHPMD.Superglobals)
      */
-    public static function path(): ?string
+    public static function path()
     {
         $url = '';
 

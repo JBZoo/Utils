@@ -326,7 +326,7 @@ class Sys
     /**
      * @return string
      */
-    public static function getVersion(): ?string
+    public static function getVersion()
     {
         if (self::isHHVM()) {
             return HHVM_VERSION;

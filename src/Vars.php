@@ -160,7 +160,7 @@ class Vars
      * @param float|int $current
      * @return string
      */
-    public static function relativePercent($normal, $current): ?string
+    public static function relativePercent($normal, $current): string
     {
         $normal = (float)$normal;
         $current = (float)$current;

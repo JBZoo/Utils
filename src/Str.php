@@ -462,7 +462,7 @@ class Str
      * @param bool   $beforeNeedle
      * @return string
      */
-    public static function iStr($haystack, $needle, $beforeNeedle = false): ?string
+    public static function iStr($haystack, $needle, $beforeNeedle = false)
     {
         if (self::isMBString()) {
             return mb_stristr($haystack, $needle, $beforeNeedle, self::$encoding);
@@ -496,7 +496,7 @@ class Str
      * @param int    $length
      * @return string
      */
-    public static function sub($string, $start, $length = 0): ?string
+    public static function sub($string, $start, $length = 0)
     {
         if (self::isMBString()) {
             if (0 === $length) {
@@ -548,7 +548,7 @@ class Str
      * @param string $needle
      * @return int
      */
-    public static function subCount($haystack, $needle): ?int
+    public static function subCount($haystack, $needle)
     {
         if (self::isMBString()) {
             return mb_substr_count($haystack, $needle, self::$encoding);

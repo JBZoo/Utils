@@ -143,7 +143,7 @@ class FS
      * @param $filepath
      * @return null|string
      */
-    public static function openFile($filepath): ?string
+    public static function openFile($filepath)
     {
         $contents = null;
 
@@ -162,7 +162,7 @@ class FS
      * @param string $filepath
      * @return string|null
      */
-    public static function firstLine($filepath): ?string
+    public static function firstLine($filepath)
     {
         if (file_exists($filepath)) {
             $cacheRes = fopen($filepath, 'rb');
@@ -289,12 +289,12 @@ class FS
     }
 
     /**
-     * @param string $filename
-     * @param bool   $isFlag
-     * @param int    $perm
+     * @param string   $filename
+     * @param bool     $isFlag
+     * @param int|null $perm
      * @return bool
      */
-    protected static function setPerms($filename, $isFlag, $perm): ?bool
+    protected static function setPerms($filename, $isFlag, $perm)
     {
         $stat = @stat($filename);
 
