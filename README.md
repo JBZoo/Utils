@@ -1,4 +1,4 @@
-# JBZoo Utils  [![Build Status](https://travis-ci.org/JBZoo/Utils.svg?branch=master)](https://travis-ci.org/JBZoo/Utils)      [![Coverage Status](https://coveralls.io/repos/JBZoo/Utils/badge.svg?branch=master&service=github)](https://coveralls.io/github/JBZoo/Utils?branch=master)
+# JBZoo Utils  [![Build Status](https://travis-ci.org/JBZoo/Utils.svg?branch=master)](https://travis-ci.org/JBZoo/Utils)      [![Coverage Status](https://coveralls.io/repos/github/JBZoo/Utils/badge.svg?branch=master)](https://coveralls.io/github/JBZoo/Utils?branch=master)
 
 A collection of useful PHP functions, mini classes and snippets that you need or could use every day.
 
