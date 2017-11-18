@@ -112,7 +112,7 @@ class Sys
      *
      * @param int $newLimit
      */
-    public static function setTime($newLimit = 0): void
+    public static function setTime($newLimit = 0)
     {
         $newLimit = (int)$newLimit;
 
@@ -128,7 +128,7 @@ class Sys
      *
      * @param string $newLimit
      */
-    public static function setMemory($newLimit = '256M'): void
+    public static function setMemory($newLimit = '256M')
     {
         self::iniSet('memory_limit', $newLimit);
     }

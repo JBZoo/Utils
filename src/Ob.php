@@ -24,7 +24,7 @@ class Ob
     /**
      * Clean all ob_* buffers
      */
-    public static function clean(): void
+    public static function clean()
     {
         /** @noinspection MissingOrEmptyGroupStatementInspection */
         /** @noinspection LoopWhichDoesNotLoopInspection */

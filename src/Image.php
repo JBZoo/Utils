@@ -209,7 +209,7 @@ class Image
         array $src,
         array $srcSizes,
         $opacity
-    ): void {
+    ) {
         list($dstX, $dstY) = $dist;
         list($srcX, $srcY) = $src;
         list($srcWidth, $srcHeight) = $srcSizes;
@@ -571,7 +571,7 @@ class Image
      * @param mixed $image   Image GD resource
      * @param bool  $isBlend Add alpha blending
      */
-    public static function addAlpha($image, $isBlend = true): void
+    public static function addAlpha($image, $isBlend = true)
     {
         imagesavealpha($image, true);
         imagealphablending($image, $isBlend);

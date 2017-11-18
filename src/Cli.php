@@ -47,7 +47,7 @@ class Cli
      * @param bool   $addEol
      * @codeCoverageIgnore
      */
-    public static function out($message, $addEol = true): void
+    public static function out($message, $addEol = true)
     {
         if ($addEol) {
             $message .= PHP_EOL;
@@ -67,7 +67,7 @@ class Cli
      * @param bool   $addEol
      * @codeCoverageIgnore
      */
-    public static function err($message, $addEol = true): void
+    public static function err($message, $addEol = true)
     {
         if ($addEol) {
             $message .= PHP_EOL;

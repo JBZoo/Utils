@@ -685,7 +685,7 @@ class Slug
      *
      * @param string $language
      */
-    private static function initLanguageMap($language = ''): void
+    private static function initLanguageMap($language = '')
     {
         if ((!$language || $language === self::$language) && count(self::$map) > 0) {
             return;
