@@ -40,12 +40,12 @@ class Env
     public static function get($name, $default = null, $options = self::VAR_STRING)
     {
         $envKey = trim($name);
-        if (isset($_ENV[$envKey])) {
-            return self::convert($_ENV[$envKey], $options);
-        }
 
         $value = getenv($envKey);
         if ($value === false) {
+            if (isset($_ENV[$envKey])) {
+                return self::convert($_ENV[$envKey], $options);
+            }
             return $default;
         }
 
