@@ -35,11 +35,16 @@ class Env
      * @param string $default
      * @param int    $options
      * @return mixed
+     * @SuppressWarnings(PHPMD.Superglobals)
      */
     public static function get($name, $default = null, $options = self::VAR_STRING)
     {
-        $value = getenv(trim($name));
+        $envKey = trim($name);
+        if (isset($_ENV[$envKey])) {
+            return self::convert($_ENV[$envKey], $options);
+        }
 
+        $value = getenv($envKey);
         if ($value === false) {
             return $default;
         }
