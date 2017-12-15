@@ -118,7 +118,8 @@ class Cli
 
         // execute command
         try {
-            $process = new Process($cmd, $cwd, null, null, 3600);
+            $process = new Process($cmd, $cwd, $_ENV, null, 3600);
+            $process->inheritEnvironmentVariables(true);
             $process->run();
         } catch (\Exception $exception) {
             throw new Exception($exception, (int)$exception->getCode(), $exception);
