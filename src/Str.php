@@ -50,7 +50,7 @@ class Str
     public static function parseLines($text, $toAssoc = true): array
     {
         $text = htmlspecialchars_decode($text);
-        $text = self::clean($text);
+        $text = self::clean($text, false, false, false);
 
         $text = str_replace(["\n", "\r", "\r\n", PHP_EOL], "\n", $text);
         $lines = explode("\n", $text);
@@ -86,11 +86,15 @@ class Str
      * @param string $string
      * @param bool   $toLower
      * @param bool   $addSlashes
+     * @param bool   $removeAccents
      * @return string
      */
-    public static function clean($string, $toLower = false, $addSlashes = false): string
+    public static function clean($string, $toLower = false, $addSlashes = false, $removeAccents = true): string
     {
-        $string = Slug::removeAccents($string);
+        if ($removeAccents) {
+            $string = Slug::removeAccents($string);
+        }
+
         $string = strip_tags($string);
         $string = trim($string);
 
