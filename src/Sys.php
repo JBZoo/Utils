@@ -54,17 +54,17 @@ class Sys
     /**
      * Returns a home directory of current user.
      *
-     * @return string
+     * @return string|null
      *
      * @SuppressWarnings(PHPMD.Superglobals)
      */
-    public static function getHome(): string
+    public static function getHome()
     {
         if (Arr::key('HOMEDRIVE', $_SERVER)) {
             return $_SERVER['HOMEDRIVE'] . $_SERVER['HOMEPATH'];
         }
 
-        return $_SERVER['HOME'];
+        return $_SERVER['HOME'] ?? null;
     }
 
     /**
