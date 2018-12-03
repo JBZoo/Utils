@@ -17,8 +17,6 @@
          convertNoticesToExceptions="true"
          convertWarningsToExceptions="true"
          processIsolation="false"
-         syntaxCheck="true"
-         stopOnFailures="false"
          stopOnError="false"
          stopOnFailure="false"
          stopOnIncomplete="false"
