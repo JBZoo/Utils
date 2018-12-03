@@ -31,7 +31,7 @@
     "require-dev"       : {
         "jbzoo/phpunit"               : "^2.3",
         "jbzoo/profiler"              : "^1.0",
-        "symfony/process"             : "^4.1",
+        "symfony/process"             : "^3.3|^4.1",
         "symfony/polyfill-mbstring"   : "^1.10",
         "php-coveralls/php-coveralls" : "^2.1"
     },
