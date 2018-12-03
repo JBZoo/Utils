@@ -100,7 +100,7 @@ class StringTest extends PHPUnit
 
     public function testZeroPad()
     {
-        is('341', Str::zeroPad('0341', 1));
+        is('0341', Str::zeroPad('0341', 1));
         is('341', Str::zeroPad(341, 3));
         is('0341', Str::zeroPad(341, 4));
         is('000341', Str::zeroPad(341, 6));
