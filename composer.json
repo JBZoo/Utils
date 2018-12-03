@@ -29,11 +29,11 @@
         "jbzoo/data" : "^1.6|^2.0"
     },
     "require-dev"       : {
-        "jbzoo/phpunit"             : "^2.2",
-        "jbzoo/profiler"            : "^1.0",
-        "symfony/process"           : "^3.3",
-        "symfony/polyfill-mbstring" : "^1.6",
-        "satooshi/php-coveralls"    : "^1.0.2"
+        "jbzoo/phpunit"               : "^2.3",
+        "jbzoo/profiler"              : "^1.0",
+        "symfony/process"             : "^4.1",
+        "symfony/polyfill-mbstring"   : "^1.10",
+        "php-coveralls/php-coveralls" : "^2.1"
     },
     "suggest"           : {
         "ext-mbstring"              : "Provides multibyte specific string functions",

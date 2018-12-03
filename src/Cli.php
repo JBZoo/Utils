@@ -53,7 +53,7 @@ class Cli
             $message .= PHP_EOL;
         }
 
-        if (defined('STDOUT')) {
+        if (\defined('STDOUT')) {
             fwrite(STDOUT, $message);
         } else {
             echo $message;
@@ -73,7 +73,7 @@ class Cli
             $message .= PHP_EOL;
         }
 
-        if (defined('STDERR')) {
+        if (\defined('STDERR')) {
             fwrite(STDERR, $message);
         } else {
             echo $message;
@@ -106,7 +106,7 @@ class Cli
         //@codeCoverageIgnoreStart
         if ($verbose) {
             // Only in testing mode
-            if (function_exists('\JBZoo\PHPUnit\cliMessage')) {
+            if (\function_exists('\JBZoo\PHPUnit\cliMessage')) {
                 cliMessage('Process: ' . $cmd);
                 cliMessage('CWD: ' . $cwd);
             } else {
@@ -118,7 +118,12 @@ class Cli
 
         // execute command
         try {
-            $process = new Process($cmd, $cwd, null, null, 3600);
+            if (method_exists(Process::class, 'fromShellCommandline')) {
+                $process = Process::fromShellCommandline($cmd, $cwd, null, null, 3600);
+            } else {
+                $process = new Process($cmd, $cwd, null, null, 3600);
+            }
+
             $process->inheritEnvironmentVariables(true);
             $process->run();
         } catch (\Exception $exception) {
