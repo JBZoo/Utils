@@ -52,6 +52,16 @@ class Sys
     }
 
     /**
+     * Returns current linux user who runs script
+     * @return string|null
+     */
+    public function getUserName()
+    {
+        $userInfo = posix_getpwuid(posix_geteuid());
+        return $userInfo['name'] ?? null;
+    }
+
+    /**
      * Returns a home directory of current user.
      *
      * @return string|null
