@@ -60,6 +60,11 @@ class Sys
      */
     public static function getHome()
     {
+        $userInfo = posix_getpwuid(posix_geteuid());
+        if (isset($userInfo['dir'])) {
+            return $userInfo['dir'];
+        }
+
         if (Arr::key('HOMEDRIVE', $_SERVER)) {
             return $_SERVER['HOMEDRIVE'] . $_SERVER['HOMEPATH'];
         }
