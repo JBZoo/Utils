@@ -55,7 +55,7 @@ class Sys
      * Returns current linux user who runs script
      * @return string|null
      */
-    public function getUserName()
+    public static function getUserName()
     {
         $userInfo = posix_getpwuid(posix_geteuid());
         return $userInfo['name'] ?? null;
