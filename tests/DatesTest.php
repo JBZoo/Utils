@@ -15,8 +15,8 @@
 
 namespace JBZoo\PHPUnit;
 
-use \DateTime;
-use \DateTimeZone;
+use DateTime;
+use DateTimeZone;
 use JBZoo\Utils\Dates;
 
 /**
@@ -26,7 +26,7 @@ use JBZoo\Utils\Dates;
  */
 class DatesTest extends PHPUnit
 {
-    protected function setUp()
+    protected function setUp(): void
     {
         date_default_timezone_set('UTC');
     }

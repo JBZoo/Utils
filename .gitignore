@@ -5,3 +5,4 @@ composer.lock
 
 # phpstorm
 .idea
+.phpunit.result.cache

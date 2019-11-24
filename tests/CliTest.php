@@ -54,45 +54,30 @@ class CliTest extends PHPUnit
         isSame($output1, $output2);
     }
 
-    /**
-     * @expectedException \Symfony\Component\Process\Exception\ProcessFailedException
-     */
     public function testExecFail()
     {
+        $this->expectException(\Symfony\Component\Process\Exception\ProcessFailedException::class);
+
         Cli::exec('undefined-command');
     }
 
-    /**
-     * @covers \JBZoo\Utils\Cli::isInteractive
-     */
     public function testCanDetectIfStdoutIsInteractiveByDefault()
     {
-        $this->assertInternalType('boolean', Cli::isInteractive());
+        $this->assertIsBool(Cli::isInteractive());
     }
 
-    /**
-     * @covers \JBZoo\Utils\Cli::isInteractive
-     */
     public function testCanDetectIfFileDescriptorIsInteractive()
     {
-        $this->assertInternalType('boolean', Cli::isInteractive(STDOUT));
+        $this->assertIsBool(Cli::isInteractive(STDOUT));
     }
 
-    /**
-     * @covers \JBZoo\Utils\Cli::hasColorSupport
-     * @uses   \JBZoo\Utils\Cli::isInteractive
-     */
     public function testCanDetectColorSupport()
     {
-        $this->assertInternalType('boolean', Cli::hasColorSupport());
+        $this->assertIsBool(Cli::hasColorSupport());
     }
 
-    /**
-     * @covers \JBZoo\Utils\Cli::getNumberOfColumns
-     * @uses   \JBZoo\Utils\Cli::isInteractive
-     */
     public function testCanDetectNumberOfColumns()
     {
-        $this->assertInternalType('integer', Cli::getNumberOfColumns());
+        $this->assertIsInt(Cli::getNumberOfColumns());
     }
 }

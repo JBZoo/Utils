@@ -127,81 +127,81 @@ class SysTest extends PHPUnit
      */
     public function testAbilityToCollectCodeCoverageCanBeAssessed()
     {
-        $this->assertInternalType('boolean', Sys::canCollectCodeCoverage());
+        $this->assertIsBool(Sys::canCollectCodeCoverage());
     }
 
     /**
-     * @covers JBZoo\Utils\Sys::getBinary
-     * @uses   JBZoo\Utils\Sys::isHHVM
+     * @covers \JBZoo\Utils\Sys::getBinary
+     * @uses   \JBZoo\Utils\Sys::isHHVM
      */
     public function testBinaryCanBeRetrieved()
     {
-        $this->assertInternalType('string', Sys::getBinary());
+        $this->assertIsString(Sys::getBinary());
     }
 
     /**
-     * @covers JBZoo\Utils\Sys::isHHVM
+     * @covers \JBZoo\Utils\Sys::isHHVM
      */
     public function testCanBeDetected()
     {
-        $this->assertInternalType('boolean', Sys::isHHVM());
+        $this->assertIsBool(Sys::isHHVM());
     }
 
     /**
-     * @covers JBZoo\Utils\Sys::isRealPHP
-     * @uses   JBZoo\Utils\Sys::isHHVM
+     * @covers \JBZoo\Utils\Sys::isRealPHP
+     * @uses   \JBZoo\Utils\Sys::isHHVM
      */
     public function testCanBeDetected2()
     {
-        $this->assertInternalType('boolean', Sys::isRealPHP());
+        $this->assertIsBool(Sys::isRealPHP());
     }
 
     /**
-     * @covers JBZoo\Utils\Sys::hasXdebug
-     * @uses   JBZoo\Utils\Sys::isHHVM
-     * @uses   JBZoo\Utils\Sys::isPHP
+     * @covers \JBZoo\Utils\Sys::hasXdebug
+     * @uses   \JBZoo\Utils\Sys::isHHVM
+     * @uses   \JBZoo\Utils\Sys::isPHP
      */
     public function testXdebugCanBeDetected()
     {
-        $this->assertInternalType('boolean', Sys::hasXdebug());
+        $this->assertIsBool(Sys::hasXdebug());
     }
 
     /**
-     * @covers JBZoo\Utils\Sys::getNameWithVersion
-     * @uses   JBZoo\Utils\Sys::getName
-     * @uses   JBZoo\Utils\Sys::getVersion
-     * @uses   JBZoo\Utils\Sys::isHHVM
-     * @uses   JBZoo\Utils\Sys::isPHP
+     * @covers \JBZoo\Utils\Sys::getNameWithVersion
+     * @uses   \JBZoo\Utils\Sys::getName
+     * @uses   \JBZoo\Utils\Sys::getVersion
+     * @uses   \JBZoo\Utils\Sys::isHHVM
+     * @uses   \JBZoo\Utils\Sys::isPHP
      */
     public function testNameAndVersionCanBeRetrieved()
     {
-        $this->assertInternalType('string', Sys::getNameWithVersion());
+        $this->assertIsString(Sys::getNameWithVersion());
     }
 
     /**
-     * @covers JBZoo\Utils\Sys::getName
-     * @uses   JBZoo\Utils\Sys::isHHVM
+     * @covers \JBZoo\Utils\Sys::getName
+     * @uses   \JBZoo\Utils\Sys::isHHVM
      */
     public function testNameCanBeRetrieved()
     {
-        $this->assertInternalType('string', Sys::getName());
+        $this->assertIsString(Sys::getName());
     }
 
     /**
-     * @covers JBZoo\Utils\Sys::getVersion
-     * @uses   JBZoo\Utils\Sys::isHHVM
+     * @covers \JBZoo\Utils\Sys::getVersion
+     * @uses   \JBZoo\Utils\Sys::isHHVM
      */
     public function testVersionCanBeRetrieved()
     {
-        $this->assertInternalType('string', Sys::getVersion());
+        $this->assertIsString(Sys::getVersion());
     }
 
     /**
-     * @covers JBZoo\Utils\Sys::getVendorUrl
-     * @uses   JBZoo\Utils\Sys::isHHVM
+     * @covers \JBZoo\Utils\Sys::getVendorUrl
+     * @uses   \JBZoo\Utils\Sys::isHHVM
      */
     public function testVendorUrlCanBeRetrieved()
     {
-        $this->assertInternalType('string', Sys::getVendorUrl());
+        $this->assertIsString(Sys::getVendorUrl());
     }
 }

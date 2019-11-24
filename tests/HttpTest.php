@@ -25,7 +25,7 @@ use JBZoo\Utils\Http;
  */
 class HttpTest extends PHPUnit
 {
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
         revertServerVar();

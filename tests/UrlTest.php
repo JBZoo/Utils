@@ -25,7 +25,7 @@ use JBZoo\Utils\Url;
  */
 class UrlTest extends PHPUnit
 {
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
         revertServerVar();

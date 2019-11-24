@@ -313,11 +313,10 @@ class FilterTest extends PHPUnit
         isSame($excepted, Filter::_($source, 'Strip, alias,int'));
     }
 
-    /**
-     * @expectedException \JBZoo\Utils\Exception
-     */
     public function testApplyUnderfinedRule()
     {
+        $this->expectException(\JBZoo\Utils\Exception::class);
+
         Filter::_('123', 'qwertY');
     }
 
