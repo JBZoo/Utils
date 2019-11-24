@@ -325,7 +325,7 @@ class Url
 
         $parsedString .= $url->has('host') ? $url['host'] : '';
 
-        if ((int)$url->get('port') !== self::PORT_HTTP && $url['scheme'] === 'http') {
+        if ((int)$url->get('port') !== self::PORT_HTTP && $url->get('scheme') === 'http') {
             $parsedString .= ':' . $url['port'];
         }
 
@@ -336,11 +336,11 @@ class Url
         }
 
         if ($url->get('query')) {
-            $parsedString .= '?' . $url['query'];
+            $parsedString .= '?' . $url->get('query');
         }
 
         if ($url->get('fragment')) {
-            $parsedString .= '#' . trim($url['fragment'], '#');
+            $parsedString .= '#' . trim($url->get('fragment'), '#');
         }
 
         $newUrl = $url->getArrayCopy();
