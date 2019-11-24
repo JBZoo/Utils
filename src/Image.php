@@ -22,15 +22,15 @@ namespace JBZoo\Utils;
  */
 class Image
 {
-    const TOP_LEFT     = 'tl';
-    const LEFT         = 'l';
-    const BOTTOM_LEFT  = 'bl';
-    const TOP          = 't';
-    const CENTER       = 'c';
-    const BOTTOM       = 'b';
-    const TOP_RIGHT    = 'tr';
-    const RIGHT        = 'r';
-    const BOTTOM_RIGHT = 'bt';
+    public const TOP_LEFT     = 'tl';
+    public const LEFT         = 'l';
+    public const BOTTOM_LEFT  = 'bl';
+    public const TOP          = 't';
+    public const CENTER       = 'c';
+    public const BOTTOM       = 'b';
+    public const TOP_RIGHT    = 'tr';
+    public const RIGHT        = 'r';
+    public const BOTTOM_RIGHT = 'bt';
 
     /**
      * Require GD library
@@ -119,17 +119,9 @@ class Image
         $color = trim($color);
 
         if (strlen($color) === 6) {
-            list($red, $green, $blue) = [
-                $color[0] . $color[1],
-                $color[2] . $color[3],
-                $color[4] . $color[5],
-            ];
+            [$red, $green, $blue] = [$color[0] . $color[1], $color[2] . $color[3], $color[4] . $color[5]];
         } elseif (strlen($color) === 3) {
-            list($red, $green, $blue) = [
-                $color[0] . $color[0],
-                $color[1] . $color[1],
-                $color[2] . $color[2],
-            ];
+            [$red, $green, $blue] = [$color[0] . $color[0], $color[1] . $color[1], $color[2] . $color[2]];
         } else {
             throw new Exception('Undefined color format (string): ' . $origColor); // @codeCoverageIgnore
         }
@@ -146,7 +138,6 @@ class Image
      *
      * @param array $origColor
      * @return integer[]
-     * @throws Exception
      */
     protected static function normalizeColorArray(array $origColor): array
     {
@@ -209,10 +200,10 @@ class Image
         array $src,
         array $srcSizes,
         $opacity
-    ) {
-        list($dstX, $dstY) = $dist;
-        list($srcX, $srcY) = $src;
-        list($srcWidth, $srcHeight) = $srcSizes;
+    ): void {
+        [$dstX, $dstY] = $dist;
+        [$srcX, $srcY] = $src;
+        [$srcWidth, $srcHeight] = $srcSizes;
 
         // Get image width and height and percentage
         $opacity /= 100;
@@ -508,12 +499,12 @@ class Image
      * @param array  $offset   Forced offset X, Y
      * @return array|null
      */
-    public static function getInnerCoords($position, array $canvas, array $box, array $offset = [0, 0])
+    public static function getInnerCoords($position, array $canvas, array $box, array $offset = [0, 0]): ?array
     {
         $positionCode = self::position($position);
-        list($canvasW, $canvasH) = $canvas;
-        list($boxW, $boxH) = $box;
-        list($offsetX, $offsetY) = $offset;
+        [$canvasW, $canvasH] = $canvas;
+        [$boxW, $boxH] = $box;
+        [$offsetX, $offsetY] = $offset;
 
         // Coords map:
         // 00  10  20  =>  tl  t   tr
@@ -571,7 +562,7 @@ class Image
      * @param mixed $image   Image GD resource
      * @param bool  $isBlend Add alpha blending
      */
-    public static function addAlpha($image, $isBlend = true)
+    public static function addAlpha($image, $isBlend = true): void
     {
         imagesavealpha($image, true);
         imagealphablending($image, $isBlend);

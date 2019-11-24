@@ -22,7 +22,7 @@ namespace JBZoo\Utils;
  */
 class Csv
 {
-    const LENGTH_LIMIT = 10000000;
+    public const LENGTH_LIMIT = 10000000;
 
     /**
      * @param string $csvFile
@@ -42,17 +42,15 @@ class Csv
             while (($row = fgetcsv($handle, self::LENGTH_LIMIT, $delimiter, $enclosure)) !== false) {
                 if ($rowCounter === 0 && $hasHeader) {
                     $headerKeys = $row;
-                } else {
-                    if ($hasHeader) {
-                        $assocRow = [];
-                        foreach ($headerKeys as $colIndex => $colName) {
-                            $assocRow[$colName] = $row[$colIndex];
-                        }
-
-                        $result[] = $assocRow;
-                    } else {
-                        $result[] = $row;
+                } elseif ($hasHeader) {
+                    $assocRow = [];
+                    foreach ($headerKeys as $colIndex => $colName) {
+                        $assocRow[$colName] = $row[$colIndex];
                     }
+
+                    $result[] = $assocRow;
+                } else {
+                    $result[] = $row;
                 }
 
                 $rowCounter++;

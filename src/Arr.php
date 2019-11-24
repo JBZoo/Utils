@@ -15,6 +15,8 @@
 
 namespace JBZoo\Utils;
 
+use Closure;
+
 /**
  * Class Arr
  *
@@ -94,7 +96,7 @@ class Arr
     /**
      * Returns the first element in an array.
      *
-     * @param  array $array
+     * @param array $array
      * @return mixed
      */
     public static function first(array $array)
@@ -105,7 +107,7 @@ class Arr
     /**
      * Returns the last element in an array.
      *
-     * @param  array $array
+     * @param array $array
      * @return mixed
      */
     public static function last(array $array)
@@ -116,7 +118,7 @@ class Arr
     /**
      * Returns the first key in an array.
      *
-     * @param  array $array
+     * @param array $array
      * @return int|string
      */
     public static function firstKey(array $array)
@@ -128,7 +130,7 @@ class Arr
     /**
      * Returns the last key in an array.
      *
-     * @param  array $array
+     * @param array $array
      * @return int|string
      */
     public static function lastKey(array $array)
@@ -140,8 +142,8 @@ class Arr
     /**
      * Flatten a multi-dimensional array into a one dimensional array.
      *
-     * @param  array   $array         The array to flatten
-     * @param  boolean $preserveKeys  Whether or not to preserve array keys. Keys from deeply nested arrays will
+     * @param array   $array          The array to flatten
+     * @param boolean $preserveKeys   Whether or not to preserve array keys. Keys from deeply nested arrays will
      *                                overwrite keys from shallow nested arrays
      * @return array
      */
@@ -164,9 +166,9 @@ class Arr
      * Searches for a given value in an array of arrays, objects and scalar values. You can optionally specify
      * a field of the nested arrays and objects to search in.
      *
-     * @param  array $array  The array to search
-     * @param  mixed $search The value to search for
-     * @param  bool  $field  The field to search in, if not specified all fields will be searched
+     * @param array $array  The array to search
+     * @param mixed $search The value to search for
+     * @param bool  $field  The field to search in, if not specified all fields will be searched
      * @return boolean|mixed  False on failure or the array key on success
      */
     public static function search(array $array, $search, $field = false)
@@ -212,9 +214,9 @@ class Arr
      * Returns an array containing all the elements of arr1 after applying
      * the callback function to each one.
      *
-     * @param  string  $callback   Callback function to run for each element in each array
-     * @param  array   $array      An array to run through the callback function
-     * @param  boolean $onNoScalar Whether or not to call the callback function on non scalar values
+     * @param string  $callback    Callback function to run for each element in each array
+     * @param array   $array       An array to run through the callback function
+     * @param boolean $onNoScalar  Whether or not to call the callback function on non scalar values
      *                             (Objects, resources, etc)
      * @return array
      */
@@ -347,8 +349,8 @@ class Arr
     /**
      * Recursive array mapping
      *
-     * @param \Closure $function
-     * @param array    $array
+     * @param Closure $function
+     * @param array   $array
      * @return array
      */
     public static function map($function, $array): array
@@ -415,13 +417,13 @@ class Arr
     /**
      * Wraps its argument in an array unless it is already an array
      *
+     * @param mixed $object
+     * @return array
      * @example
      *   Arr.wrap(null)      # => []
      *   Arr.wrap([1, 2, 3]) # => [1, 2, 3]
      *   Arr.wrap(0)         # => [0]
      *
-     * @param mixed $object
-     * @return array
      */
     public static function wrap($object): array
     {

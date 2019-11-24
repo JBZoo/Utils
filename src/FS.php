@@ -15,6 +15,11 @@
 
 namespace JBZoo\Utils;
 
+use FilesystemIterator;
+use RecursiveDirectoryIterator;
+use RecursiveIteratorIterator;
+use RuntimeException;
+
 /**
  * Class FS
  *
@@ -25,8 +30,8 @@ class FS
     /**
      * Returns the file permissions as a nice string, like -rw-r--r-- or false if the file is not found.
      *
-     * @param   string $file  The name of the file to get permissions form
-     * @param   int    $perms Numerical value of permissions to display as text.
+     * @param string $file  The name of the file to get permissions form
+     * @param int    $perms Numerical value of permissions to display as text.
      * @return  string
      *
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
@@ -87,10 +92,10 @@ class FS
      * Removes a directory (and its contents) recursively.
      * Contributed by Askar (ARACOOL) <https://github.com/ARACOOOL>
      *
-     * @param  string $dir              The directory to be deleted recursively
-     * @param  bool   $traverseSymlinks Delete contents of symlinks recursively
+     * @param string $dir              The directory to be deleted recursively
+     * @param bool   $traverseSymlinks Delete contents of symlinks recursively
      * @return bool
-     * @throws \RuntimeException
+     * @throws RuntimeException
      */
     public static function rmDir($dir, $traverseSymlinks = false): bool
     {
@@ -99,7 +104,7 @@ class FS
         }
 
         if (!is_dir($dir)) {
-            throw new \RuntimeException('Given path is not a directory');
+            throw new RuntimeException('Given path is not a directory');
         }
 
         if ($traverseSymlinks || !is_link($dir)) {
@@ -114,7 +119,7 @@ class FS
                     self::rmDir($currentPath, $traverseSymlinks);
                 } elseif (!unlink($currentPath)) {
                     // @codeCoverageIgnoreStart
-                    throw new \RuntimeException('Unable to delete ' . $currentPath);
+                    throw new RuntimeException('Unable to delete ' . $currentPath);
                     // @codeCoverageIgnoreEnd
                 }
             }
@@ -124,12 +129,10 @@ class FS
         // Windows treats removing directory symlinks identically to removing directories.
         if (!defined('PHP_WINDOWS_VERSION_MAJOR') && is_link($dir)) {
             if (!unlink($dir)) {
-                throw new \RuntimeException('Unable to delete ' . $dir);
+                throw new RuntimeException('Unable to delete ' . $dir);
             }
-        } else {
-            if (!rmdir($dir)) {
-                throw new \RuntimeException('Unable to delete ' . $dir);
-            }
+        } elseif (!rmdir($dir)) {
+            throw new RuntimeException('Unable to delete ' . $dir);
         }
 
         return true;
@@ -142,7 +145,7 @@ class FS
      * @param $filepath
      * @return null|string
      */
-    public static function openFile($filepath)
+    public static function openFile($filepath): ?string
     {
         $contents = null;
 
@@ -161,7 +164,7 @@ class FS
      * @param string $filepath
      * @return string|null
      */
-    public static function firstLine($filepath)
+    public static function firstLine($filepath): ?string
     {
         if (file_exists($filepath)) {
             $cacheRes = fopen($filepath, 'rb');
@@ -177,8 +180,8 @@ class FS
     /**
      * Set the writable bit on a file to the minimum value that allows the user running PHP to write to it.
      *
-     * @param  string  $filename The filename to set the writable bit on
-     * @param  boolean $writable Whether to make the file writable or not
+     * @param string  $filename The filename to set the writable bit on
+     * @param boolean $writable Whether to make the file writable or not
      * @return boolean
      */
     public static function writable($filename, $writable = true): bool
@@ -189,8 +192,8 @@ class FS
     /**
      * Set the readable bit on a file to the minimum value that allows the user running PHP to read to it.
      *
-     * @param  string  $filename The filename to set the readable bit on
-     * @param  boolean $readable Whether to make the file readable or not
+     * @param string  $filename The filename to set the readable bit on
+     * @param boolean $readable Whether to make the file readable or not
      * @return boolean
      */
     public static function readable($filename, $readable = true): bool
@@ -201,8 +204,8 @@ class FS
     /**
      * Set the executable bit on a file to the minimum value that allows the user running PHP to read to it.
      *
-     * @param  string  $filename   The filename to set the executable bit on
-     * @param  boolean $executable Whether to make the file executable or not
+     * @param string  $filename   The filename to set the executable bit on
+     * @param boolean $executable Whether to make the file executable or not
      * @return boolean
      */
     public static function executable($filename, $executable = true): bool
@@ -220,9 +223,9 @@ class FS
     {
         $size = 0;
 
-        $flags = \FilesystemIterator::CURRENT_AS_FILEINFO | \FilesystemIterator::SKIP_DOTS;
+        $flags = FilesystemIterator::CURRENT_AS_FILEINFO | FilesystemIterator::SKIP_DOTS;
 
-        $dirIterator = new \RecursiveIteratorIterator(new \RecursiveDirectoryIterator($dir, $flags));
+        $dirIterator = new RecursiveIteratorIterator(new RecursiveDirectoryIterator($dir, $flags));
 
         foreach ($dirIterator as $key) {
             if ($key->isFile()) {
@@ -246,11 +249,11 @@ class FS
     {
         $contents = [];
 
-        $flags = \FilesystemIterator::KEY_AS_PATHNAME
-            | \FilesystemIterator::CURRENT_AS_FILEINFO
-            | \FilesystemIterator::SKIP_DOTS;
+        $flags = FilesystemIterator::KEY_AS_PATHNAME
+            | FilesystemIterator::CURRENT_AS_FILEINFO
+            | FilesystemIterator::SKIP_DOTS;
 
-        $dirIterator = new \RecursiveIteratorIterator(new \RecursiveDirectoryIterator($dir, $flags));
+        $dirIterator = new RecursiveIteratorIterator(new RecursiveDirectoryIterator($dir, $flags));
 
         foreach ($dirIterator as $path => $fi) {
             $contents[] = $path;
@@ -263,8 +266,8 @@ class FS
     /**
      * Nice formatting for computer sizes (Bytes).
      *
-     * @param   integer|float $bytes    The number in bytes to format
-     * @param   integer       $decimals The number of decimal points to include
+     * @param integer|float $bytes    The number in bytes to format
+     * @param integer       $decimals The number of decimal points to include
      * @return  string
      */
     public static function format($bytes, $decimals = 2): string
@@ -293,7 +296,7 @@ class FS
      * @param int|null $perm
      * @return bool
      */
-    protected static function setPerms($filename, $isFlag, $perm)
+    protected static function setPerms($filename, $isFlag, $perm): bool
     {
         $stat = @stat($filename);
 
@@ -308,7 +311,7 @@ class FS
             //@codeCoverageIgnoreEnd
         }
 
-        list($myuid, $mygid) = [posix_geteuid(), posix_getgid()];
+        [$myuid, $mygid] = [posix_geteuid(), posix_getgid()];
 
         $isMyUid = $stat['uid'] === $myuid;
         $isMyGid = $stat['gid'] === $mygid;
@@ -415,8 +418,8 @@ class FS
     /**
      * Function to strip additional / or \ in a path name.
      *
-     * @param   string $path   The path to clean.
-     * @param   string $dirSep Directory separator (optional).
+     * @param string $path   The path to clean.
+     * @param string $dirSep Directory separator (optional).
      * @return  string
      *
      * @SuppressWarnings(PHPMD.Superglobals)

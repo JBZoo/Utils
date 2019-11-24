@@ -46,6 +46,11 @@ class SysTest extends PHPUnit
         //isSame('1800', Sys::iniGet('max_execution_time'));
     }
 
+    public function testGetUserName()
+    {
+        isNotEmpty(Sys::getUserName());
+    }
+
     public function testIsPHPVersion()
     {
         isFalse(Sys::isPHP('5.3', '4'));

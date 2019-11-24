@@ -15,6 +15,7 @@
 
 namespace JBZoo\Utils;
 
+use Closure;
 use JBZoo\Data\Data;
 use JBZoo\Data\JSON;
 
@@ -28,8 +29,8 @@ class Filter
     /**
      * Apply custom filter to variable
      *
-     * @param mixed           $value
-     * @param string|\Closure $filters
+     * @param mixed          $value
+     * @param string|Closure $filters
      * @return mixed
      * @throws Exception
      * @SuppressWarnings(PHPMD.CamelCaseMethodName)
@@ -54,7 +55,7 @@ class Filter
                     }
                 }
             }
-        } elseif ($filters instanceof \Closure) {
+        } elseif ($filters instanceof Closure) {
             $value = $filters($value);
         }
 
@@ -64,7 +65,7 @@ class Filter
     /**
      * Converts many english words that equate to true or false to boolean.
      *
-     * @param  string $string The string to convert to boolean
+     * @param string $string The string to convert to boolean
      * @return boolean
      */
     public static function bool($string): bool
@@ -152,7 +153,7 @@ class Filter
 
         $result = round($result, $round);
 
-        return (float)$result;
+        return $result;
     }
 
     /**
@@ -256,8 +257,8 @@ class Filter
     /**
      * Cleanup array
      *
-     * @param mixed           $value
-     * @param string|\Closure $filter
+     * @param mixed          $value
+     * @param string|Closure $filter
      * @return array
      */
     public static function arr($value, $filter = null): array
@@ -266,7 +267,7 @@ class Filter
 
         if ($filter === 'noempty') {
             $array = Arr::clean($array);
-        } elseif ($filter instanceof \Closure) {
+        } elseif ($filter instanceof Closure) {
             $array = array_filter($array, $filter); // TODO add support both - key + value
         }
 
@@ -496,11 +497,11 @@ class Filter
      */
     public static function stripQuotes($value): string
     {
-        if ($value[0] === '"' && substr($value, -1) === '"') {
+        if (strpos($value, '"') === 0 && substr($value, -1) === '"') {
             $value = trim($value, '"');
         }
 
-        if ($value[0] === "'" && substr($value, -1) === "'") {
+        if (strpos($value, "'") === 0 && substr($value, -1) === "'") {
             $value = trim($value, "'");
         }
 

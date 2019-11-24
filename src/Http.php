@@ -94,7 +94,7 @@ class Http
     /**
      * Transmit UTF-8 content headers if the headers haven't already been sent.
      *
-     * @param  string $contentType The content type to send out
+     * @param string $contentType The content type to send out
      * @return boolean
      *
      * @codeCoverageIgnore
@@ -163,7 +163,7 @@ class Http
                     // Decode AUTHORIZATION header into PHP_AUTH_USER and PHP_AUTH_PW when authorization header is basic
                     $exploded = explode(':', base64_decode(substr($authorizationHeader, 6)), 2);
                     if (count($exploded) === 2) {
-                        list($headers['PHP_AUTH_USER'], $headers['PHP_AUTH_PW']) = $exploded;
+                        [$headers['PHP_AUTH_USER'], $headers['PHP_AUTH_PW']] = $exploded;
                     }
                 } elseif (empty($_SERVER['PHP_AUTH_DIGEST']) && (0 === stripos($authorizationHeader, 'digest '))) {
                     // In some circumstances PHP_AUTH_DIGEST needs to be set

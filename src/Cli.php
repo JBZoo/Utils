@@ -15,9 +15,10 @@
 
 namespace JBZoo\Utils;
 
-use function JBZoo\PHPUnit\cliMessage;
+use RuntimeException;
 use Symfony\Component\Process\Exception\ProcessFailedException;
 use Symfony\Component\Process\Process;
+use function JBZoo\PHPUnit\cliMessage;
 
 /**
  * Class Cli
@@ -26,9 +27,9 @@ use Symfony\Component\Process\Process;
  */
 class Cli
 {
-    const STDIN  = 0;
-    const STDOUT = 1;
-    const STDERR = 2;
+    public const STDIN  = 0;
+    public const STDOUT = 1;
+    public const STDERR = 2;
 
     /**
      * Is command line
@@ -47,13 +48,13 @@ class Cli
      * @param bool   $addEol
      * @codeCoverageIgnore
      */
-    public static function out($message, $addEol = true)
+    public static function out($message, $addEol = true): void
     {
         if ($addEol) {
             $message .= PHP_EOL;
         }
 
-        if (\defined('STDOUT')) {
+        if (defined('STDOUT')) {
             fwrite(STDOUT, $message);
         } else {
             echo $message;
@@ -67,13 +68,13 @@ class Cli
      * @param bool   $addEol
      * @codeCoverageIgnore
      */
-    public static function err($message, $addEol = true)
+    public static function err($message, $addEol = true): void
     {
         if ($addEol) {
             $message .= PHP_EOL;
         }
 
-        if (\defined('STDERR')) {
+        if (defined('STDERR')) {
             fwrite(STDERR, $message);
         } else {
             echo $message;
@@ -88,9 +89,7 @@ class Cli
      * @param null   $cwd
      * @param bool   $verbose
      * @return string
-     * @throws \Symfony\Component\Process\Exception\LogicException
-     * @throws \Symfony\Component\Process\Exception\ProcessFailedException
-     * @throws \RuntimeException
+     * @throws RuntimeException
      * @throws Exception
      */
     public static function exec($command, array $args = [], $cwd = null, $verbose = false): string
@@ -106,7 +105,7 @@ class Cli
         //@codeCoverageIgnoreStart
         if ($verbose) {
             // Only in testing mode
-            if (\function_exists('\JBZoo\PHPUnit\cliMessage')) {
+            if (function_exists('\JBZoo\PHPUnit\cliMessage')) {
                 cliMessage('Process: ' . $cmd);
                 cliMessage('CWD: ' . $cwd);
             } else {
@@ -124,7 +123,6 @@ class Cli
                 $process = new Process($cmd, $cwd, null, null, 3600);
             }
 
-            //$process->inheritEnvironmentVariables(true);
             $process->run();
         } catch (\Exception $exception) {
             throw new Exception($exception, (int)$exception->getCode(), $exception);
@@ -159,7 +157,7 @@ class Cli
                     $key = strlen($key) === 1 ? '-' . $key : '--' . $key;
                 }
 
-                if (strlen($value) > 0) {
+                if ($value) {
                     $stringArgs[] = $key . '="' . addcslashes($value, '"') . '"';
                 } else {
                     $stringArgs[] = $key;
@@ -244,16 +242,12 @@ class Cli
             return 80;
         }
 
-        if (preg_match('#\d+ (\d+)#', shell_exec('stty size'), $match) === 1) {
-            if ((int)$match[1] > 0) {
-                return (int)$match[1];
-            }
+        if ((preg_match('#\d+ (\d+)#', shell_exec('stty size'), $match) === 1) && (int)$match[1] > 0) {
+            return (int)$match[1];
         }
 
-        if (preg_match('#columns = (\d+);#', shell_exec('stty'), $match) === 1) {
-            if ((int)$match[1] > 0) {
-                return (int)$match[1];
-            }
+        if ((preg_match('#columns = (\d+);#', shell_exec('stty'), $match) === 1) && (int)$match[1] > 0) {
+            return (int)$match[1];
         }
 
         return 80;

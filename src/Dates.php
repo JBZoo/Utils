@@ -15,8 +15,8 @@
 
 namespace JBZoo\Utils;
 
-use \DateTime;
-use \DateTimeZone;
+use DateTime;
+use DateTimeZone;
 
 /**
  * Class Dates
@@ -25,21 +25,21 @@ use \DateTimeZone;
  */
 class Dates
 {
-    const MINUTE = 60;
-    const HOUR   = 3600;
-    const DAY    = 86400;
-    const WEEK   = 604800;      // 7 days
-    const MONTH  = 2592000;     // 30 days
-    const YEAR   = 31536000;    // 365 days
+    public const MINUTE = 60;
+    public const HOUR   = 3600;
+    public const DAY    = 86400;
+    public const WEEK   = 604800;      // 7 days
+    public const MONTH  = 2592000;     // 30 days
+    public const YEAR   = 31536000;    // 365 days
 
-    const SQL_FORMAT = 'Y-m-d H:i:s';
-    const SQL_NULL   = '0000-00-00 00:00:00';
+    public const SQL_FORMAT = 'Y-m-d H:i:s';
+    public const SQL_NULL   = '0000-00-00 00:00:00';
 
     /**
      * Convert to timestamp
      *
-     * @param string|DateTime $time
-     * @param bool            $currentIsDefault
+     * @param string|int|DateTime $time
+     * @param bool                $currentIsDefault
      * @return int
      */
     public static function toStamp($time = null, $currentIsDefault = true): int
@@ -64,7 +64,7 @@ class Dates
      * @param null  $timeZone
      * @return DateTime
      */
-    public static function factory($time = null, $timeZone = null): \DateTime
+    public static function factory($time = null, $timeZone = null): DateTime
     {
         $timeZone = self::timezone($timeZone);
 
@@ -82,9 +82,9 @@ class Dates
      * Return a DateTimeZone object based on the current timezone.
      *
      * @param mixed $timezone
-     * @return \DateTimeZone
+     * @return DateTimeZone
      */
-    public static function timezone($timezone = null): \DateTimeZone
+    public static function timezone($timezone = null): DateTimeZone
     {
         if ($timezone instanceof DateTimeZone) {
             return $timezone;

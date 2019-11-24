@@ -32,7 +32,7 @@ class Str
     /**
      * Strip all whitespaces from the given string.
      *
-     * @param  string $string The string to strip
+     * @param string $string The string to strip
      * @return string
      */
     public static function stripSpace($string): string
@@ -141,7 +141,7 @@ class Str
     /**
      * Get unique string
      *
-     * @param  string $prefix
+     * @param string $prefix
      * @return string
      */
     public static function unique($prefix = 'unique'): string
@@ -222,8 +222,8 @@ class Str
     /**
      * Pads a given string with zeroes on the left.
      *
-     * @param  int $number The number to pad
-     * @param  int $length The total length of the desired string
+     * @param int $number The number to pad
+     * @param int $length The total length of the desired string
      * @return string
      */
     public static function zeroPad($number, $length): string
@@ -234,9 +234,9 @@ class Str
     /**
      * Truncate a string to a specified length without cutting a word off.
      *
-     * @param   string  $string The string to truncate
-     * @param   integer $length The length to truncate the string to
-     * @param   string  $append Text to append to the string IF it gets truncated, defaults to '...'
+     * @param string  $string The string to truncate
+     * @param integer $length The length to truncate the string to
+     * @param string  $append Text to append to the string IF it gets truncated, defaults to '...'
      * @return  string
      */
     public static function truncateSafe($string, $length, $append = '...'): string
@@ -294,9 +294,9 @@ class Str
     /**
      * Check if a given string matches a given pattern.
      *
-     * @param  string $pattern Pattern of string expected
-     * @param  string $string  String that need to be matched
-     * @param  bool   $caseSensitive
+     * @param string $pattern Pattern of string expected
+     * @param string $string  String that need to be matched
+     * @param bool   $caseSensitive
      * @return bool
      */
     public static function like($pattern, $string, $caseSensitive = true): bool
@@ -396,7 +396,7 @@ class Str
      * @param string $haystack
      * @param string $needle
      * @param int    $offset
-     * @return int
+     * @return int|bool
      */
     public static function pos($haystack, $needle, $offset = 0)
     {
@@ -415,7 +415,7 @@ class Str
      * @param int    $offset
      * @return int
      */
-    public static function rPos($haystack, $needle, $offset = 0)
+    public static function rPos($haystack, $needle, $offset = 0): int
     {
         if (self::isMBString()) {
             return mb_strrpos($haystack, $needle, $offset, self::$encoding);
@@ -432,7 +432,7 @@ class Str
      * @param int    $offset
      * @return int
      */
-    public static function iPos($haystack, $needle, $offset = 0)
+    public static function iPos($haystack, $needle, $offset = 0): int
     {
         if (self::isMBString()) {
             return mb_stripos($haystack, $needle, $offset, self::$encoding);
@@ -449,7 +449,7 @@ class Str
      * @param bool   $beforeNeedle
      * @return string
      */
-    public static function strStr($haystack, $needle, $beforeNeedle = false)
+    public static function strStr($haystack, $needle, $beforeNeedle = false): string
     {
         if (self::isMBString()) {
             return mb_strstr($haystack, $needle, $beforeNeedle, self::$encoding);
@@ -466,7 +466,7 @@ class Str
      * @param bool   $beforeNeedle
      * @return string
      */
-    public static function iStr($haystack, $needle, $beforeNeedle = false)
+    public static function iStr($haystack, $needle, $beforeNeedle = false): string
     {
         if (self::isMBString()) {
             return mb_stristr($haystack, $needle, $beforeNeedle, self::$encoding);
@@ -483,7 +483,7 @@ class Str
      * @param bool   $part
      * @return string
      */
-    public static function rChr($haystack, $needle, $part = null)
+    public static function rChr($haystack, $needle, $part = null): string
     {
         if (self::isMBString()) {
             return mb_strrchr($haystack, $needle, $part, self::$encoding);
@@ -500,7 +500,7 @@ class Str
      * @param int    $length
      * @return string
      */
-    public static function sub($string, $start, $length = 0)
+    public static function sub($string, $start, $length = 0): string
     {
         if (self::isMBString()) {
             if (0 === $length) {
@@ -552,7 +552,7 @@ class Str
      * @param string $needle
      * @return int
      */
-    public static function subCount($haystack, $needle)
+    public static function subCount($haystack, $needle): int
     {
         if (self::isMBString()) {
             return mb_substr_count($haystack, $needle, self::$encoding);
@@ -782,9 +782,9 @@ class Str
      *  - default: "Label" becomes "Label (2)"
      *  - dash:    "Label" becomes "Label-2"
      *
-     * @param   string  $string The source string.
-     * @param   string  $style  The the style (default|dash).
-     * @param   integer $next   If supplied, this number is used for the copy, otherwise it is the 'next' number.
+     * @param string  $string The source string.
+     * @param string  $style  The the style (default|dash).
+     * @param integer $next   If supplied, this number is used for the copy, otherwise it is the 'next' number.
      * @return  string
      */
     public static function inc($string, $style = 'default', $next = 0): string
@@ -829,7 +829,7 @@ class Str
      * Splits a string of multiple queries into an array of individual queries.
      * Single line or line end comments and multi line comments are stripped off.
      *
-     * @param   string $sql Input SQL string with which to split into individual queries.
+     * @param string $sql Input SQL string with which to split into individual queries.
      * @return  array
      *
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)

@@ -33,35 +33,18 @@ class CliTest extends PHPUnit
     public function testBuild()
     {
         is('ls', Cli::build('ls'));
-
-        is('ls -a', Cli::build('ls', [
-            'a' => '',
-        ]));
+        is('ls -a', Cli::build('ls', ['a' => '']));
 
         is('ls -a -l', Cli::build('ls', [
             'a' => '',
             'l' => '',
         ]));
 
-        is('ls --help', Cli::build('ls', [
-            'help' => '',
-        ]));
-
-        is('ls --option="qwerty"', Cli::build('ls', [
-            'option' => 'qwerty',
-        ]));
-
-        is('ls --option="qwert\'y"', Cli::build('ls', [
-            'option' => 'qwert\'y',
-        ]));
-
-        is('ls --option="qwert\"y"', Cli::build('ls', [
-            'option' => 'qwert"y',
-        ]));
-
-        is('ls --option="0"', Cli::build('ls', [
-            'option' => 0,
-        ]));
+        is('ls --help', Cli::build('ls', ['help' => '']));
+        is('ls --option="qwerty"', Cli::build('ls', ['option' => 'qwerty']));
+        is('ls --option="qwert\'y"', Cli::build('ls', ['option' => 'qwert\'y']));
+        is('ls --option="qwert\"y"', Cli::build('ls', ['option' => 'qwert"y']));
+        is('ls --option', Cli::build('ls', ['option' => 0,]));
     }
 
     public function testExec()

@@ -22,11 +22,11 @@ namespace JBZoo\Utils;
  */
 class Env
 {
-    const VAR_NULL   = 1;
-    const VAR_BOOL   = 2;
-    const VAR_INT    = 4;
-    const VAR_FLOAT  = 8;
-    const VAR_STRING = 16;
+    public const VAR_NULL   = 1;
+    public const VAR_BOOL   = 2;
+    public const VAR_INT    = 4;
+    public const VAR_FLOAT  = 8;
+    public const VAR_STRING = 16;
 
     /**
      * Returns an environment variable.

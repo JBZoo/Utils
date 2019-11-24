@@ -26,7 +26,10 @@
     ],
     "require"           : {
         "php"          : ">=7.1",
-        "ext-mbstring" : "*"
+        "ext-posix"    : "*",
+        "ext-mbstring" : "*",
+        "ext-intl"     : "*",
+        "ext-gd"       : "*"
     },
 
     "require-dev"       : {

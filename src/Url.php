@@ -29,28 +29,28 @@ class Url
      *
      * @see http://us2.php.net/manual/en/http.constants.php#http.constants.url
      */
-    const URL_REPLACE        = 1;
-    const URL_JOIN_PATH      = 2;
-    const URL_JOIN_QUERY     = 4;
-    const URL_STRIP_USER     = 8;
-    const URL_STRIP_PASS     = 16;
-    const URL_STRIP_AUTH     = 32;
-    const URL_STRIP_PORT     = 64;
-    const URL_STRIP_PATH     = 128;
-    const URL_STRIP_QUERY    = 256;
-    const URL_STRIP_FRAGMENT = 512;
-    const URL_STRIP_ALL      = 1024;
+    public const URL_REPLACE        = 1;
+    public const URL_JOIN_PATH      = 2;
+    public const URL_JOIN_QUERY     = 4;
+    public const URL_STRIP_USER     = 8;
+    public const URL_STRIP_PASS     = 16;
+    public const URL_STRIP_AUTH     = 32;
+    public const URL_STRIP_PORT     = 64;
+    public const URL_STRIP_PATH     = 128;
+    public const URL_STRIP_QUERY    = 256;
+    public const URL_STRIP_FRAGMENT = 512;
+    public const URL_STRIP_ALL      = 1024;
 
-    const ARG_SEPARATOR = '&';
+    public const ARG_SEPARATOR = '&';
 
-    const PORT_HTTP  = 80;
-    const PORT_HTTPS = 443;
+    public const PORT_HTTP  = 80;
+    public const PORT_HTTPS = 443;
 
     /**
      * Add or remove query arguments to the URL.
      *
-     * @param  mixed $newParams Either newkey or an associative array
-     * @param  mixed $uri       URI or URL to append the queru/queries to.
+     * @param mixed $newParams Either newkey or an associative array
+     * @param mixed $uri       URI or URL to append the queru/queries to.
      * @return string
      *
      * @SuppressWarnings(PHPMD.NPathComplexity)
@@ -110,9 +110,9 @@ class Url
      * @param bool $addAuth
      * @return string|null
      */
-    public static function current($addAuth = false)
+    public static function current($addAuth = false): ?string
     {
-        $current = (string)self::root($addAuth) . (string)self::path();
+        $current = self::root($addAuth) . self::path();
         return $current ?: null;
     }
 
@@ -122,7 +122,7 @@ class Url
      * @return string|null
      * @SuppressWarnings(PHPMD.Superglobals)
      */
-    public static function path()
+    public static function path(): ?string
     {
         $url = '';
 
@@ -147,7 +147,7 @@ class Url
      *
      * @SuppressWarnings(PHPMD.Superglobals)
      */
-    public static function root($addAuth = false)
+    public static function root($addAuth = false): ?string
     {
         $url = '';
 
@@ -192,7 +192,7 @@ class Url
      *
      * @SuppressWarnings(PHPMD.Superglobals)
      */
-    public static function getAuth()
+    public static function getAuth(): ?string
     {
         $result = null;
         if ($user = Arr::key('PHP_AUTH_USER', $_SERVER, true)) {
@@ -220,9 +220,6 @@ class Url
     /**
      * Build a URL. The parts of the second URL will be merged into the first according to the flags argument.
      *
-     * @author       Jake Smith <theman@jakeasmith.com>
-     * @see          https://github.com/jakeasmith/http_build_url/
-     *
      * @param array|string $sourceUrl (part(s) of) an URL in form of a string
      *                                or associative array like parse_url() returns
      * @param array|string $destParts Same as the first argument
@@ -234,6 +231,9 @@ class Url
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
      * @SuppressWarnings(PHPMD.Superglobals)
+     * @see          https://github.com/jakeasmith/http_build_url/
+     *
+     * @author       Jake Smith <theman@jakeasmith.com>
      */
     public static function buildAll($sourceUrl, $destParts = [], $flags = self::URL_REPLACE, &$newUrl = []): string
     {
@@ -374,8 +374,8 @@ class Url
     /**
      * Removes an item or list from the query string.
      *
-     * @param  string|array $keys Query key or keys to remove.
-     * @param  bool         $uri  When false uses the $_SERVER value
+     * @param string|array $keys Query key or keys to remove.
+     * @param bool         $uri  When false uses the $_SERVER value
      * @return string
      */
     public static function delArg($keys, $uri = null): string
@@ -391,7 +391,7 @@ class Url
      * Turns all of the links in a string into HTML links.
      * Part of the LinkifyURL Project <https://github.com/jmrware/LinkifyURL>
      *
-     * @param  string $text The string to parse
+     * @param string $text The string to parse
      * @return string
      */
     public static function parseLink($text): string
@@ -418,23 +418,19 @@ class Url
      * Callback for the preg_replace in the linkify() method.
      * Part of the LinkifyURL Project <https://github.com/jmrware/LinkifyURL>
      *
-     * @param  string $matches Matches from the preg_ function
+     * @param string $matches Matches from the preg_ function
      * @return string
      */
     protected static function linkifyCallback($matches): string
     {
-        if (isset($matches[2])) {
-            return $matches[2];
-        }
-
-        return self::linkifyRegex($matches[1]);
+        return $matches[2] ?? self::linkifyRegex($matches[1]);
     }
 
     /**
      * Callback for the preg_replace in the linkify() method.
      * Part of the LinkifyURL Project <https://github.com/jmrware/LinkifyURL>
      *
-     * @param  string $text Matches from the preg_ function
+     * @param string $text Matches from the preg_ function
      * @return mixed
      */
     protected static function linkifyRegex($text)

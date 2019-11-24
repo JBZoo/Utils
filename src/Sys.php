@@ -45,7 +45,7 @@ class Sys
     public static function isRoot(): bool
     {
         if (self::isFunc('posix_geteuid')) {
-            return posix_geteuid() === 0;
+            return 0 === posix_geteuid();
         }
 
         return false; // @codeCoverageIgnore
@@ -55,7 +55,7 @@ class Sys
      * Returns current linux user who runs script
      * @return string|null
      */
-    public static function getUserName()
+    public static function getUserName(): ?string
     {
         $userInfo = posix_getpwuid(posix_geteuid());
         return $userInfo['name'] ?? null;
@@ -68,7 +68,7 @@ class Sys
      *
      * @SuppressWarnings(PHPMD.Superglobals)
      */
-    public static function getHome()
+    public static function getHome(): ?string
     {
         $userInfo = posix_getpwuid(posix_geteuid());
         if (isset($userInfo['dir'])) {
@@ -127,7 +127,7 @@ class Sys
      *
      * @param int $newLimit
      */
-    public static function setTime($newLimit = 0)
+    public static function setTime($newLimit = 0): void
     {
         $newLimit = (int)$newLimit;
 
@@ -143,7 +143,7 @@ class Sys
      *
      * @param string $newLimit
      */
-    public static function setMemory($newLimit = '256M')
+    public static function setMemory($newLimit = '256M'): void
     {
         self::iniSet('memory_limit', $newLimit);
     }
@@ -243,10 +243,8 @@ class Sys
     public static function getBinary(): string
     {
         // Custom PHP path
-        if (self::$binary === null) {
-            if ((self::$binary = getenv('PHP_BINARY_CUSTOM')) === false) {
-                self::$binary = PHP_BINARY;
-            }
+        if ((self::$binary === null) && (self::$binary = getenv('PHP_BINARY_CUSTOM')) === false) {
+            self::$binary = PHP_BINARY;
         }
 
         // HHVM
@@ -263,20 +261,18 @@ class Sys
         }
 
         // PHP < 5.4.0
-        if (self::$binary === null) {
-            if (PHP_SAPI === 'cli' && isset($_SERVER['_'])) {
-                if (strpos($_SERVER['_'], 'phpunit') !== false) {
-                    $file = file($_SERVER['_']);
+        if ((self::$binary === null) && PHP_SAPI === 'cli' && isset($_SERVER['_'])) {
+            if (strpos($_SERVER['_'], 'phpunit') !== false) {
+                $file = file($_SERVER['_']);
 
-                    if (strpos($file[0], ' ') !== false) {
-                        $tmp = explode(' ', $file[0]);
-                        self::$binary = escapeshellarg(trim($tmp[1]));
-                    } else {
-                        self::$binary = escapeshellarg(ltrim(trim($file[0]), '#!'));
-                    }
-                } elseif (strpos(basename($_SERVER['_']), 'php') !== false) {
-                    self::$binary = escapeshellarg($_SERVER['_']);
+                if (strpos($file[0], ' ') !== false) {
+                    $tmp = explode(' ', $file[0]);
+                    self::$binary = escapeshellarg(trim($tmp[1]));
+                } else {
+                    self::$binary = escapeshellarg(ltrim(trim($file[0]), '#!'));
                 }
+            } elseif (strpos(basename($_SERVER['_']), 'php') !== false) {
+                self::$binary = escapeshellarg($_SERVER['_']);
             }
         }
 
@@ -341,13 +337,13 @@ class Sys
     /**
      * @return string
      */
-    public static function getVersion()
+    public static function getVersion(): ?string
     {
         if (self::isHHVM()) {
-            return HHVM_VERSION;
+            return defined('HHVM_VERSION') ? HHVM_VERSION : null;
         }
 
-        return PHP_VERSION;
+        return defined('PHP_VERSION') ? PHP_VERSION : null;
     }
 
     /**

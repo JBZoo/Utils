@@ -25,7 +25,7 @@ class IP
     /**
      * Returns the IP address of the client.
      *
-     * @param   boolean $trustProxy Whether or not to trust the proxy headers HTTP_CLIENT_IP and HTTP_X_FORWARDED_FOR.
+     * @param boolean $trustProxy   Whether or not to trust the proxy headers HTTP_CLIENT_IP and HTTP_X_FORWARDED_FOR.
      *                              ONLY use if your server is behind a proxy that sets these values
      * @return  string
      * @SuppressWarnings(PHPMD.Superglobals)
@@ -52,18 +52,18 @@ class IP
     /**
      * Check if a given ip is in a network
      *
-     * @param  string $ipAddress IP to check in IPV4 format eg. 127.0.0.1
-     * @param  string $range     IP/CIDR netmask eg. 127.0.0.0/24, also 127.0.0.1 is accepted and /32 assumed
+     * @param string $ipAddress IP to check in IPV4 format eg. 127.0.0.1
+     * @param string $range     IP/CIDR netmask eg. 127.0.0.0/24, also 127.0.0.1 is accepted and /32 assumed
      *
      * @return bool
      * @SuppressWarnings(PHPMD.NPathComplexity)
      * @see https://www.pgregg.com/projects/php/ip_in_range/
      */
-    public static function v4InRange($ipAddress, $range)
+    public static function v4InRange($ipAddress, $range): bool
     {
         if (strpos($range, '/') !== false) {
             // $range is in IP/NETMASK format
-            list($range, $netMask) = explode('/', $range, 2);
+            [$range, $netMask] = explode('/', $range, 2);
 
             if (strpos($netMask, '.') !== false) {
                 // $netMask is a 255.255.0.0 format
@@ -81,7 +81,7 @@ class IP
                 $blocks[] = '0';
             }
 
-            list($blockA, $blockB, $blockC, $blockD) = $blocks;
+            [$blockA, $blockB, $blockC, $blockD] = $blocks;
 
             $range = sprintf(
                 '%u.%u.%u.%u',
@@ -109,7 +109,7 @@ class IP
         }
 
         if (strpos($range, '-') !== false) { // A-B format
-            list($lower, $upper) = explode('-', $range, 2);
+            [$lower, $upper] = explode('-', $range, 2);
             $lowerDec = (float)sprintf('%u', ip2long($lower));
             $upperDec = (float)sprintf('%u', ip2long($upper));
             $ipDec = (float)sprintf('%u', ip2long($ipAddress));
