@@ -25,20 +25,24 @@
         }
     ],
     "require"           : {
-        "php"        : ">=7.0",
-        "jbzoo/data" : "^2.0|^3.0"
+        "php"          : ">=7.1",
+        "ext-mbstring" : "*"
     },
+
     "require-dev"       : {
-        "jbzoo/phpunit"               : "^2.2",
-        "jbzoo/profiler"              : "^1.0",
-        "symfony/process"             : "^3.3|^4.1",
-        "symfony/polyfill-mbstring"   : "^1.10",
-        "php-coveralls/php-coveralls" : "^2.1"
+        "jbzoo/phpunit"               : "^2.3|^3.0",
+        "jbzoo/profiler"              : "^1.0.5",
+        "jbzoo/data"                  : "^3.0.0",
+        "symfony/process"             : "^4.4",
+        "symfony/polyfill-mbstring"   : "^1.12",
+        "php-coveralls/php-coveralls" : "^2.2.0"
     },
+
     "suggest"           : {
         "ext-mbstring"              : "Provides multibyte specific string functions",
         "symfony/process"           : "For Cli::exec() method only",
-        "symfony/polyfill-mbstring" : "For UTF-8 if ext-mbstring disabled"
+        "symfony/polyfill-mbstring" : "For UTF-8 if ext-mbstring disabled",
+        "jbzoo/data"                : "^2.0|^3.0"
     },
     "autoload"          : {
         "files" : [
