@@ -270,7 +270,7 @@ class Url
         } else {
             // PATH
             if (($flags & self::URL_JOIN_PATH) && $parts->has('path')) {
-                if ($url->has('path') && $parts->has('path')[0] !== '/') {
+                if ($url->has('path') && $parts->get('path')[0] !== '/') {
                     $url['path'] =
                         rtrim(str_replace(basename($url['path']), '', $url['path']), '/')
                         . '/'
