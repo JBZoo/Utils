@@ -307,7 +307,7 @@ class Url
             $url['scheme'] = 'http';
         }
 
-        if (!$url['port']) {
+        if (!$url->get('port')) {
             if ($url->get('scheme') === 'https') {
                 $url['port'] = 443;
             } elseif ($url->get('scheme') === 'http') {
@@ -325,7 +325,7 @@ class Url
 
         $parsedString .= $url->has('host') ? $url['host'] : '';
 
-        if ((int)$url['port'] !== self::PORT_HTTP && $url['scheme'] === 'http') {
+        if ((int)$url->get('port') !== self::PORT_HTTP && $url['scheme'] === 'http') {
             $parsedString .= ':' . $url['port'];
         }
 
