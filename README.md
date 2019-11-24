@@ -7,7 +7,6 @@ A collection of useful PHP functions, mini classes and snippets that you need or
 
 ## Install
 ```sh
-composer require jbzoo/utils:"1.x-dev"  # Last version
 composer require jbzoo/utils            # Stable version
 ```
 

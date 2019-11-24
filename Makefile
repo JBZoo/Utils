@@ -71,8 +71,3 @@ clean:
 	@mkdir -vp  ./build
 	@rm -fr     ./vendor
 	@rm -vf     ./composer.lock
-
-coveralls:
-	@echo "\033[0;33m>>> >>> >>> >>> >>> >>> >>> >>> \033[0;30;46m Send coverage to coveralls.io \033[0m"
-	@php ./vendor/php-coveralls/php-coveralls/bin/php-coveralls --verbose
-	@echo ""

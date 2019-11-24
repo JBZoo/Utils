@@ -19,5 +19,5 @@ script:
   - make
   - make test-all
 
-after_script:
- - make coveralls
+after_success:
+  - travis_retry php vendor/bin/php-coveralls -v

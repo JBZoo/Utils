@@ -9,6 +9,7 @@
         "array", "cli", "command line", "dates", "email", "env", "filter", "http", "url", "serialize",
         "slugify", "string", "mbstring", "timer", "misc"
     ],
+
     "authors"           : [
         {
             "name"  : "SmetDenis",
@@ -24,6 +25,7 @@
             "email" : "luis.barros.nobrega@gmail.com"
         }
     ],
+
     "require"           : {
         "php"          : ">=7.1",
         "ext-posix"    : "*",
@@ -55,14 +57,11 @@
             "JBZoo\\Utils\\" : "src"
         }
     },
-    "extra"             : {
-        "branch-alias" : {
-            "dev-master" : "1.x-dev"
-        }
-    },
+
     "config"            : {
         "optimize-autoloader" : true
     },
+
     "support"           : {
         "issues" : "https://github.com/JBZoo/Utils/issues"
     }
