@@ -26,6 +26,7 @@ update:
 
 validate:
 	@echo "\033[0;33m>>> >>> >>> >>> >>> >>> >>> >>> \033[0;30;46m Composer validate \033[0m"
+	@composer check-platform-reqs --no-interaction
 	@composer validate --no-interaction
 	@echo ""
 
@@ -41,7 +42,7 @@ test:
 
 phpmd:
 	@echo "\033[0;33m>>> >>> >>> >>> >>> >>> >>> >>> \033[0;30;46m Check PHPmd \033[0m"
-	@php ./vendor/phpmd/phpmd/src/bin/phpmd ./src text controversial,design,naming,unusedcode
+	@php ./vendor/phpmd/phpmd/src/bin/phpmd ./src text controversial,design,naming,unusedcode --ignore-violations-on-exit
 
 phpcs:
 	@echo "\033[0;33m>>> >>> >>> >>> >>> >>> >>> >>> \033[0;30;46m Check Code Style \033[0m"
@@ -73,5 +74,5 @@ clean:
 
 coveralls:
 	@echo "\033[0;33m>>> >>> >>> >>> >>> >>> >>> >>> \033[0;30;46m Send coverage to coveralls.io \033[0m"
-	@php ./vendor/satooshi/php-coveralls/bin/coveralls --verbose
+	@php ./vendor/php-coveralls/php-coveralls/bin/php-coveralls --verbose
 	@echo ""

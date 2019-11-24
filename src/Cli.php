@@ -120,7 +120,7 @@ class Cli
             if (method_exists(Process::class, 'fromShellCommandline')) {
                 $process = Process::fromShellCommandline($cmd, $cwd, null, null, 3600);
             } else {
-                $process = new Process($cmd, $cwd, null, null, 3600);
+                $process = new Process([$cmd], $cwd, null, null, 3600);
             }
 
             $process->run();

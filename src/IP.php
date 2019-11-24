@@ -56,7 +56,7 @@ class IP
      * @param string $range     IP/CIDR netmask eg. 127.0.0.0/24, also 127.0.0.1 is accepted and /32 assumed
      *
      * @return bool
-     * @SuppressWarnings(PHPMD.NPathComplexity)
+     * @SuppressWarnings(PHPMD)
      * @see https://www.pgregg.com/projects/php/ip_in_range/
      */
     public static function v4InRange($ipAddress, $range): bool
