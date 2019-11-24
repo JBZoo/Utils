@@ -30,7 +30,6 @@
         "php"          : ">=7.1",
         "ext-posix"    : "*",
         "ext-mbstring" : "*",
-        "ext-intl"     : "*",
         "ext-gd"       : "*"
     },
 
