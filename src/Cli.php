@@ -54,7 +54,7 @@ class Cli
             $message .= PHP_EOL;
         }
 
-        if (defined('STDOUT')) {
+        if (self::check()) {
             fwrite(STDOUT, $message);
         } else {
             echo $message;
@@ -74,7 +74,7 @@ class Cli
             $message .= PHP_EOL;
         }
 
-        if (defined('STDERR')) {
+        if (self::check()) {
             fwrite(STDERR, $message);
         } else {
             echo $message;
@@ -184,14 +184,12 @@ class Cli
     public static function hasColorSupport(): bool
     {
         if (DIRECTORY_SEPARATOR === '\\') {
-            $winColor = Env::get('ANSICON', Env::VAR_BOOL)
+            return Env::get('ANSICON', Env::VAR_BOOL)
                 || 'ON' === Env::get('ConEmuANSI')
                 || 'xterm' === Env::get('TERM');
-
-            return $winColor;
         }
 
-        if (!defined('STDOUT')) {
+        if (!self::check()) {
             return false;
         }
 
