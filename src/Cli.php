@@ -38,7 +38,7 @@ class Cli
      */
     public static function check(): bool
     {
-        return PHP_SAPI === 'cli' || defined('STDOUT');
+        return PHP_SAPI === 'cli' && defined('STDOUT');
     }
 
     /**
