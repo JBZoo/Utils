@@ -1,8 +1,9 @@
 <?php
+
 /**
- * JBZoo Utils
+ * JBZoo Toolbox - Utils
  *
- * This file is part of the JBZoo CCK package.
+ * This file is part of the JBZoo Toolbox project.
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  *
@@ -18,7 +19,6 @@ namespace JBZoo\Utils;
 use RuntimeException;
 use Symfony\Component\Process\Exception\ProcessFailedException;
 use Symfony\Component\Process\Process;
-use function JBZoo\PHPUnit\cliMessage;
 
 /**
  * Class Cli
@@ -31,14 +31,16 @@ class Cli
     public const STDOUT = 1;
     public const STDERR = 2;
 
+    public const DEFAULT_WIDTH = 80;
+
     /**
-     * Is command line
+     * Is command line mode
      *
      * @return bool
      */
     public static function check(): bool
     {
-        return PHP_SAPI === 'cli' && defined('STDOUT');
+        return PHP_SAPI === 'cli' && defined('STDOUT') && defined('STDERR');
     }
 
     /**
@@ -46,7 +48,6 @@ class Cli
      *
      * @param string $message
      * @param bool   $addEol
-     * @codeCoverageIgnore
      */
     public static function out($message, $addEol = true): void
     {
@@ -54,8 +55,8 @@ class Cli
             $message .= PHP_EOL;
         }
 
-        if (self::check()) {
-            fwrite(STDOUT, $message);
+        if (self::check() && $stdout = fopen('php://stdout', 'wb')) {
+            fwrite($stdout, $message);
         } else {
             echo $message;
         }
@@ -66,7 +67,6 @@ class Cli
      *
      * @param string $message
      * @param bool   $addEol
-     * @codeCoverageIgnore
      */
     public static function err($message, $addEol = true): void
     {
@@ -74,8 +74,8 @@ class Cli
             $message .= PHP_EOL;
         }
 
-        if (self::check()) {
-            fwrite(STDERR, $message);
+        if (self::check() && $stderr = fopen('php://stderr', 'wb')) {
+            fwrite($stderr, $message);
         } else {
             echo $message;
         }
@@ -86,46 +86,42 @@ class Cli
      *
      * @param string $command
      * @param array  $args
-     * @param null   $cwd
+     * @param string $cwd
      * @param bool   $verbose
      * @return string
      * @throws RuntimeException
      * @throws Exception
      */
-    public static function exec($command, array $args = [], $cwd = null, $verbose = false): string
+    public static function exec(string $command, array $args = [], $cwd = null, $verbose = false): string
     {
         if (!class_exists(Process::class)) {
-            throw new Exception('Symfony/Process package required for Cli::exec() method'); // @codeCoverageIgnore
+            throw new Exception('Symfony/Process package required for Cli::exec() method');
         }
 
-        $cmd = self::build($command, $args);
-        /** @noinspection CallableParameterUseCaseInTypeContextInspection */
-        $cwd = $cwd ? realpath($cwd) : null;
+        $realCommand = self::build($command, $args);
 
-        //@codeCoverageIgnoreStart
+        if ($cwd) {
+            /** @noinspection CallableParameterUseCaseInTypeContextInspection */
+            $cwd = realpath($cwd) ?: null;
+        } else {
+            $cwd = null;
+        }
+
         if ($verbose) {
-            // Only in testing mode
-            if (function_exists('\JBZoo\PHPUnit\cliMessage')) {
-                cliMessage('Process: ' . $cmd);
-                cliMessage('CWD: ' . $cwd);
-            } else {
-                self::out('Process: ' . $cmd);
-                self::out('CWD: ' . $cwd);
-            }
+            self::out("Process: {$realCommand}");
+            self::out("CWD: {$cwd}");
         }
-        //@codeCoverageIgnoreEnd
 
-        // execute command
         try {
             if (method_exists(Process::class, 'fromShellCommandline')) {
-                $process = Process::fromShellCommandline($cmd, $cwd, null, null, 3600);
+                $process = Process::fromShellCommandline($realCommand, $cwd, null, null, 3600);
             } else {
-                $process = new Process([$cmd], $cwd, null, null, 3600);
+                $process = new Process([$realCommand], $cwd, null, null, 3600);
             }
 
             $process->run();
         } catch (\Exception $exception) {
-            throw new Exception($exception, (int)$exception->getCode(), $exception);
+            throw new Exception($exception->getMessage(), (int)$exception->getCode(), $exception);
         }
 
         // executes after the command finishes
@@ -143,7 +139,7 @@ class Cli
      * @param array  $args
      * @return string
      */
-    public static function build($command, array $args = []): string
+    public static function build(string $command, array $args = []): string
     {
         $stringArgs = [];
         $realCommand = $command;
@@ -179,43 +175,39 @@ class Cli
      * Symfony\Component\Console\Output\OutputStream.
      *
      * @return bool
-     * @codeCoverageIgnore
      */
     public static function hasColorSupport(): bool
     {
-        if (DIRECTORY_SEPARATOR === '\\') {
-            return Env::get('ANSICON', Env::VAR_BOOL)
-                || 'ON' === Env::get('ConEmuANSI')
-                || 'xterm' === Env::get('TERM');
-        }
-
         if (!self::check()) {
             return false;
         }
+
+        // @codeCoverageIgnoreStart
+        if (Sys::isWin()) {
+            return Env::bool('ANSICON') || 'ON' === Env::string('ConEmuANSI') || 'xterm' === Env::string('TERM');
+        }
+        // @codeCoverageIgnoreEnd
 
         return self::isInteractive(STDOUT);
     }
 
     /**
      * Returns the number of columns of the terminal.
-     *
      * @return int
-     * @codeCoverageIgnore
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     public static function getNumberOfColumns(): int
     {
-        if (DIRECTORY_SEPARATOR === '\\') {
-            $columns = 80;
+        // @codeCoverageIgnoreStart
+        if (Sys::isWin()) {
+            $columns = self::DEFAULT_WIDTH;
 
-            if (preg_match('/^(\d+)x\d+ \(\d+x(\d+)\)$/', trim(getenv('ANSICON')), $matches)) {
+            if (preg_match('/^(\d+)x\d+ \(\d+x(\d+)\)$/', Env::string('ANSICON'), $matches)) {
                 $columns = $matches[1];
             } elseif (function_exists('proc_open')) {
                 $process = proc_open(
                     'mode CON',
-                    [
-                        1 => ['pipe', 'w'],
-                        2 => ['pipe', 'w'],
-                    ],
+                    [1 => ['pipe', 'w'], 2 => ['pipe', 'w']],
                     $pipes,
                     null,
                     null,
@@ -223,32 +215,37 @@ class Cli
                 );
 
                 if (is_resource($process)) {
-                    $info = stream_get_contents($pipes[1]);
+                    $info = (string)stream_get_contents($pipes[1]);
+
                     fclose($pipes[1]);
                     fclose($pipes[2]);
                     proc_close($process);
+
                     if (preg_match('/--------+\r?\n.+?(\d+)\r?\n.+?(\d+)\r?\n/', $info, $matches)) {
                         $columns = $matches[2];
                     }
                 }
             }
 
-            return $columns - 1;
+            return (int)$columns - 1;
         }
+        // @codeCoverageIgnoreEnd
 
         if (!self::isInteractive(self::STDIN)) {
-            return 80;
+            return self::DEFAULT_WIDTH;
         }
 
-        if ((preg_match('#\d+ (\d+)#', shell_exec('stty size'), $match) === 1) && (int)$match[1] > 0) {
+        /** @psalm-suppress ForbiddenCode */
+        if ((preg_match('#\d+ (\d+)#', (string)shell_exec('stty size'), $match) === 1) && (int)$match[1] > 0) {
             return (int)$match[1];
         }
 
-        if ((preg_match('#columns = (\d+);#', shell_exec('stty'), $match) === 1) && (int)$match[1] > 0) {
+        /** @psalm-suppress ForbiddenCode */
+        if ((preg_match('#columns = (\d+);#', (string)shell_exec('stty'), $match) === 1) && (int)$match[1] > 0) {
             return (int)$match[1];
         }
 
-        return 80;
+        return Env::int('COLUMNS', self::DEFAULT_WIDTH);
     }
 
     /**

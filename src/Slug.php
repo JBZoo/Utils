@@ -1,8 +1,9 @@
 <?php
+
 /**
- * JBZoo Utils
+ * JBZoo Toolbox - Utils
  *
- * This file is part of the JBZoo CCK package.
+ * This file is part of the JBZoo Toolbox project.
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  *
@@ -729,14 +730,14 @@ class Slug
      */
     public static function filter($string, $separator = '-', $cssMode = false): string
     {
-        $slug = preg_replace('/([^a-z0-9]+)/', $separator, strtolower(self::removeAccents($string)));
+        $slug = (string)preg_replace('/([^a-z0-9]+)/', $separator, strtolower(self::removeAccents($string)));
         $slug = trim($slug, $separator);
 
         if ($cssMode) {
+            $firstLetter = (int)substr($slug, 0, 1);
             $digits = ['zero', 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine'];
-
-            if (is_numeric($slug[0])) {
-                $slug = $digits[$slug[0]] . substr($slug, 1);
+            if ($firstLetter && isset($digits[$firstLetter])) {
+                $slug = $digits[$firstLetter] . substr($slug, 1);
             }
         }
 
@@ -759,9 +760,7 @@ class Slug
             return mb_check_encoding($string, Str::$encoding);
         }
 
-        // @codeCoverageIgnoreStart
         return self::seemsUtf8Regex($string);
-        // @codeCoverageIgnoreEnd
     }
 
     /**
@@ -769,12 +768,11 @@ class Slug
      *
      * @link http://stackoverflow.com/a/11709412/430062
      *
-     * @param $string
+     * @param string $string
      * @return bool
      */
     protected static function seemsUtf8Regex($string): bool
     {
-        // @codeCoverageIgnoreStart
         $regex = '/(
             [\xC0-\xC1]                                                         # Invalid UTF-8 Bytes
             | [\xF5-\xFF]                                                       # Invalid UTF-8 Bytes
@@ -792,7 +790,6 @@ class Slug
         )/x';
 
         return !preg_match($regex, $string);
-        // @codeCoverageIgnoreEnd
     }
 
     /**

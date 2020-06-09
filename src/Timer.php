@@ -1,8 +1,9 @@
 <?php
+
 /**
- * JBZoo Utils
+ * JBZoo Toolbox - Utils
  *
- * This file is part of the JBZoo CCK package.
+ * This file is part of the JBZoo Toolbox project.
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  *
@@ -24,11 +25,6 @@ namespace JBZoo\Utils;
 class Timer
 {
     /**
-     * @var float
-     */
-    public static $requestTime;
-
-    /**
      * @var array
      */
     private static $times = [
@@ -40,16 +36,17 @@ class Timer
     /**
      * Formats the elapsed time as a string.
      *
-     * @param  float $time
+     * @param float $milliSeconds
      * @return string
      */
-    public static function format($time): string
+    public static function format($milliSeconds): string
     {
-        $time = round($time * 1000);
+        $time = round($milliSeconds * 1000);
+
         foreach (self::$times as $unit => $value) {
             if ($time >= $value) {
                 $time = floor($time / $value * 100.0) / 100.0;
-                return $time . ' ' . $unit . ((float)$time === 1.0 ? '' : 's');
+                return $time . ' ' . $unit . ($time === 1.0 ? '' : 's');
             }
         }
 
@@ -59,12 +56,12 @@ class Timer
     /**
      * Formats the elapsed time as a string.
      *
-     * @param  float $time
+     * @param float $seconds
      * @return string
      */
-    public static function formatMS($time): string
+    public static function formatMS($seconds): string
     {
-        $time = round($time * 1000, 3);
+        $time = round($seconds * 1000, 3);
         $dec = 3;
 
         if (!$time || $time >= 10 || $time >= 100) {

@@ -1,8 +1,9 @@
 <?php
+
 /**
- * JBZoo Utils
+ * JBZoo Toolbox - Utils
  *
- * This file is part of the JBZoo CCK package.
+ * This file is part of the JBZoo Toolbox project.
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  *
@@ -19,6 +20,8 @@ namespace JBZoo\Utils;
  * Class Image
  *
  * @package JBZoo\Utils
+ * @SuppressWarnings(PHPMD.TooManyPublicMethods)
+ * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
  */
 class Image
 {
@@ -45,7 +48,7 @@ class Image
 
         // Require GD library
         if ($throwException && !$isGd) {
-            throw new Exception('Required extension GD is not loaded.'); // @codeCoverageIgnore
+            throw new Exception('Required extension GD is not loaded.');
         }
 
         return $isGd;
@@ -95,12 +98,12 @@ class Image
 
         if (is_string($origColor)) {
             $result = self::normalizeColorString($origColor);
-        } elseif (is_array($origColor) && (count($origColor) === 3 || count($origColor) === 4)) {
+        } elseif ((count($origColor) === 3 || count($origColor) === 4)) {
             $result = self::normalizeColorArray($origColor);
         }
 
         if (count($result) !== 4) {
-            throw new Exception('Undefined color format (string): ' . $origColor); // @codeCoverageIgnore
+            throw new Exception('Undefined color format (string): ' . print_r($origColor, true));
         }
 
         return $result;
@@ -110,10 +113,10 @@ class Image
      * Normalize color from string
      *
      * @param string $origColor
-     * @return integer[]
+     * @return array
      * @throws Exception
      */
-    protected static function normalizeColorString($origColor): array
+    protected static function normalizeColorString(string $origColor): array
     {
         $color = trim($origColor, '#');
         $color = trim($color);
@@ -123,7 +126,7 @@ class Image
         } elseif (strlen($color) === 3) {
             [$red, $green, $blue] = [$color[0] . $color[0], $color[1] . $color[1], $color[2] . $color[2]];
         } else {
-            throw new Exception('Undefined color format (string): ' . $origColor); // @codeCoverageIgnore
+            throw new Exception('Undefined color format (string): ' . $origColor);
         }
 
         $red = hexdec($red);
@@ -150,7 +153,7 @@ class Image
                 self::color($origColor['b']),
                 self::alpha(Arr::key('a', $origColor) ? $origColor['a'] : 0),
             ];
-        } elseif (Arr::key(0, $origColor) && Arr::key(1, $origColor) && Arr::key(2, $origColor)) {
+        } elseif (Arr::key('0', $origColor) && Arr::key(1, $origColor) && Arr::key(2, $origColor)) {
             $result = [
                 self::color($origColor[0]),
                 self::color($origColor[1]),
@@ -244,11 +247,11 @@ class Image
                     ($colorXY >> 16) & 0xFF,
                     ($colorXY >> 8) & 0xFF,
                     $colorXY & 0xFF,
-                    $alpha
+                    (int)$alpha
                 );
 
                 // Set pixel with the new color + opacity
-                if (!imagesetpixel($srcImg, $x, $y, $alphaColorXY)) {
+                if (!imagesetpixel($srcImg, $x, $y, (int)$alphaColorXY)) {
                     return;
                 }
             }
@@ -263,7 +266,7 @@ class Image
     /**
      * Check opacity value
      *
-     * @param $opacity
+     * @param int $opacity
      * @return int
      */
     public static function opacity($opacity): int
@@ -290,7 +293,7 @@ class Image
         $opacity /= 100;
 
         $alpha = 127 - (127 * $opacity);
-        $alpha = self::alpha($alpha);
+        $alpha = self::alpha((int)$alpha);
 
         return $alpha;
     }
@@ -374,7 +377,7 @@ class Image
     }
 
     /**
-     * @param string $blur
+     * @param int $blur
      * @return int
      */
     public static function blur($blur): int
@@ -383,7 +386,7 @@ class Image
     }
 
     /**
-     * @param string $percent
+     * @param int $percent
      * @return int
      */
     public static function percent($percent): int
@@ -392,7 +395,7 @@ class Image
     }
 
     /**
-     * @param string $percent
+     * @param int $percent
      * @return int
      */
     public static function quality($percent): int
@@ -403,12 +406,12 @@ class Image
     /**
      * Convert string to binary data
      *
-     * @param $imageString
+     * @param string $imageString
      * @return string
      */
-    public static function strToBin($imageString): string
+    public static function strToBin(string $imageString): string
     {
-        $cleanedString = str_replace(' ', '+', preg_replace('#^data:image/[^;]+;base64,#', '', $imageString));
+        $cleanedString = str_replace(' ', '+', (string)preg_replace('#^data:image/[^;]+;base64,#', '', $imageString));
         $result = base64_decode($cleanedString, true);
 
         if (!$result) {
@@ -449,6 +452,7 @@ class Image
      *
      * @param string $position
      * @return string
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     public static function position($position): string
     {
@@ -498,6 +502,7 @@ class Image
      * @param array  $box      Width and Height of box that will be located on canvas
      * @param array  $offset   Forced offset X, Y
      * @return array|null
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     public static function getInnerCoords($position, array $canvas, array $box, array $offset = [0, 0]): ?array
     {

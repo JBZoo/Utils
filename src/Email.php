@@ -1,8 +1,9 @@
 <?php
+
 /**
- * JBZoo Utils
+ * JBZoo Toolbox - Utils
  *
- * This file is part of the JBZoo CCK package.
+ * This file is part of the JBZoo Toolbox project.
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  *
@@ -25,12 +26,12 @@ class Email
     /**
      * Create random email
      *
-     * @param int $length
+     * @param int $userNameLength
      * @return string
      */
-    public static function random($length = 10): string
+    public static function random(int $userNameLength = 10): string
     {
-        return Str::random($length) . '@' . Str::random(5) . '.com';
+        return Str::random($userNameLength) . '@' . Str::random(5) . '.com';
     }
 
     /**
@@ -69,7 +70,6 @@ class Email
      *
      * @param string $email
      * @return bool
-     * @codeCoverageIgnore
      */
     public static function checkDns($email): bool
     {
@@ -122,11 +122,6 @@ class Email
     public static function getDomainSorted(array $emails): array
     {
         $domains = self::getDomain($emails);
-
-        if (count($domains) < 2) {
-            return $domains;
-        }
-
         sort($domains, SORT_STRING);
 
         return $domains;
@@ -234,10 +229,10 @@ class Email
     private static function extractDomain($email): string
     {
         $parts = explode('@', $email);
-        $domain = array_pop($parts);
+        $domain = (string)array_pop($parts);
 
         if (Sys::isFunc('idn_to_utf8')) {
-            return idn_to_ascii($domain, 0, INTL_IDNA_VARIANT_UTS46);
+            return (string)idn_to_ascii($domain, 0, INTL_IDNA_VARIANT_UTS46);
         }
 
         return $domain;

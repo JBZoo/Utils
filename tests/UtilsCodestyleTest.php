@@ -11,8 +11,15 @@
  * @license    MIT
  * @copyright  Copyright (C) JBZoo.com, All rights reserved.
  * @link       https://github.com/JBZoo/Utils
- * @author     Denis Smetannikov <denis@jbzoo.com>
  */
 
-$_SERVER['REQUEST_TIME_FLOAT'] = $_SERVER['REQUEST_TIME_FLOAT'] ?? microtime(true);
-$_SERVER['REQUEST_TIME'] = $_SERVER['REQUEST_TIME'] ?? $_SERVER['REQUEST_TIME_FLOAT'];
+namespace JBZoo\PHPUnit;
+
+/**
+ * Class UtilsCodestyleTest
+ * @package JBZoo\PHPUnit
+ */
+class UtilsCodestyleTest extends AbstractCopyrightTest
+{
+    protected $packageName = "Utils";
+}

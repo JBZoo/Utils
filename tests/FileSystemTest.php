@@ -1,8 +1,9 @@
 <?php
+
 /**
- * JBZoo Utils
+ * JBZoo Toolbox - Utils
  *
- * This file is part of the JBZoo CCK package.
+ * This file is part of the JBZoo Toolbox project.
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  *
@@ -10,14 +11,12 @@
  * @license    MIT
  * @copyright  Copyright (C) JBZoo.com, All rights reserved.
  * @link       https://github.com/JBZoo/Utils
- * @author     Denis Smetannikov <denis@jbzoo.com>
  */
 
 namespace JBZoo\PHPUnit;
 
 use JBZoo\Utils\FS;
 use JBZoo\Utils\Sys;
-use JBZoo\Utils\Vars;
 
 /**
  * Class FileSystemTest
@@ -26,6 +25,13 @@ use JBZoo\Utils\Vars;
  */
 class FileSystemTest extends PHPUnit
 {
+    protected function setUp(): void
+    {
+        parent::setUp();
+
+        $_SERVER['DOCUMENT_ROOT'] = PROJECT_ROOT;
+    }
+
     public function testRemoveDir()
     {
         $dirname = __DIR__;
@@ -97,29 +103,24 @@ class FileSystemTest extends PHPUnit
         }
 
         // Test symlink traversal.
-        if (Sys::isWin()) {
-            //skip('Windows does not correctly support symlinks :(');
+        $dir = $dirname . '/test6';
+        $nestedDir = "$dir/nested";
+        $symlink = "$dir/nested-symlink";
+        @mkdir($dir);
+        @mkdir($nestedDir);
 
-        } else {
-            $dir = $dirname . '/test6';
-            $nestedDir = "$dir/nested";
-            $symlink = "$dir/nested-symlink";
-            @mkdir($dir);
-            @mkdir($nestedDir);
+        $symlinkStatus = symlink($nestedDir, $symlink);
+        isTrue($symlinkStatus, 'The test system does not support making symlinks.');
 
-            $symlinkStatus = symlink($nestedDir, $symlink);
-            isTrue($symlinkStatus, 'The test system does not support making symlinks.');
-
-            if (!$symlink) {
-                return;
-            }
-
-            isTrue(FS::rmDir($symlink, true), 'Could not delete a symlinked directory.');
-            isFalse(file_exists($symlink), 'Could not delete a symlinked directory.');
-
-            FS::rmDir($dir, true);
-            isFalse(is_dir($dir), 'Could not delete a directory with a symlinked directory inside of it.');
+        if (!$symlink) {
+            return;
         }
+
+        isTrue(FS::rmDir($symlink, true), 'Could not delete a symlinked directory.');
+        isFalse(file_exists($symlink), 'Could not delete a symlinked directory.');
+
+        FS::rmDir($dir, true);
+        isFalse(is_dir($dir), 'Could not delete a directory with a symlinked directory inside of it.');
     }
 
     public function testOpenFile()
@@ -210,15 +211,6 @@ class FileSystemTest extends PHPUnit
 
     public function testExecutable()
     {
-        if (Sys::isWin()) {
-            //skip('This functionality is not working on Windows.');
-            return false;
-        }
-
-        if (Sys::isRoot()) {
-            skip('These tests don\'t work when run as root');
-        }
-
         isFalse(FS::executable('/no/such/file'));
 
         $dirname = __DIR__;
@@ -286,7 +278,7 @@ class FileSystemTest extends PHPUnit
         $dir = __DIR__ . DIRECTORY_SEPARATOR . 'dir1';
 
         @mkdir($dir);
-        $file1 = $dir . DIRECTORY_SEPARATOR . 'file1';
+        $file1 = $dir . DIRECTORY_SEPARATOR . 'file1.txt';
         touch($file1);
 
         is([$file1], FS::ls($dir));
@@ -385,26 +377,20 @@ class FileSystemTest extends PHPUnit
         isSame(__FILE__, FS::real(__FILE__));
     }
 
-    /**
-     * @SuppressWarnings(PHPMD.Superglobals)
-     */
     public function testClean()
     {
-        $dirSep = DIRECTORY_SEPARATOR;
-        $empty = Vars::get($_SERVER['DOCUMENT_ROOT'], '');
-
-        isSame($empty, FS::clean(''));
-        isSame($empty, FS::clean(false));
-        isSame($empty, FS::clean(null));
+        isSame('', FS::clean(''));
+        isSame('', FS::clean(false));
+        isSame('', FS::clean(null));
 
         isSame('path', FS::clean('path'));
-        isSame("{$dirSep}path", FS::clean('/path'));
-        isSame("{$dirSep}path", FS::clean(' /path '));
-        isSame("{$dirSep}path{$dirSep}", FS::clean('/path/'));
-        isSame("{$dirSep}path{$dirSep}", FS::clean('///path///'));
-        isSame("{$dirSep}path{$dirSep}path", FS::clean('///path///path'));
-        isSame("{$dirSep}path{$dirSep}path{$dirSep}path", FS::clean('///path///path/path'));
-        isSame("{$dirSep}path{$dirSep}path{$dirSep}path{$dirSep}", FS::clean('\path\path\path\\\\\\\\'));
+        isSame('/path', FS::clean('/path'));
+        isSame('/path', FS::clean(' /path '));
+        isSame('/path/', FS::clean('/path/'));
+        isSame('/path/', FS::clean('///path///'));
+        isSame('/path/path', FS::clean('///path///path'));
+        isSame('/path/path/path', FS::clean('///path///path/path'));
+        isSame('/path/path/path/', FS::clean('\path\path\path\\\\\\\\'));
         isSame('\\path\\path\\path\\', FS::clean('\path\path\path\\\\\\\\', '\\'));
         isSame('\\path\\path\\path\\', FS::clean('\\path\\path\\path\\\\\\\\', '\\'));
         isSame('\\\\path\\path\\path\\', FS::clean('\\\\path\\path\\path\\\\\\\\', '\\'));

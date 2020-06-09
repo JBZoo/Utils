@@ -1,8 +1,9 @@
 <?php
+
 /**
- * JBZoo Utils
+ * JBZoo Toolbox - Utils
  *
- * This file is part of the JBZoo CCK package.
+ * This file is part of the JBZoo Toolbox project.
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  *
@@ -19,14 +20,10 @@ namespace JBZoo\Utils;
  * Class Sys
  *
  * @package JBZoo\Utils
+ * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
  */
 class Sys
 {
-    /**
-     * @var string
-     */
-    private static $binary;
-
     /**
      * Check is current OS Windows
      *
@@ -34,7 +31,7 @@ class Sys
      */
     public static function isWin(): bool
     {
-        return strncasecmp(PHP_OS, 'WIN', 3) === 0;
+        return strncasecmp(PHP_OS_FAMILY, 'WIN', 3) === 0 || DIRECTORY_SEPARATOR === '\\';
     }
 
     /**
@@ -48,7 +45,7 @@ class Sys
             return 0 === posix_geteuid();
         }
 
-        return false; // @codeCoverageIgnore
+        return false;
     }
 
     /**
@@ -85,17 +82,17 @@ class Sys
     /**
      * Alias fo ini_set function
      *
-     * @param string $varName
+     * @param string $phpIniKey
      * @param string $newValue
-     * @return mixed
+     * @return bool
      */
-    public static function iniSet($varName, $newValue)
+    public static function iniSet(string $phpIniKey, string $newValue): bool
     {
         if (self::isFunc('ini_set')) {
-            return Filter::bool(ini_set($varName, $newValue));
+            return Filter::bool(ini_set($phpIniKey, $newValue));
         }
 
-        return null; // @codeCoverageIgnore
+        return false;
     }
 
     /**
@@ -110,16 +107,16 @@ class Sys
             return ini_get($varName);
         }
 
-        return null; // @codeCoverageIgnore
+        return null;
     }
 
     /**
-     * @param $funcName
+     * @param string|\Closure $funcName
      * @return bool
      */
     public static function isFunc($funcName): bool
     {
-        return is_callable($funcName) || (is_string($funcName) && function_exists($funcName) && is_callable($funcName));
+        return is_callable($funcName) || (is_string($funcName) && function_exists($funcName));
     }
 
     /**
@@ -127,12 +124,11 @@ class Sys
      *
      * @param int $newLimit
      */
-    public static function setTime($newLimit = 0): void
+    public static function setTime(int $newLimit = 0): void
     {
-        $newLimit = (int)$newLimit;
+        self::iniSet('set_time_limit', (string)$newLimit);
+        self::iniSet('max_execution_time', (string)$newLimit);
 
-        self::iniSet('set_time_limit', $newLimit);
-        self::iniSet('max_execution_time', $newLimit);
         if (self::isFunc('set_time_limit')) {
             set_time_limit($newLimit);
         }
@@ -156,7 +152,7 @@ class Sys
     public static function isPHP($version, $current = PHP_VERSION): bool
     {
         $version = trim($version, '.');
-        return preg_match('#^' . preg_quote($version, null) . '#i', $current);
+        return (bool)preg_match('#^' . preg_quote($version, '') . '#i', $current);
     }
 
     /**
@@ -198,22 +194,16 @@ class Sys
      * Return document root
      *
      * @SuppressWarnings(PHPMD.Superglobals)
-     * @return string
+     * @return string|null
      */
-    public static function getDocRoot(): string
+    public static function getDocRoot(): ?string
     {
-        $result = '.';
-        $root = Arr::key('DOCUMENT_ROOT', $_SERVER, true);
-
-        if ($root) {
-            $result = $root;
-        }
-
+        $result = $_SERVER['DOCUMENT_ROOT'] ?? '.';
         $result = FS::clean($result);
         $result = FS::real($result);
 
         if (!$result) {
-            $result = FS::real('.'); // @codeCoverageIgnore
+            $result = FS::real('.');
         }
 
         return $result;
@@ -236,66 +226,39 @@ class Sys
      *
      * @return string
      *
-     * @SuppressWarnings(PHPMD.NPathComplexity)
      * @SuppressWarnings(PHPMD.Superglobals)
-     * @codeCoverageIgnore
      */
     public static function getBinary(): string
     {
-        // Custom PHP path
-        if ((self::$binary === null) && (self::$binary = getenv('PHP_BINARY_CUSTOM')) === false) {
-            self::$binary = PHP_BINARY;
+        if ($customPath = Env::string('PHP_BINARY_CUSTOM')) {
+            return $customPath;
         }
 
         // HHVM
-        if (self::$binary === null && self::isHHVM()) {
-            if ((self::$binary = getenv('PHP_BINARY')) === false) {
-                self::$binary = PHP_BINARY;
+        if (self::isHHVM()) {
+            if (($binary = getenv('PHP_BINARY')) === false) {
+                $binary = PHP_BINARY;
             }
-            self::$binary = escapeshellarg(self::$binary) . ' --php';
+            return escapeshellarg($binary) . ' --php';
         }
 
-        // PHP >= 5.4.0
-        if (self::$binary === null && defined('PHP_BINARY')) {
-            self::$binary = escapeshellarg(PHP_BINARY);
+        if (defined('PHP_BINARY')) {
+            return escapeshellarg(PHP_BINARY);
         }
 
-        // PHP < 5.4.0
-        if ((self::$binary === null) && PHP_SAPI === 'cli' && isset($_SERVER['_'])) {
-            if (strpos($_SERVER['_'], 'phpunit') !== false) {
-                $file = file($_SERVER['_']);
+        $binaryLocations = [
+            PHP_BINDIR . '/php',
+            PHP_BINDIR . '/php-cli.exe',
+            PHP_BINDIR . '/php.exe',
+        ];
 
-                if (strpos($file[0], ' ') !== false) {
-                    $tmp = explode(' ', $file[0]);
-                    self::$binary = escapeshellarg(trim($tmp[1]));
-                } else {
-                    self::$binary = escapeshellarg(ltrim(trim($file[0]), '#!'));
-                }
-            } elseif (strpos(basename($_SERVER['_']), 'php') !== false) {
-                self::$binary = escapeshellarg($_SERVER['_']);
+        foreach ($binaryLocations as $binary) {
+            if (is_readable($binary)) {
+                return $binary;
             }
         }
 
-        if (self::$binary === null) {
-            $binaryLocations = [
-                PHP_BINDIR . '/php',
-                PHP_BINDIR . '/php-cli.exe',
-                PHP_BINDIR . '/php.exe',
-            ];
-
-            foreach ($binaryLocations as $binary) {
-                if (is_readable($binary)) {
-                    self::$binary = escapeshellarg($binary);
-                    break;
-                }
-            }
-        }
-
-        if (self::$binary === null) {
-            self::$binary = 'php';
-        }
-
-        return self::$binary;
+        return 'php';
     }
 
     /**
@@ -335,14 +298,10 @@ class Sys
     }
 
     /**
-     * @return string
+     * @return string|null
      */
     public static function getVersion(): ?string
     {
-        if (self::isHHVM()) {
-            return defined('HHVM_VERSION') ? HHVM_VERSION : null;
-        }
-
         return defined('PHP_VERSION') ? PHP_VERSION : null;
     }
 
@@ -380,7 +339,6 @@ class Sys
      * Returns true when the runtime used is PHP with the PHPDBG SAPI.
      *
      * @return bool
-     * @codeCoverageIgnore
      */
     public static function isPHPDBG(): bool
     {
@@ -392,7 +350,6 @@ class Sys
      * and the phpdbg_*_oplog() functions are available (PHP >= 7.0).
      *
      * @return bool
-     * @codeCoverageIgnore
      */
     public static function hasPHPDBGCodeCoverage(): bool
     {

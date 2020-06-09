@@ -3,7 +3,6 @@
     "type"              : "library",
     "description"       : "A collection of useful PHP functions, mini classes and snippets that you need every day.",
     "license"           : "MIT",
-    "minimum-stability" : "stable",
     "keywords"          : [
         "helpers", "helper", "utility", "utils", "collection", "environment", "image", "filesystem",
         "array", "cli", "command line", "dates", "email", "env", "filter", "http", "url", "serialize",
@@ -27,27 +26,28 @@
     ],
 
     "require"           : {
-        "php"          : ">=7.1",
+        "php"          : ">=7.2",
         "ext-posix"    : "*",
         "ext-mbstring" : "*",
-        "ext-gd"       : "*"
+        "ext-gd"       : "*",
+        "ext-filter"   : "*",
+        "ext-intl"     : "*"
     },
 
     "require-dev"       : {
-        "jbzoo/phpunit"               : "^2.3|^3.0",
-        "jbzoo/profiler"              : "^1.0.5",
-        "jbzoo/data"                  : "^3.0.0",
-        "symfony/process"             : "^4.4",
-        "symfony/polyfill-mbstring"   : "^1.12",
-        "php-coveralls/php-coveralls" : "^2.2.0"
+        "jbzoo/toolbox-dev"         : "1.1.x-dev",
+        "jbzoo/data"                : "^3.0.0",
+        "symfony/process"           : "^4.4|^5.0",
+        "symfony/polyfill-mbstring" : "^1.12"
     },
 
     "suggest"           : {
         "ext-mbstring"              : "Provides multibyte specific string functions",
         "symfony/process"           : "For Cli::exec() method only",
         "symfony/polyfill-mbstring" : "For UTF-8 if ext-mbstring disabled",
-        "jbzoo/data"                : "^2.0|^3.0"
+        "jbzoo/data"                : ">=3.0"
     },
+
     "autoload"          : {
         "files" : [
             "src/defines.php"
@@ -57,11 +57,20 @@
         }
     },
 
+    "minimum-stability" : "dev",
+    "prefer-stable"     : true,
+
+    "autoload-dev"      : {
+        "classmap" : ["tests"]
+    },
+
     "config"            : {
         "optimize-autoloader" : true
     },
 
-    "support"           : {
-        "issues" : "https://github.com/JBZoo/Utils/issues"
+    "extra"             : {
+        "branch-alias" : {
+            "dev-master" : "4.0.x-dev"
+        }
     }
 }

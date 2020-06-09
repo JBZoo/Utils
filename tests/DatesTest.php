@@ -1,8 +1,9 @@
 <?php
+
 /**
- * JBZoo Utils
+ * JBZoo Toolbox - Utils
  *
- * This file is part of the JBZoo CCK package.
+ * This file is part of the JBZoo Toolbox project.
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  *
@@ -10,7 +11,6 @@
  * @license    MIT
  * @copyright  Copyright (C) JBZoo.com, All rights reserved.
  * @link       https://github.com/JBZoo/Utils
- * @author     Denis Smetannikov <denis@jbzoo.com>
  */
 
 namespace JBZoo\PHPUnit;
@@ -151,5 +151,16 @@ class DatesTest extends PHPUnit
     {
         isSame('Y-m-d H:i:s', Dates::SQL_FORMAT);
         isSame('0000-00-00 00:00:00', Dates::SQL_NULL);
+    }
+
+    public function testTimeFormat()
+    {
+        isSame('0.000 sec', Dates::formatTime(0));
+        isSame('0.568 sec', Dates::formatTime(0.56789));
+        isSame('1.568 sec', Dates::formatTime(1.56789));
+        isSame('1.999 sec', Dates::formatTime(1.999));
+        isSame('00:00:03', Dates::formatTime(2.56789));
+        isSame('00:00:02', Dates::formatTime(2));
+        isSame('00:00:50', Dates::formatTime(50));
     }
 }

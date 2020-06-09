@@ -1,8 +1,9 @@
 <?php
+
 /**
- * JBZoo Utils
+ * JBZoo Toolbox - Utils
  *
- * This file is part of the JBZoo CCK package.
+ * This file is part of the JBZoo Toolbox project.
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  *
@@ -38,18 +39,18 @@ class Dates
     /**
      * Convert to timestamp
      *
-     * @param string|int|DateTime $time
-     * @param bool                $currentIsDefault
+     * @param string|int|DateTime|null $time
+     * @param bool                     $currentIsDefault
      * @return int
      */
     public static function toStamp($time = null, $currentIsDefault = true): int
     {
         if ($time instanceof DateTime) {
-            return $time->format('U');
+            return (int)$time->format('U');
         }
 
         if (null !== $time) {
-            $time = is_numeric($time) ? (int)$time : strtotime($time);
+            $time = is_numeric($time) ? (int)$time : (int)strtotime($time);
         }
 
         if (!$time) {
@@ -194,5 +195,18 @@ class Dates
     public static function isYesterday($time): bool
     {
         return (self::factory($time)->format('Y-m-d') === self::factory('yesterday')->format('Y-m-d'));
+    }
+
+    /**
+     * @param int $seconds
+     * @return string
+     */
+    public static function formatTime($seconds): string
+    {
+        if ($seconds < 2) {
+            return number_format($seconds, 3) . ' sec';
+        }
+
+        return (string)gmdate('H:i:s', (int)round($seconds, 0));
     }
 }

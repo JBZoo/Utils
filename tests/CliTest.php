@@ -1,8 +1,9 @@
 <?php
+
 /**
- * JBZoo Utils
+ * JBZoo Toolbox - Utils
  *
- * This file is part of the JBZoo CCK package.
+ * This file is part of the JBZoo Toolbox project.
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  *
@@ -10,12 +11,12 @@
  * @license    MIT
  * @copyright  Copyright (C) JBZoo.com, All rights reserved.
  * @link       https://github.com/JBZoo/Utils
- * @author     Denis Smetannikov <denis@jbzoo.com>
  */
 
 namespace JBZoo\PHPUnit;
 
 use JBZoo\Utils\Cli;
+use Symfony\Component\Process\Exception\ProcessFailedException;
 
 /**
  * Class CliTest
@@ -33,7 +34,11 @@ class CliTest extends PHPUnit
     public function testBuild()
     {
         is('ls', Cli::build('ls'));
+        is('ls -0="qwerty"', Cli::build('ls', ['qwerty']));
+        is('ls -a', Cli::build('ls', ['a' => null]));
         is('ls -a', Cli::build('ls', ['a' => '']));
+        is('ls -a', Cli::build('ls', ['a' => false]));
+        is('ls -a="1"', Cli::build('ls', ['a' => true]));
 
         is('ls -a -l', Cli::build('ls', [
             'a' => '',
@@ -44,7 +49,7 @@ class CliTest extends PHPUnit
         is('ls --option="qwerty"', Cli::build('ls', ['option' => 'qwerty']));
         is('ls --option="qwert\'y"', Cli::build('ls', ['option' => 'qwert\'y']));
         is('ls --option="qwert\"y"', Cli::build('ls', ['option' => 'qwert"y']));
-        is('ls --option', Cli::build('ls', ['option' => 0,]));
+        is('ls --option', Cli::build('ls', ['option' => 0]));
     }
 
     public function testExec()
@@ -56,14 +61,14 @@ class CliTest extends PHPUnit
 
     public function testExecFail()
     {
-        $this->expectException(\Symfony\Component\Process\Exception\ProcessFailedException::class);
+        $this->expectException(ProcessFailedException::class);
 
         Cli::exec('undefined-command');
     }
 
     public function testCanDetectIfStdoutIsInteractiveByDefault()
     {
-        $this->assertIsBool(Cli::isInteractive());
+        isTrue(Cli::isInteractive());
     }
 
     public function testCanDetectIfFileDescriptorIsInteractive()
@@ -73,11 +78,32 @@ class CliTest extends PHPUnit
 
     public function testCanDetectColorSupport()
     {
-        $this->assertIsBool(Cli::hasColorSupport());
+        isTrue(Cli::hasColorSupport());
     }
 
     public function testCanDetectNumberOfColumns()
     {
         $this->assertIsInt(Cli::getNumberOfColumns());
+    }
+
+    public function testStdMessage()
+    {
+        // Just no errors
+        Cli::out('message1');
+        Cli::out('message2', true);
+        success();
+    }
+
+    public function testErrorMessage()
+    {
+        // Just no errors
+        Cli::err('error1');
+        Cli::err('error2', true);
+        success();
+    }
+
+    public function testGetNumberOfColumns()
+    {
+        isTrue(Cli::getNumberOfColumns() >= 80);
     }
 }

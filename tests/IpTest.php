@@ -1,8 +1,9 @@
 <?php
+
 /**
- * JBZoo Utils
+ * JBZoo Toolbox - Utils
  *
- * This file is part of the JBZoo CCK package.
+ * This file is part of the JBZoo Toolbox project.
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  *
@@ -10,13 +11,11 @@
  * @license    MIT
  * @copyright  Copyright (C) JBZoo.com, All rights reserved.
  * @link       https://github.com/JBZoo/Utils
- * @author     Denis Smetannikov <denis@jbzoo.com>
  */
 
 namespace JBZoo\PHPUnit;
 
 use JBZoo\Utils\IP;
-use JBZoo\Utils\Sys;
 
 /**
  * Class ArrayTest
@@ -67,6 +66,7 @@ class IpTest extends PHPUnit
         isFalse(IP::v4InRange('81.76.201.37', '80.76.201.32/27'));
         isFalse(IP::v4InRange('80.76.201.40', '80.76.201.64/27'));
         isFalse(IP::v4InRange('192.168.1.42', '192.168.3.0/24'));
+        isFalse(IP::v4InRange('192.168.1.42', '192.168.3.0'));
     }
 
     public function testGetNetMask()

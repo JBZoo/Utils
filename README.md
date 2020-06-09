@@ -208,9 +208,6 @@ Filter::arr($value, $filter = null)
 // Cleanup system command
 Filter::cmd($value)
 
-// Validate email
-Filter::email($email)
-
 // Get safe string
 Filter::strip($string)
 
@@ -622,10 +619,6 @@ Url::pathToUrl($path)
 ## Variable handlers
 ```php
 use JBZoo\Utils\Vars;
-
-// Access an array index, retrieving the value stored there if it exists or a default if it does not.
-// This function allows you to concisely access an index which may or may not exist without raising a warning.
-Vars::get(&$var, $default = null)
 
 // Return true if the number is within the min and max.
 Vars::isIn($number, $min, $max)

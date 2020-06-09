@@ -1,8 +1,9 @@
 <?php
+
 /**
- * JBZoo Utils
+ * JBZoo Toolbox - Utils
  *
- * This file is part of the JBZoo CCK package.
+ * This file is part of the JBZoo Toolbox project.
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  *
@@ -31,8 +32,12 @@ class Csv
      * @param bool   $hasHeader
      * @return array
      */
-    public static function parse($csvFile, $delimiter = ';', $enclosure = '"', $hasHeader = true): array
-    {
+    public static function parse(
+        string $csvFile,
+        string $delimiter = ';',
+        string $enclosure = '"',
+        bool $hasHeader = true
+    ): array {
         $result = [];
 
         $headerKeys = [];
@@ -40,11 +45,14 @@ class Csv
 
         if (($handle = fopen($csvFile, 'rb')) !== false) {
             while (($row = fgetcsv($handle, self::LENGTH_LIMIT, $delimiter, $enclosure)) !== false) {
+                $row = (array)$row;
                 if ($rowCounter === 0 && $hasHeader) {
                     $headerKeys = $row;
                 } elseif ($hasHeader) {
                     $assocRow = [];
+
                     foreach ($headerKeys as $colIndex => $colName) {
+                        $colName = (string)$colName;
                         $assocRow[$colName] = $row[$colIndex];
                     }
 

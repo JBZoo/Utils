@@ -1,8 +1,9 @@
 <?php
+
 /**
- * JBZoo Utils
+ * JBZoo Toolbox - Utils
  *
- * This file is part of the JBZoo CCK package.
+ * This file is part of the JBZoo Toolbox project.
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  *
@@ -22,19 +23,6 @@ namespace JBZoo\Utils;
  */
 class Vars
 {
-    /**
-     * Access an array index, retrieving the value stored there if it exists or a default if it does not.
-     * This function allows you to concisely access an index which may or may not exist without raising a warning.
-     *
-     * @param array $var     Array value to access
-     * @param mixed $default Default value to return if the key is not
-     * @return mixed
-     */
-    public static function get(&$var, $default = null)
-    {
-        return $var ?? $default;
-    }
-
     /**
      * Return true if the number is within the min and max.
      *

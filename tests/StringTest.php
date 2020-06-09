@@ -1,8 +1,9 @@
 <?php
+
 /**
- * JBZoo Utils
+ * JBZoo Toolbox - Utils
  *
- * This file is part of the JBZoo CCK package.
+ * This file is part of the JBZoo Toolbox project.
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  *
@@ -10,13 +11,12 @@
  * @license    MIT
  * @copyright  Copyright (C) JBZoo.com, All rights reserved.
  * @link       https://github.com/JBZoo/Utils
- * @author     Denis Smetannikov <denis@jbzoo.com>
  */
 
 namespace JBZoo\PHPUnit;
 
-use JBZoo\Utils\Str;
 use JBZoo\Utils\Slug;
+use JBZoo\Utils\Str;
 
 /**
  * Class StringTest
@@ -175,16 +175,16 @@ class StringTest extends PHPUnit
         is('one231251251', Slug::filter('123----1251251', '', true));
     }
 
-    public function testMBString()
+    public function testMbString()
     {
         isSame(Str::isMBString(), function_exists('mb_strtoupper'));
-        isSame(Str::isOverload(), (int)ini_get('mbstring.func_overload') & MB_OVERLOAD_STRING);
+        isSame(Str::isOverload(), (bool)(ini_get('mbstring.func_overload') & MB_OVERLOAD_STRING));
 
         is(5, Str::len('Денис'));
 
         isSame(0, Str::pos('Денис', 'Д'));
         isSame(1, Str::pos('Денис', 'е'));
-        isSame(false, Str::pos('Денис', 'Е'));
+        isSame(null, Str::pos('Денис', 'Е'));
         isSame(3, Str::rPos('Денис', 'и'));
         isSame(1, Str::iPos('Денис', 'Е'));
         isSame(1, Str::iPos('Денис', 'Е'));

@@ -1,0 +1,183 @@
+<?php
+
+/**
+ * JBZoo Toolbox - Utils
+ *
+ * This file is part of the JBZoo Toolbox project.
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ *
+ * @package    Utils
+ * @license    MIT
+ * @copyright  Copyright (C) JBZoo.com, All rights reserved.
+ * @link       https://github.com/JBZoo/Utils
+ * @author     Denis Smetannikov <denis@jbzoo.com>
+ */
+
+namespace JBZoo\Utils;
+
+/**
+ * Class Math
+ * @see     Class based on Statistics.php from phpbench/phpbench
+ * @package JBZoo\Utils
+ */
+class Stats
+{
+    /**
+     * Return the standard deviation of a given population.
+     *
+     * @param array $values
+     * @param bool  $sample
+     *
+     * @return float
+     */
+    public static function stdDev(array $values, $sample = false)
+    {
+        $variance = self::variance($values, $sample);
+        return \sqrt($variance);
+    }
+
+    /**
+     * Return the variance for a given population.
+     *
+     * @param array $values
+     * @param bool  $sample
+     *
+     * @return float
+     */
+    public static function variance(array $values, $sample = false)
+    {
+        $average = self::mean($values);
+        $sum = 0;
+
+        foreach ($values as $value) {
+            $diff = ($value - $average) ** 2;
+            $sum += $diff;
+        }
+
+        if (count($values) === 0) {
+            return 0;
+        }
+
+        return $sum / (count($values) - ($sample ? 1 : 0));
+    }
+
+    /**
+     * Return the mean (average) value of the given values.
+     *
+     * @param array $values
+     *
+     * @return mixed
+     */
+    public static function mean($values)
+    {
+        if (empty($values)) {
+            return 0;
+        }
+
+        $sum = array_sum($values);
+
+        if (!$sum) {
+            return 0;
+        }
+
+        $count = count($values);
+
+        return $sum / $count;
+    }
+
+    /**
+     * Return an array populated with $num numbers from $min to $max.
+     *
+     * @param float $min
+     * @param float $max
+     * @param int   $num
+     * @param bool  $endpoint
+     *
+     * @return float[]
+     */
+    public static function linSpace($min, $max, $num = 50, $endpoint = true)
+    {
+        $range = $max - $min;
+
+        if ((float)$max === (float)$min) {
+            throw new Exception(sprintf('Min and max cannot be the same number: %s', (string)$max));
+        }
+
+        $unit = $range / ($endpoint ? $num - 1 : $num);
+        $space = [];
+
+        for ($value = $min; $value <= $max; $value += $unit) {
+            $space[] = $value;
+        }
+
+        if ($endpoint === false) {
+            array_pop($space);
+        }
+
+        return $space;
+    }
+
+    /**
+     * Generate a histogram.
+     *
+     * Note this is not a great function, and should not be relied upon
+     * for serious use.
+     *
+     * For a better implementation copy:
+     *   http://docs.scipy.org/doc/numpy-1.10.1/reference/generated/numpy.histogram.html
+     *
+     * @param array $values
+     * @param int   $steps
+     * @param float $lowerBound
+     * @param float $upperBound
+     *
+     * @return array
+     */
+    public static function histogram(array $values, $steps = 10, $lowerBound = null, $upperBound = null)
+    {
+        $min = $lowerBound ?: min($values);
+        $max = $upperBound ?: max($values);
+
+        $range = $max - $min;
+
+        $step = $range / $steps;
+        $steps++; // add one extra step to catch the max value
+
+        $histogram = [];
+
+        $floor = $min;
+
+        for ($i = 0; $i < $steps; $i++) {
+            $ceil = $floor + $step;
+
+            if (!isset($histogram[(string)$floor])) {
+                $histogram[(string)$floor] = 0;
+            }
+
+            foreach ($values as $value) {
+                if ($value >= $floor && $value < $ceil) {
+                    $histogram[(string)$floor]++;
+                }
+            }
+
+            $floor += $step;
+            $ceil += $step;
+        }
+
+        return $histogram;
+    }
+
+    /**
+     * @param array $values
+     * @param int   $rounding
+     * @return string
+     */
+    public static function renderAverage(array $values, int $rounding = 3): string
+    {
+        $avg = number_format(self::mean($values), $rounding);
+        $stdDev = number_format(self::stdDev($values), $rounding);
+
+        return "{$avg}±{$stdDev}";
+    }
+}

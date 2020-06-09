@@ -1,8 +1,9 @@
 <?php
+
 /**
- * JBZoo Utils
+ * JBZoo Toolbox - Utils
  *
- * This file is part of the JBZoo CCK package.
+ * This file is part of the JBZoo Toolbox project.
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  *
@@ -32,12 +33,12 @@ class Env
      * Returns an environment variable.
      *
      * @param string $name
-     * @param string $default
+     * @param mixed  $default
      * @param int    $options
      * @return mixed
      * @SuppressWarnings(PHPMD.Superglobals)
      */
-    public static function get($name, $default = null, $options = self::VAR_STRING)
+    public static function get(string $name, $default = null, $options = self::VAR_STRING)
     {
         $envKey = trim($name);
 
@@ -46,6 +47,7 @@ class Env
             if (isset($_ENV[$envKey])) {
                 return self::convert($_ENV[$envKey], $options);
             }
+
             return $default;
         }
 
@@ -55,9 +57,9 @@ class Env
     /**
      * Converts the type of values like "true", "false", "null" or "123".
      *
-     * @param string $value
-     * @param int    $options
-     * @return mixed
+     * @param string|null $value
+     * @param int         $options
+     * @return string|float|int|bool|null
      */
     public static function convert($value, $options = self::VAR_STRING)
     {
@@ -68,11 +70,11 @@ class Env
         }
 
         if ($options & self::VAR_FLOAT) {
-            return Filter::float($value, 12);
+            return Filter::float((string)$value);
         }
 
         if ($options & self::VAR_INT) {
-            return Filter::int($value);
+            return Filter::int((int)$value);
         }
 
         if ($options & self::VAR_BOOL || $options & self::VAR_NULL) {
@@ -84,5 +86,45 @@ class Env
         }
 
         return (string)$value;
+    }
+
+    /**
+     * @param string $envVarName
+     * @param string $default
+     * @return string
+     */
+    public static function string(string $envVarName, string $default = ''): string
+    {
+        return (string)self::get($envVarName, $default, self::VAR_STRING);
+    }
+
+    /**
+     * @param string $envVarName
+     * @param int    $default
+     * @return int
+     */
+    public static function int(string $envVarName, int $default = 0): int
+    {
+        return (int)self::get($envVarName, $default, self::VAR_INT);
+    }
+
+    /**
+     * @param string $envVarName
+     * @param float  $default
+     * @return float
+     */
+    public static function float(string $envVarName, float $default = 0.0): float
+    {
+        return (float)self::get($envVarName, $default, self::VAR_FLOAT);
+    }
+
+    /**
+     * @param string $envVarName
+     * @param bool   $default
+     * @return bool
+     */
+    public static function bool(string $envVarName, bool $default = false): bool
+    {
+        return (bool)self::get($envVarName, $default, self::VAR_BOOL);
     }
 }

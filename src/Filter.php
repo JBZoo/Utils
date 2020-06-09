@@ -1,8 +1,9 @@
 <?php
+
 /**
- * JBZoo Utils
+ * JBZoo Toolbox - Utils
  *
- * This file is part of the JBZoo CCK package.
+ * This file is part of the JBZoo Toolbox project.
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  *
@@ -23,6 +24,8 @@ use JBZoo\Data\JSON;
  * Class Filter
  *
  * @package JBZoo\Utils
+ * @SuppressWarnings(PHPMD.TooManyMethods)
+ * @SuppressWarnings(PHPMD.TooManyPublicMethods)
  */
 class Filter
 {
@@ -40,22 +43,20 @@ class Filter
     {
         if (is_string($filters)) {
             $filters = Str::trim($filters);
-            $filters = explode(',', $filters);
+            $filters = (array)explode(',', $filters);
 
-            if (count($filters) > 0) {
-                foreach ($filters as $filter) {
-                    $filterName = self::cmd($filter);
+            foreach ($filters as $filter) {
+                $filterName = self::cmd($filter);
 
-                    if ($filterName) {
-                        if (method_exists(__CLASS__, $filterName)) {
-                            $value = self::$filterName($value);
-                        } else {
-                            throw new Exception('Undefined filter method: ' . $filter);
-                        }
+                if ($filterName) {
+                    if (method_exists(__CLASS__, $filterName)) {
+                        $value = self::$filterName($value);
+                    } else {
+                        throw new Exception('Undefined filter method: ' . $filter);
                     }
                 }
             }
-        } elseif ($filters instanceof Closure) {
+        } else {
             $value = $filters($value);
         }
 
@@ -65,10 +66,10 @@ class Filter
     /**
      * Converts many english words that equate to true or false to boolean.
      *
-     * @param string $string The string to convert to boolean
+     * @param mixed $variable The string to convert to boolean
      * @return boolean
      */
-    public static function bool($string): bool
+    public static function bool($variable): bool
     {
         $yesList = [
             'affirmative',
@@ -125,31 +126,31 @@ class Filter
             '-',
         ];
 
-        $string = Str::low($string);
+        $variable = Str::low($variable);
 
-        if (Arr::in($string, $yesList) || self::float($string) !== 0.0) {
+        if (Arr::in($variable, $yesList) || self::float($variable) !== 0.0) {
             return true;
         }
 
-        if (Arr::in($string, $noList)) {
+        if (Arr::in($variable, $noList)) {
             return false;
         }
 
-        return filter_var($string, FILTER_VALIDATE_BOOLEAN);
+        return filter_var($variable, FILTER_VALIDATE_BOOLEAN);
     }
 
     /**
-     * @param string $value
-     * @param int    $round
+     * @param string|float|int|null $value
+     * @param int                   $round
      * @return float
      */
-    public static function float($value, $round = 10): float
+    public static function float($value, int $round = 10): float
     {
-        $cleaned = preg_replace('#[^\deE\-\.\,]#iu', '', $value);
+        $cleaned = (string)preg_replace('#[^\deE\-\.\,]#iu', '', (string)$value);
         $cleaned = str_replace(',', '.', $cleaned);
 
         preg_match('#[-+]?[\d]+(\.[\d]+)?([eE][-+]?[\d]+)?#', $cleaned, $matches);
-        $result = $matches[0] ?? 0.0;
+        $result = (float)($matches[0] ?? 0.0);
 
         $result = round($result, $round);
 
@@ -159,12 +160,12 @@ class Filter
     /**
      * Smart convert any string to int
      *
-     * @param string $value
+     * @param string|int|float $value
      * @return int
      */
     public static function int($value): int
     {
-        $cleaned = preg_replace('#[^0-9-+.,]#', '', $value);
+        $cleaned = (string)preg_replace('#[^0-9-+.,]#', '', (string)$value);
         preg_match('#[-+]?[\d]+#', $cleaned, $matches);
         $result = $matches[0] ?? 0;
 
@@ -174,14 +175,14 @@ class Filter
     /**
      * Return only digits chars
      *
-     * @param $value
-     * @return mixed
+     * @param string $value
+     * @return string
      */
     public static function digits($value)
     {
         // we need to remove - and + because they're allowed in the filter
         $cleaned = str_replace(['-', '+'], '', $value);
-        $cleaned = filter_var($cleaned, FILTER_SANITIZE_NUMBER_INT);
+        $cleaned = (string)filter_var($cleaned, FILTER_SANITIZE_NUMBER_INT);
 
         return $cleaned;
     }
@@ -189,29 +190,29 @@ class Filter
     /**
      * Return only alpha chars
      *
-     * @param $value
+     * @param string $value
      * @return mixed
      */
     public static function alpha($value)
     {
-        return preg_replace('#[^[:alpha:]]#', '', $value);
+        return (string)preg_replace('#[^[:alpha:]]#', '', $value);
     }
 
     /**
      * Return only alpha and digits chars
      *
-     * @param $value
+     * @param string $value
      * @return mixed
      */
     public static function alphanum($value)
     {
-        return preg_replace('#[^[:alnum:]]#', '', $value);
+        return (string)preg_replace('#[^[:alnum:]]#', '', $value);
     }
 
     /**
      * Return only chars for base64
      *
-     * @param $value
+     * @param string $value
      * @return string
      */
     public static function base64($value): string
@@ -222,7 +223,7 @@ class Filter
     /**
      * Remove whitespaces
      *
-     * @param $value
+     * @param string $value
      * @return string
      */
     public static function path($value): string
@@ -235,7 +236,7 @@ class Filter
     /**
      * Remove whitespaces
      *
-     * @param $value
+     * @param string $value
      * @return string
      */
     public static function trim($value): string
@@ -246,7 +247,7 @@ class Filter
     /**
      * Remove whitespaces
      *
-     * @param $value
+     * @param string $value
      * @return string
      */
     public static function trimExtend($value): string
@@ -283,36 +284,16 @@ class Filter
     public static function cmd($value): string
     {
         $value = Str::low($value);
-        $value = preg_replace('#[^a-z0-9\_\-\.]#', '', $value);
+        $value = (string)preg_replace('#[^a-z0-9\_\-\.]#', '', $value);
         $value = Str::trim($value);
 
         return $value;
     }
 
     /**
-     * Validate email
-     *
-     * @param $email
-     * @return mixed
-     *
-     * @deprecated See JBZoo\Utils\Email
-     */
-    public static function email($email)
-    {
-        $email = Str::trim($email);
-        $cleaned = filter_var($email, FILTER_VALIDATE_EMAIL);
-
-        if (Email::isValid($cleaned)) {
-            return $cleaned;
-        }
-
-        return false;
-    }
-
-    /**
      * Get safe string
      *
-     * @param $string
+     * @param string $string
      * @return mixed
      */
     public static function strip($string)
@@ -326,10 +307,10 @@ class Filter
     /**
      * Get safe string
      *
-     * @param $string
-     * @return mixed
+     * @param string $string
+     * @return string
      */
-    public static function alias($string)
+    public static function alias($string): string
     {
         $cleaned = self::strip($string);
         $cleaned = Str::slug($cleaned);
@@ -340,7 +321,7 @@ class Filter
     /**
      * String to lower and trim
      *
-     * @param $string
+     * @param string $string
      * @return string
      */
     public static function low($string): string
@@ -354,7 +335,7 @@ class Filter
     /**
      * String to upper and trim
      *
-     * @param $string
+     * @param string $string
      * @return string
      *
      * @SuppressWarnings(PHPMD.ShortMethodName)
@@ -370,7 +351,7 @@ class Filter
     /**
      * Strip spaces
      *
-     * @param $string
+     * @param string $string
      * @return string
      */
     public static function stripSpace($string): string
@@ -379,7 +360,7 @@ class Filter
     }
 
     /**
-     * @param $string
+     * @param string $string
      * @return string
      */
     public static function clean($string): string
@@ -388,7 +369,7 @@ class Filter
     }
 
     /**
-     * @param $string
+     * @param string $string
      * @return string
      */
     public static function html($string): string
@@ -397,7 +378,7 @@ class Filter
     }
 
     /**
-     * @param $string
+     * @param string $string
      * @return string
      */
     public static function xml($string): string
@@ -406,7 +387,7 @@ class Filter
     }
 
     /**
-     * @param $string
+     * @param string $string
      * @return string
      */
     public static function esc($string): string
@@ -430,7 +411,7 @@ class Filter
     /**
      * RAW placeholder
      *
-     * @param $string
+     * @param string $string
      * @return mixed
      */
     public static function raw($string)
@@ -441,7 +422,7 @@ class Filter
     /**
      * First char to upper, other to lower
      *
-     * @param $input
+     * @param string $input
      * @return string
      */
     public static function ucFirst($input): string
@@ -470,16 +451,16 @@ class Filter
     /**
      * Convert words to PHP Class name
      *
-     * @param $input
+     * @param string $input
      * @return string
      */
     public static function className($input): string
     {
-        $output = preg_replace(['#(?<=[^A-Z\s])([A-Z\s])#i'], ' $0', $input);
+        $output = (string)preg_replace(['#(?<=[^A-Z\s])([A-Z\s])#i'], ' $0', $input);
         $output = explode(' ', $output);
 
         $output = array_map(function ($item) {
-            $item = preg_replace('#[^a-z0-9]#i', '', $item);
+            $item = (string)preg_replace('#[^a-z0-9]#i', '', $item);
             $item = Filter::ucFirst($item);
             return $item;
         }, $output);

@@ -1,8 +1,9 @@
 <?php
+
 /**
- * JBZoo Utils
+ * JBZoo Toolbox - Utils
  *
- * This file is part of the JBZoo CCK package.
+ * This file is part of the JBZoo Toolbox project.
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  *
@@ -21,6 +22,8 @@ use function JBZoo\Data\data;
  * Class Url
  *
  * @package JBZoo\Utils
+ * @SuppressWarnings(PHPMD.TooManyPublicMethods)
+ * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
  */
 class Url
 {
@@ -49,19 +52,20 @@ class Url
     /**
      * Add or remove query arguments to the URL.
      *
-     * @param mixed $newParams Either newkey or an associative array
-     * @param mixed $uri       URI or URL to append the queru/queries to.
+     * @param array  $newParams Either new key or an associative array
+     * @param string $uri       URI or URL to append the query/queries to.
      * @return string
      *
      * @SuppressWarnings(PHPMD.NPathComplexity)
      * @SuppressWarnings(PHPMD.Superglobals)
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     public static function addArg(array $newParams, $uri = null): string
     {
         $uri = $uri ?? ($_SERVER['REQUEST_URI'] ?? '');
 
         // Parse the URI into it's components
-        $parsedUri = data(parse_url($uri));
+        $parsedUri = data((array)parse_url($uri));
 
         if ($parsedUri->get('query')) {
             parse_str($parsedUri['query'], $queryParams);
@@ -89,7 +93,7 @@ class Url
         $parsedUri['query'] = self::build($queryParams);
 
         // Strip = from valueless parameters.
-        $parsedUri['query'] = preg_replace('/=(?=&|$)/', '', $parsedUri['query']);
+        $parsedUri['query'] = (string)preg_replace('/=(?=&|$)/', '', $parsedUri['query']);
 
         // Re-construct the entire URL
         $newUri = self::buildAll((array)$parsedUri);
@@ -101,7 +105,7 @@ class Url
             }
         }
 
-        return rtrim($newUri, '?');
+        return rtrim((string)$newUri, '?');
     }
 
     /**
@@ -146,6 +150,7 @@ class Url
      * @return null|string
      *
      * @SuppressWarnings(PHPMD.Superglobals)
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     public static function root($addAuth = false): ?string
     {
@@ -214,7 +219,7 @@ class Url
      */
     public static function build(array $queryParams): string
     {
-        return http_build_query($queryParams, null, self::ARG_SEPARATOR);
+        return http_build_query($queryParams, '', self::ARG_SEPARATOR);
     }
 
     /**
@@ -231,9 +236,10 @@ class Url
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
      * @SuppressWarnings(PHPMD.Superglobals)
-     * @see          https://github.com/jakeasmith/http_build_url/
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      *
-     * @author       Jake Smith <theman@jakeasmith.com>
+     * @see    https://github.com/jakeasmith/http_build_url/
+     * @author Jake Smith <theman@jakeasmith.com>
      */
     public static function buildAll($sourceUrl, $destParts = [], $flags = self::URL_REPLACE, &$newUrl = []): string
     {
@@ -375,16 +381,17 @@ class Url
      * Removes an item or list from the query string.
      *
      * @param string|array $keys Query key or keys to remove.
-     * @param bool         $uri  When false uses the $_SERVER value
+     * @param string|null  $uri  When null uses the $_SERVER value
      * @return string
      */
     public static function delArg($keys, $uri = null): string
     {
         if (is_array($keys)) {
-            return self::addArg(array_combine($keys, array_fill(0, count($keys), false)), $uri);
+            $params = array_combine($keys, array_fill(0, count($keys), false)) ?: [];
+            return self::addArg($params, (string)$uri);
         }
 
-        return self::addArg([$keys => false], $uri);
+        return self::addArg([$keys => false], (string)$uri);
     }
 
     /**
@@ -394,9 +401,9 @@ class Url
      * @param string $text The string to parse
      * @return string
      */
-    public static function parseLink($text): string
+    public static function parseLink(string $text): string
     {
-        $text = preg_replace('/&apos;/', '&#39;', $text); // IE does not handle &apos; entity!
+        $text = (string)preg_replace('/&apos;/', '&#39;', $text); // IE does not handle &apos; entity!
 
         $sectionHtmlPattern = '%            # Rev:20100913_0900 github.com/jmrware/LinkifyURL
                                             # Section text into HTML <A> tags  and everything else.
@@ -411,7 +418,14 @@ class Url
              )                              # End $2:
              %ix';
 
-        return preg_replace_callback($sectionHtmlPattern, [__CLASS__, 'linkifyCallback'], $text);
+        return (string)preg_replace_callback(
+            $sectionHtmlPattern,
+            /** @psalm-suppress MissingClosureParamType */
+            function ($matches) {
+                return self::linkifyCallback($matches);
+            },
+            $text
+        );
     }
 
     /**
@@ -478,27 +492,27 @@ class Url
 
         $urlReplace = '$1$4$7$10$13<a href="$2$5$8$11$14">$2$5$8$11$14</a>$3$6$9$12';
 
-        return preg_replace($urlPattern, $urlReplace, $text);
+        return (string)preg_replace($urlPattern, $urlReplace, $text);
     }
 
     /**
      * Convert file path to relative URL
      *
-     * @param $path
+     * @param string $path
      * @return string
      *
      * @SuppressWarnings(PHPMD.Superglobals)
      */
     public static function pathToRel($path): string
     {
-        $root = FS::clean(Vars::get($_SERVER['DOCUMENT_ROOT']));
+        $root = FS::clean($_SERVER['DOCUMENT_ROOT'] ?? null);
         $path = FS::clean($path);
 
         $normRoot = str_replace(DIRECTORY_SEPARATOR, '/', $root);
         $normPath = str_replace(DIRECTORY_SEPARATOR, '/', $path);
 
         $regExp = '/^' . preg_quote($normRoot, '/') . '/i';
-        $relative = preg_replace($regExp, '', $normPath);
+        $relative = (string)preg_replace($regExp, '', $normPath);
 
         $relative = ltrim($relative, '/');
 
@@ -508,7 +522,7 @@ class Url
     /**
      * Convert file path to absolute URL
      *
-     * @param $path
+     * @param string $path
      * @return string
      *
      * @SuppressWarnings(PHPMD.Superglobals)
@@ -521,7 +535,7 @@ class Url
     /**
      * Is absolute url
      *
-     * @param $path
+     * @param string $path
      * @return bool
      */
     public static function isAbsolute($path): bool

@@ -1,8 +1,9 @@
 <?php
+
 /**
- * JBZoo Utils
+ * JBZoo Toolbox - Utils
  *
- * This file is part of the JBZoo CCK package.
+ * This file is part of the JBZoo Toolbox project.
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  *
@@ -28,7 +29,6 @@ class Http
      *
      * @param string $filename The name of the filename to display to browsers
      * @return boolean
-     *
      * @codeCoverageIgnore
      */
     public static function download($filename): bool
@@ -36,8 +36,6 @@ class Http
         if (headers_sent()) {
             return false;
         }
-
-        Ob::clean();
 
         // required for IE, otherwise Content-disposition is ignored
         if (Sys::iniGet('zlib.output_compression')) {
@@ -59,6 +57,9 @@ class Http
         // output file
         if (Sys::isFunc('fpassthru')) {
             $handle = fopen($filename, 'rb');
+            if (!$handle) {
+                throw new Exception("Can't open file '{$filename}'");
+            }
             fpassthru($handle);
             fclose($handle);
         } else {
@@ -74,7 +75,6 @@ class Http
      * headers must be sent so that all of them get the point that no caching should occur
      *
      * @return boolean
-     *
      * @codeCoverageIgnore
      */
     public static function nocache(): bool
@@ -96,7 +96,6 @@ class Http
      *
      * @param string $contentType The content type to send out
      * @return boolean
-     *
      * @codeCoverageIgnore
      */
     public static function utf8($contentType = 'text/html'): bool
@@ -119,6 +118,7 @@ class Http
      *
      * @SuppressWarnings(PHPMD.Superglobals)
      * @SuppressWarnings(PHPMD.NPathComplexity)
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     public static function getHeaders(): array
     {
@@ -158,10 +158,10 @@ class Http
                 $authorizationHeader = $_SERVER['REDIRECT_HTTP_AUTHORIZATION'];
             }
 
-            if (null !== $authorizationHeader) {
+            if ($authorizationHeader) {
                 if (0 === stripos($authorizationHeader, 'basic ')) {
                     // Decode AUTHORIZATION header into PHP_AUTH_USER and PHP_AUTH_PW when authorization header is basic
-                    $exploded = explode(':', base64_decode(substr($authorizationHeader, 6)), 2);
+                    $exploded = explode(':', (string)base64_decode((string)substr($authorizationHeader, 6)), 2);
                     if (count($exploded) === 2) {
                         [$headers['PHP_AUTH_USER'], $headers['PHP_AUTH_PW']] = $exploded;
                     }
@@ -186,7 +186,10 @@ class Http
 
         // PHP_AUTH_USER/PHP_AUTH_PW
         if (isset($headers['PHP_AUTH_USER'])) {
-            $authorization = 'Basic ' . base64_encode($headers['PHP_AUTH_USER'] . ':' . $headers['PHP_AUTH_PW']);
+            $user = $headers['PHP_AUTH_USER'] ?? '';
+            $password = $headers['PHP_AUTH_PW'] ?? '';
+
+            $authorization = 'Basic ' . base64_encode($user . ':' . $password);
             $headers['AUTHORIZATION'] = $authorization;
         } elseif (isset($headers['PHP_AUTH_DIGEST'])) {
             $headers['AUTHORIZATION'] = $headers['PHP_AUTH_DIGEST'];

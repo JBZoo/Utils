@@ -1,8 +1,9 @@
 <?php
+
 /**
- * JBZoo Utils
+ * JBZoo Toolbox - Utils
  *
- * This file is part of the JBZoo CCK package.
+ * This file is part of the JBZoo Toolbox project.
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  *
@@ -16,7 +17,6 @@
 namespace JBZoo\PHPUnit;
 
 use JBZoo\Utils\Arr;
-use JBZoo\Utils\Vars;
 
 /**
  * Class ArrayTest
@@ -40,48 +40,6 @@ class ArrayTest extends PHPUnit
             'asd_2' => 'asd',
         ];
         isSame(['asd_1' => 'asd'], Arr::unique($array, true));
-    }
-
-    public function testGet()
-    {
-        $array = [];
-
-        $array['abc'] = 'def';
-        $array['nested'] = ['key1' => 'val1', 'key2' => 'val2', 'key3' => 'val3'];
-
-        // Looks for $array['abc']
-        /** @noinspection PhpParamsInspection */
-        is('def', Vars::get($array['abc']));
-
-        // Looks for $array['nested']['key2']
-        is('val2', Vars::get($array['nested']['key2']));
-
-        // Looks for $array['not-exist']
-        is('default', Vars::get($array['not-exist'], 'default'));
-    }
-
-    public function testFirst()
-    {
-        $test = ['a' => ['a', 'b', 'c']];
-        is('a', Arr::first(Vars::get($test['a'])));
-    }
-
-    public function testFirstKey()
-    {
-        $test = ['a' => ['a' => 'b', 'c' => 'd']];
-        is('a', Arr::firstKey(Vars::get($test['a'])));
-    }
-
-    public function testLast()
-    {
-        $test = ['a' => ['a', 'b', 'c']];
-        is('c', Arr::last(Vars::get($test['a'])));
-    }
-
-    public function testLastKey()
-    {
-        $test = ['a' => ['a' => 'b', 'c' => 'd']];
-        is('c', Arr::lastKey(Vars::get($test['a'])));
     }
 
     public function testFlatten()
@@ -411,8 +369,61 @@ class ArrayTest extends PHPUnit
         isTrue(Arr::in(false, $array, false));
 
         isSame('some-string', Arr::in('1234567890098765432111111', $array, true));
-        isTrue('some-int', Arr::in(1111112345678900987654321, $array, true));
-        isTrue('some-bool', Arr::in(false, $array, true));
+        isSame('some-int', Arr::in(1111112345678900987654321, $array, true));
+        isSame('some-bool', Arr::in(false, $array, true));
+        isSame(null, Arr::in('qwerty', $array, true));
+    }
+
+    public function testFirst()
+    {
+        $array = [1, 2, 3];
+
+        isSame(1, Arr::first($array));
+
+        next($array);
+        isSame(1, Arr::first($array));
+    }
+
+    public function testEnd()
+    {
+        $array = [1, 2, 3];
+
+        isSame(3, Arr::last($array));
+
+        next($array);
+        isSame(3, Arr::last($array));
+    }
+
+    public function testFirstKey()
+    {
+        $array = [
+            'key'         => 'asd',
+            'null'        => null,
+            'some-bool'   => false,
+            'some-string' => '1234567890098765432111111',
+            'some-int'    => 1111112345678900987654321,
+        ];
+
+        isSame('key', Arr::firstKey($array));
+
+        next($array);
+        isSame('key', Arr::firstKey($array));
+    }
+
+    public function testLastKey()
+    {
+        $array = [
+            'key'         => 'asd',
+            'null'        => null,
+            'some-bool'   => false,
+            'some-string' => '1234567890098765432111111',
+            'some-int'    => 1111112345678900987654321,
+        ];
+
+        isSame('some-int', Arr::lastKey($array));
+
+        next($array);
+        isSame('some-int', Arr::lastKey($array));
     }
 
     public function testWrap()

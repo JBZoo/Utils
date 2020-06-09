@@ -1,8 +1,9 @@
 <?php
+
 /**
- * JBZoo Utils
+ * JBZoo Toolbox - Utils
  *
- * This file is part of the JBZoo CCK package.
+ * This file is part of the JBZoo Toolbox project.
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  *
@@ -26,7 +27,7 @@ class Ser
      * Check value to find if it was serialized.
      * If $data is not an string, then returned value will always be false. Serialized data is always a string.
      *
-     * @param  mixed $data Value to check to see if was serialized
+     * @param mixed $data Value to check to see if was serialized
      * @return boolean
      *
      * @SuppressWarnings(PHPMD.ShortMethodName)
@@ -64,7 +65,7 @@ class Ser
     /**
      * Serialize data, if needed.
      *
-     * @param  mixed $data Data that might need to be serialized
+     * @param mixed $data Data that might need to be serialized
      * @return mixed
      */
     public static function maybe($data)
@@ -79,16 +80,11 @@ class Ser
     /**
      * Unserialize value only if it is serialized.
      *
-     * @param  string $data A variable that may or may not be serialized
+     * @param string $data A variable that may or may not be serialized
      * @return mixed
      */
-    public static function maybeUn($data)
+    public static function maybeUn(string $data)
     {
-        // If it isn't a string, it isn't serialized
-        if (!is_string($data)) {
-            return $data;
-        }
-
         $data = trim($data);
 
         // Is it the serialized NULL value?
@@ -133,17 +129,22 @@ class Ser
      * NOTE: This error can *frequently* occur with mismatched character sets and higher-than-ASCII characters.
      * Contributed by Theodore R. Smith of PHP Experts, Inc. <http://www.phpexperts.pro/>
      *
-     * @param  string $brokenSerializedData
+     * @param string $brokenSerializedData
      * @return string
      */
     public static function fix($brokenSerializedData): string
     {
-        $fixedSerializedData = preg_replace_callback('!s:(\d+):"(.*?)";!', function ($matches) {
-            $snip = $matches[2];
-            return 's:' . strlen($snip) . ':"' . $snip . '";';
-        }, $brokenSerializedData);
+        $fixedSerializedData = preg_replace_callback(
+            '!s:(\d+):"(.*?)";!',
+            /** @psalm-suppress MissingClosureParamType */
+            function ($matches) {
+                $snip = $matches[2];
+                return 's:' . strlen($snip) . ':"' . $snip . '";';
+            },
+            $brokenSerializedData
+        );
 
-        return $fixedSerializedData;
+        return (string)$fixedSerializedData;
     }
 
     /**

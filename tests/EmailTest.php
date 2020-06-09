@@ -1,8 +1,9 @@
 <?php
+
 /**
- * JBZoo Utils
+ * JBZoo Toolbox - Utils
  *
- * This file is part of the JBZoo CCK package.
+ * This file is part of the JBZoo Toolbox project.
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  *
@@ -10,7 +11,6 @@
  * @license    MIT
  * @copyright  Copyright (C) JBZoo.com, All rights reserved.
  * @link       https://github.com/JBZoo/Utils
- * @author     Denis Smetannikov <denis@jbzoo.com>
  */
 
 namespace JBZoo\PHPUnit;
@@ -258,5 +258,21 @@ class EmailTest extends PHPUnit
                 'https://secure.gravatar.com/avatar/f27f28ab2158cd2cccc78c364d6247fe/?s=2048&d=identicon',
             ],
         ];
+    }
+
+    public function testRandomEmail()
+    {
+        isTrue(Email::check(Email::random()));
+        isTrue(Email::isValid(Email::random()));
+
+        isNotSame(Email::random(), Email::random());
+        isNotSame(Email::random(), Email::random());
+        isNotSame(Email::random(), Email::random());
+    }
+
+    public function testCheckDns()
+    {
+        isFalse(Email::checkDns('123'));
+        isTrue(Email::checkDns('denis@gmail.com'));
     }
 }

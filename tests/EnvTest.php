@@ -1,8 +1,9 @@
 <?php
+
 /**
- * JBZoo Utils
+ * JBZoo Toolbox - Utils
  *
- * This file is part of the JBZoo CCK package.
+ * This file is part of the JBZoo Toolbox project.
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  *
@@ -10,7 +11,6 @@
  * @license    MIT
  * @copyright  Copyright (C) JBZoo.com, All rights reserved.
  * @link       https://github.com/JBZoo/Utils
- * @author     Denis Smetannikov <denis@jbzoo.com>
  */
 
 namespace JBZoo\PHPUnit;
@@ -79,5 +79,53 @@ class EnvTest extends PHPUnit
 
         $_ENV['SOME_VAR'] = '123';
         isSame('123', Env::get('SOME_VAR', 42, Env::VAR_STRING));
+    }
+
+    public function testInt()
+    {
+        putenv('FOO= 123 ');
+        isSame(123, Env::int('FOO'));
+        isSame(0, Env::int('UNDEFINED_VAR'));
+        isSame(42, Env::int('UNDEFINED_VAR', 42));
+
+        $_ENV['SOME_VAR'] = '123';
+        isSame(123, Env::int('SOME_VAR'));
+    }
+
+    public function testFloat()
+    {
+        $value = 1/3;
+
+        putenv("FOO= {$value} ");
+        isSame($value, Env::float('FOO'));
+        isSame(0.0, Env::float('UNDEFINED_VAR'));
+        isSame(42.0, Env::float('UNDEFINED_VAR', 42));
+
+        $_ENV['SOME_VAR'] = '0.5';
+        isSame(0.5, Env::float('SOME_VAR'));
+    }
+
+    public function testString()
+    {
+        $value = '"qwerty"';
+
+        putenv("FOO= {$value} ");
+        isSame($value, Env::string('FOO'));
+        isSame('', Env::string('UNDEFINED_VAR'));
+        isSame('42', Env::string('UNDEFINED_VAR', 42));
+
+        $_ENV['SOME_VAR'] = '0.5';
+        isSame('0.5', Env::string('SOME_VAR'));
+
+
+        $value = '"qwerty123';
+
+        putenv("FOO={$value}");
+        isSame($value, Env::string('FOO'));
+        isSame('', Env::string('UNDEFINED_VAR'));
+        isSame('42', Env::string('UNDEFINED_VAR', 42));
+
+        $_ENV['SOME_VAR'] = '0.5';
+        isSame('0.5', Env::string('SOME_VAR'));
     }
 }

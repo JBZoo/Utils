@@ -1,8 +1,9 @@
 <?php
+
 /**
- * JBZoo Utils
+ * JBZoo Toolbox - Utils
  *
- * This file is part of the JBZoo CCK package.
+ * This file is part of the JBZoo Toolbox project.
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  *
@@ -21,6 +22,8 @@ use Closure;
  * Class Arr
  *
  * @package JBZoo\Utils
+ * @SuppressWarnings(PHPMD.TooManyPublicMethods)
+ * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
  */
 class Arr
 {
@@ -48,9 +51,9 @@ class Arr
     /**
      * Check is key exists
      *
-     * @param string $key
-     * @param mixed  $array
-     * @param bool   $returnValue
+     * @param string|int $key
+     * @param mixed      $array
+     * @param bool       $returnValue
      * @return mixed
      */
     public static function key($key, $array, $returnValue = false)
@@ -72,7 +75,7 @@ class Arr
      * Check is value exists in the array
      *
      * @param string $value
-     * @param mixed  $array
+     * @param array  $array
      * @param bool   $returnKey
      * @return mixed
      *
@@ -119,7 +122,7 @@ class Arr
      * Returns the first key in an array.
      *
      * @param array $array
-     * @return int|string
+     * @return int|string|null
      */
     public static function firstKey(array $array)
     {
@@ -131,7 +134,7 @@ class Arr
      * Returns the last key in an array.
      *
      * @param array $array
-     * @return int|string
+     * @return int|string|null
      */
     public static function lastKey(array $array)
     {
@@ -151,13 +154,20 @@ class Arr
     {
         $flattened = [];
 
-        array_walk_recursive($array, function ($value, $key) use (&$flattened, $preserveKeys) {
-            if ($preserveKeys && !is_int($key)) {
-                $flattened[$key] = $value;
-            } else {
-                $flattened[] = $value;
+        array_walk_recursive(
+            $array,
+            /**
+             * @param string     $value
+             * @param string|int $key
+             */
+            function ($value, $key) use (&$flattened, $preserveKeys) {
+                if ($preserveKeys && !is_int($key)) {
+                    $flattened[$key] = $value;
+                } else {
+                    $flattened[] = $value;
+                }
             }
-        });
+        );
 
         return $flattened;
     }
@@ -166,44 +176,46 @@ class Arr
      * Searches for a given value in an array of arrays, objects and scalar values. You can optionally specify
      * a field of the nested arrays and objects to search in.
      *
-     * @param array $array  The array to search
-     * @param mixed $search The value to search for
-     * @param bool  $field  The field to search in, if not specified all fields will be searched
+     * @param array       $array  The array to search
+     * @param mixed       $search The value to search for
+     * @param string|null $field  The field to search in, if not specified all fields will be searched
      * @return boolean|mixed  False on failure or the array key on success
+     *
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
-    public static function search(array $array, $search, $field = false)
+    public static function search(array $array, $search, $field = null)
     {
         // *grumbles* stupid PHP type system
         $search = (string)$search;
-        foreach ($array as $key => $elem) {
+        foreach ($array as $key => $element) {
             // *grumbles* stupid PHP type system
 
             $key = (string)$key;
 
             if ($field) {
-                if (is_object($elem) && $elem->{$field} === $search) {
+                /** @noinspection NotOptimalIfConditionsInspection */
+                if (is_object($element) && $element->{$field} === $search) {
                     return $key;
                 }
 
-                if (is_array($elem) && $elem[$field] === $search) {
+                /** @noinspection NotOptimalIfConditionsInspection */
+                if (is_array($element) && $element[$field] === $search) {
                     return $key;
                 }
 
-                if (is_scalar($elem) && $elem === $search) {
+                /** @noinspection NotOptimalIfConditionsInspection */
+                if (is_scalar($element) && $element === $search) {
                     return $key;
                 }
-            } else {
-                if (is_object($elem)) {
-                    $elem = (array)$elem;
-                    /** @noinspection NotOptimalIfConditionsInspection */
-                    if (in_array($search, $elem, false)) {
-                        return $key;
-                    }
-                } elseif (is_array($elem) && in_array($search, $elem, false)) {
-                    return $key;
-                } elseif (is_scalar($elem) && $elem === $search) {
+            } elseif (is_object($element)) {
+                $element = (array)$element;
+                if (in_array($search, $element, false)) {
                     return $key;
                 }
+            } elseif (is_array($element) && in_array($search, $element, false)) {
+                return $key;
+            } elseif (is_scalar($element) && $element === $search) {
+                return $key;
             }
         }
 
@@ -214,8 +226,8 @@ class Arr
      * Returns an array containing all the elements of arr1 after applying
      * the callback function to each one.
      *
-     * @param string  $callback    Callback function to run for each element in each array
      * @param array   $array       An array to run through the callback function
+     * @param Closure $callback    Callback function to run for each element in each array
      * @param boolean $onNoScalar  Whether or not to call the callback function on non scalar values
      *                             (Objects, resources, etc)
      * @return array
@@ -269,7 +281,7 @@ class Arr
     /**
      * Check is array is type assoc
      *
-     * @param $array
+     * @param array $array
      * @return bool
      */
     public static function isAssoc($array): bool
@@ -301,18 +313,16 @@ class Arr
      * @param string $fieldName
      * @return array
      */
-    public static function getField($arrayList, $fieldName = 'id'): array
+    public static function getField(array $arrayList, string $fieldName = 'id'): array
     {
         $result = [];
 
-        if (!empty($arrayList) && is_array($arrayList)) {
-            foreach ($arrayList as $option) {
-                if (is_array($option)) {
-                    $result[] = $option[$fieldName];
-                } elseif (is_object($option)) {
-                    if (isset($option->{$fieldName})) {
-                        $result[] = $option->{$fieldName};
-                    }
+        foreach ($arrayList as $option) {
+            if (is_array($option)) {
+                $result[] = $option[$fieldName];
+            } elseif (is_object($option)) {
+                if (isset($option->{$fieldName})) {
+                    $result[] = $option->{$fieldName};
                 }
             }
         }

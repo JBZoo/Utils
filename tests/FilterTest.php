@@ -1,8 +1,9 @@
 <?php
+
 /**
- * JBZoo Utils
+ * JBZoo Toolbox - Utils
  *
- * This file is part of the JBZoo CCK package.
+ * This file is part of the JBZoo Toolbox project.
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  *
@@ -10,7 +11,6 @@
  * @license    MIT
  * @copyright  Copyright (C) JBZoo.com, All rights reserved.
  * @link       https://github.com/JBZoo/Utils
- * @author     Denis Smetannikov <denis@jbzoo.com>
  */
 
 namespace JBZoo\PHPUnit;
@@ -167,38 +167,7 @@ class FilterTest extends PHPUnit
         ];
     }
 
-    /**
-     * @param $excepted
-     * @param $actual
-     * @dataProvider providerEmail
-     */
-    public function testEmail($excepted, $actual)
-    {
-        if ($excepted) {
-            isTrue(Filter::_($actual, 'email'));
-        } else {
-            isFalse(Filter::_($actual, 'email'));
-        }
-    }
-
-    public function providerEmail()
-    {
-        return [
-            [true, 'john.smith@gmail.com'],
-            [true, 'john.smith+label@gmail.com'],
-            [true, 'john.smith@gmail.co.uk'],
-            [true, '_somename@example.com'],
-
-            [false, 'русская@почта.рф'], // madness..
-            [false, '"Abc\@def"@example.com'],
-            [false, '"Fred Bloggs"@example.com'],
-            [false, '"Joe\\Blow"@example.com'],
-            [false, '"Abc@def"@example.com'],
-            [false, '\$A12345@example.com'],
-        ];
-    }
-
-    public function testDigets()
+    public function testDigests()
     {
         $string = " 0 1 a2b 3c!@#$%^&*()-= <>\t";
 

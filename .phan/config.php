@@ -11,8 +11,15 @@
  * @license    MIT
  * @copyright  Copyright (C) JBZoo.com, All rights reserved.
  * @link       https://github.com/JBZoo/Utils
- * @author     Denis Smetannikov <denis@jbzoo.com>
  */
 
-$_SERVER['REQUEST_TIME_FLOAT'] = $_SERVER['REQUEST_TIME_FLOAT'] ?? microtime(true);
-$_SERVER['REQUEST_TIME'] = $_SERVER['REQUEST_TIME'] ?? $_SERVER['REQUEST_TIME_FLOAT'];
+$default = include __DIR__ . '/../vendor/jbzoo/codestyle/src/phan/default.php';
+
+return array_merge($default, [
+    'directory_list' => [
+        'src',
+
+        'vendor/symfony/process',
+        'vendor/jbzoo/data',
+    ]
+]);

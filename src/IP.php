@@ -1,8 +1,9 @@
 <?php
+
 /**
- * JBZoo Utils
+ * JBZoo Toolbox - Utils
  *
- * This file is part of the JBZoo CCK package.
+ * This file is part of the JBZoo Toolbox project.
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  *
@@ -85,15 +86,16 @@ class IP
 
             $range = sprintf(
                 '%u.%u.%u.%u',
-                empty($blockA) ? '0' : $blockA,
-                empty($blockB) ? '0' : $blockB,
-                empty($blockC) ? '0' : $blockC,
-                empty($blockD) ? '0' : $blockD
+                (int)(empty($blockA) ? '0' : $blockA),
+                (int)(empty($blockB) ? '0' : $blockB),
+                (int)(empty($blockC) ? '0' : $blockC),
+                (int)(empty($blockD) ? '0' : $blockD)
             );
 
             $rangeDec = ip2long($range);
             $ipDec = ip2long($ipAddress);
 
+            $netMask = (int)$netMask;
             $wildcardDec = (2 ** (32 - $netMask)) - 1;
             $netMaskDec = ~$wildcardDec;
 
@@ -110,9 +112,9 @@ class IP
 
         if (strpos($range, '-') !== false) { // A-B format
             [$lower, $upper] = explode('-', $range, 2);
-            $lowerDec = (float)sprintf('%u', ip2long($lower));
-            $upperDec = (float)sprintf('%u', ip2long($upper));
-            $ipDec = (float)sprintf('%u', ip2long($ipAddress));
+            $lowerDec = (float)sprintf('%u', (int)ip2long($lower));
+            $upperDec = (float)sprintf('%u', (int)ip2long($upper));
+            $ipDec = (float)sprintf('%u', (int)ip2long($ipAddress));
             return (($ipDec >= $lowerDec) && ($ipDec <= $upperDec));
         }
 
@@ -120,21 +122,19 @@ class IP
     }
 
     /**
-     * @param $ipAddress
+     * @param string $ipAddress
      * @return string
      */
-    public static function getNetMask($ipAddress): string
+    public static function getNetMask(string $ipAddress): string
     {
-        if (is_string($ipAddress)) {
-            $ipAddress = ip2long($ipAddress);
-        }
+        $ipAddressLong = ip2long($ipAddress);
 
         $mask = 0xFFFFFFFF;
-        if (($ipAddress & 0x80000000) === 0) {
+        if (($ipAddressLong & 0x80000000) === 0) {
             $mask = 0xFF000000;
-        } elseif (($ipAddress & 0xC0000000) === 0x80000000) {
+        } elseif (($ipAddressLong & 0xC0000000) === 0x80000000) {
             $mask = 0xFFFF0000;
-        } elseif (($ipAddress & 0xE0000000) === 0xC0000000) {
+        } elseif (($ipAddressLong & 0xE0000000) === 0xC0000000) {
             $mask = 0xFFFFFF00;
         }
 
