@@ -85,6 +85,16 @@ class Image
     }
 
     /**
+     * @param string $format
+     * @return bool
+     */
+    public static function isWebp($format): bool
+    {
+        $format = strtolower($format);
+        return 'image/webp' === $format || 'webp' === $format;
+    }
+
+    /**
      * Converts a hex color value to its RGB equivalent
      *
      * @param string|array $origColor Hex color string, array(red, green, blue) or array(red, green, blue, alpha).
@@ -427,10 +437,10 @@ class Image
      * @param string $format
      * @return bool
      */
-    public static function isSupportedFormat($format): bool
+    public static function isSupportedFormat($format)
     {
         if ($format) {
-            return self::isJpeg($format) || self::isPng($format) || self::isGif($format);
+            return self::isJpeg($format) || self::isPng($format) || self::isGif($format) || self::isWebp($format);
         }
 
         return false;
