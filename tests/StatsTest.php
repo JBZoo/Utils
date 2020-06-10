@@ -26,16 +26,16 @@ class StatsTest extends PHPUnit
 {
     public function testMean()
     {
-        isSame(0, Stats::mean([]));
-        isSame(0, Stats::mean(false));
-        isSame(0, Stats::mean(null));
-        isSame(0, Stats::mean(''));
-        isSame(0, Stats::mean(0));
-        isSame(0, Stats::mean(['0', '']));
+        isSame(0.0, Stats::mean([]));
+        isSame(0.0, Stats::mean(false));
+        isSame(0.0, Stats::mean(null));
+        isSame(0.0, Stats::mean(''));
+        isSame(0.0, Stats::mean(0));
+        isSame(0.0, Stats::mean(['0', '']));
 
-        isSame(1, Stats::mean([1]));
-        isSame(1, Stats::mean([1, 1]));
-        isSame(2, Stats::mean([1, 3]));
+        isSame(1.0, Stats::mean([1]));
+        isSame(1.0, Stats::mean([1, 1]));
+        isSame(2.0, Stats::mean([1, 3]));
     }
 
     public function testStdDev()
@@ -51,8 +51,8 @@ class StatsTest extends PHPUnit
 
     public function testLinSpace()
     {
-        isSame([0, 5, 10, 15, 20], Stats::linSpace(0, 20, 5));
-        isSame([0, 4, 8, 12, 16], Stats::linSpace(0, 20, 5, false));
+        isSame([0.0, 5.0, 10.0, 15.0, 20.0], Stats::linSpace(0, 20, 5));
+        isSame([0.0, 4.0, 8.0, 12.0, 16.0], Stats::linSpace(0, 20, 5, false));
     }
 
     public function testHistogram()

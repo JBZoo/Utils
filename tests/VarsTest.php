@@ -33,9 +33,9 @@ class VarsTest extends PHPUnit
 
     public function testLimit()
     {
-        is(100, Vars::limit(125, 50, 100));
-        is(50, Vars::limit(45, 50, 100));
-        is(77, Vars::limit(77, 50, 100));
+        isSame(100, Vars::limit(125, 50, 100));
+        isSame(50, Vars::limit(45, 50, 100));
+        isSame(77, Vars::limit(77, 50, 100));
     }
 
     public function testMin()
@@ -47,10 +47,11 @@ class VarsTest extends PHPUnit
 
     public function testMax()
     {
-        is(-15, Vars::max(-15, 50));
-        is(12, Vars::max(12, 50));
-        is(50, Vars::max(55, 50));
-        is(50, Vars::max(123, 50));
+        isSame(-15, Vars::max(-15, 50));
+        isSame(12, Vars::max(12, 50));
+        isSame(50, Vars::max(55, 50));
+        isSame(50, Vars::max(123, 50));
+        isSame(50, Vars::max(123.5, 50.9));
     }
 
     public function testOut()

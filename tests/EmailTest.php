@@ -84,7 +84,7 @@ class EmailTest extends PHPUnit
 
     /**
      * @dataProvider getGravatarUrlProvider
-     * @param        $input
+     * @param string $input
      * @param string $expectedHttp
      * @param string $expectedHttps
      * @SuppressWarnings(PHPMD.Superglobals)
@@ -92,19 +92,15 @@ class EmailTest extends PHPUnit
     public function testGetGravatarUrl($input, $expectedHttp, $expectedHttps)
     {
         $_SERVER['HTTPS'] = 'off';
-        isSame($expectedHttp, Email::getGravatarUrl($input[0], $input[1], $input[2]));
+        isSame($expectedHttp, Email::getGravatarUrl($input[0], $input[1], $input[2] ?? 'identicon'));
 
         $_SERVER['HTTPS'] = 'on';
-        isSame($expectedHttps, Email::getGravatarUrl($input[0], $input[1], $input[2]));
+        isSame($expectedHttps, Email::getGravatarUrl($input[0], $input[1], $input[2] ?? 'identicon'));
     }
 
-    /**
-     * @dataProvider getEmptyProvider
-     * @param $input
-     */
-    public function testGetGravatarUrlWithEmptyEmails($input)
+    public function testGetGravatarUrlWithEmptyEmails()
     {
-        is(null, Email::getGravatarUrl($input));
+        is(null, Email::getGravatarUrl(''));
     }
 
     public function getCheckProvider()
@@ -216,12 +212,12 @@ class EmailTest extends PHPUnit
     {
         return [
             0 => [
-                ['test@test.pt', 32, null],
+                ['test@test.pt', 32],
                 'http://www.gravatar.com/avatar/7c2cf316efa3b541b3ac76a950aea671/?s=32&d=identicon',
                 'https://secure.gravatar.com/avatar/7c2cf316efa3b541b3ac76a950aea671/?s=32&d=identicon',
             ],
             1 => [
-                ['test@test.pt', 5000, null],
+                ['test@test.pt', 5000],
                 'http://www.gravatar.com/avatar/7c2cf316efa3b541b3ac76a950aea671/?s=2048&d=identicon',
                 'https://secure.gravatar.com/avatar/7c2cf316efa3b541b3ac76a950aea671/?s=2048&d=identicon',
             ],
@@ -231,29 +227,29 @@ class EmailTest extends PHPUnit
                 'https://secure.gravatar.com/avatar/7c2cf316efa3b541b3ac76a950aea671/?s=2047&d=monsterid',
             ],
             3 => [
-                ['test@test.pt', -1, null],
+                ['test@test.pt', -1],
                 'http://www.gravatar.com/avatar/7c2cf316efa3b541b3ac76a950aea671/?s=32&d=identicon',
                 'https://secure.gravatar.com/avatar/7c2cf316efa3b541b3ac76a950aea671/?s=32&d=identicon',
             ],
             4 => [
-                ['test@test.pt', 8.1, 'https://example.com/images/avatar.jpg'],
+                ['test@test.pt', 8, 'https://example.com/images/avatar.jpg'],
                 'http://www.gravatar.com/avatar/7c2cf316efa3b541b3ac76a950aea671/?'
                 . 's=32&d=https%3A%2F%2Fexample.com%2Fimages%2Favatar.jpg',
                 'https://secure.gravatar.com/avatar/7c2cf316efa3b541b3ac76a950aea671/?'
                 . 's=32&d=https%3A%2F%2Fexample.com%2Fimages%2Favatar.jpg',
             ],
             5 => [
-                ['test@test.pt', 15.5, null],
+                ['test@test.pt', 15],
                 'http://www.gravatar.com/avatar/7c2cf316efa3b541b3ac76a950aea671/?s=32&d=identicon',
                 'https://secure.gravatar.com/avatar/7c2cf316efa3b541b3ac76a950aea671/?s=32&d=identicon',
             ],
             6 => [
-                ['test@test.pt', ' 9000 ', 'IDEnticon'],
+                ['test@test.pt', 9000, 'IDEnticon'],
                 'http://www.gravatar.com/avatar/7c2cf316efa3b541b3ac76a950aea671/?s=2048&d=identicon',
                 'https://secure.gravatar.com/avatar/7c2cf316efa3b541b3ac76a950aea671/?s=2048&d=identicon',
             ],
             7 => [
-                ['admin@jbzoo.com', '9000', 'IDEnticon'],
+                ['admin@jbzoo.com', 9000, 'IDEnticon'],
                 'http://www.gravatar.com/avatar/f27f28ab2158cd2cccc78c364d6247fe/?s=2048&d=identicon',
                 'https://secure.gravatar.com/avatar/f27f28ab2158cd2cccc78c364d6247fe/?s=2048&d=identicon',
             ],

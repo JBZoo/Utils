@@ -312,7 +312,7 @@ Http::getHeaders()
 
 ## Image helper
 ```php
-use JBZoo\Utils\Image;
+use JBZoo\Utils\Image;use JBZoo\Utils\Vars;
 
 // Check required GD library
 Image::checkGD($thowException = true)
@@ -331,7 +331,7 @@ Image::normalizeColor($origColor)
 
 // Ensures $value is always within $min and $max range.
 // If lower, $min is returned. If higher, $max is returned.
-Image::range($value, $min, $max)
+Vars::range($value, $min, $max)
 
 // Same as PHP's imagecopymerge() function, except preserves alpha-transparency in 24-bit PNGs
 // @link http://www.php.net/manual/en/function.imagecopymerge.php#88456

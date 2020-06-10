@@ -72,7 +72,7 @@ class Sys
             return $userInfo['dir'];
         }
 
-        if (Arr::key('HOMEDRIVE', $_SERVER)) {
+        if (array_key_exists('HOMEDRIVE', $_SERVER)) {
             return $_SERVER['HOMEDRIVE'] . $_SERVER['HOMEPATH'];
         }
 
@@ -99,12 +99,12 @@ class Sys
      * Alias fo ini_get function
      *
      * @param string $varName
-     * @return mixed
+     * @return string|null
      */
-    public static function iniGet($varName)
+    public static function iniGet(string $varName): ?string
     {
         if (self::isFunc('ini_get')) {
-            return ini_get($varName);
+            return (string)ini_get($varName);
         }
 
         return null;
@@ -139,7 +139,7 @@ class Sys
      *
      * @param string $newLimit
      */
-    public static function setMemory($newLimit = '256M'): void
+    public static function setMemory(string $newLimit = '256M'): void
     {
         self::iniSet('memory_limit', $newLimit);
     }
@@ -149,7 +149,7 @@ class Sys
      * @param string $current
      * @return bool
      */
-    public static function isPHP($version, $current = PHP_VERSION): bool
+    public static function isPHP(string $version, string $current = PHP_VERSION): bool
     {
         $version = trim($version, '.');
         return (bool)preg_match('#^' . preg_quote($version, '') . '#i', $current);
@@ -159,7 +159,7 @@ class Sys
      * @param string $current
      * @return bool
      */
-    public static function isPHP53($current = PHP_VERSION): bool
+    public static function isPHP5(string $current = PHP_VERSION): bool
     {
         return self::isPHP('5.3', $current);
     }
@@ -168,7 +168,7 @@ class Sys
      * @param string $current
      * @return bool
      */
-    public static function isPHP7($current = PHP_VERSION): bool
+    public static function isPHP7(string $current = PHP_VERSION): bool
     {
         return self::isPHP('7', $current);
     }
@@ -179,7 +179,7 @@ class Sys
      * @param bool $isPeak
      * @return string
      */
-    public static function getMemory($isPeak = true): string
+    public static function getMemory(bool $isPeak = true): string
     {
         if ($isPeak) {
             $memory = memory_get_peak_usage(false);

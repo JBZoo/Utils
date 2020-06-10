@@ -409,6 +409,7 @@ class FileSystemTest extends PHPUnit
 
     public function testIsDir()
     {
+        isFalse(FS::isDir(false));
         isFalse(FS::isDir(__FILE__));
         isTrue(FS::isDir(__DIR__));
     }

@@ -114,7 +114,7 @@ class Url
      * @param bool $addAuth
      * @return string|null
      */
-    public static function current($addAuth = false): ?string
+    public static function current(bool $addAuth = false): ?string
     {
         $current = self::root($addAuth) . self::path();
         return $current ?: null;
@@ -131,9 +131,9 @@ class Url
         $url = '';
 
         // Get the rest of the URL
-        if (!Arr::key('REQUEST_URI', $_SERVER)) {
+        if (!array_key_exists('REQUEST_URI', $_SERVER)) {
             // Microsoft IIS doesn't set REQUEST_URI by default
-            if ($queryString = Arr::key('QUERY_STRING', $_SERVER, true)) {
+            if ($queryString = $_SERVER['QUERY_STRING'] ?? null) {
                 $url .= '?' . $queryString;
             }
         } else {
@@ -152,7 +152,7 @@ class Url
      * @SuppressWarnings(PHPMD.Superglobals)
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
-    public static function root($addAuth = false): ?string
+    public static function root(bool $addAuth = false): ?string
     {
         $url = '';
 
@@ -200,10 +200,10 @@ class Url
     public static function getAuth(): ?string
     {
         $result = null;
-        if ($user = Arr::key('PHP_AUTH_USER', $_SERVER, true)) {
+        if ($user = $_SERVER['PHP_AUTH_USER'] ?? null) {
             $result .= $user;
 
-            if ($password = Arr::key('PHP_AUTH_PW', $_SERVER, true)) {
+            if ($password = $_SERVER['PHP_AUTH_PW'] ?? null) {
                 $result .= ':' . $password;
             }
 
@@ -241,7 +241,7 @@ class Url
      * @see    https://github.com/jakeasmith/http_build_url/
      * @author Jake Smith <theman@jakeasmith.com>
      */
-    public static function buildAll($sourceUrl, $destParts = [], $flags = self::URL_REPLACE, &$newUrl = []): string
+    public static function buildAll($sourceUrl, $destParts = [], int $flags = self::URL_REPLACE, &$newUrl = []): string
     {
         is_array($sourceUrl) || $sourceUrl = parse_url($sourceUrl);
         is_array($destParts) || $destParts = parse_url($destParts);
@@ -358,18 +358,18 @@ class Url
      * Checks to see if the page is being server over SSL or not
      *
      * @param bool $trustProxyHeaders
-     * @return boolean
+     * @return bool
      *
      * @SuppressWarnings(PHPMD.Superglobals)
      */
-    public static function isHttps($trustProxyHeaders = false): bool
+    public static function isHttps(bool $trustProxyHeaders = false): bool
     {
         // Check standard HTTPS header
-        if (Arr::key('HTTPS', $_SERVER)) {
+        if (array_key_exists('HTTPS', $_SERVER)) {
             return !empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off';
         }
 
-        if ($trustProxyHeaders && Arr::key('X-FORWARDED-PROTO', $_SERVER)) {
+        if ($trustProxyHeaders && array_key_exists('X-FORWARDED-PROTO', $_SERVER)) {
             return $_SERVER['X-FORWARDED-PROTO'] === 'https';
         }
 
@@ -445,7 +445,7 @@ class Url
      * Part of the LinkifyURL Project <https://github.com/jmrware/LinkifyURL>
      *
      * @param string $text Matches from the preg_ function
-     * @return mixed
+     * @return string
      */
     protected static function linkifyRegex($text)
     {

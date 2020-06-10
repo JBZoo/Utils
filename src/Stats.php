@@ -31,7 +31,7 @@ class Stats
      *
      * @return float
      */
-    public static function stdDev(array $values, $sample = false)
+    public static function stdDev(array $values, bool $sample = false): float
     {
         $variance = self::variance($values, $sample);
         return \sqrt($variance);
@@ -45,7 +45,7 @@ class Stats
      *
      * @return float
      */
-    public static function variance(array $values, $sample = false)
+    public static function variance(array $values, bool $sample = false)
     {
         $average = self::mean($values);
         $sum = 0;
@@ -66,10 +66,9 @@ class Stats
      * Return the mean (average) value of the given values.
      *
      * @param array $values
-     *
-     * @return mixed
+     * @return float
      */
-    public static function mean($values)
+    public static function mean($values): float
     {
         if (empty($values)) {
             return 0;
@@ -96,12 +95,12 @@ class Stats
      *
      * @return float[]
      */
-    public static function linSpace($min, $max, $num = 50, $endpoint = true)
+    public static function linSpace(float $min, float $max, int $num = 50, bool $endpoint = true): array
     {
         $range = $max - $min;
 
-        if ((float)$max === (float)$min) {
-            throw new Exception(sprintf('Min and max cannot be the same number: %s', (string)$max));
+        if ($max === $min) {
+            throw new Exception("Min and max cannot be the same number: {$max}");
         }
 
         $unit = $range / ($endpoint ? $num - 1 : $num);
@@ -134,7 +133,7 @@ class Stats
      *
      * @return array
      */
-    public static function histogram(array $values, $steps = 10, $lowerBound = null, $upperBound = null)
+    public static function histogram(array $values, int $steps = 10, $lowerBound = null, $upperBound = null): array
     {
         $min = $lowerBound ?: min($values);
         $max = $upperBound ?: max($values);
@@ -162,7 +161,6 @@ class Stats
             }
 
             $floor += $step;
-            $ceil += $step;
         }
 
         return $histogram;

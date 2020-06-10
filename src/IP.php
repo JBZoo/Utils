@@ -26,12 +26,12 @@ class IP
     /**
      * Returns the IP address of the client.
      *
-     * @param boolean $trustProxy   Whether or not to trust the proxy headers HTTP_CLIENT_IP and HTTP_X_FORWARDED_FOR.
-     *                              ONLY use if your server is behind a proxy that sets these values
+     * @param bool $trustProxy Whether or not to trust the proxy headers HTTP_CLIENT_IP and HTTP_X_FORWARDED_FOR.
+     *                         ONLY use if your server is behind a proxy that sets these values
      * @return  string
      * @SuppressWarnings(PHPMD.Superglobals)
      */
-    public static function getRemote($trustProxy = false): string
+    public static function getRemote(bool $trustProxy = false): string
     {
         if (!$trustProxy) {
             return $_SERVER['REMOTE_ADDR'];
@@ -60,7 +60,7 @@ class IP
      * @SuppressWarnings(PHPMD)
      * @see https://www.pgregg.com/projects/php/ip_in_range/
      */
-    public static function v4InRange($ipAddress, $range): bool
+    public static function v4InRange(string $ipAddress, string $range): bool
     {
         if (strpos($range, '/') !== false) {
             // $range is in IP/NETMASK format

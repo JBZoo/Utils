@@ -43,7 +43,7 @@ class Dates
      * @param bool                     $currentIsDefault
      * @return int
      */
-    public static function toStamp($time = null, $currentIsDefault = true): int
+    public static function toStamp($time = null, bool $currentIsDefault = true): int
     {
         if ($time instanceof DateTime) {
             return (int)$time->format('U');
@@ -82,7 +82,7 @@ class Dates
     /**
      * Return a DateTimeZone object based on the current timezone.
      *
-     * @param mixed $timezone
+     * @param DateTimeZone|string|null $timezone
      * @return DateTimeZone
      */
     public static function timezone($timezone = null): DateTimeZone
@@ -99,15 +99,15 @@ class Dates
     /**
      * Check if string is date
      *
-     * @param string $date
+     * @param string|null $date
      * @return bool
      *
      * @SuppressWarnings(PHPMD.ShortMethodName)
      */
-    public static function is($date): bool
+    public static function is(?string $date): bool
     {
-        $time = strtotime($date);
-        return $time > 0;
+        $time = strtotime((string)$date);
+        return $time > 10000;
     }
 
     /**
@@ -126,7 +126,7 @@ class Dates
      * @param string     $format
      * @return string
      */
-    public static function human($date, $format = 'd M Y H:i'): string
+    public static function human($date, string $format = 'd M Y H:i'): string
     {
         return self::factory($date)->format($format);
     }
@@ -198,10 +198,10 @@ class Dates
     }
 
     /**
-     * @param int $seconds
+     * @param float $seconds
      * @return string
      */
-    public static function formatTime($seconds): string
+    public static function formatTime(float $seconds): string
     {
         if ($seconds < 2) {
             return number_format($seconds, 3) . ' sec';

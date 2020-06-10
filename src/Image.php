@@ -42,7 +42,7 @@ class Image
      * @return bool
      * @throws Exception
      */
-    public static function checkGD($throwException = true): bool
+    public static function checkGD(bool $throwException = true): bool
     {
         $isGd = extension_loaded('gd');
 
@@ -58,7 +58,7 @@ class Image
      * @param string $format
      * @return bool
      */
-    public static function isJpeg($format): bool
+    public static function isJpeg(string $format): bool
     {
         $format = strtolower($format);
         return 'image/jpg' === $format || 'jpg' === $format || 'image/jpeg' === $format || 'jpeg' === $format;
@@ -68,7 +68,7 @@ class Image
      * @param string $format
      * @return bool
      */
-    public static function isGif($format): bool
+    public static function isGif(string $format): bool
     {
         $format = strtolower($format);
         return 'image/gif' === $format || 'gif' === $format;
@@ -78,7 +78,7 @@ class Image
      * @param string $format
      * @return bool
      */
-    public static function isPng($format): bool
+    public static function isPng(string $format): bool
     {
         $format = strtolower($format);
         return 'image/png' === $format || 'png' === $format;
@@ -88,7 +88,7 @@ class Image
      * @param string $format
      * @return bool
      */
-    public static function isWebp($format): bool
+    public static function isWebp(string $format): bool
     {
         $format = strtolower($format);
         return 'image/webp' === $format || 'webp' === $format;
@@ -99,7 +99,7 @@ class Image
      *
      * @param string|array $origColor Hex color string, array(red, green, blue) or array(red, green, blue, alpha).
      *                                Where red, green, blue - integers 0-255, alpha - integer 0-127
-     * @return integer[]
+     * @return int[]
      * @throws Exception
      */
     public static function normalizeColor($origColor): array
@@ -150,48 +150,37 @@ class Image
      * Normalize color from array
      *
      * @param array $origColor
-     * @return integer[]
+     * @return int[]
      */
     protected static function normalizeColorArray(array $origColor): array
     {
         $result = [];
 
-        if (Arr::key('r', $origColor) && Arr::key('g', $origColor) && Arr::key('b', $origColor)) {
+        if (
+            array_key_exists('r', $origColor) &&
+            array_key_exists('g', $origColor) &&
+            array_key_exists('b', $origColor)
+        ) {
             $result = [
-                self::color($origColor['r']),
-                self::color($origColor['g']),
-                self::color($origColor['b']),
-                self::alpha(Arr::key('a', $origColor) ? $origColor['a'] : 0),
+                self::color((int)$origColor['r']),
+                self::color((int)$origColor['g']),
+                self::color((int)$origColor['b']),
+                self::alpha($origColor['a'] ?? 0),
             ];
-        } elseif (Arr::key('0', $origColor) && Arr::key(1, $origColor) && Arr::key(2, $origColor)) {
+        } elseif (
+            array_key_exists('0', $origColor) &&
+            array_key_exists(1, $origColor) &&
+            array_key_exists(2, $origColor)
+        ) {
             $result = [
-                self::color($origColor[0]),
-                self::color($origColor[1]),
-                self::color($origColor[2]),
-                self::alpha(Arr::key(3, $origColor) ? $origColor[3] : 0),
+                self::color((int)$origColor[0]),
+                self::color((int)$origColor[1]),
+                self::color((int)$origColor[2]),
+                self::alpha($origColor[3] ?? 0),
             ];
         }
 
         return $result;
-    }
-
-    /**
-     * Ensures $value is always within $min and $max range.
-     * If lower, $min is returned. If higher, $max is returned.
-     *
-     * @param mixed $value
-     * @param int   $min
-     * @param int   $max
-     *
-     * @return int
-     */
-    public static function range($value, $min, $max): int
-    {
-        $value = Filter::int($value);
-        $min = Filter::int($min);
-        $max = Filter::int($max);
-
-        return Vars::limit($value, $min, $max);
     }
 
     /**
@@ -212,7 +201,7 @@ class Image
         array $dist,
         array $src,
         array $srcSizes,
-        $opacity
+        int $opacity
     ): void {
         [$dstX, $dstY] = $dist;
         [$srcX, $srcY] = $src;
@@ -276,10 +265,10 @@ class Image
     /**
      * Check opacity value
      *
-     * @param int $opacity
+     * @param float $opacity
      * @return int
      */
-    public static function opacity($opacity): int
+    public static function opacity(float $opacity): int
     {
         if ($opacity <= 1) {
             $opacity *= 100;
@@ -294,10 +283,10 @@ class Image
     /**
      * Convert opacity value to alpha
      *
-     * @param int $opacity
+     * @param float $opacity
      * @return int
      */
-    public static function opacity2Alpha($opacity): int
+    public static function opacity2Alpha(float $opacity): int
     {
         $opacity = self::opacity($opacity);
         $opacity /= 100;
@@ -309,73 +298,73 @@ class Image
     }
 
     /**
-     * @param int $color
+     * @param float $color
      * @return int
      */
-    public static function color($color): int
+    public static function color(float $color): int
     {
-        return self::range($color, 0, 255);
+        return Vars::range($color, 0, 255);
     }
 
     /**
-     * @param int $color
+     * @param float $color
      * @return int
      */
-    public static function alpha($color): int
+    public static function alpha(float $color): int
     {
-        return self::range($color, 0, 127);
+        return Vars::range($color, 0, 127);
     }
 
     /**
-     * @param int $color
+     * @param float $color
      * @return int
      */
-    public static function rotate($color): int
+    public static function rotate(float $color): int
     {
-        return self::range($color, -360, 360);
+        return Vars::range($color, -360, 360);
     }
 
     /**
-     * @param int $brightness
+     * @param float $brightness
      * @return int
      */
-    public static function brightness($brightness): int
+    public static function brightness(float $brightness): int
     {
-        return self::range($brightness, -255, 255);
+        return Vars::range($brightness, -255, 255);
     }
 
     /**
-     * @param int $contrast
+     * @param float $contrast
      * @return int
      */
-    public static function contrast($contrast): int
+    public static function contrast(float $contrast): int
     {
-        return self::range($contrast, -100, 100);
+        return Vars::range($contrast, -100, 100);
     }
 
     /**
-     * @param int $colorize
+     * @param float $colorize
      * @return int
      */
-    public static function colorize($colorize): int
+    public static function colorize(float $colorize): int
     {
-        return self::range($colorize, -255, 255);
+        return Vars::range($colorize, -255, 255);
     }
 
     /**
-     * @param int $smooth
+     * @param float $smooth
      * @return int
      */
-    public static function smooth($smooth): int
+    public static function smooth(float $smooth): int
     {
-        return self::range($smooth, 1, 10);
+        return Vars::range($smooth, 1, 10);
     }
 
     /**
      * @param string $direction
      * @return string
      */
-    public static function direction($direction): string
+    public static function direction(string $direction): string
     {
         $direction = strtolower(trim($direction));
 
@@ -387,30 +376,30 @@ class Image
     }
 
     /**
-     * @param int $blur
+     * @param float $blur
      * @return int
      */
-    public static function blur($blur): int
+    public static function blur(float $blur): int
     {
-        return self::range($blur, 1, 10);
+        return Vars::range($blur, 1, 10);
     }
 
     /**
-     * @param int $percent
+     * @param float $percent
      * @return int
      */
-    public static function percent($percent): int
+    public static function percent(float $percent): int
     {
-        return self::range($percent, 0, 100);
+        return Vars::range($percent, 0, 100);
     }
 
     /**
-     * @param int $percent
+     * @param float $percent
      * @return int
      */
-    public static function quality($percent): int
+    public static function quality(float $percent): int
     {
-        return self::range($percent, 0, 100);
+        return Vars::range($percent, 0, 100);
     }
 
     /**
@@ -437,7 +426,7 @@ class Image
      * @param string $format
      * @return bool
      */
-    public static function isSupportedFormat($format)
+    public static function isSupportedFormat(string $format): bool
     {
         if ($format) {
             return self::isJpeg($format) || self::isPng($format) || self::isGif($format) || self::isWebp($format);
@@ -464,7 +453,7 @@ class Image
      * @return string
      * @SuppressWarnings(PHPMD.NPathComplexity)
      */
-    public static function position($position): string
+    public static function position(string $position): string
     {
         $position = strtolower(trim($position));
         $position = str_replace(['-', '_'], ' ', $position);
@@ -514,7 +503,7 @@ class Image
      * @return array|null
      * @SuppressWarnings(PHPMD.NPathComplexity)
      */
-    public static function getInnerCoords($position, array $canvas, array $box, array $offset = [0, 0]): ?array
+    public static function getInnerCoords(string $position, array $canvas, array $box, array $offset = [0, 0]): ?array
     {
         $positionCode = self::position($position);
         [$canvasW, $canvasH] = $canvas;
@@ -577,7 +566,7 @@ class Image
      * @param mixed $image   Image GD resource
      * @param bool  $isBlend Add alpha blending
      */
-    public static function addAlpha($image, $isBlend = true): void
+    public static function addAlpha($image, bool $isBlend = true): void
     {
         imagesavealpha($image, true);
         imagealphablending($image, $isBlend);

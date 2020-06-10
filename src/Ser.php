@@ -28,7 +28,7 @@ class Ser
      * If $data is not an string, then returned value will always be false. Serialized data is always a string.
      *
      * @param mixed $data Value to check to see if was serialized
-     * @return boolean
+     * @return bool
      *
      * @SuppressWarnings(PHPMD.ShortMethodName)
      */
@@ -123,7 +123,7 @@ class Ser
     }
 
     /**
-     * Unserializes partially-corrupted arrays that occur sometimes. Addresses
+     * UnSerializes partially-corrupted arrays that occur sometimes. Addresses
      * specifically the `unserialize(): Error at offset xxx of yyy bytes` error.
      *
      * NOTE: This error can *frequently* occur with mismatched character sets and higher-than-ASCII characters.
@@ -154,7 +154,7 @@ class Ser
      * @param int    $length
      * @return bool
      */
-    protected static function checkBasic($data, $length): bool
+    protected static function checkBasic(string $data, int $length): bool
     {
         return $length < 4 || $data[1] !== ':' || ($data[$length - 1] !== ';' && $data[$length - 1] !== '}');
     }

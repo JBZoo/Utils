@@ -216,6 +216,7 @@ class ImageTest extends PHPUnit
         isSame(0, Image::percent('0'));
         isSame(100, Image::percent('100'));
         isSame(50, Image::percent('50'));
+        isSame(50, Image::percent('50.5'));
         isSame(0, Image::percent('-1'));
         isSame(100, Image::percent('200'));
     }
@@ -256,8 +257,6 @@ class ImageTest extends PHPUnit
         isFalse(Image::isSupportedFormat('bmp'));
         isFalse(Image::isSupportedFormat('image/bmp'));
         isFalse(Image::isSupportedFormat(''));
-        isFalse(Image::isSupportedFormat(false));
-        isFalse(Image::isSupportedFormat(null));
     }
 
     public function testIsGdRes()

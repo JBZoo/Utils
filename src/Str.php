@@ -51,7 +51,7 @@ class Str
      * @param bool   $toAssoc
      * @return array
      */
-    public static function parseLines($text, $toAssoc = true): array
+    public static function parseLines(string $text, bool $toAssoc = true): array
     {
         $text = htmlspecialchars_decode($text);
         $text = self::clean($text, false, false, false);
@@ -91,8 +91,12 @@ class Str
      * @param bool   $removeAccents
      * @return string
      */
-    public static function clean($string, $toLower = false, $addSlashes = false, $removeAccents = true): string
-    {
+    public static function clean(
+        string $string,
+        bool $toLower = false,
+        bool $addSlashes = false,
+        bool $removeAccents = true
+    ): string {
         if ($removeAccents) {
             $string = Slug::removeAccents($string);
         }
@@ -118,7 +122,7 @@ class Str
      * @param bool   $encodedEntities
      * @return string
      */
-    public static function htmlEnt($string, $encodedEntities = false): string
+    public static function htmlEnt(string $string, bool $encodedEntities = false): string
     {
         if ($encodedEntities) {
             $transTable = get_html_translation_table(HTML_ENTITIES, ENT_QUOTES, self::$encoding);
@@ -140,7 +144,7 @@ class Str
      * @return string
      * @throws \Exception
      */
-    public static function unique($prefix = 'unique'): string
+    public static function unique(string $prefix = 'unique'): string
     {
         $prefix = rtrim(trim($prefix), '-');
         $random = random_int(10000000, 99999999);
@@ -160,7 +164,7 @@ class Str
      * @param bool $isReadable
      * @return string
      */
-    public static function random($length = 10, $isReadable = true): string
+    public static function random(int $length = 10, bool $isReadable = true): string
     {
         $result = '';
 
@@ -218,24 +222,24 @@ class Str
     /**
      * Pads a given string with zeroes on the left.
      *
-     * @param int $number The number to pad
-     * @param int $length The total length of the desired string
+     * @param string $number The number to pad
+     * @param int    $length The total length of the desired string
      * @return string
      */
-    public static function zeroPad($number, $length): string
+    public static function zeroPad(string $number, int $length): string
     {
-        return str_pad((string)$number, (int)$length, '0', STR_PAD_LEFT);
+        return str_pad($number, $length, '0', STR_PAD_LEFT);
     }
 
     /**
      * Truncate a string to a specified length without cutting a word off.
      *
-     * @param string  $string The string to truncate
-     * @param integer $length The length to truncate the string to
-     * @param string  $append Text to append to the string IF it gets truncated, defaults to '...'
+     * @param string $string The string to truncate
+     * @param int    $length The length to truncate the string to
+     * @param string $append Text to append to the string IF it gets truncated, defaults to '...'
      * @return  string
      */
-    public static function truncateSafe($string, $length, $append = '...'): string
+    public static function truncateSafe(string $string, int $length, string $append = '...'): string
     {
         $result = self::sub($string, 0, $length);
         $lastSpace = self::rPos($result, ' ');
@@ -254,12 +258,12 @@ class Str
     /**
      * Truncate the string to given length of characters.
      *
-     * @param string  $string The variable to truncate
-     * @param integer $limit  The length to truncate the string to
-     * @param string  $append Text to append to the string IF it gets truncated, defaults to '...'
+     * @param string $string The variable to truncate
+     * @param int    $limit  The length to truncate the string to
+     * @param string $append Text to append to the string IF it gets truncated, defaults to '...'
      * @return string
      */
-    public static function limitChars($string, $limit = 100, $append = '...'): string
+    public static function limitChars(string $string, $limit = 100, $append = '...'): string
     {
         if (self::len($string) <= $limit) {
             return $string;
@@ -276,11 +280,11 @@ class Str
      * @param string $append
      * @return string
      */
-    public static function limitWords($string, $limit = 100, $append = '...'): string
+    public static function limitWords(string $string, int $limit = 100, string $append = '...'): string
     {
         preg_match('/^\s*+(?:\S++\s*+){1,' . $limit . '}/u', $string, $matches);
 
-        if (!Arr::key('0', $matches) || self::len($string) === self::len($matches[0])) {
+        if (!array_key_exists('0', $matches) || self::len($string) === self::len($matches[0])) {
             return $string;
         }
 
@@ -295,7 +299,7 @@ class Str
      * @param bool   $caseSensitive
      * @return bool
      */
-    public static function like($pattern, $string, $caseSensitive = true): bool
+    public static function like(string $pattern, $string, bool $caseSensitive = true): bool
     {
         if ($pattern === $string) {
             return true;
@@ -320,7 +324,7 @@ class Str
      * @param bool   $isCache
      * @return string
      */
-    public static function slug($text = '', $isCache = false): string
+    public static function slug(string $text = '', bool $isCache = false): string
     {
         static $cache = [];
 
@@ -342,7 +346,7 @@ class Str
     public static function isOverload(): bool
     {
         if (defined('MB_OVERLOAD_STRING') && self::isMBString()) {
-            return (bool)(Sys::iniGet('mbstring.func_overload') & MB_OVERLOAD_STRING);
+            return (bool)(Filter::int(Sys::iniGet('mbstring.func_overload')) & MB_OVERLOAD_STRING);
         }
 
         return false;
@@ -391,7 +395,7 @@ class Str
      * @param int    $offset
      * @return int|null
      */
-    public static function pos($haystack, $needle, $offset = 0): ?int
+    public static function pos($haystack, $needle, int $offset = 0): ?int
     {
         $result = strpos($haystack, $needle, $offset);
         if (self::isMBString()) {
@@ -409,7 +413,7 @@ class Str
      * @param int    $offset
      * @return int|null
      */
-    public static function rPos($haystack, $needle, $offset = 0): ?int
+    public static function rPos($haystack, $needle, int $offset = 0): ?int
     {
         $result = strrpos($haystack, $needle, $offset);
         if (self::isMBString()) {
@@ -427,7 +431,7 @@ class Str
      * @param int    $offset
      * @return int|null
      */
-    public static function iPos($haystack, $needle, $offset = 0): ?int
+    public static function iPos($haystack, $needle, int $offset = 0): ?int
     {
         $result = (int)stripos($haystack, $needle, $offset);
         if (self::isMBString()) {
@@ -445,7 +449,7 @@ class Str
      * @param bool   $beforeNeedle
      * @return string
      */
-    public static function strStr($haystack, $needle, $beforeNeedle = false): string
+    public static function strStr($haystack, $needle, bool $beforeNeedle = false): string
     {
         if (self::isMBString()) {
             return (string)mb_strstr($haystack, $needle, $beforeNeedle, self::$encoding);
@@ -462,7 +466,7 @@ class Str
      * @param bool   $beforeNeedle
      * @return string
      */
-    public static function iStr($haystack, $needle, $beforeNeedle = false): string
+    public static function iStr($haystack, $needle, bool $beforeNeedle = false): string
     {
         if (self::isMBString()) {
             return (string)mb_stristr($haystack, $needle, $beforeNeedle, self::$encoding);
@@ -479,7 +483,7 @@ class Str
      * @param bool   $part
      * @return string
      */
-    public static function rChr($haystack, $needle, $part = false): string
+    public static function rChr($haystack, $needle, bool $part = false): string
     {
         if (self::isMBString()) {
             return (string)mb_strrchr((string)$haystack, (string)$needle, $part, self::$encoding);
@@ -496,7 +500,7 @@ class Str
      * @param int    $length
      * @return string
      */
-    public static function sub($string, $start, $length = 0): string
+    public static function sub($string, $start, int $length = 0): string
     {
         if (self::isMBString()) {
             if (0 === $length) {
@@ -512,22 +516,22 @@ class Str
     /**
      * Make a string lowercase
      *
-     * @param string $string
+     * @param string|float|int|bool|null $string
      * @return string
      */
     public static function low($string): string
     {
         if (self::isMBString()) {
-            return (string)mb_strtolower($string, self::$encoding);
+            return (string)mb_strtolower((string)$string, self::$encoding);
         }
 
-        return (string)strtolower($string);
+        return (string)strtolower((string)$string);
     }
 
     /**
      * Make a string uppercase
      *
-     * @param string $string
+     * @param string|float|int|bool|null $string
      * @return string
      *
      * @SuppressWarnings(PHPMD.ShortMethodName)
@@ -535,10 +539,10 @@ class Str
     public static function up($string): string
     {
         if (self::isMBString()) {
-            return (string)mb_strtoupper($string, self::$encoding);
+            return (string)mb_strtoupper((string)$string, self::$encoding);
         }
 
-        return (string)strtoupper($string);
+        return (string)strtoupper((string)$string);
     }
 
     /**
@@ -565,7 +569,7 @@ class Str
      * @param bool   $caseSensitive
      * @return bool
      */
-    public static function isStart($haystack, $needle, $caseSensitive = false): bool
+    public static function isStart($haystack, $needle, bool $caseSensitive = false): bool
     {
         if ($caseSensitive) {
             return $needle === '' || self::pos($haystack, $needle) === 0;
@@ -582,7 +586,7 @@ class Str
      * @param bool   $caseSensitive
      * @return bool
      */
-    public static function isEnd($haystack, $needle, $caseSensitive = false): bool
+    public static function isEnd($haystack, $needle, bool $caseSensitive = false): bool
     {
         if ($caseSensitive) {
             return $needle === '' || self::sub($haystack, -self::len($needle)) === $needle;
@@ -601,7 +605,7 @@ class Str
      * @param bool   $extendMode
      * @return string
      */
-    public static function trim($value, $extendMode = false): string
+    public static function trim($value, bool $extendMode = false): string
     {
         $result = (string)trim($value);
 
@@ -618,9 +622,9 @@ class Str
      * Escape string before save it as xml content
      *
      * @param string $string
-     * @return mixed
+     * @return string
      */
-    public static function escXml(string $string)
+    public static function escXml(string $string): string
     {
         $string = (string)preg_replace(
             '/[^\x{0009}\x{000a}\x{000d}\x{0020}-\x{D7FF}\x{E000}-\x{FFFD}]+/u',
@@ -653,7 +657,7 @@ class Str
      *
      * @param string $input
      * @param string $separator
-     * @param bool   $toLower *
+     * @param bool   $toLower
      * @return string
      */
     public static function splitCamelCase(string $input, string $separator = '_', bool $toLower = true): string
@@ -679,9 +683,9 @@ class Str
      * Convert test name to human readable string
      *
      * @param string $input
-     * @return mixed|string
+     * @return string
      */
-    public static function testName2Human($input)
+    public static function testName2Human(string $input): string
     {
         $original = $input;
         $input = self::getClassName($input);
@@ -754,9 +758,9 @@ class Str
      *
      * @param mixed $object
      * @param bool  $toLower
-     * @return mixed|string
+     * @return string
      */
-    public static function getClassName($object, $toLower = false)
+    public static function getClassName($object, bool $toLower = false): string
     {
         $className = $object;
         if (is_object($object)) {
@@ -783,12 +787,12 @@ class Str
      *  - default: "Label" becomes "Label (2)"
      *  - dash:    "Label" becomes "Label-2"
      *
-     * @param string  $string The source string.
-     * @param string  $style  The the style (default|dash).
-     * @param integer $next   If supplied, this number is used for the copy, otherwise it is the 'next' number.
-     * @return  string
+     * @param string $string The source string.
+     * @param string $style  The the style (default|dash).
+     * @param int    $next   If supplied, this number is used for the copy, otherwise it is the 'next' number.
+     * @return string
      */
-    public static function inc($string, $style = 'default', $next = 0): string
+    public static function inc(string $string, string $style = 'default', int $next = 0): string
     {
         $styles = [
             'dash'    => ['#-(\d+)$#', '-%d'],

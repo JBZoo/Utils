@@ -71,7 +71,7 @@ class Email
      * @param string $email
      * @return bool
      */
-    public static function checkDns($email): bool
+    public static function checkDns(string $email): bool
     {
         if (!self::isValid($email)) {
             return false;
@@ -146,7 +146,7 @@ class Email
      * @return null|string
      * @link http://en.gravatar.com/site/implement/images/
      */
-    public static function getGravatarUrl($email, $size = 32, $defaultImage = 'identicon'): ?string
+    public static function getGravatarUrl(string $email, int $size = 32, string $defaultImage = 'identicon'): ?string
     {
         if (empty($email) || self::isValid($email) === false) {
             return null;
@@ -168,7 +168,7 @@ class Email
             $defaultImage = urldecode($defaultImage);
         } else {
             $defaultImage = strtolower($defaultImage);
-            if (!Arr::in((string)$defaultImage, self::getGravatarBuiltInImages())) {
+            if (!Arr::in($defaultImage, self::getGravatarBuiltInImages())) {
                 $defaultImage = self::getGravatarBuiltInDefaultImage();
             }
         }
@@ -204,14 +204,14 @@ class Email
      */
     public static function getGravatarBuiltInDefaultImage(): string
     {
-        return Arr::key(2, self::getGravatarBuiltInImages(), true);
+        return self::getGravatarBuiltInImages()[2] ?? '';
     }
 
     /**
-     * @param string $email
+     * @param string|null $email
      * @return bool
      */
-    public static function isValid($email): bool
+    public static function isValid(?string $email): bool
     {
         if (empty($email)) {
             return false;
@@ -226,7 +226,7 @@ class Email
      * @param string $email
      * @return string
      */
-    private static function extractDomain($email): string
+    private static function extractDomain(string $email): string
     {
         $parts = explode('@', $email);
         $domain = (string)array_pop($parts);

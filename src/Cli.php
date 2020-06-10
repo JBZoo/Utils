@@ -48,8 +48,9 @@ class Cli
      *
      * @param string $message
      * @param bool   $addEol
+     * @return bool
      */
-    public static function out($message, $addEol = true): void
+    public static function out(string $message, bool $addEol = true): bool
     {
         if ($addEol) {
             $message .= PHP_EOL;
@@ -57,9 +58,11 @@ class Cli
 
         if (self::check() && $stdout = fopen('php://stdout', 'wb')) {
             fwrite($stdout, $message);
-        } else {
-            echo $message;
+            return true;
         }
+
+        echo $message;
+        return false;
     }
 
     /**
@@ -67,8 +70,9 @@ class Cli
      *
      * @param string $message
      * @param bool   $addEol
+     * @return bool
      */
-    public static function err($message, $addEol = true): void
+    public static function err(string $message, bool $addEol = true): bool
     {
         if ($addEol) {
             $message .= PHP_EOL;
@@ -76,23 +80,25 @@ class Cli
 
         if (self::check() && $stderr = fopen('php://stderr', 'wb')) {
             fwrite($stderr, $message);
-        } else {
-            echo $message;
+            return true;
         }
+
+        echo $message;
+        return false;
     }
 
     /**
      * Execute cli commands
      *
-     * @param string $command
-     * @param array  $args
-     * @param string $cwd
-     * @param bool   $verbose
+     * @param string      $command
+     * @param array       $args
+     * @param string|null $cwd
+     * @param bool        $verbose
      * @return string
      * @throws RuntimeException
      * @throws Exception
      */
-    public static function exec(string $command, array $args = [], $cwd = null, $verbose = false): string
+    public static function exec(string $command, array $args = [], ?string $cwd = null, bool $verbose = false): string
     {
         if (!class_exists(Process::class)) {
             throw new Exception('Symfony/Process package required for Cli::exec() method');

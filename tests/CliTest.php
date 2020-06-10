@@ -89,16 +89,16 @@ class CliTest extends PHPUnit
     public function testStdMessage()
     {
         // Just no errors
-        Cli::out('message1');
-        Cli::out('message2', true);
+        isTrue(Cli::out('message1'));
+        isTrue(Cli::out('message2', true));
         success();
     }
 
     public function testErrorMessage()
     {
         // Just no errors
-        Cli::err('error1');
-        Cli::err('error2', true);
+        isTrue(Cli::err('error1'));
+        isTrue(Cli::err('error2', true));
         success();
     }
 

@@ -28,10 +28,10 @@ class Http
      * Cross browser compatible. Only fires if headers have not already been sent.
      *
      * @param string $filename The name of the filename to display to browsers
-     * @return boolean
+     * @return bool
      * @codeCoverageIgnore
      */
-    public static function download($filename): bool
+    public static function download(string $filename): bool
     {
         if (headers_sent()) {
             return false;
@@ -74,7 +74,7 @@ class Http
      * Different browsers support different nocache headers, so several
      * headers must be sent so that all of them get the point that no caching should occur
      *
-     * @return boolean
+     * @return bool
      * @codeCoverageIgnore
      */
     public static function nocache(): bool
@@ -95,10 +95,10 @@ class Http
      * Transmit UTF-8 content headers if the headers haven't already been sent.
      *
      * @param string $contentType The content type to send out
-     * @return boolean
+     * @return bool
      * @codeCoverageIgnore
      */
-    public static function utf8($contentType = 'text/html'): bool
+    public static function utf8(string $contentType = 'text/html'): bool
     {
         if (!headers_sent()) {
             header('Content-type: ' . $contentType . '; charset=utf-8');

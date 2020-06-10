@@ -81,8 +81,9 @@ class StringTest extends PHPUnit
     public function testUnique()
     {
         is(15, strlen(Str::unique()));
-        is(8, strlen(Str::unique(null)));
         is(10, strlen(Str::unique('t-')));
+        isNotSame(Str::unique(), Str::unique());
+        isNotSame(Str::unique(), Str::unique());
         isNotSame(Str::unique(), Str::unique());
     }
 
@@ -306,11 +307,11 @@ class StringTest extends PHPUnit
 
     public function testInc()
     {
-        isSame('title (2)', Str::inc('title', null, 0));
-        isSame('title(3)', Str::inc('title(2)', null, 0));
+        isSame('title (2)', Str::inc('title', 'default', 0));
+        isSame('title(3)', Str::inc('title(2)', 'default', 0));
         isSame('title-2', Str::inc('title', 'dash', 0));
         isSame('title-3', Str::inc('title-2', 'dash', 0));
-        isSame('title (4)', Str::inc('title', null, 4));
+        isSame('title (4)', Str::inc('title', 'default', 4));
         isSame('title (2)', Str::inc('title', 'foo', 0));
     }
 

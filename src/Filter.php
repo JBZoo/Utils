@@ -67,7 +67,7 @@ class Filter
      * Converts many english words that equate to true or false to boolean.
      *
      * @param mixed $variable The string to convert to boolean
-     * @return boolean
+     * @return bool
      */
     public static function bool($variable): bool
     {
@@ -140,8 +140,8 @@ class Filter
     }
 
     /**
-     * @param string|float|int|null $value
-     * @param int                   $round
+     * @param mixed $value
+     * @param int   $round
      * @return float
      */
     public static function float($value, int $round = 10): float
@@ -160,7 +160,7 @@ class Filter
     /**
      * Smart convert any string to int
      *
-     * @param string|int|float $value
+     * @param string|float|int|null $value
      * @return int
      */
     public static function int($value): int
@@ -175,13 +175,13 @@ class Filter
     /**
      * Return only digits chars
      *
-     * @param string $value
+     * @param string|null $value
      * @return string
      */
-    public static function digits($value)
+    public static function digits($value): string
     {
         // we need to remove - and + because they're allowed in the filter
-        $cleaned = str_replace(['-', '+'], '', $value);
+        $cleaned = str_replace(['-', '+'], '', (string)$value);
         $cleaned = (string)filter_var($cleaned, FILTER_SANITIZE_NUMBER_INT);
 
         return $cleaned;
@@ -190,23 +190,23 @@ class Filter
     /**
      * Return only alpha chars
      *
-     * @param string $value
-     * @return mixed
+     * @param string|null $value
+     * @return string
      */
-    public static function alpha($value)
+    public static function alpha($value): string
     {
-        return (string)preg_replace('#[^[:alpha:]]#', '', $value);
+        return (string)preg_replace('#[^[:alpha:]]#', '', (string)$value);
     }
 
     /**
      * Return only alpha and digits chars
      *
-     * @param string $value
-     * @return mixed
+     * @param string|null $value
+     * @return string
      */
-    public static function alphanum($value)
+    public static function alphanum($value): string
     {
-        return (string)preg_replace('#[^[:alnum:]]#', '', $value);
+        return (string)preg_replace('#[^[:alnum:]]#', '', (string)$value);
     }
 
     /**
@@ -215,7 +215,7 @@ class Filter
      * @param string $value
      * @return string
      */
-    public static function base64($value): string
+    public static function base64(string $value): string
     {
         return (string)preg_replace('#[^A-Z0-9\/+=]#i', '', $value);
     }
@@ -239,7 +239,7 @@ class Filter
      * @param string $value
      * @return string
      */
-    public static function trim($value): string
+    public static function trim(string $value): string
     {
         return Str::trim($value);
     }
@@ -250,7 +250,7 @@ class Filter
      * @param string $value
      * @return string
      */
-    public static function trimExtend($value): string
+    public static function trimExtend(string $value): string
     {
         return Str::trim($value, true);
     }
@@ -281,7 +281,7 @@ class Filter
      * @param string $value
      * @return string
      */
-    public static function cmd($value): string
+    public static function cmd(string $value): string
     {
         $value = Str::low($value);
         $value = (string)preg_replace('#[^a-z0-9\_\-\.]#', '', $value);
@@ -294,9 +294,9 @@ class Filter
      * Get safe string
      *
      * @param string $string
-     * @return mixed
+     * @return string
      */
-    public static function strip($string)
+    public static function strip(string $string): string
     {
         $cleaned = strip_tags($string);
         $cleaned = Str::trim($cleaned);
@@ -310,7 +310,7 @@ class Filter
      * @param string $string
      * @return string
      */
-    public static function alias($string): string
+    public static function alias(string $string): string
     {
         $cleaned = self::strip($string);
         $cleaned = Str::slug($cleaned);
@@ -324,7 +324,7 @@ class Filter
      * @param string $string
      * @return string
      */
-    public static function low($string): string
+    public static function low(string $string): string
     {
         $cleaned = Str::low($string);
         $cleaned = Str::trim($cleaned);
@@ -340,7 +340,7 @@ class Filter
      *
      * @SuppressWarnings(PHPMD.ShortMethodName)
      */
-    public static function up($string): string
+    public static function up(string $string): string
     {
         $cleaned = Str::up($string);
         $cleaned = Str::trim($cleaned);
@@ -354,7 +354,7 @@ class Filter
      * @param string $string
      * @return string
      */
-    public static function stripSpace($string): string
+    public static function stripSpace(string $string): string
     {
         return Str::stripSpace($string);
     }
@@ -363,7 +363,7 @@ class Filter
      * @param string $string
      * @return string
      */
-    public static function clean($string): string
+    public static function clean(string $string): string
     {
         return Str::clean($string, true, true);
     }
@@ -372,7 +372,7 @@ class Filter
      * @param string $string
      * @return string
      */
-    public static function html($string): string
+    public static function html(string $string): string
     {
         return Str::htmlEnt($string);
     }
@@ -381,7 +381,7 @@ class Filter
      * @param string $string
      * @return string
      */
-    public static function xml($string): string
+    public static function xml(string $string): string
     {
         return Str::escXml($string);
     }
@@ -390,7 +390,7 @@ class Filter
      * @param string $string
      * @return string
      */
-    public static function esc($string): string
+    public static function esc(string $string): string
     {
         return Str::esc($string);
     }
@@ -411,7 +411,7 @@ class Filter
     /**
      * RAW placeholder
      *
-     * @param string $string
+     * @param mixed $string
      * @return mixed
      */
     public static function raw($string)
@@ -454,7 +454,7 @@ class Filter
      * @param string $input
      * @return string
      */
-    public static function className($input): string
+    public static function className(string $input): string
     {
         $output = (string)preg_replace(['#(?<=[^A-Z\s])([A-Z\s])#i'], ' $0', $input);
         $output = explode(' ', $output);
@@ -476,7 +476,7 @@ class Filter
      * @param string $value
      * @return string
      */
-    public static function stripQuotes($value): string
+    public static function stripQuotes(string $value): string
     {
         if (strpos($value, '"') === 0 && substr($value, -1) === '"') {
             $value = trim($value, '"');

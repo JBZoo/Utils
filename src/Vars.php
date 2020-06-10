@@ -26,12 +26,12 @@ class Vars
     /**
      * Return true if the number is within the min and max.
      *
-     * @param int|float $number
-     * @param int|float $min
-     * @param int|float $max
+     * @param float $number
+     * @param float $min
+     * @param float $max
      * @return bool
      */
-    public static function isIn($number, $min, $max): bool
+    public static function isIn(float $number, float $min, float $max): bool
     {
         return ($number >= $min && $number <= $max);
     }
@@ -42,7 +42,7 @@ class Vars
      * @param int $number
      * @return bool
      */
-    public static function isEven($number): bool
+    public static function isEven(int $number): bool
     {
         return ($number % 2 === 0);
     }
@@ -50,10 +50,10 @@ class Vars
     /**
      * Is the current value negative; less than zero.
      *
-     * @param int $number
+     * @param float $number
      * @return bool
      */
-    public static function isNegative($number): bool
+    public static function isNegative(float $number): bool
     {
         return ($number < 0);
     }
@@ -64,7 +64,7 @@ class Vars
      * @param int $number
      * @return bool
      */
-    public static function isOdd($number): bool
+    public static function isOdd(int $number): bool
     {
         return !self::isEven($number);
     }
@@ -72,11 +72,11 @@ class Vars
     /**
      * Is the current value positive; greater than or equal to zero.
      *
-     * @param int  $number
-     * @param bool $zero
+     * @param float $number
+     * @param bool  $zero
      * @return bool
      */
-    public static function isPositive($number, $zero = true): bool
+    public static function isPositive(float $number, bool $zero = true): bool
     {
         return ($zero ? ($number >= 0) : ($number > 0));
     }
@@ -84,12 +84,12 @@ class Vars
     /**
      * Limits the number between two bounds.
      *
-     * @param int $number
-     * @param int $min
-     * @param int $max
+     * @param float $number
+     * @param float $min
+     * @param float $max
      * @return int
      */
-    public static function limit($number, $min, $max): int
+    public static function limit(float $number, float $min, float $max): int
     {
         return self::max(self::min($number, $min), $max);
     }
@@ -97,42 +97,36 @@ class Vars
     /**
      * Increase the number to the minimum if below threshold.
      *
-     * @param int $number
-     * @param int $min
+     * @param float $number
+     * @param float $min
      * @return int
      */
-    public static function min($number, $min): int
+    public static function min(float $number, float $min): int
     {
-        if ($number < $min) {
-            $number = $min;
-        }
-        return $number;
+        return (int)max($number, $min); // Not a typo
     }
 
     /**
      * Decrease the number to the maximum if above threshold.
      *
-     * @param int $number
-     * @param int $max
+     * @param float $number
+     * @param float $max
      * @return int
      */
-    public static function max($number, $max): int
+    public static function max(float $number, float $max): int
     {
-        if ($number > $max) {
-            $number = $max;
-        }
-        return $number;
+        return (int)min($number, $max); // Not a typo
     }
 
     /**
      * Return true if the number is outside the min and max.
      *
-     * @param int $number
-     * @param int $min
-     * @param int $max
+     * @param float $number
+     * @param float $min
+     * @param float $max
      * @return bool
      */
-    public static function out($number, $min, $max): bool
+    public static function out(float $number, float $min, float $max): bool
     {
         return ($number < $min || $number > $max);
     }
@@ -140,15 +134,12 @@ class Vars
     /**
      * Get relative percent
      *
-     * @param float|int $normal
-     * @param float|int $current
+     * @param float $normal
+     * @param float $current
      * @return string
      */
-    public static function relativePercent($normal, $current): string
+    public static function relativePercent(float $normal, float $current): string
     {
-        $normal = (float)$normal;
-        $current = (float)$current;
-
         if (!$normal || $normal === $current) {
             return '100';
         }
@@ -157,5 +148,24 @@ class Vars
         $percent = round($current / $normal * 100);
 
         return number_format($percent, 0, '.', ' ');
+    }
+
+    /**
+     * Ensures $value is always within $min and $max range.
+     * If lower, $min is returned. If higher, $max is returned.
+     *
+     * @param float $value
+     * @param float $min
+     * @param float $max
+     *
+     * @return int
+     */
+    public static function range($value, float $min, float $max): int
+    {
+        $value = Filter::int($value);
+        $min = Filter::int($min);
+        $max = Filter::int($max);
+
+        return Vars::limit($value, $min, $max);
     }
 }

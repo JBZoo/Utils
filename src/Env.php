@@ -32,19 +32,19 @@ class Env
     /**
      * Returns an environment variable.
      *
-     * @param string $name
+     * @param string $envVarName
      * @param mixed  $default
      * @param int    $options
      * @return mixed
      * @SuppressWarnings(PHPMD.Superglobals)
      */
-    public static function get(string $name, $default = null, $options = self::VAR_STRING)
+    public static function get(string $envVarName, $default = null, int $options = self::VAR_STRING)
     {
-        $envKey = trim($name);
+        $envKey = trim($envVarName);
 
         $value = getenv($envKey);
         if ($value === false) {
-            if (isset($_ENV[$envKey])) {
+            if (array_key_exists($envKey, $_ENV)) {
                 return self::convert($_ENV[$envKey], $options);
             }
 
@@ -61,16 +61,14 @@ class Env
      * @param int         $options
      * @return string|float|int|bool|null
      */
-    public static function convert($value, $options = self::VAR_STRING)
+    public static function convert(?string $value, int $options = self::VAR_STRING)
     {
-        $options = (int)$options;
-
         if ($options & self::VAR_STRING && !empty($value)) {
             return trim(Filter::stripQuotes($value));
         }
 
         if ($options & self::VAR_FLOAT) {
-            return Filter::float((string)$value);
+            return Filter::float($value);
         }
 
         if ($options & self::VAR_INT) {
@@ -85,7 +83,7 @@ class Env
             return Filter::bool($value);
         }
 
-        return (string)$value;
+        return $value;
     }
 
     /**

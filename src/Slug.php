@@ -686,7 +686,7 @@ class Slug
      *
      * @param string $language
      */
-    private static function initLanguageMap($language = ''): void
+    private static function initLanguageMap(string $language = ''): void
     {
         if ((!$language || $language === self::$language) && count(self::$map) > 0) {
             return;
@@ -694,7 +694,7 @@ class Slug
 
         // Is a specific map associated with $language?
 
-        if (Arr::key($language, self::$maps) && is_array(self::$maps[$language])) {
+        if (array_key_exists($language, self::$maps) && is_array(self::$maps[$language])) {
             // Move this map to end. This means it will have priority over others
             $langMap = self::$maps[$language];
             unset(self::$maps[$language]);
@@ -723,18 +723,18 @@ class Slug
      * slugs safe for use as URLs, and if you pass true as the second parameter, it will create strings safe for
      * use as CSS classes or IDs.
      *
-     * @param string  $string    A string to convert to a slug
-     * @param string  $separator The string to separate words with
-     * @param boolean $cssMode   Whether or not to generate strings safe for CSS classes/IDs (Default to false)
+     * @param string|null $string    A string to convert to a slug
+     * @param string      $separator The string to separate words with
+     * @param bool        $cssMode   Whether or not to generate strings safe for CSS classes/IDs (Default to false)
      * @return  string
      */
-    public static function filter($string, $separator = '-', $cssMode = false): string
+    public static function filter($string, string $separator = '-', bool $cssMode = false): string
     {
-        $slug = (string)preg_replace('/([^a-z0-9]+)/', $separator, strtolower(self::removeAccents($string)));
+        $slug = (string)preg_replace('/([^a-z0-9]+)/', $separator, strtolower(self::removeAccents((string)$string)));
         $slug = trim($slug, $separator);
 
         if ($cssMode) {
-            $firstLetter = (int)substr($slug, 0, 1);
+            $firstLetter = (int)$slug[0];
             $digits = ['zero', 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine'];
             if ($firstLetter && isset($digits[$firstLetter])) {
                 $slug = $digits[$firstLetter] . substr($slug, 1);
@@ -750,9 +750,9 @@ class Slug
      * Written by Tony Ferrara <http://blog.ircmaxwell.com>
      *
      * @param string $string The string to be checked
-     * @return boolean
+     * @return bool
      */
-    public static function seemsUTF8($string): bool
+    public static function seemsUTF8(string $string): bool
     {
         if (Str::isMBString()) {
             // If mbstring is available, this is significantly faster than
@@ -771,7 +771,7 @@ class Slug
      * @param string $string
      * @return bool
      */
-    protected static function seemsUtf8Regex($string): bool
+    protected static function seemsUtf8Regex(string $string): bool
     {
         $regex = '/(
             [\xC0-\xC1]                                                         # Invalid UTF-8 Bytes
@@ -802,7 +802,7 @@ class Slug
      * @param string $language Specifies a priority for a specific language.
      * @return string Filtered string with replaced "nice" characters
      */
-    public static function downCode($text, $language = ''): string
+    public static function downCode(string $text, string $language = ''): string
     {
         self::initLanguageMap($language);
 
@@ -813,7 +813,7 @@ class Slug
                 for ($i = 0; $i < $matchesCount; $i++) {
                     $char = $matches[0][$i];
 
-                    if (Arr::key($char, self::$map)) {
+                    if (array_key_exists($char, self::$map)) {
                         $text = str_replace($char, self::$map[$char], $text);
                     }
                 }
@@ -843,7 +843,7 @@ class Slug
      * @param string $language Specifies a priority for a specific language.
      * @return string Filtered  string with replaced "nice" characters
      */
-    public static function removeAccents($string, $language = ''): string
+    public static function removeAccents(string $string, string $language = ''): string
     {
         if (!preg_match('/[\x80-\xff]/', $string)) {
             return $string;

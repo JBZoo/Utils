@@ -31,8 +31,6 @@ class EnvTest extends PHPUnit
     public function dataProvider(): array
     {
         return [
-            ['', null, ''],
-
             ['NULL', Env::VAR_NULL, null],
             ['null', Env::VAR_NULL, null],
 
