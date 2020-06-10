@@ -124,6 +124,9 @@ class Filter
             'н',
             'немає',
             '-',
+            'null',
+            'nill',
+            'undefined',
         ];
 
         $variable = Str::low($variable);

@@ -63,24 +63,29 @@ class Env
      */
     public static function convert(?string $value, int $options = self::VAR_STRING)
     {
-        if ($options & self::VAR_STRING && !empty($value)) {
-            return trim(Filter::stripQuotes($value));
+        $cleanedValue = trim(Filter::stripQuotes((string)$value));
+
+        if ($options & self::VAR_NULL) {
+            $cleanedValue = strtolower($cleanedValue);
+            if (in_array($cleanedValue, ['null', 'nil', 'undefined'], true)) {
+                return null;
+            }
+        }
+
+        if ($options & self::VAR_STRING) {
+            return $cleanedValue;
         }
 
         if ($options & self::VAR_FLOAT) {
-            return Filter::float($value);
+            return Filter::float($cleanedValue);
         }
 
         if ($options & self::VAR_INT) {
-            return Filter::int((int)$value);
+            return Filter::int((int)$cleanedValue);
         }
 
-        if ($options & self::VAR_BOOL || $options & self::VAR_NULL) {
-            if (null === $value || 'null' === strtolower(trim($value))) {
-                return null;
-            }
-
-            return Filter::bool($value);
+        if ($options & self::VAR_BOOL) {
+            return Filter::bool($cleanedValue);
         }
 
         return $value;
@@ -93,7 +98,11 @@ class Env
      */
     public static function string(string $envVarName, string $default = ''): string
     {
-        return (string)self::get($envVarName, $default, self::VAR_STRING);
+        if (self::isExists($envVarName)) {
+            return (string)self::get($envVarName, $default, self::VAR_STRING);
+        }
+
+        return $default;
     }
 
     /**
@@ -103,7 +112,11 @@ class Env
      */
     public static function int(string $envVarName, int $default = 0): int
     {
-        return (int)self::get($envVarName, $default, self::VAR_INT);
+        if (self::isExists($envVarName)) {
+            return (int)self::get($envVarName, $default, self::VAR_INT);
+        }
+
+        return $default;
     }
 
     /**
@@ -113,7 +126,11 @@ class Env
      */
     public static function float(string $envVarName, float $default = 0.0): float
     {
-        return (float)self::get($envVarName, $default, self::VAR_FLOAT);
+        if (self::isExists($envVarName)) {
+            return (float)self::get($envVarName, $default, self::VAR_FLOAT);
+        }
+
+        return $default;
     }
 
     /**
@@ -123,6 +140,19 @@ class Env
      */
     public static function bool(string $envVarName, bool $default = false): bool
     {
-        return (bool)self::get($envVarName, $default, self::VAR_BOOL);
+        if (self::isExists($envVarName)) {
+            return (bool)self::get($envVarName, $default, self::VAR_BOOL);
+        }
+
+        return $default;
+    }
+
+    /**
+     * @param string $envVarName
+     * @return bool
+     */
+    public static function isExists(string $envVarName): bool
+    {
+        return self::get($envVarName, null, self::VAR_NULL) !== null;
     }
 }

@@ -92,7 +92,7 @@ class EnvTest extends PHPUnit
 
     public function testFloat()
     {
-        $value = 1/3;
+        $value = 1 / 3;
 
         putenv("FOO= {$value} ");
         isSame($value, Env::float('FOO'));
@@ -125,5 +125,25 @@ class EnvTest extends PHPUnit
 
         $_ENV['SOME_VAR'] = '0.5';
         isSame('0.5', Env::string('SOME_VAR'));
+    }
+
+    public function testIsExists()
+    {
+        $notEmptyValue = '"qwerty';
+        $emptyValue = '';
+
+        putenv("FOO_STRING={$notEmptyValue}");
+        putenv("FOO_EMPTY={$emptyValue}");
+
+        isTrue(Env::isExists('FOO_STRING'));
+        isTrue(Env::isExists('FOO_EMPTY'));
+        isFalse(Env::isExists('FOO_QWERTY'));
+
+        $_ENV['FOO_STRING_2'] = $notEmptyValue;
+        $_ENV['FOO_EMPTY_2'] = $emptyValue;
+
+        isTrue(Env::isExists('FOO_STRING_2'));
+        isTrue(Env::isExists('FOO_EMPTY_2'));
+        isFalse(Env::isExists('FOO_QWERTY_2'));
     }
 }

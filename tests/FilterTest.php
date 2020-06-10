@@ -59,17 +59,17 @@ class FilterTest extends PHPUnit
     }
 
     /**
-     * @param $exepted
+     * @param $excepted
      * @param $actual
      * @param $round
      * @dataProvider providerFloat
      */
-    public function testFloat($exepted, $actual, $round = null)
+    public function testFloat($excepted, $actual, $round = null)
     {
         if (null === $round) {
-            isSame($exepted, Filter::_($actual, 'float'));
+            isSame($excepted, Filter::_($actual, 'float'));
         } else {
-            isSame($exepted, Filter::float($actual, $round));
+            isSame($excepted, Filter::float($actual, $round));
         }
     }
 
