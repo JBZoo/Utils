@@ -55,41 +55,57 @@ class Image
     }
 
     /**
-     * @param string $format
+     * @param string|null $format
      * @return bool
      */
-    public static function isJpeg(string $format): bool
+    public static function isJpeg(?string $format = null): bool
     {
+        if (!$format) {
+            return false;
+        }
+
         $format = strtolower($format);
         return 'image/jpg' === $format || 'jpg' === $format || 'image/jpeg' === $format || 'jpeg' === $format;
     }
 
     /**
-     * @param string $format
+     * @param string|null $format
      * @return bool
      */
-    public static function isGif(string $format): bool
+    public static function isGif(?string $format = null): bool
     {
+        if (!$format) {
+            return false;
+        }
+
         $format = strtolower($format);
         return 'image/gif' === $format || 'gif' === $format;
     }
 
     /**
-     * @param string $format
+     * @param string|null $format
      * @return bool
      */
-    public static function isPng(string $format): bool
+    public static function isPng(?string $format = null): bool
     {
+        if (!$format) {
+            return false;
+        }
+
         $format = strtolower($format);
         return 'image/png' === $format || 'png' === $format;
     }
 
     /**
-     * @param string $format
+     * @param string|null $format
      * @return bool
      */
-    public static function isWebp(string $format): bool
+    public static function isWebp(?string $format = null): bool
     {
+        if (!$format) {
+            return false;
+        }
+
         $format = strtolower($format);
         return 'image/webp' === $format || 'webp' === $format;
     }
