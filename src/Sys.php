@@ -266,7 +266,10 @@ class Sys
      */
     public static function getNameWithVersion(): string
     {
-        return self::getName() . ' ' . self::getVersion();
+        $name = self::getName();
+        $version = self::getVersion();
+
+        return (string)trim("{$name} {$version}");
     }
 
     /**

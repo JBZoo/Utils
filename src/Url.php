@@ -116,8 +116,10 @@ class Url
      */
     public static function current(bool $addAuth = false): ?string
     {
-        $current = self::root($addAuth) . self::path();
-        return $current ?: null;
+        $root = self::root($addAuth);
+        $path = self::path();
+
+        return (string)trim("{$root}{$path}") ?: null;
     }
 
     /**
@@ -161,7 +163,7 @@ class Url
 
         // Was a username or password passed?
         if ($addAuth) {
-            $url .= self::getAuth();
+            $url .= (string)self::getAuth();
         }
 
         $serverData = data($_SERVER);
@@ -529,7 +531,7 @@ class Url
      */
     public static function pathToUrl($path): string
     {
-        return self::root() . '/' . self::pathToRel($path);
+        return (string)self::root() . '/' . self::pathToRel($path);
     }
 
     /**
