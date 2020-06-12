@@ -225,8 +225,8 @@ class Image
 
         // Get image width and height and percentage
         $opacity /= 100;
-        $width = imagesx($srcImg);
-        $height = imagesy($srcImg);
+        $width = (int)imagesx($srcImg);
+        $height = (int)imagesy($srcImg);
 
         // Turn alpha blending off
         self::addAlpha($srcImg, false);

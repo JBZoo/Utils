@@ -50,7 +50,8 @@
 
     "autoload"          : {
         "files" : [
-            "src/defines.php"
+            "src/defines.php",
+            "src/aliases.php"
         ],
         "psr-4" : {
             "JBZoo\\Utils\\" : "src"
