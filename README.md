@@ -1,9 +1,8 @@
-# JBZoo Utils  [![Build Status](https://travis-ci.org/JBZoo/Utils.svg?branch=master)](https://travis-ci.org/JBZoo/Utils)      [![Coverage Status](https://coveralls.io/repos/github/JBZoo/Utils/badge.svg?branch=master)](https://coveralls.io/github/JBZoo/Utils?branch=master)
+#JBZoo - Utils
 
-A collection of useful PHP functions, mini classes and snippets that you need or could use every day.
+[![Build Status](https://travis-ci.org/JBZoo/Utils.svg?branch=master)](https://travis-ci.org/JBZoo/Utils)    [![Coverage Status](https://coveralls.io/repos/JBZoo/Utils/badge.svg)](https://coveralls.io/github/JBZoo/Utils?branch=master)    [![Psalm Coverage](https://shepherd.dev/github/JBZoo/Utils/coverage.svg)](https://shepherd.dev/github/JBZoo/Utils)    [![Codacy Badge](https://app.codacy.com/project/badge/Grade/28babe533d6749a69d805c19abfc6b5a)](https://www.codacy.com/gh/JBZoo/Utils)    
+[![Latest Stable Version](https://poser.pugx.org/JBZoo/Utils/v)](https://packagist.org/packages/JBZoo/Utils)    [![Latest Unstable Version](https://poser.pugx.org/JBZoo/Utils/v/unstable)](https://packagist.org/packages/JBZoo/Utils)    [![Dependents](https://poser.pugx.org/JBZoo/Utils/dependents)](https://packagist.org/packages/JBZoo/Utils/dependents?order_by=downloads)    [![GitHub Issues](https://img.shields.io/github/issues/JBZoo/Utils)](https://github.com/JBZoo/Utils/issues)    [![Total Downloads](https://poser.pugx.org/JBZoo/Utils/downloads)](https://packagist.org/packages/JBZoo/Utils/stats)    [![GitHub License](https://img.shields.io/github/license/JBZoo/Utils)](https://github.com/JBZoo/Utils/blob/master/LICENSE)
 
-[![License](https://poser.pugx.org/JBZoo/Utils/license)](https://packagist.org/packages/JBZoo/Utils)
-[![Latest Stable Version](https://poser.pugx.org/JBZoo/Utils/v/stable)](https://packagist.org/packages/JBZoo/Utils) [![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/JBZoo/Utils/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/JBZoo/Utils/?branch=master)
 
 ## Install
 ```sh
