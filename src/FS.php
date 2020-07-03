@@ -307,20 +307,20 @@ class FS
     {
         $exp = 0;
         $value = 0;
-        $symbol = ['B', 'KB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB'];
+        $symbols = ['B', 'KB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB'];
 
         $bytes = (float)$bytes;
 
         if ($bytes > 0) {
-            $exp = floor(log($bytes) / log(1024));
+            $exp = (int)floor(log($bytes) / log(1024));
             $value = ($bytes / (1024 ** floor($exp)));
         }
 
-        if ($symbol[(int)$exp] === 'B') {
+        if ($symbols[$exp] === 'B') {
             $decimals = 0;
         }
 
-        return number_format($value, $decimals, '.', '') . ' ' . $symbol[$exp];
+        return number_format($value, $decimals, '.', '') . ' ' . $symbols[$exp];
     }
 
     /**
