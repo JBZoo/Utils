@@ -67,13 +67,13 @@ class Url
         // Parse the URI into it's components
         $parsedUri = data((array)parse_url($uri));
 
-        if ($parsedUri->get('query')) {
-            parse_str($parsedUri['query'], $queryParams);
+        if ($parsedQuery = $parsedUri->get('query')) {
+            parse_str($parsedQuery, $queryParams);
             $queryParams = array_merge($queryParams, $newParams);
-        } elseif ($parsedUri->get('path') && false !== strpos($parsedUri['path'], '=')) {
+        } elseif ((string)$parsedUri->get('path') && false !== strpos((string)$parsedUri['path'], '=')) {
             $parsedUri['query'] = $parsedUri['path'];
             $parsedUri->remove('path');
-            parse_str($parsedUri['query'], $queryParams);
+            parse_str((string)$parsedUri['query'], $queryParams);
             $queryParams = array_merge($queryParams, $newParams);
         } else {
             $queryParams = $newParams;
@@ -93,7 +93,7 @@ class Url
         $parsedUri['query'] = self::build($queryParams);
 
         // Strip = from valueless parameters.
-        $parsedUri['query'] = (string)preg_replace('/=(?=&|$)/', '', $parsedUri['query']);
+        $parsedUri['query'] = (string)preg_replace('/=(?=&|$)/', '', (string)$parsedUri['query']);
 
         // Re-construct the entire URL
         $newUri = self::buildAll((array)$parsedUri);
@@ -280,9 +280,9 @@ class Url
             if (($flags & self::URL_JOIN_PATH) && $parts->has('path')) {
                 if ($url->has('path') && $parts->get('path')[0] !== '/') {
                     $url['path'] =
-                        rtrim(str_replace(basename($url['path']), '', $url['path']), '/')
+                        rtrim(str_replace(basename((string)$url['path']), '', (string)$url['path']), '/')
                         . '/'
-                        . ltrim($parts['path'], '/');
+                        . ltrim((string)$parts['path'], '/');
                 } else {
                     $url['path'] = $parts['path'];
                 }
@@ -299,7 +299,7 @@ class Url
         }
 
         if ($url->get('path')) {
-            $url['path'] = '/' . ltrim($url['path'], '/');
+            $url['path'] = '/' . ltrim((string)$url['path'], '/');
         }
 
         foreach ($allKeys as $key) {
