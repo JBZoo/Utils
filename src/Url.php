@@ -304,7 +304,7 @@ class Url
 
         foreach ($allKeys as $key) {
             $strip = 'URL_STRIP_' . strtoupper($key);
-            if ($flags & constant(__CLASS__ . '::' . $strip)) {
+            if ($flags & (int)constant(__CLASS__ . '::' . $strip)) {
                 $url->remove($key);
             }
         }

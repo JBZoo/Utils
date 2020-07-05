@@ -49,7 +49,7 @@ class Arr
     }
 
     /**
-     * Check is key exists
+     * Check if key exists
      *
      * @param string|int $key
      * @param array      $array
