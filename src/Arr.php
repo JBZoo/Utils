@@ -158,10 +158,10 @@ class Arr
         array_walk_recursive(
             $array,
             /**
-             * @param string     $value
+             * @param mixed      $value
              * @param string|int $key
              */
-            function ($value, $key) use (&$flattened, $preserveKeys) {
+            static function ($value, $key) use (&$flattened, $preserveKeys): void {
                 if ($preserveKeys && !is_int($key)) {
                     $flattened[$key] = $value;
                 } else {
@@ -227,13 +227,13 @@ class Arr
      * Returns an array containing all the elements of arr1 after applying
      * the callback function to each one.
      *
-     * @param array   $array       An array to run through the callback function
-     * @param Closure $callback    Callback function to run for each element in each array
-     * @param bool    $onNoScalar  Whether or not to call the callback function on non scalar values
+     * @param array    $array      An array to run through the callback function
+     * @param callable $callback   Callback function to run for each element in each array
+     * @param bool     $onNoScalar Whether or not to call the callback function on non scalar values
      *                             (Objects, resources, etc)
      * @return array
      */
-    public static function mapDeep(array $array, $callback, bool $onNoScalar = false): array
+    public static function mapDeep(array $array, callable $callback, bool $onNoScalar = false): array
     {
         foreach ($array as $key => $value) {
             if (is_array($value)) {
@@ -253,7 +253,7 @@ class Arr
      * @param array $haystack
      * @return array
      */
-    public static function clean($haystack): array
+    public static function clean(array $haystack): array
     {
         return array_filter($haystack);
     }
@@ -285,7 +285,7 @@ class Arr
      * @param array $array
      * @return bool
      */
-    public static function isAssoc($array): bool
+    public static function isAssoc(array $array): bool
     {
         return array_keys($array) !== range(0, count($array) - 1);
     }
@@ -364,7 +364,7 @@ class Arr
      * @param array   $array
      * @return array
      */
-    public static function map($function, $array): array
+    public static function map(Closure $function, array $array): array
     {
         $result = [];
 

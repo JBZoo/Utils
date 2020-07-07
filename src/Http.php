@@ -63,6 +63,7 @@ class Http
             fpassthru($handle);
             fclose($handle);
         } else {
+            /** @phan-suppress-next-line PhanPluginRemoveDebugEcho */
             echo file_get_contents($filename);
         }
 

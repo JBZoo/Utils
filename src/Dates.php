@@ -113,7 +113,7 @@ class Dates
     /**
      * Convert time for sql format
      *
-     * @param null|int $time
+     * @param string|int|null $time
      * @return string
      */
     public static function sql($time = null): string

@@ -181,7 +181,7 @@ class Filter
      * @param string|null $value
      * @return string
      */
-    public static function digits($value): string
+    public static function digits(?string $value): string
     {
         // we need to remove - and + because they're allowed in the filter
         $cleaned = str_replace(['-', '+'], '', (string)$value);
@@ -196,7 +196,7 @@ class Filter
      * @param string|null $value
      * @return string
      */
-    public static function alpha($value): string
+    public static function alpha(?string $value): string
     {
         return (string)preg_replace('#[^[:alpha:]]#', '', (string)$value);
     }
@@ -207,7 +207,7 @@ class Filter
      * @param string|null $value
      * @return string
      */
-    public static function alphanum($value): string
+    public static function alphanum(?string $value): string
     {
         return (string)preg_replace('#[^[:alnum:]]#', '', (string)$value);
     }
@@ -229,7 +229,7 @@ class Filter
      * @param string $value
      * @return string
      */
-    public static function path($value): string
+    public static function path(string $value): string
     {
         $pattern = '#^[A-Za-z0-9_\/-]+[A-Za-z0-9_\.-]*([\\\\\/][A-Za-z0-9_-]+[A-Za-z0-9_\.-]*)*$#';
         preg_match($pattern, $value, $matches);
@@ -428,7 +428,7 @@ class Filter
      * @param string $input
      * @return string
      */
-    public static function ucFirst($input): string
+    public static function ucFirst(string $input): string
     {
         $string = Str::low($input);
         $string = ucfirst($string);
@@ -462,7 +462,7 @@ class Filter
         $output = (string)preg_replace(['#(?<=[^A-Z\s])([A-Z\s])#i'], ' $0', $input);
         $output = explode(' ', $output);
 
-        $output = array_map(function ($item) {
+        $output = array_map(static function ($item) {
             $item = (string)preg_replace('#[^a-z0-9]#i', '', $item);
             $item = Filter::ucFirst($item);
             return $item;

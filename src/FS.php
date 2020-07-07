@@ -303,7 +303,7 @@ class FS
      * @param int $decimals The number of decimal points to include
      * @return  string
      */
-    public static function format(int $bytes, $decimals = 2): string
+    public static function format(int $bytes, int $decimals = 2): string
     {
         $exp = 0;
         $value = 0;
@@ -393,11 +393,15 @@ class FS
     }
 
     /**
-     * @param string $path
+     * @param string|null $path
      * @return string
      */
-    public static function ext($path): string
+    public static function ext(?string $path): string
     {
+        if (!$path) {
+            return '';
+        }
+
         if (strpos($path, '?') !== false) {
             $path = (string)preg_replace('#\?(.*)#', '', $path);
         }
@@ -412,7 +416,7 @@ class FS
      * @param string|null $path
      * @return string
      */
-    public static function base($path): string
+    public static function base(?string $path): string
     {
         return (string)pathinfo((string)$path, PATHINFO_BASENAME);
     }
@@ -430,7 +434,7 @@ class FS
      * @param string|null $path
      * @return string
      */
-    public static function dirName($path): string
+    public static function dirName(?string $path): string
     {
         return (string)pathinfo((string)$path, PATHINFO_DIRNAME);
     }
@@ -495,7 +499,7 @@ class FS
      * @param string $path
      * @return bool
      */
-    public static function isDir($path): bool
+    public static function isDir(string $path): bool
     {
         if (!$path) {
             return false;
@@ -511,7 +515,7 @@ class FS
      * @param string $path
      * @return bool
      */
-    public static function isFile($path): bool
+    public static function isFile(string $path): bool
     {
         $path = self::clean($path);
         return file_exists($path) && is_file($path);
@@ -550,7 +554,7 @@ class FS
      * @param string|null $path
      * @return bool
      */
-    public static function isReal($path): bool
+    public static function isReal(?string $path): bool
     {
         if (!$path) {
             return false;

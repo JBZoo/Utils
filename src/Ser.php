@@ -132,12 +132,15 @@ class Ser
      * @param string $brokenSerializedData
      * @return string
      */
-    public static function fix($brokenSerializedData): string
+    public static function fix(string $brokenSerializedData): string
     {
         $fixedSerializedData = preg_replace_callback(
             '!s:(\d+):"(.*?)";!',
-            /** @psalm-suppress MissingClosureParamType */
-            function ($matches) {
+            /**
+             * @param array $matches
+             * @return string
+             */
+            static function (array $matches): string {
                 $snip = $matches[2];
                 return 's:' . strlen($snip) . ':"' . $snip . '";';
             },

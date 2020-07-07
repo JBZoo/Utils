@@ -263,7 +263,7 @@ class Str
      * @param string $append Text to append to the string IF it gets truncated, defaults to '...'
      * @return string
      */
-    public static function limitChars(string $string, $limit = 100, $append = '...'): string
+    public static function limitChars(string $string, int $limit = 100, string $append = '...'): string
     {
         if (self::len($string) <= $limit) {
             return $string;
@@ -294,14 +294,14 @@ class Str
     /**
      * Check if a given string matches a given pattern.
      *
-     * @param string $pattern Pattern of string expected
-     * @param string $string  String that need to be matched
+     * @param string $pattern  Pattern of string expected
+     * @param string $haystack String that need to be matched
      * @param bool   $caseSensitive
      * @return bool
      */
-    public static function like(string $pattern, $string, bool $caseSensitive = true): bool
+    public static function like(string $pattern, string $haystack, bool $caseSensitive = true): bool
     {
-        if ($pattern === $string) {
+        if ($pattern === $haystack) {
             return true;
         }
 
@@ -314,7 +314,7 @@ class Str
         // Unescaped * which is our wildcard character and change it to .*
         $pattern = str_replace('\*', '.*', $pattern);
 
-        return (bool)preg_match('#^' . $pattern . '$#' . $flags, $string);
+        return (bool)preg_match('#^' . $pattern . '$#' . $flags, $haystack);
     }
 
     /**
@@ -378,7 +378,7 @@ class Str
      * @param string $string
      * @return int
      */
-    public static function len($string): int
+    public static function len(string $string): int
     {
         if (self::isMBString()) {
             return (int)mb_strlen($string, self::$encoding);
@@ -395,7 +395,7 @@ class Str
      * @param int    $offset
      * @return int|null
      */
-    public static function pos($haystack, $needle, int $offset = 0): ?int
+    public static function pos(string $haystack, string $needle, int $offset = 0): ?int
     {
         $result = strpos($haystack, $needle, $offset);
         if (self::isMBString()) {
@@ -413,7 +413,7 @@ class Str
      * @param int    $offset
      * @return int|null
      */
-    public static function rPos($haystack, $needle, int $offset = 0): ?int
+    public static function rPos(string $haystack, string $needle, int $offset = 0): ?int
     {
         $result = strrpos($haystack, $needle, $offset);
         if (self::isMBString()) {
@@ -431,7 +431,7 @@ class Str
      * @param int    $offset
      * @return int|null
      */
-    public static function iPos($haystack, $needle, int $offset = 0): ?int
+    public static function iPos(string $haystack, string $needle, int $offset = 0): ?int
     {
         $result = (int)stripos($haystack, $needle, $offset);
         if (self::isMBString()) {
@@ -449,7 +449,7 @@ class Str
      * @param bool   $beforeNeedle
      * @return string
      */
-    public static function strStr($haystack, $needle, bool $beforeNeedle = false): string
+    public static function strStr(string $haystack, string $needle, bool $beforeNeedle = false): string
     {
         if (self::isMBString()) {
             return (string)mb_strstr($haystack, $needle, $beforeNeedle, self::$encoding);
@@ -466,7 +466,7 @@ class Str
      * @param bool   $beforeNeedle
      * @return string
      */
-    public static function iStr($haystack, $needle, bool $beforeNeedle = false): string
+    public static function iStr(string $haystack, string $needle, bool $beforeNeedle = false): string
     {
         if (self::isMBString()) {
             return (string)mb_stristr($haystack, $needle, $beforeNeedle, self::$encoding);
@@ -483,13 +483,13 @@ class Str
      * @param bool   $part
      * @return string
      */
-    public static function rChr($haystack, $needle, bool $part = false): string
+    public static function rChr(string $haystack, string $needle, bool $part = false): string
     {
         if (self::isMBString()) {
-            return (string)mb_strrchr((string)$haystack, (string)$needle, $part, self::$encoding);
+            return (string)mb_strrchr($haystack, $needle, $part, self::$encoding);
         }
 
-        return (string)strrchr((string)$haystack, (string)$needle);
+        return (string)strrchr($haystack, $needle);
     }
 
     /**
@@ -500,7 +500,7 @@ class Str
      * @param int    $length
      * @return string
      */
-    public static function sub($string, $start, int $length = 0): string
+    public static function sub(string $string, int $start, int $length = 0): string
     {
         if (self::isMBString()) {
             if (0 === $length) {
@@ -552,7 +552,7 @@ class Str
      * @param string $needle
      * @return int
      */
-    public static function subCount($haystack, $needle): int
+    public static function subCount(string $haystack, string $needle): int
     {
         if (self::isMBString()) {
             return (int)mb_substr_count($haystack, $needle, self::$encoding);
@@ -569,7 +569,7 @@ class Str
      * @param bool   $caseSensitive
      * @return bool
      */
-    public static function isStart($haystack, $needle, bool $caseSensitive = false): bool
+    public static function isStart(string $haystack, string $needle, bool $caseSensitive = false): bool
     {
         if ($caseSensitive) {
             return $needle === '' || self::pos($haystack, $needle) === 0;
@@ -586,7 +586,7 @@ class Str
      * @param bool   $caseSensitive
      * @return bool
      */
-    public static function isEnd($haystack, $needle, bool $caseSensitive = false): bool
+    public static function isEnd(string $haystack, string $needle, bool $caseSensitive = false): bool
     {
         if ($caseSensitive) {
             return $needle === '' || self::sub($haystack, -self::len($needle)) === $needle;
@@ -605,7 +605,7 @@ class Str
      * @param bool   $extendMode
      * @return string
      */
-    public static function trim($value, bool $extendMode = false): string
+    public static function trim(string $value, bool $extendMode = false): string
     {
         $result = (string)trim($value);
 
@@ -647,7 +647,7 @@ class Str
      * @param string $string
      * @return string
      */
-    public static function esc($string): string
+    public static function esc(string $string): string
     {
         return htmlspecialchars($string, ENT_NOQUOTES, self::$encoding);
     }
@@ -700,10 +700,9 @@ class Str
         $output = str_replace('_', ' ', $output);
         $output = trim($output);
 
-        $output = implode(' ', array_filter(array_map(function ($item) {
+        $output = implode(' ', array_filter(array_map(static function (string $item): string {
             $item = ucwords($item);
             $item = trim($item);
-
             return $item;
         }, explode(' ', $output))));
 
@@ -837,12 +836,12 @@ class Str
      * Single line or line end comments and multi line comments are stripped off.
      *
      * @param string $sql Input SQL string with which to split into individual queries.
-     * @return  array
+     * @return array
      *
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
      */
-    public static function splitSql($sql): array
+    public static function splitSql(string $sql): array
     {
         $start = 0;
         $open = false;

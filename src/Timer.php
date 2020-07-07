@@ -39,7 +39,7 @@ class Timer
      * @param float $milliSeconds
      * @return string
      */
-    public static function format($milliSeconds): string
+    public static function format(float $milliSeconds): string
     {
         $time = round($milliSeconds * 1000);
 
@@ -59,7 +59,7 @@ class Timer
      * @param float $seconds
      * @return string
      */
-    public static function formatMS($seconds): string
+    public static function formatMS(float $seconds): string
     {
         $time = round($seconds * 1000, 3);
         $dec = 3;
@@ -68,8 +68,6 @@ class Timer
             $dec = 0;
         } elseif ($time < 10 && $time >= 0.1) {
             $dec = 1;
-        } elseif ($time <= 0.01) {
-            $dec = 3;
         }
 
         return number_format($time, $dec, '.', ' ') . ' ms';

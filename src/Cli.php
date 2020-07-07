@@ -61,6 +61,7 @@ class Cli
             return true;
         }
 
+        /** @phan-suppress-next-line PhanPluginRemoveDebugEcho */
         echo $message;
         return false;
     }
@@ -83,6 +84,7 @@ class Cli
             return true;
         }
 
+        /** @phan-suppress-next-line PhanPluginRemoveDebugEcho */
         echo $message;
         return false;
     }

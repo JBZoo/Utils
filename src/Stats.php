@@ -45,7 +45,7 @@ class Stats
      *
      * @return float
      */
-    public static function variance(array $values, bool $sample = false)
+    public static function variance(array $values, bool $sample = false): float
     {
         $average = self::mean($values);
         $sum = 0;
@@ -65,10 +65,10 @@ class Stats
     /**
      * Return the mean (average) value of the given values.
      *
-     * @param array $values
+     * @param array|null $values
      * @return float
      */
-    public static function mean($values): float
+    public static function mean(?array $values): float
     {
         if (empty($values)) {
             return 0;
@@ -110,7 +110,7 @@ class Stats
             $space[] = $value;
         }
 
-        if ($endpoint === false) {
+        if (!$endpoint) {
             array_pop($space);
         }
 
@@ -126,17 +126,21 @@ class Stats
      * For a better implementation copy:
      *   http://docs.scipy.org/doc/numpy-1.10.1/reference/generated/numpy.histogram.html
      *
-     * @param array $values
-     * @param int   $steps
-     * @param float $lowerBound
-     * @param float $upperBound
+     * @param array      $values
+     * @param int        $steps
+     * @param float|null $lowerBound
+     * @param float|null $upperBound
      *
      * @return array
      */
-    public static function histogram(array $values, int $steps = 10, $lowerBound = null, $upperBound = null): array
-    {
-        $min = $lowerBound ?: min($values);
-        $max = $upperBound ?: max($values);
+    public static function histogram(
+        array $values,
+        int $steps = 10,
+        ?float $lowerBound = null,
+        ?float $upperBound = null
+    ): array {
+        $min = $lowerBound ?? min($values);
+        $max = $upperBound ?? max($values);
 
         $range = $max - $min;
 

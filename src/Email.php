@@ -148,7 +148,7 @@ class Email
      */
     public static function getGravatarUrl(string $email, int $size = 32, string $defaultImage = 'identicon'): ?string
     {
-        if (empty($email) || self::isValid($email) === false) {
+        if (empty($email) || !self::isValid($email)) {
             return null;
         }
 

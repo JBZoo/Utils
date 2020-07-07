@@ -27,10 +27,7 @@ class StatsTest extends PHPUnit
     public function testMean()
     {
         isSame(0.0, Stats::mean([]));
-        isSame(0.0, Stats::mean(false));
         isSame(0.0, Stats::mean(null));
-        isSame(0.0, Stats::mean(''));
-        isSame(0.0, Stats::mean(0));
         isSame(0.0, Stats::mean(['0', '']));
 
         isSame(1.0, Stats::mean([1]));

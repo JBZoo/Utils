@@ -52,15 +52,15 @@ class Url
     /**
      * Add or remove query arguments to the URL.
      *
-     * @param array  $newParams Either new key or an associative array
-     * @param string $uri       URI or URL to append the query/queries to.
+     * @param array       $newParams Either new key or an associative array
+     * @param string|null $uri       URI or URL to append the query/queries to.
      * @return string
      *
      * @SuppressWarnings(PHPMD.NPathComplexity)
      * @SuppressWarnings(PHPMD.Superglobals)
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
-    public static function addArg(array $newParams, $uri = null): string
+    public static function addArg(array $newParams, ?string $uri = null): string
     {
         $uri = $uri ?? ($_SERVER['REQUEST_URI'] ?? '');
 
@@ -243,8 +243,12 @@ class Url
      * @see    https://github.com/jakeasmith/http_build_url/
      * @author Jake Smith <theman@jakeasmith.com>
      */
-    public static function buildAll($sourceUrl, $destParts = [], int $flags = self::URL_REPLACE, &$newUrl = []): string
-    {
+    public static function buildAll(
+        $sourceUrl,
+        $destParts = [],
+        int $flags = self::URL_REPLACE,
+        array &$newUrl = []
+    ): string {
         is_array($sourceUrl) || $sourceUrl = parse_url($sourceUrl);
         is_array($destParts) || $destParts = parse_url($destParts);
 
@@ -386,7 +390,7 @@ class Url
      * @param string|null  $uri  When null uses the $_SERVER value
      * @return string
      */
-    public static function delArg($keys, $uri = null): string
+    public static function delArg($keys, ?string $uri = null): string
     {
         if (is_array($keys)) {
             $params = array_combine($keys, array_fill(0, count($keys), false)) ?: [];
@@ -422,8 +426,11 @@ class Url
 
         return (string)preg_replace_callback(
             $sectionHtmlPattern,
-            /** @psalm-suppress MissingClosureParamType */
-            function ($matches) {
+            /**
+             * @param array $matches
+             * @return string
+             */
+            static function (array $matches): string {
                 return self::linkifyCallback($matches);
             },
             $text
@@ -434,10 +441,10 @@ class Url
      * Callback for the preg_replace in the linkify() method.
      * Part of the LinkifyURL Project <https://github.com/jmrware/LinkifyURL>
      *
-     * @param string $matches Matches from the preg_ function
+     * @param array $matches Matches from the preg_ function
      * @return string
      */
-    protected static function linkifyCallback($matches): string
+    protected static function linkifyCallback(array $matches): string
     {
         return $matches[2] ?? self::linkifyRegex($matches[1]);
     }
@@ -449,7 +456,7 @@ class Url
      * @param string $text Matches from the preg_ function
      * @return string
      */
-    protected static function linkifyRegex($text)
+    protected static function linkifyRegex(string $text): string
     {
         $urlPattern = '/                                            # Rev:20100913_0900 github.com\/jmrware\/LinkifyURL
                                                                     # Match http & ftp URL that is not already linkified
@@ -505,7 +512,7 @@ class Url
      *
      * @SuppressWarnings(PHPMD.Superglobals)
      */
-    public static function pathToRel($path): string
+    public static function pathToRel(string $path): string
     {
         $root = FS::clean($_SERVER['DOCUMENT_ROOT'] ?? null);
         $path = FS::clean($path);
@@ -529,7 +536,7 @@ class Url
      *
      * @SuppressWarnings(PHPMD.Superglobals)
      */
-    public static function pathToUrl($path): string
+    public static function pathToUrl(string $path): string
     {
         return (string)self::root() . '/' . self::pathToRel($path);
     }
@@ -540,7 +547,7 @@ class Url
      * @param string $path
      * @return bool
      */
-    public static function isAbsolute($path): bool
+    public static function isAbsolute(string $path): bool
     {
         return strpos($path, '//') === 0 || preg_match('#^[a-z-]{3,}:\/\/#i', $path);
     }

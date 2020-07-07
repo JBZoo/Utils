@@ -160,7 +160,7 @@ class Vars
      *
      * @return int
      */
-    public static function range($value, float $min, float $max): int
+    public static function range(float $value, float $min, float $max): int
     {
         $value = Filter::int($value);
         $min = Filter::int($min);

@@ -728,7 +728,7 @@ class Slug
      * @param bool        $cssMode   Whether or not to generate strings safe for CSS classes/IDs (Default to false)
      * @return  string
      */
-    public static function filter($string, string $separator = '-', bool $cssMode = false): string
+    public static function filter(?string $string, string $separator = '-', bool $cssMode = false): string
     {
         $slug = (string)preg_replace('/([^a-z0-9]+)/', $separator, strtolower(self::removeAccents((string)$string)));
         $slug = trim($slug, $separator);
