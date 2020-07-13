@@ -46,6 +46,8 @@ class ReadmeTest extends PHPUnit
 {
     public function testDocs()
     {
+        skip("Disabled test. It's only for local using");
+
         $classes = [
             Arr::class,
             Cli::class,
