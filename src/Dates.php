@@ -61,6 +61,8 @@ class Dates
     }
 
     /**
+     * Build PHP \DateTime object from mixed input
+     *
      * @param mixed $time
      * @param null  $timeZone
      * @return DateTime
@@ -80,7 +82,7 @@ class Dates
     }
 
     /**
-     * Return a DateTimeZone object based on the current timezone.
+     * Returns a DateTimeZone object based on the current timezone.
      *
      * @param DateTimeZone|string|null $timezone
      * @return DateTimeZone
@@ -122,6 +124,8 @@ class Dates
     }
 
     /**
+     * Convert date string ot unix timestamp to human readable date format
+     *
      * @param string|int $date
      * @param string     $format
      * @return string
@@ -198,6 +202,8 @@ class Dates
     }
 
     /**
+     * Convert seconds to human readable format "H:i:s"
+     *
      * @param float $seconds
      * @return string
      */

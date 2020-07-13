@@ -55,6 +55,8 @@ class Image
     }
 
     /**
+     * Checks if image has JPEG/JPG format
+     *
      * @param string|null $format
      * @return bool
      */
@@ -69,6 +71,8 @@ class Image
     }
 
     /**
+     * Checks if image has GIF format
+     *
      * @param string|null $format
      * @return bool
      */
@@ -83,6 +87,8 @@ class Image
     }
 
     /**
+     * Checks if image has PNG format
+     *
      * @param string|null $format
      * @return bool
      */
@@ -97,6 +103,8 @@ class Image
     }
 
     /**
+     * Checks if image has WEBP format
+     *
      * @param string|null $format
      * @return bool
      */
@@ -314,6 +322,8 @@ class Image
     }
 
     /**
+     * Returns valid value to change color segment of a image (0..255)
+     *
      * @param float $color
      * @return int
      */
@@ -323,6 +333,8 @@ class Image
     }
 
     /**
+     * Returns valid value of alpha-channel
+     *
      * @param float $color
      * @return int
      */
@@ -332,6 +344,8 @@ class Image
     }
 
     /**
+     * Returns valid value of image rotation (-360..360)
+     *
      * @param float $color
      * @return int
      */
@@ -341,6 +355,8 @@ class Image
     }
 
     /**
+     * Returns valid value to make image bright (-255..255)
+     *
      * @param float $brightness
      * @return int
      */
@@ -350,6 +366,8 @@ class Image
     }
 
     /**
+     * Returns valid value to change contrast of a image (-100..100)
+     *
      * @param float $contrast
      * @return int
      */
@@ -359,6 +377,8 @@ class Image
     }
 
     /**
+     * Returns valid value to change color segment of a image (-255..255)
+     *
      * @param float $colorize
      * @return int
      */
@@ -368,6 +388,8 @@ class Image
     }
 
     /**
+     * Returns valid value to change smoothness of a image (1..10)
+     *
      * @param float $smooth
      * @return int
      */
@@ -377,6 +399,8 @@ class Image
     }
 
     /**
+     * Returns valid value of image direction: 'x', 'y', 'xy', 'yx'
+     *
      * @param string $direction
      * @return string
      */
@@ -392,6 +416,8 @@ class Image
     }
 
     /**
+     * Return valid value to blur image (1-10)
+     *
      * @param float $blur
      * @return int
      */
@@ -401,6 +427,8 @@ class Image
     }
 
     /**
+     * Return valid value of percent (0-100)
+     *
      * @param float $percent
      * @return int
      */
@@ -410,6 +438,8 @@ class Image
     }
 
     /**
+     * Returns valid value of image quality (0..100)
+     *
      * @param float $percent
      * @return int
      */

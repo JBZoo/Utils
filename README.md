@@ -9,6 +9,29 @@
 composer require jbzoo/utils            # Stable version
 ```
 
+## Usage
+
+### Smart functions
+```php
+use function JBZoo\Utils\alias;
+use function JBZoo\Utils\alpha;
+use function JBZoo\Utils\alphanum;
+use function JBZoo\Utils\digits;
+use function JBZoo\Utils\int;
+
+int(' 10.0 ') === 10;
+float(' 10.0 ') === 10.0;
+
+bool(' yes ') === true;
+bool(' no ') === false;
+bool('1') === true;
+bool('0') === false;
+
+alias('Qwer ty') === 'qwer-ty';
+digits('Qwer 1 ty2') === '12';
+alpha('Qwer 1 ty2') == 'Qwerty';
+alphanum(' #$% Qwer 1 ty2') === 'Qwer1ty2';
+```
 
 
 ### JBZoo\Utils\Arr
@@ -32,7 +55,7 @@ Arr::getField(array $arrayList, string $fieldName = 'id'): array; // Get one fie
 
 Arr::groupByKey(array $arrayList, string $key = 'id'): array; // Group array by key
 
-Arr::implode(string $glue, array $array): string;
+Arr::implode(string $glue, array $array): string; // Array imploding for nested array
 
 Arr::in($value, array $array, bool $returnKey = false); // Check is value exists in the array
 
@@ -100,7 +123,7 @@ Cli::out(string $message, bool $addEol = true): bool; // Print line to std out
 ### JBZoo\Utils\Csv
 
 ```php
-Csv::parse(string $csvFile, string $delimiter = ';', string $enclosure = '"', bool $hasHeader = true): array;
+Csv::parse(string $csvFile, string $delimiter = ';', string $enclosure = '"', bool $hasHeader = true): array; // Simple parser for CSV files
 
 ```
 
@@ -108,11 +131,11 @@ Csv::parse(string $csvFile, string $delimiter = ';', string $enclosure = '"', bo
 ### JBZoo\Utils\Dates
 
 ```php
-Dates::factory($time = null, $timeZone = null): DateTime;
+Dates::factory($time = null, $timeZone = null): DateTime; // Build PHP \DateTime object from mixed input
 
-Dates::formatTime(float $seconds): string;
+Dates::formatTime(float $seconds): string; // Convert seconds to human readable format "H:i:s"
 
-Dates::human($date, string $format = 'd M Y H:i'): string;
+Dates::human($date, string $format = 'd M Y H:i'): string; // Convert date string ot unix timestamp to human readable date format
 
 Dates::is(?string $date): bool; // Check if string is date
 
@@ -130,7 +153,7 @@ Dates::isYesterday($time): bool; // Returns true if date passed was yesterday.
 
 Dates::sql($time = null): string; // Convert time for sql format
 
-Dates::timezone($timezone = null): DateTimeZone; // Return a DateTimeZone object based on the current timezone.
+Dates::timezone($timezone = null): DateTimeZone; // Returns a DateTimeZone object based on the current timezone.
 
 Dates::toStamp($time = null, bool $currentIsDefault = true): int; // Convert to timestamp
 
@@ -154,9 +177,7 @@ Email::getDomain($emails): array;
 
 Email::getDomainSorted(array $emails): array; // Get domains from email addresses in alphabetical order.
 
-Email::getGravatarBuiltInDefaultImage(): string;
-
-Email::getGravatarBuiltInImages(): array;
+Email::getGravatarBuiltInImages(): array; // Returns gravatar supported placeholders
 
 // Generates an Gravatar URL.
 // Size of the image:
@@ -169,7 +190,7 @@ Email::getGravatarBuiltInImages(): array;
 // * If none is defined then a built in default is used. See Email::getGravatarBuiltInDefaultImage().
 Email::getGravatarUrl(string $email, int $size = 32, string $defaultImage = 'identicon'): ?string;
 
-Email::isValid(?string $email): bool;
+Email::isValid(?string $email): bool; // Returns true if string has valid email format
 
 Email::random(int $userNameLength = 10): string; // Create random email
 
@@ -179,19 +200,19 @@ Email::random(int $userNameLength = 10): string; // Create random email
 ### JBZoo\Utils\Env
 
 ```php
-Env::bool(string $envVarName, bool $default = false): bool;
+Env::bool(string $envVarName, bool $default = false): bool; // Convert value of environment variable to strict bool value
 
 Env::convert(?string $value, int $options = 16); // Converts the type of values like "true", "false", "null" or "123".
 
-Env::float(string $envVarName, float $default = 0): float;
+Env::float(string $envVarName, float $default = 0): float; // Convert value of environment variable to strict float value
 
 Env::get(string $envVarName, $default = null, int $options = 16); // Returns an environment variable.
 
-Env::int(string $envVarName, int $default = 0): int;
+Env::int(string $envVarName, int $default = 0): int; // Convert value of environment variable to strict integer value
 
-Env::isExists(string $envVarName): bool;
+Env::isExists(string $envVarName): bool; // Returns true if environment variable exists
 
-Env::string(string $envVarName, string $default = ''): string;
+Env::string(string $envVarName, string $default = ''): string; // Convert value of environment variable to clean string
 
 ```
 
@@ -199,19 +220,19 @@ Env::string(string $envVarName, string $default = ''): string;
 ### JBZoo\Utils\FS
 
 ```php
-FS::base(?string $path): string;
+FS::base(?string $path): string; // Returns name of file with ext from FS pathname
 
-FS::clean(?string $path, string $dirSep = '/'): string; // Function to strip additional / or \ in a path name.
+FS::clean(?string $path, string $dirSep = '/'): string; // Function to strip trailing / or \ in a pathname
 
-FS::dirName(?string $path): string;
+FS::dirName(?string $path): string; // Returns name for directory from FS pathname
 
 FS::dirSize(string $dir): int; // Returns size of a given directory in bytes.
 
 FS::executable(string $filename, bool $executable = true): bool; // Set the executable bit on a file to the minimum value that allows the user running PHP to read to it.
 
-FS::ext(?string $path): string;
+FS::ext(?string $path): string; // Returns
 
-FS::filename(?string $path): string;
+FS::filename(?string $path): string; // Returns filename without ext from FS pathname
 
 FS::firstLine(string $filepath): ?string; // Quickest way for getting first file line
 
@@ -223,7 +244,7 @@ FS::isDir(string $path): bool; // Check is current path directory
 
 FS::isFile(string $path): bool; // Check is current path regular file
 
-FS::isReal(?string $path): bool;
+FS::isReal(?string $path): bool; // Returns clean realpath if file or directory exists
 
 FS::ls(string $dir): array; // Returns all paths inside a directory.
 
@@ -233,7 +254,7 @@ FS::perms(string $file, ?int $perms = null): string; // Returns the file permiss
 
 FS::readable(string $filename, bool $readable = true): bool; // Set the readable bit on a file to the minimum value that allows the user running PHP to read to it.
 
-FS::real(?string $path): ?string;
+FS::real(?string $path): ?string; // Returns realpath (smart analog of PHP \realpath())
 
 // Removes a directory (and its contents) recursively.
 // Contributed by Askar (ARACOOL) <https://github.com/ARACOOOL>
@@ -253,31 +274,31 @@ Filter::_($value, $filters = 'raw'); // Apply custom filter to variable
 
 Filter::alias(string $string): string; // Get safe string
 
-Filter::alpha(?string $value): string; // Return only alpha chars
+Filter::alpha(?string $value): string; // Returns only alpha chars
 
-Filter::alphanum(?string $value): string; // Return only alpha and digits chars
+Filter::alphanum(?string $value): string; // Returns only alpha and digits chars
 
 Filter::arr($value, $filter = null): array; // Cleanup array
 
-Filter::base64(string $value): string; // Return only chars for base64
+Filter::base64(string $value): string; // Returns only chars for base64
 
 Filter::bool($variable): bool; // Converts many english words that equate to true or false to boolean.
 
 Filter::className(string $input): string; // Convert words to PHP Class name
 
-Filter::clean(string $string): string;
+Filter::clean(string $string): string; // Alias of "Str::clean($string, true, true)"
 
 Filter::cmd(string $value): string; // Cleanup system command
 
-Filter::data($data): JBZoo\Data\Data;
+Filter::data($data): JBZoo\Data\Data; // Returns JSON object from array
 
-Filter::digits(?string $value): string; // Return only digits chars
+Filter::digits(?string $value): string; // Returns only digits chars
 
-Filter::esc(string $string): string;
+Filter::esc(string $string): string; // Alias of "Str::esc($string)"
 
-Filter::float($value, int $round = 10): float;
+Filter::float($value, int $round = 10): float; // Smart converter string to float
 
-Filter::html(string $string): string;
+Filter::html(string $string): string; // Alias of "Str::htmlEnt($string)"
 
 Filter::int($value): int; // Smart convert any string to int
 
@@ -303,7 +324,7 @@ Filter::ucFirst(string $input): string; // First char to upper, other to lower
 
 Filter::up(string $string): string; // String to upper and trim
 
-Filter::xml(string $string): string;
+Filter::xml(string $string): string; // Alias of "Str::escXml($string)"
 
 ```
 
@@ -330,7 +351,7 @@ Http::utf8(string $contentType = 'text/html'): bool; // Transmit UTF-8 content h
 ### JBZoo\Utils\IP
 
 ```php
-IP::getNetMask(string $ipAddress): string;
+IP::getNetMask(string $ipAddress): string; // Return network mask. For example, '192.0.0.0' => '255.255.255.0'
 
 // Returns the IP address of the client.
 //                         ONLY use if your server is behind a proxy that sets these values
@@ -346,21 +367,21 @@ IP::v4InRange(string $ipAddress, string $range): bool; // Check if a given ip is
 ```php
 Image::addAlpha($image, bool $isBlend = true): void; // Add alpha chanel to image resource
 
-Image::alpha(float $color): int;
+Image::alpha(float $color): int; // Returns valid value of alpha-channel
 
-Image::blur(float $blur): int;
+Image::blur(float $blur): int; // Return valid value to blur image (1-10)
 
-Image::brightness(float $brightness): int;
+Image::brightness(float $brightness): int; // Returns valid value to make image bright (-255..255)
 
 Image::checkGD(bool $throwException = true): bool; // Require GD library
 
-Image::color(float $color): int;
+Image::color(float $color): int; // Returns valid value to change color segment of a image (0..255)
 
-Image::colorize(float $colorize): int;
+Image::colorize(float $colorize): int; // Returns valid value to change color segment of a image (-255..255)
 
-Image::contrast(float $contrast): int;
+Image::contrast(float $contrast): int; // Returns valid value to change contrast of a image (-100..100)
 
-Image::direction(string $direction): string;
+Image::direction(string $direction): string; // Returns valid value of image direction: 'x', 'y', 'xy', 'yx'
 
 Image::getInnerCoords(string $position, array $canvas, array $box, array $offset = []): ?array; // Determine position
 
@@ -368,15 +389,15 @@ Image::imageCopyMergeAlpha($dstImg, $srcImg, array $dist, array $src, array $src
 
 Image::isGdRes($image): bool; // Check is var image GD resource
 
-Image::isGif(?string $format = null): bool;
+Image::isGif(?string $format = null): bool; // Checks if image has GIF format
 
-Image::isJpeg(?string $format = null): bool;
+Image::isJpeg(?string $format = null): bool; // Checks if image has JPEG/JPG format
 
-Image::isPng(?string $format = null): bool;
+Image::isPng(?string $format = null): bool; // Checks if image has PNG format
 
 Image::isSupportedFormat(string $format): bool; // Check is format supported by lib
 
-Image::isWebp(?string $format = null): bool;
+Image::isWebp(?string $format = null): bool; // Checks if image has WEBP format
 
 // Converts a hex color value to its RGB equivalent
 //                                Where red, green, blue - integers 0-255, alpha - integer 0-127
@@ -386,17 +407,34 @@ Image::opacity(float $opacity): int; // Check opacity value
 
 Image::opacity2Alpha(float $opacity): int; // Convert opacity value to alpha
 
-Image::percent(float $percent): int;
+Image::percent(float $percent): int; // Return valid value of percent (0-100)
 
 Image::position(string $position): string; // Check position name
 
-Image::quality(float $percent): int;
+Image::quality(float $percent): int; // Returns valid value of image quality (0..100)
 
-Image::rotate(float $color): int;
+Image::rotate(float $color): int; // Returns valid value of image rotation (-360..360)
 
-Image::smooth(float $smooth): int;
+Image::smooth(float $smooth): int; // Returns valid value to change smoothness of a image (1..10)
 
 Image::strToBin(string $imageString): string; // Convert string to binary data
+
+```
+
+
+### JBZoo\Utils\PhpDocs
+
+```php
+// Simple parse of PHPDocs.
+// Example or return value
+//  [
+//      'description' => 'Simple parse of PHPDocs. Example or return value',
+//      'params'      => [
+//          'param'  => ['string $phpDoc'],
+//          'return' => ['array']
+//      ]
+//  ]
+PhpDocs::parse(string $phpDoc): array;
 
 ```
 
@@ -456,15 +494,15 @@ Slug::seemsUTF8(string $string): bool;
 //   http://docs.scipy.org/doc/numpy-1.10.1/reference/generated/numpy.histogram.html
 Stats::histogram(array $values, int $steps = 10, ?float $lowerBound = null, ?float $upperBound = null): array;
 
-Stats::linSpace(float $min, float $max, int $num = 50, bool $endpoint = true): array; // Return an array populated with $num numbers from $min to $max.
+Stats::linSpace(float $min, float $max, int $num = 50, bool $endpoint = true): array; // Returns an array populated with $num numbers from $min to $max.
 
-Stats::mean(?array $values): float; // Return the mean (average) value of the given values.
+Stats::mean(?array $values): float; // Returns the mean (average) value of the given values.
 
-Stats::renderAverage(array $values, int $rounding = 3): string;
+Stats::renderAverage(array $values, int $rounding = 3): string; // Render human readable string of average value and system error
 
-Stats::stdDev(array $values, bool $sample = false): float; // Return the standard deviation of a given population.
+Stats::stdDev(array $values, bool $sample = false): float; // Returns the standard deviation of a given population.
 
-Stats::variance(array $values, bool $sample = false): float; // Return the variance for a given population.
+Stats::variance(array $values, bool $sample = false): float; // Returns the variance for a given population.
 
 ```
 
@@ -574,21 +612,21 @@ Sys::canCollectCodeCoverage(): bool;
 // Appends ' --php' to the path when the runtime is HHVM.
 Sys::getBinary(): string;
 
-Sys::getDocRoot(): ?string; // Return document root
+Sys::getDocRoot(): ?string; // Returns current document root
 
 Sys::getHome(): ?string; // Returns a home directory of current user.
 
 Sys::getMemory(bool $isPeak = true): string; // Get usage memory
 
-Sys::getName(): string;
+Sys::getName(): string; // Returns type of PHP
 
-Sys::getNameWithVersion(): string;
+Sys::getNameWithVersion(): string; // Return type and version of current PHP
 
 Sys::getUserName(): ?string; // Returns current linux user who runs script
 
-Sys::getVendorUrl(): string;
+Sys::getVendorUrl(): string; // Return URL of PHP official web-site. It depends of PHP vendor.
 
-Sys::getVersion(): ?string;
+Sys::getVersion(): ?string; // Returns current PHP version
 
 // Returns true when the runtime used is PHP with the PHPDBG SAPI
 // and the phpdbg_*_oplog() functions are available (PHP >= 7.0).
@@ -600,15 +638,11 @@ Sys::iniGet(string $varName): ?string; // Alias fo ini_get function
 
 Sys::iniSet(string $phpIniKey, string $newValue): bool; // Alias fo ini_set function
 
-Sys::isFunc($funcName): bool;
+Sys::isFunc($funcName): bool; // Checks if function exists and callable
 
 Sys::isHHVM(): bool; // Returns true when the runtime used is HHVM.
 
-Sys::isPHP(string $version, string $current = '7.2.31'): bool;
-
-Sys::isPHP5(string $current = '7.2.31'): bool;
-
-Sys::isPHP7(string $current = '7.2.31'): bool;
+Sys::isPHP(string $version, string $current = '7.2.31'): bool; // Compares PHP versions
 
 Sys::isPHPDBG(): bool; // Returns true when the runtime used is PHP with the PHPDBG SAPI.
 
@@ -644,16 +678,16 @@ Timer::timeSinceStart(): float; // Formats the elapsed time since the start of t
 ```php
 Url::addArg(array $newParams, ?string $uri = null): string; // Add or remove query arguments to the URL.
 
-Url::build(array $queryParams): string;
+Url::build(array $queryParams): string; // Builds HTTP query from array
 
 // Build a URL. The parts of the second URL will be merged into the first according to the flags argument.
 //                                or associative array like parse_url() returns
 //                                would return
 Url::buildAll($sourceUrl, $destParts = [], int $flags = 1, array $newUrl = []): string;
 
-Url::create(array $parts = []): string;
+Url::create(array $parts = []): string; // Create URL from array params
 
-Url::current(bool $addAuth = false): ?string; // Return the current URL.
+Url::current(bool $addAuth = false): ?string; // Returns the current URL.
 
 Url::delArg($keys, ?string $uri = null): string; // Removes an item or list from the query string.
 
@@ -667,13 +701,13 @@ Url::isHttps(bool $trustProxyHeaders = false): bool; // Checks to see if the pag
 // Part of the LinkifyURL Project <https://github.com/jmrware/LinkifyURL>
 Url::parseLink(string $text): string;
 
-Url::path(): ?string; // Return the current path
+Url::path(): ?string; // Returns the current path
 
 Url::pathToRel(string $path): string; // Convert file path to relative URL
 
 Url::pathToUrl(string $path): string; // Convert file path to absolute URL
 
-Url::root(bool $addAuth = false): ?string; // Return current root URL
+Url::root(bool $addAuth = false): ?string; // Returns current root URL
 
 ```
 
@@ -683,7 +717,7 @@ Url::root(bool $addAuth = false): ?string; // Return current root URL
 ```php
 Vars::isEven(int $number): bool; // Is the current value even?
 
-Vars::isIn(float $number, float $min, float $max): bool; // Return true if the number is within the min and max.
+Vars::isIn(float $number, float $min, float $max): bool; // Returns true if the number is within the min and max.
 
 Vars::isNegative(float $number): bool; // Is the current value negative; less than zero.
 
@@ -697,7 +731,7 @@ Vars::max(float $number, float $max): int; // Decrease the number to the maximum
 
 Vars::min(float $number, float $min): int; // Increase the number to the minimum if below threshold.
 
-Vars::out(float $number, float $min, float $max): bool; // Return true if the number is outside the min and max.
+Vars::out(float $number, float $min, float $max): bool; // Returns true if the number is outside the min and max.
 
 // Ensures $value is always within $min and $max range.
 // If lower, $min is returned. If higher, $max is returned.

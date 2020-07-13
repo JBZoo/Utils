@@ -169,7 +169,7 @@ class Email
         } else {
             $defaultImage = strtolower($defaultImage);
             if (!Arr::in($defaultImage, self::getGravatarBuiltInImages())) {
-                $defaultImage = self::getGravatarBuiltInDefaultImage();
+                $defaultImage = self::getGravatarBuiltInImages()[2];
             }
         }
 
@@ -184,6 +184,8 @@ class Email
     }
 
     /**
+     * Returns gravatar supported placeholders
+     *
      * @return array
      */
     public static function getGravatarBuiltInImages(): array
@@ -200,14 +202,8 @@ class Email
     }
 
     /**
-     * @return string
-     */
-    public static function getGravatarBuiltInDefaultImage(): string
-    {
-        return self::getGravatarBuiltInImages()[2] ?? '';
-    }
-
-    /**
+     * Returns true if string has valid email format
+     *
      * @param string|null $email
      * @return bool
      */

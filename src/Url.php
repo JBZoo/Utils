@@ -109,7 +109,7 @@ class Url
     }
 
     /**
-     * Return the current URL.
+     * Returns the current URL.
      *
      * @param bool $addAuth
      * @return string|null
@@ -123,7 +123,7 @@ class Url
     }
 
     /**
-     * Return the current path
+     * Returns the current path
      *
      * @return string|null
      * @SuppressWarnings(PHPMD.Superglobals)
@@ -146,7 +146,7 @@ class Url
     }
 
     /**
-     * Return current root URL
+     * Returns current root URL
      *
      * @param bool $addAuth
      * @return null|string
@@ -216,6 +216,8 @@ class Url
     }
 
     /**
+     * Builds HTTP query from array
+     *
      * @param array $queryParams
      * @return string
      */
@@ -553,13 +555,15 @@ class Url
     }
 
     /**
+     * Create URL from array params
+     *
      * @param array $parts
      * @return string
      */
     public static function create(array $parts = []): string
     {
         $parts = array_merge([
-            'scheme' => 'http',
+            'scheme' => 'https',
             'query'  => [],
         ], $parts);
 

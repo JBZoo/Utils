@@ -111,6 +111,8 @@ class Sys
     }
 
     /**
+     * Checks if function exists and callable
+     *
      * @param string|\Closure $funcName
      * @return bool
      */
@@ -145,6 +147,8 @@ class Sys
     }
 
     /**
+     * Compares PHP versions
+     *
      * @param string $version
      * @param string $current
      * @return bool
@@ -153,24 +157,6 @@ class Sys
     {
         $version = trim($version, '.');
         return (bool)preg_match('#^' . preg_quote($version, '') . '#i', $current);
-    }
-
-    /**
-     * @param string $current
-     * @return bool
-     */
-    public static function isPHP5(string $current = PHP_VERSION): bool
-    {
-        return self::isPHP('5.3', $current);
-    }
-
-    /**
-     * @param string $current
-     * @return bool
-     */
-    public static function isPHP7(string $current = PHP_VERSION): bool
-    {
-        return self::isPHP('7', $current);
     }
 
     /**
@@ -191,7 +177,7 @@ class Sys
     }
 
     /**
-     * Return document root
+     * Returns current document root
      *
      * @SuppressWarnings(PHPMD.Superglobals)
      * @return string|null
@@ -262,6 +248,8 @@ class Sys
     }
 
     /**
+     * Return type and version of current PHP
+     *
      * @return string
      */
     public static function getNameWithVersion(): string
@@ -273,6 +261,8 @@ class Sys
     }
 
     /**
+     * Returns type of PHP
+     *
      * @return string
      */
     public static function getName(): string
@@ -289,6 +279,8 @@ class Sys
     }
 
     /**
+     * Return URL of PHP official web-site. It depends of PHP vendor.
+     *
      * @return string
      */
     public static function getVendorUrl(): string
@@ -301,6 +293,8 @@ class Sys
     }
 
     /**
+     * Returns current PHP version
+     *
      * @return string|null
      */
     public static function getVersion(): ?string

@@ -26,6 +26,8 @@ class Csv
     public const LENGTH_LIMIT = 10000000;
 
     /**
+     * Simple parser for CSV files
+     *
      * @param string $csvFile
      * @param string $delimiter
      * @param string $enclosure

@@ -92,6 +92,8 @@ class Env
     }
 
     /**
+     * Convert value of environment variable to clean string
+     *
      * @param string $envVarName
      * @param string $default
      * @return string
@@ -106,6 +108,8 @@ class Env
     }
 
     /**
+     * Convert value of environment variable to strict integer value
+     *
      * @param string $envVarName
      * @param int    $default
      * @return int
@@ -120,6 +124,8 @@ class Env
     }
 
     /**
+     * Convert value of environment variable to strict float value
+     *
      * @param string $envVarName
      * @param float  $default
      * @return float
@@ -134,6 +140,8 @@ class Env
     }
 
     /**
+     * Convert value of environment variable to strict bool value
+     *
      * @param string $envVarName
      * @param bool   $default
      * @return bool
@@ -148,6 +156,8 @@ class Env
     }
 
     /**
+     * Returns true if environment variable exists
+     *
      * @param string $envVarName
      * @return bool
      */

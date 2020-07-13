@@ -450,6 +450,8 @@ class Arr
     }
 
     /**
+     * Array imploding for nested array
+     *
      * @param string $glue
      * @param array  $array
      * @return string

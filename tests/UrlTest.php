@@ -208,7 +208,7 @@ class UrlTest extends PHPUnit
 
     public function testCreate()
     {
-        isSame('http://example.com/?foo=bar', Url::create([
+        isSame('https://example.com/?foo=bar', Url::create([
             'host'  => 'example.com',
             'user'  => '',
             'pass'  => '123456',
@@ -217,7 +217,7 @@ class UrlTest extends PHPUnit
             ],
         ]));
 
-        isSame('http://example.com/', Url::create([
+        isSame('https://example.com/', Url::create([
             'host' => 'example.com',
             'part' => '',
         ]));
@@ -238,7 +238,7 @@ class UrlTest extends PHPUnit
             'port' => 443,
         ]));
 
-        isSame('http://example.com/page#hash', Url::create([
+        isSame('https://example.com/page#hash', Url::create([
             'host'     => 'example.com',
             'path'     => 'page',
             'fragment' => 'hash',

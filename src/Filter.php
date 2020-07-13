@@ -143,6 +143,8 @@ class Filter
     }
 
     /**
+     * Smart converter string to float
+     *
      * @param mixed $value
      * @param int   $round
      * @return float
@@ -176,7 +178,7 @@ class Filter
     }
 
     /**
-     * Return only digits chars
+     * Returns only digits chars
      *
      * @param string|null $value
      * @return string
@@ -191,7 +193,7 @@ class Filter
     }
 
     /**
-     * Return only alpha chars
+     * Returns only alpha chars
      *
      * @param string|null $value
      * @return string
@@ -202,7 +204,7 @@ class Filter
     }
 
     /**
-     * Return only alpha and digits chars
+     * Returns only alpha and digits chars
      *
      * @param string|null $value
      * @return string
@@ -213,7 +215,7 @@ class Filter
     }
 
     /**
-     * Return only chars for base64
+     * Returns only chars for base64
      *
      * @param string $value
      * @return string
@@ -363,6 +365,8 @@ class Filter
     }
 
     /**
+     * Alias of "Str::clean($string, true, true)"
+     *
      * @param string $string
      * @return string
      */
@@ -372,6 +376,8 @@ class Filter
     }
 
     /**
+     * Alias of "Str::htmlEnt($string)"
+     *
      * @param string $string
      * @return string
      */
@@ -381,6 +387,8 @@ class Filter
     }
 
     /**
+     * Alias of "Str::escXml($string)"
+     *
      * @param string $string
      * @return string
      */
@@ -390,6 +398,8 @@ class Filter
     }
 
     /**
+     * Alias of "Str::esc($string)"
+     *
      * @param string $string
      * @return string
      */
@@ -399,6 +409,8 @@ class Filter
     }
 
     /**
+     * Returns JSON object from array
+     *
      * @param array|Data $data
      * @return Data
      */

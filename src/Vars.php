@@ -24,7 +24,7 @@ namespace JBZoo\Utils;
 class Vars
 {
     /**
-     * Return true if the number is within the min and max.
+     * Returns true if the number is within the min and max.
      *
      * @param float $number
      * @param float $min
@@ -119,7 +119,7 @@ class Vars
     }
 
     /**
-     * Return true if the number is outside the min and max.
+     * Returns true if the number is outside the min and max.
      *
      * @param float $number
      * @param float $min

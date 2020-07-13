@@ -73,30 +73,6 @@ class SysTest extends PHPUnit
         isFalse(Sys::isPHP('5.3', '5.5.0'));
     }
 
-    public function testIsPHP53()
-    {
-        isTrue(Sys::isPHP5('5.3'));
-        isTrue(Sys::isPHP5('5.3.0'));
-        isTrue(Sys::isPHP5('5.3.1'));
-
-        isFalse(Sys::isPHP5('5.2'));
-        isFalse(Sys::isPHP5('5.2.3'));
-        isFalse(Sys::isPHP5('5.4'));
-        isFalse(Sys::isPHP5('7.3'));
-    }
-
-    public function testIsPHP7()
-    {
-        isTrue(Sys::isPHP7('7'));
-        isTrue(Sys::isPHP7('7.0'));
-        isTrue(Sys::isPHP7('7.0.9'));
-        isTrue(Sys::isPHP7('7.1'));
-        isTrue(Sys::isPHP7('7.1.0alpha1'));
-
-        isFalse(Sys::isPHP7('5.7'));
-        isFalse(Sys::isPHP7('5.3'));
-    }
-
     public function testGetMemory()
     {
         isTrue(Sys::getMemory());

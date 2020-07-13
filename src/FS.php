@@ -393,6 +393,8 @@ class FS
     }
 
     /**
+     * Returns
+     *
      * @param string|null $path
      * @return string
      */
@@ -413,6 +415,8 @@ class FS
     }
 
     /**
+     * Returns name of file with ext from FS pathname
+     *
      * @param string|null $path
      * @return string
      */
@@ -422,6 +426,8 @@ class FS
     }
 
     /**
+     * Returns filename without ext from FS pathname
+     *
      * @param string|null $path
      * @return string
      */
@@ -431,6 +437,8 @@ class FS
     }
 
     /**
+     * Returns name for directory from FS pathname
+     *
      * @param string|null $path
      * @return string
      */
@@ -440,6 +448,8 @@ class FS
     }
 
     /**
+     * Returns realpath (smart analog of PHP \realpath())
+     *
      * @param string|null $path
      * @return string|null
      */
@@ -454,7 +464,7 @@ class FS
     }
 
     /**
-     * Function to strip additional / or \ in a path name.
+     * Function to strip trailing / or \ in a pathname
      *
      * @param string|null $path   The path to clean.
      * @param string      $dirSep Directory separator (optional).
@@ -551,6 +561,8 @@ class FS
     }
 
     /**
+     * Returns clean realpath if file or directory exists
+     *
      * @param string|null $path
      * @return bool
      */

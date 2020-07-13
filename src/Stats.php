@@ -24,7 +24,7 @@ namespace JBZoo\Utils;
 class Stats
 {
     /**
-     * Return the standard deviation of a given population.
+     * Returns the standard deviation of a given population.
      *
      * @param array $values
      * @param bool  $sample
@@ -38,7 +38,7 @@ class Stats
     }
 
     /**
-     * Return the variance for a given population.
+     * Returns the variance for a given population.
      *
      * @param array $values
      * @param bool  $sample
@@ -63,7 +63,7 @@ class Stats
     }
 
     /**
-     * Return the mean (average) value of the given values.
+     * Returns the mean (average) value of the given values.
      *
      * @param array|null $values
      * @return float
@@ -86,7 +86,7 @@ class Stats
     }
 
     /**
-     * Return an array populated with $num numbers from $min to $max.
+     * Returns an array populated with $num numbers from $min to $max.
      *
      * @param float $min
      * @param float $max
@@ -171,6 +171,8 @@ class Stats
     }
 
     /**
+     * Render human readable string of average value and system error
+     *
      * @param array $values
      * @param int   $rounding
      * @return string
