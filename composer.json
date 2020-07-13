@@ -1,7 +1,7 @@
 {
     "name"              : "jbzoo/utils",
     "type"              : "library",
-    "description"       : "A collection of useful PHP functions, mini classes and snippets that you need every day.",
+    "description"       : "Collection of PHP functions, mini classes and snippets for everyday developer's routine life.",
     "license"           : "MIT",
     "keywords"          : [
         "helpers", "helper", "utility", "utils", "collection", "environment", "image", "filesystem",
