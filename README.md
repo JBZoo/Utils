@@ -10,714 +10,701 @@ composer require jbzoo/utils            # Stable version
 ```
 
 
-## Array helper
+
+### JBZoo\Utils\Arr
+
 ```php
-use JBZoo\Utils\Arr;
+Arr::addEachKey(array $array, string $prefix): array; // Add some prefix to each key
 
-// This is faster version than the builtin array_unique()
-Arr::unique($array, $keepKeys = false)
+Arr::clean(array $haystack): array; // Clean array by custom rule
 
-// Check is key exists with stric mode
-Arr::key($key, $array)
+Arr::cleanBeforeJson(array $array): array; // Clean array before serialize to JSON
 
-// Check is value exists in the array
-Arr::in($key, array $array)
+Arr::first(array $array); // Returns the first element in an array.
 
-// Returns the first element in an array.
-Arr::first(array $array)
-
-// Returns the last element in an array.
-Arr::last(array $array)
-
-// Returns the first key in an array.
-Arr::firstKey(array $array)
-
-// Returns the last key in an array.
-Arr::lastKey(array $array)
+Arr::firstKey(array $array); // Returns the first key in an array.
 
 // Flatten a multi-dimensional array into a one dimensional array.
-Arr::flat(array $array, $preserve_keys = true)
+//                            overwrite keys from shallow nested arrays
+Arr::flat(array $array, bool $preserveKeys = true): array;
 
-// Searches for a given value in an array of arrays, objects and scalar values. You can optionally specify
-// a field of the nested arrays and objects to search in.
-Arr::search(array $array, $search, $field = false)
+Arr::getField(array $arrayList, string $fieldName = 'id'): array; // Get one field from array of arrays (array of objects)
+
+Arr::groupByKey(array $arrayList, string $key = 'id'): array; // Group array by key
+
+Arr::implode(string $glue, array $array): string;
+
+Arr::in($value, array $array, bool $returnKey = false); // Check is value exists in the array
+
+Arr::isAssoc(array $array): bool; // Check is array is type assoc
+
+Arr::key($key, array $array, bool $returnValue = false); // Check if key exists
+
+Arr::last(array $array); // Returns the last element in an array.
+
+Arr::lastKey(array $array); // Returns the last key in an array.
+
+Arr::map(Closure $function, array $array): array; // Recursive array mapping
 
 // Returns an array containing all the elements of arr1 after applying
 // the callback function to each one.
-Arr::mapDeep(array $array, $callback, $onNoScalar = false)
+//                             (Objects, resources, etc)
+Arr::mapDeep(array $array, callable $callback, bool $onNoScalar = false): array;
 
-// Clean array by custom rule
-Arr::clean($haystack)
+// Searches for a given value in an array of arrays, objects and scalar values. You can optionally specify
+// a field of the nested arrays and objects to search in.
+Arr::search(array $array, $search, ?string $field = null);
 
-// Clean array before serialize to JSON
-Arr::cleanBeforeJson(array $array)
+Arr::sortByArray(array $array, array $orderArray): array; // Sort an array by keys based on another array
 
-// Check is array is type assoc
-Arr::isAssoc($array)
+Arr::toComment(array $data): string; // Convert assoc array to comment style
 
-// Add cell to the start of assoc array
-Arr::unshiftAssoc(array &$array, $key, $value)
+Arr::unique(array $array, bool $keepKeys = false): array; // Remove the duplicates from an array.
 
-// Get one field from array of arrays (array of objects)
-Arr::getField($arrayList, $fieldName = 'id')
-
-// Group array by key
-Arr::groupByKey(array $arrayList, $key = 'id')
-
-// Recursive array mapping
-Arr::map($function, $array)
-
-// Sort an array by keys based on another array
-Arr::sortByArray(array $array, array $orderArray)
-
-// Add some prefix to each key
-Arr::addEachKey(array $array, $prefix)
-
-// Convert assoc array to comment style
-Arr::toComment(array $data)
+Arr::unshiftAssoc(array $array, $key, $value): array; // Add cell to the start of assoc array
 
 // Wraps its argument in an array unless it is already an array
-Arr::wrap($object)
+//   Arr.wrap(null)      # => []
+//   Arr.wrap([1, 2, 3]) # => [1, 2, 3]
+//   Arr.wrap(0)         # => [0]
+Arr::wrap($object): array;
+
 ```
 
 
-## Command line
+### JBZoo\Utils\Cli
+
 ```php
-use JBZoo\Utils\Cli;
+Cli::build(string $command, array $args = []): string; // Build params for cli options
 
-// Is command line
-Cli::check()
+Cli::check(): bool; // Is command line mode
 
-// Print line to std out (or echo)
-Cli::out($message, $addEol = true)
+Cli::err(string $message, bool $addEol = true): bool; // Print line to std error
 
-// Print line to std error (or echo)
-Cli::err($message, $addEol = true)
+Cli::exec(string $command, array $args = [], ?string $cwd = null, bool $verbose = false): string; // Execute cli commands
 
-// Execute cli command with Symfony Process Component
-Cli::exec($command, $args = array(), $cwd = null, $verbose = false)
-
-// Build params for cli
-Cli::build($command, $args = array())
+Cli::getNumberOfColumns(): int; // Returns the number of columns of the terminal.
 
 // Returns true if STDOUT supports colorization.
-Cli::hasColorSupport()
+// This code has been copied and adapted from
+// Symfony\Component\Console\Output\OutputStream.
+Cli::hasColorSupport(): bool;
 
-// Returns the number of columns of the terminal.
-Cli::getNumberOfColumns()
+Cli::isInteractive($fileDescriptor = 1): bool; // Returns if the file descriptor is an interactive terminal or not.
 
-// Returns if the file descriptor is an interactive terminal or not.
-Cli::isInteractive($fileDescriptor = self::STDOUT)
+Cli::out(string $message, bool $addEol = true): bool; // Print line to std out
+
 ```
 
 
-## Date helper
+### JBZoo\Utils\Csv
+
 ```php
-use JBZoo\Utils\Dates;
+Csv::parse(string $csvFile, string $delimiter = ';', string $enclosure = '"', bool $hasHeader = true): array;
 
-Dates::MINUTE  //         60  seconds
-Dates::HOUR    //       3600  (60 * 60)
-Dates::DAY     //      86400  (60 * 60 * 24)
-Dates::WEEK    //     604800  (60 * 60 * 24 * 7)
-Dates::MONTH   //    2592000  (60 * 60 * 24 * 30)
-Dates::YEAR    //   31536000  (60 * 60 * 24 * 365)
-Dates::SQL     //   Y-m-d H:i:s
-
-// Convert to timestamp
-Dates::toStamp($time, $currentIsDefault = true)
-
-// Factory to create DateTime object from string, timestamp etc
-Dates::factory($time = null, $timeZone = null)
-
-// Return a DateTimeZone object based on the current timezone.
-Dates::timezone($timezone = null)
-
-// Check if string is date
-Dates::is($date)
-
-// Convert time for sql format
-Dates::sql($time = null)
-
-// To human readable format
-Dates::human($date, $format = 'd M Y H:i')
-
-// Returns true if date passed is within this week
-Dates::isThisWeek($time)
-
-// Returns true if date passed is within this month
-Dates::isThisMonth($time)
-
-// Returns true if date passed is within this year
-Dates::isThisYear($time)
-
-// Returns true if date passed is tomorrow
-Dates::isTomorrow($time)
-
-// Returns true if date passed is today
-Dates::isToday($time)
-
-// Returns true if date passed was yesterday
-Dates::isYesterday($time)
 ```
 
 
-## Parse and filter simple variables
+### JBZoo\Utils\Dates
+
 ```php
-use JBZoo\Utils\Filter;
+Dates::factory($time = null, $timeZone = null): DateTime;
 
-// Apply some filters to variable
-Filter::_($value, 'slug, trim, cmd');
+Dates::formatTime(float $seconds): string;
 
-// Apply custom filter to variable
-Filter::_($source, function ($value) {
-    $value = str_replace('-', '_', $value);
-    return $value;
-}));
+Dates::human($date, string $format = 'd M Y H:i'): string;
 
-// Converts many english words that equate to true or false to boolean.
-Filter::bool($string)
+Dates::is(?string $date): bool; // Check if string is date
 
-// Smart convert any string to float with round
-Filter::float($value, $round = 10)
+Dates::isThisMonth($time): bool; // Returns true if date passed is within this month.
 
-// Smart convert any string to int
-Filter::int($value)
+Dates::isThisWeek($time): bool; // Returns true if date passed is within this week.
 
-// Return only digits chars
-Filter::digits($value)
+Dates::isThisYear($time): bool; // Returns true if date passed is within this year.
 
-// Return only alpha chars
-Filter::alpha($value)
+Dates::isToday($time): bool; // Returns true if date passed is today.
 
-// Return only alpha and digits chars
-Filter::alphanum($value)
+Dates::isTomorrow($time): bool; // Returns true if date passed is tomorrow.
 
-// Return only chars for base64
-Filter::base64($value)
+Dates::isYesterday($time): bool; // Returns true if date passed was yesterday.
 
-// Remove whitespaces
-Filter::path($value)
+Dates::sql($time = null): string; // Convert time for sql format
 
-// Remove whitespaces
-Filter::trim($value)
+Dates::timezone($timezone = null): DateTimeZone; // Return a DateTimeZone object based on the current timezone.
 
-// Cleanup array
-Filter::arr($value, $filter = null)
+Dates::toStamp($time = null, bool $currentIsDefault = true): int; // Convert to timestamp
 
-// Cleanup system command
-Filter::cmd($value)
-
-// Get safe string
-Filter::strip($string)
-
-// Get safe string
-Filter::alias($string)
-
-//First char to upper, other to lower
-Filter::ucfirst($string)
-
-//Convert words to PHP Class name (CamelCase)
-Filter::className($string)
 ```
 
 
-## Functions for filesystem
-```php
-use JBZoo\Utils\FS;
+### JBZoo\Utils\Email
 
-// Returns the file permissions as a nice string, like -rw-r--r-- or false if the file is not found.
-FS::perms($file, $perms = null)
+```php
+Email::check($emails): array; // Check if email(s) is(are) valid. You can send one or an array of emails.
+
+// Check for DNS MX records of the email domain. Notice that a
+// (temporary) DNS error will have the same result as no records
+// were found. Code coverage ignored because this method requires
+// DNS requests that could not be reliable.
+Email::checkDns(string $email): bool;
+
+// Get domains from email addresses. The not valid email addresses
+// will be skipped.
+Email::getDomain($emails): array;
+
+Email::getDomainSorted(array $emails): array; // Get domains from email addresses in alphabetical order.
+
+Email::getGravatarBuiltInDefaultImage(): string;
+
+Email::getGravatarBuiltInImages(): array;
+
+// Generates an Gravatar URL.
+// Size of the image:
+// * The default size is 32px, and it can be anywhere between 1px up to 2048px.
+// * If requested any value above the allowed range, then the maximum is applied.
+// * If requested any value bellow the minimum, then the default is applied.
+// Default image:
+// * It can be an URL to an image.
+// * Or one of built in options that Gravatar has. See Email::getGravatarBuiltInImages().
+// * If none is defined then a built in default is used. See Email::getGravatarBuiltInDefaultImage().
+Email::getGravatarUrl(string $email, int $size = 32, string $defaultImage = 'identicon'): ?string;
+
+Email::isValid(?string $email): bool;
+
+Email::random(int $userNameLength = 10): string; // Create random email
+
+```
+
+
+### JBZoo\Utils\Env
+
+```php
+Env::bool(string $envVarName, bool $default = false): bool;
+
+Env::convert(?string $value, int $options = 16); // Converts the type of values like "true", "false", "null" or "123".
+
+Env::float(string $envVarName, float $default = 0): float;
+
+Env::get(string $envVarName, $default = null, int $options = 16); // Returns an environment variable.
+
+Env::int(string $envVarName, int $default = 0): int;
+
+Env::isExists(string $envVarName): bool;
+
+Env::string(string $envVarName, string $default = ''): string;
+
+```
+
+
+### JBZoo\Utils\FS
+
+```php
+FS::base(?string $path): string;
+
+FS::clean(?string $path, string $dirSep = '/'): string; // Function to strip additional / or \ in a path name.
+
+FS::dirName(?string $path): string;
+
+FS::dirSize(string $dir): int; // Returns size of a given directory in bytes.
+
+FS::executable(string $filename, bool $executable = true): bool; // Set the executable bit on a file to the minimum value that allows the user running PHP to read to it.
+
+FS::ext(?string $path): string;
+
+FS::filename(?string $path): string;
+
+FS::firstLine(string $filepath): ?string; // Quickest way for getting first file line
+
+FS::format(int $bytes, int $decimals = 2): string; // Nice formatting for computer sizes (Bytes).
+
+FS::getRelative(string $path, ?string $rootPath = null, string $forceDS = '/'): string; // Find relative path of file (remove root part)
+
+FS::isDir(string $path): bool; // Check is current path directory
+
+FS::isFile(string $path): bool; // Check is current path regular file
+
+FS::isReal(?string $path): bool;
+
+FS::ls(string $dir): array; // Returns all paths inside a directory.
+
+FS::openFile(string $filepath): ?string; // Binary safe to open file
+
+FS::perms(string $file, ?int $perms = null): string; // Returns the file permissions as a nice string, like -rw-r--r-- or false if the file is not found.
+
+FS::readable(string $filename, bool $readable = true): bool; // Set the readable bit on a file to the minimum value that allows the user running PHP to read to it.
+
+FS::real(?string $path): ?string;
 
 // Removes a directory (and its contents) recursively.
-FS::rmdir($dir, $traverseSymlinks = false)
+// Contributed by Askar (ARACOOL) <https://github.com/ARACOOOL>
+FS::rmDir(string $dir, bool $traverseSymlinks = true): bool;
 
-// Binary safe to open file
-FS::openFile($filepath)
+FS::stripExt(string $path): string; // Strip off the extension if it exists.
 
-// Quickest way for getting first file line
-FS::firstLine($filepath)
+FS::writable(string $filename, bool $writable = true): bool; // Set the writable bit on a file to the minimum value that allows the user running PHP to write to it.
 
-// Set the writable bit on a file to the minimum value that allows the user running PHP to write to it.
-FS::writable($filename, $writable = true)
-
-// Set the readable bit on a file to the minimum value that allows the user running PHP to read to it.
-FS::readable($filename, $readable = true)
-
-// Set the executable bit on a file to the minimum value that allows the user running PHP to read to it.
-FS::executable($filename, $executable = true)
-
-// Returns size of a given directory in bytes.
-FS::dirSize($dir)
-
-// Returns all paths inside a directory.
-FS::ls($dir)
-
-// Nice formatting for computer sizes (Bytes).
-FS::format($bytes, $decimals = 0)
-
-// Get file extention
-FS::ext($path)
-
-// Get basename
-FS::base($path)
-
-// Get file name
-FS::filename($path)
-
-// Get dirname
-FS::dirname($path)
-
-// Get full real path if file or dir exists
-FS::real($path)
-
-// Function to strip additional / or \ in a path name.
-FS::clean($path, $dirSep = DIRECTORY_SEPARATOR)
-
-// Strip off the extension if it exists.
-FS::stripExt($path)
-
-// Check is current path directory (not file)
-FS::isDir($path)
-
-// Check is current path regular file (not dir)
-FS::isFile($path)
 ```
 
 
-## Some functions with HTTP headers
-```php
-use JBZoo\Utils\Http;
+### JBZoo\Utils\Filter
 
+```php
+Filter::_($value, $filters = 'raw'); // Apply custom filter to variable
+
+Filter::alias(string $string): string; // Get safe string
+
+Filter::alpha(?string $value): string; // Return only alpha chars
+
+Filter::alphanum(?string $value): string; // Return only alpha and digits chars
+
+Filter::arr($value, $filter = null): array; // Cleanup array
+
+Filter::base64(string $value): string; // Return only chars for base64
+
+Filter::bool($variable): bool; // Converts many english words that equate to true or false to boolean.
+
+Filter::className(string $input): string; // Convert words to PHP Class name
+
+Filter::clean(string $string): string;
+
+Filter::cmd(string $value): string; // Cleanup system command
+
+Filter::data($data): JBZoo\Data\Data;
+
+Filter::digits(?string $value): string; // Return only digits chars
+
+Filter::esc(string $string): string;
+
+Filter::float($value, int $round = 10): float;
+
+Filter::html(string $string): string;
+
+Filter::int($value): int; // Smart convert any string to int
+
+Filter::low(string $string): string; // String to lower and trim
+
+Filter::parseLines($input): array; // Parse lines to assoc list
+
+Filter::path(string $value): string; // Remove whitespaces
+
+Filter::raw($string); // RAW placeholder
+
+Filter::strip(string $string): string; // Get safe string
+
+Filter::stripQuotes(string $value): string; // Strip quotes.
+
+Filter::stripSpace(string $string): string; // Strip spaces
+
+Filter::trim(string $value): string; // Remove whitespaces
+
+Filter::trimExtend(string $value): string; // Remove whitespaces
+
+Filter::ucFirst(string $input): string; // First char to upper, other to lower
+
+Filter::up(string $string): string; // String to upper and trim
+
+Filter::xml(string $string): string;
+
+```
+
+
+### JBZoo\Utils\Http
+
+```php
 // Transmit headers that force a browser to display the download file dialog.
 // Cross browser compatible. Only fires if headers have not already been sent.
-Http::download($filename, $content = false)
+Http::download(string $filename): bool;
+
+Http::getHeaders(): array; // Get all HTTP headers
 
 // Sets the headers to prevent caching for the different browsers.
 // Different browsers support different nocache headers, so several
 // headers must be sent so that all of them get the point that no caching should occur
-Http::nocache()
+Http::nocache(): bool;
+
+Http::utf8(string $contentType = 'text/html'): bool; // Transmit UTF-8 content headers if the headers haven't already been sent.
+
+```
+
+
+### JBZoo\Utils\IP
+
+```php
+IP::getNetMask(string $ipAddress): string;
 
 // Returns the IP address of the client.
-Http::IP($trustProxy = false)
+//                         ONLY use if your server is behind a proxy that sets these values
+IP::getRemote(bool $trustProxy = false): string;
 
-// Transmit UTF-8 content headers if the headers haven't already been sent.
-Http::utf8($content_type = 'text/html')
+IP::v4InRange(string $ipAddress, string $range): bool; // Check if a given ip is in a network
 
-// Get all HTTP headers from $_SERVER
-// @see https://github.com/symfony/http-foundation/blob/master/ServerBag.php
-Http::getHeaders()
 ```
 
 
-## Image helper
+### JBZoo\Utils\Image
+
 ```php
-use JBZoo\Utils\Image;use JBZoo\Utils\Vars;
+Image::addAlpha($image, bool $isBlend = true): void; // Add alpha chanel to image resource
 
-// Check required GD library
-Image::checkGD($thowException = true)
+Image::alpha(float $color): int;
 
-// Check is extention or mime have JPEG format
-Image::isJpeg($format)
+Image::blur(float $blur): int;
 
-// Check is extention or mime have GIF format
-Image::isGif($format)
+Image::brightness(float $brightness): int;
 
-// Check is extention or mime have PNG format
-Image::isPng($format)
+Image::checkGD(bool $throwException = true): bool; // Require GD library
+
+Image::color(float $color): int;
+
+Image::colorize(float $colorize): int;
+
+Image::contrast(float $contrast): int;
+
+Image::direction(string $direction): string;
+
+Image::getInnerCoords(string $position, array $canvas, array $box, array $offset = []): ?array; // Determine position
+
+Image::imageCopyMergeAlpha($dstImg, $srcImg, array $dist, array $src, array $srcSizes, int $opacity): void; // Same as PHP's imagecopymerge() function, except preserves alpha-transparency in 24-bit PNGs
+
+Image::isGdRes($image): bool; // Check is var image GD resource
+
+Image::isGif(?string $format = null): bool;
+
+Image::isJpeg(?string $format = null): bool;
+
+Image::isPng(?string $format = null): bool;
+
+Image::isSupportedFormat(string $format): bool; // Check is format supported by lib
+
+Image::isWebp(?string $format = null): bool;
 
 // Converts a hex color value to its RGB equivalent
-Image::normalizeColor($origColor)
+//                                Where red, green, blue - integers 0-255, alpha - integer 0-127
+Image::normalizeColor($origColor): array;
 
-// Ensures $value is always within $min and $max range.
-// If lower, $min is returned. If higher, $max is returned.
-Vars::range($value, $min, $max)
+Image::opacity(float $opacity): int; // Check opacity value
 
-// Same as PHP's imagecopymerge() function, except preserves alpha-transparency in 24-bit PNGs
-// @link http://www.php.net/manual/en/function.imagecopymerge.php#88456
-Image::imageCopyMergeAlpha($dstImg, $srcImg, array $dist, array $src, array $srcSizes, $opacity)
+Image::opacity2Alpha(float $opacity): int; // Convert opacity value to alpha
 
-// Check opacity value (0 to 100)
-Image::opacity($opacity)
+Image::percent(float $percent): int;
 
-// Convert opacity value to alpha (0 to 127)
-Image::opacity2Alpha($opacity)
+Image::position(string $position): string; // Check position name
 
-// Validate color id (0 to 255)
-Image::color($color)
+Image::quality(float $percent): int;
 
-// Validate alpha channel value (0 to 127)
-Image::alpha($color)
+Image::rotate(float $color): int;
 
-// Validate rotate degree (-360 to 360)
-Image::rotate($color)
+Image::smooth(float $smooth): int;
 
-// Validate brightness value (-255 to 255)
-Image::brightness($brightness)
+Image::strToBin(string $imageString): string; // Convert string to binary data
 
-// Validate contrast value (-100 to 100)
-Image::contrast($contrast)
-
-// Validate colorize id (-255 to 255)
-Image::colorize($colorize)
-
-// Validate smooth force (1 to 10)
-Image::smooth($smooth)
-
-// Validate blur passes (1 to 10)
-Image::blur($blur)
-
-// Validate percent value (0 to 100)
-Image::percent($percent)
-
-// Validate image quality (0 to 100)
-Image::quality($percent)
-
-// Convert base64 to binary data
-Image::strToBin($imageString)
-
-// Check variable is a GD resource
-Image::isGdRes($image)
-
-// Validate position name
-Image::position($position)
-
-// Determine position box that contained in big box by position name and offsets
-Image::getInnerCoords($position, array $canvas, array $box, array $offset)
-
-// Add alpha chanel and blending to image resource
-Image::addAlpha($image, $isBlend = true)
 ```
 
 
-## Helper for serialized data
+### JBZoo\Utils\Ser
+
 ```php
-use JBZoo\Utils\Ser;
+// UnSerializes partially-corrupted arrays that occur sometimes. Addresses
+// specifically the `unserialize(): Error at offset xxx of yyy bytes` error.
+// NOTE: This error can *frequently* occur with mismatched character sets and higher-than-ASCII characters.
+// Contributed by Theodore R. Smith of PHP Experts, Inc. <http://www.phpexperts.pro/>
+Ser::fix(string $brokenSerializedData): string;
 
 // Check value to find if it was serialized.
 // If $data is not an string, then returned value will always be false. Serialized data is always a string.
-Ser::is($data)
+Ser::is($data): bool;
 
-// Serialize data, if needed.
-Ser::maybe($data)
+Ser::maybe($data); // Serialize data, if needed.
 
-// Unserialize value only if it is serialized.
-Ser::maybeUn($data)
+Ser::maybeUn(string $data); // Unserialize value only if it is serialized.
 
-// Unserializes partially-corrupted arrays that occur sometimes. Addresses
-// specifically the `unserialize(): Error at offset xxx of yyy bytes` error.
-Ser::fix($brokenSerializedData)
 ```
 
 
-## Sluggify
+### JBZoo\Utils\Slug
+
 ```php
-use JBZoo\Utils\Slug;
+// Transliterates characters to their ASCII equivalents.
+// Part of the URLify.php Project <https://github.com/jbroadway/urlify/>
+Slug::downCode(string $text, string $language = ''): string;
 
 // Converts any accent characters to their equivalent normal characters and converts any other non-alphanumeric
 // characters to dashes, then converts any sequence of two or more dashes to a single dash. This function generates
 // slugs safe for use as URLs, and if you pass true as the second parameter, it will create strings safe for
 // use as CSS classes or IDs.
-Slug::filter($string, $separator = '-', $cssMode = false)
-
-// Checks to see if a string is utf8 encoded.
-// NOTE: This function checks for 5-Byte sequences, UTF8 has Bytes Sequences with a maximum length of 4.
-Slug::seemsUTF8($string)
-
-// Transliterates characters to their ASCII equivalents.
-// Part of the URLify.php Project <https://github.com/jbroadway/urlify/>
-// @see https://github.com/jbroadway/urlify/blob/master/URLify.php
-Slug::downcode($text, $language = '')
+Slug::filter(?string $string, string $separator = '-', bool $cssMode = false): string;
 
 // Converts all accent characters to ASCII characters.
 // If there are no accent characters, then the string given is just returned.
-Slug::removeAccents($string, $language = '')
+Slug::removeAccents(string $string, string $language = ''): string;
+
+// Checks to see if a string is utf8 encoded.
+// NOTE: This function checks for 5-Byte sequences, UTF8 has Bytes Sequences with a maximum length of 4.
+// Written by Tony Ferrara <http://blog.ircmaxwell.com>
+Slug::seemsUTF8(string $string): bool;
+
 ```
 
 
-## Functions for strings (check mbstring module)
+### JBZoo\Utils\Stats
+
 ```php
-use JBZoo\Utils\Str;
+// Generate a histogram.
+// Note this is not a great function, and should not be relied upon
+// for serious use.
+// For a better implementation copy:
+//   http://docs.scipy.org/doc/numpy-1.10.1/reference/generated/numpy.histogram.html
+Stats::histogram(array $values, int $steps = 10, ?float $lowerBound = null, ?float $upperBound = null): array;
 
-// Strip all witespaces from the given string.
-Str::stripSpace($string)
+Stats::linSpace(float $min, float $max, int $num = 50, bool $endpoint = true): array; // Return an array populated with $num numbers from $min to $max.
 
-// Parse text by lines
-Str::parseLines($text, $toAssoc = true)
+Stats::mean(?array $values): float; // Return the mean (average) value of the given values.
 
+Stats::renderAverage(array $values, int $rounding = 3): string;
+
+Stats::stdDev(array $values, bool $sample = false): float; // Return the standard deviation of a given population.
+
+Stats::variance(array $values, bool $sample = false): float; // Return the variance for a given population.
+
+```
+
+
+### JBZoo\Utils\Str
+
+```php
 // Make string safe
 // - Remove UTF-8 chars
 // - Remove all tags
 // - Trim
-Str::clean($string, $toLower = false, $addslashes = false)
+// - Add Slashes (opt)
+// - To lower (opt)
+Str::clean(string $string, bool $toLower = false, bool $addSlashes = false, bool $removeAccents = true): string;
 
-// Convert >, <, ', " and & to html entities, but preserves entities that are already encoded.
-Str::htmlEnt($string, $encodedEntities = false)
+Str::esc(string $string): string; // Escape UTF-8 strings
 
-// Get unique string
-Str::unique($prefix = 'unique')
+Str::escXml(string $string): string; // Escape string before save it as xml content
 
-// Generate ridable random string
-Str::random($length = 6, $isReadable = true)
+Str::getClassName($object, bool $toLower = false): string; // Get class name without namespace
 
-// Pads a given string with zeroes on the left.
-Str::zeroPad($number, $length)
+Str::htmlEnt(string $string, bool $encodedEntities = false): string; // Convert >, <, ', " and & to html entities, but preserves entities that are already encoded.
 
-// Truncate a string to a specified length without cutting a word off.
-Str::truncateSafe($string, $length, $append = '...')
+Str::iPos(string $haystack, string $needle, int $offset = 0): ?int; // Finds position of first occurrence of a string within another, case insensitive
 
-// Truncate the string to given length of characters.
-Str::limitChars($string, $limit = 100, $append = '...')
+Str::iStr(string $haystack, string $needle, bool $beforeNeedle = false): string; // Finds first occurrence of a string within another, case insensitive
 
-// Truncate the string to given length of words.
-Str::limitWords($string, $limit = 100, $append = '...')
+// Increments a trailing number in a string.
+// Used to easily create distinct labels when copying objects. The method has the following styles:
+//  - default: "Label" becomes "Label (2)"
+//  - dash:    "Label" becomes "Label-2"
+Str::inc(string $string, string $style = 'default', int $next = 0): string;
 
-// Check if a given string matches a given pattern.
-Str::like($pattern, $string, $caseSensitive = true)
+Str::isEnd(string $haystack, string $needle, bool $caseSensitive = false): bool; // Checks if the $haystack ends with the text in the $needle. Case sensitive.
 
-// Converts any accent characters to their equivalent normal characters
-Str::slug($text = '', $isCache = false)
+Str::isMBString(): bool; // Check is mbstring loaded
 
-// Check is mbstring oeverload standard functions
-Str::isOverload()
+Str::isOverload(): bool; // Check is mbstring overload standard functions
 
-// Check is mbstring loaded
-Str::isMBString()
+Str::isStart(string $haystack, string $needle, bool $caseSensitive = false): bool; // Checks if the $haystack starts with the text in the $needle.
 
-// Get string length (check mbstring)
-Str::len($string)
+Str::len(string $string): int; // Get string length
 
-// Find position of first occurrence of string in a string (check mbstring)
-Str::pos($haystack, $needle, $offset = 0)
+Str::like(string $pattern, string $haystack, bool $caseSensitive = true): bool; // Check if a given string matches a given pattern.
 
-// Find position of last occurrence of a string in a string (check mbstring)
-Str::rpos($haystack, $needle, $offset = 0)
+Str::limitChars(string $string, int $limit = 100, string $append = '...'): string; // Truncate the string to given length of characters.
 
-// Finds position of first occurrence of a string within another, case insensitive (check mbstring)
-Str::ipos($haystack, $needle, $offset = 0)
+Str::limitWords(string $string, int $limit = 100, string $append = '...'): string; // Truncate the string to given length of words.
 
-// Finds first occurrence of a string within another (check mbstring)
-Str::strstr($haystack, $needle, $beforeNeedle = false)
+Str::low($string): string; // Make a string lowercase
 
-// Finds first occurrence of a string within another, case insensitive (check mbstring)
-Str::istr($haystack, $needle, $beforeNeedle = false)
+Str::parseLines(string $text, bool $toAssoc = true): array; // Parse text by lines
 
-// Finds the last occurrence of a character in a string within another (check mbstring)
-Str::rchr($haystack, $needle, $part = null)
+Str::pos(string $haystack, string $needle, int $offset = 0): ?int; // Find position of first occurrence of string in a string
 
-// Get part of string (check mbstring)
-Str::sub($string, $start, $length = 0)
+Str::rChr(string $haystack, string $needle, bool $part = false): string; // Finds the last occurrence of a character in a string within another
 
-// Make a string lowercase (check mbstring)
-Str::low($string)
+Str::rPos(string $haystack, string $needle, int $offset = 0): ?int; // Find position of last occurrence of a string in a string
 
-// Make a string uppercase (check mbstring)
-Str::up($string)
+Str::random(int $length = 10, bool $isReadable = true): string; // Generate readable random string
 
-// Count the number of substring occurrences (check mbstring)
-Str::subCount($haystack, $needle)
+Str::slug(string $text = '', bool $isCache = false): string; // Converts any accent characters to their equivalent normal characters
 
-// Checks if the $haystack starts with the text in the $needle. (check mbstring)
-Str::isStart($haystack, $needle, $caseSensitive = false)
+Str::splitCamelCase(string $input, string $separator = '_', bool $toLower = true): string; // Convert camel case to human readable format
 
-// Checks if the $haystack ends with the text in the $needle. Case sensitive. (check mbstring)
-Str::isEnd($haystack, $needle, $caseSensitive = false)
+// Splits a string of multiple queries into an array of individual queries.
+// Single line or line end comments and multi line comments are stripped off.
+Str::splitSql(string $sql): array;
 
-// Extend version to remove whitespaces
-Str::trim($value)
+Str::strStr(string $haystack, string $needle, bool $beforeNeedle = false): string; // Finds first occurrence of a string within another
 
-// Escape string before save it as xml content
-Str::escXml($string)
+Str::stripSpace(string $string): string; // Strip all whitespaces from the given string.
 
-// Escape UTF-8 strings
-Str::esc($string)
+Str::sub(string $string, int $start, int $length = 0): string; // Get part of string
 
-// Convert camel case to human readable format
-Str::splitCamelCase($input, $separator = '_', $toLower = true)
+Str::subCount(string $haystack, string $needle): int; // Count the number of substring occurrences
+
+Str::testName2Human(string $input): string; // Convert test name to human readable string
+
+Str::trim(string $value, bool $extendMode = false): string; // Trim whitespaces and other special chars
+
+Str::truncateSafe(string $string, int $length, string $append = '...'): string; // Truncate a string to a specified length without cutting a word off.
+
+Str::unique(string $prefix = 'unique'): string; // Get unique string
+
+Str::up($string): string; // Make a string uppercase
 
 // Generates a universally unique identifier (UUID v4) according to RFC 4122
-Str::uuid()
+// Version 4 UUIDs are pseudo-random!
+// Returns Version 4 UUID format: xxxxxxxx-xxxx-4xxx-Yxxx-xxxxxxxxxxxx where x is
+// any random hex digit and Y is a random choice from 8, 9, a, or b.
+Str::uuid(): string;
+
+Str::zeroPad(string $number, int $length): string; // Pads a given string with zeroes on the left.
+
 ```
 
 
-## Some functions for system or enviroment
+### JBZoo\Utils\Sys
+
 ```php
-use JBZoo\Utils\Sys;
+// Returns true when Xdebug is supported or
+// the runtime used is PHPDBG (PHP >= 7.0).
+Sys::canCollectCodeCoverage(): bool;
 
-// Check is current OS Windows
-Sys::isWin()
+// Returns the path to the binary of the current runtime.
+// Appends ' --php' to the path when the runtime is HHVM.
+Sys::getBinary(): string;
 
-// Check is current user ROOT
-Sys::isRoot()
+Sys::getDocRoot(): ?string; // Return document root
 
-// Returns a home directory of current user.
-Sys::getHome()
+Sys::getHome(): ?string; // Returns a home directory of current user.
 
-// Alias fo ini_set function
-Sys::iniSet($varName, $newValue)
+Sys::getMemory(bool $isPeak = true): string; // Get usage memory
 
-// Alias fo ini_get function
-Sys::iniGet($varName)
+Sys::getName(): string;
 
-// Check is function exists and callable
-Sys::isFunc($funcName)
+Sys::getNameWithVersion(): string;
 
-// Set PHP execution time limit
-Sys::setTime($newLimit = -1)
+Sys::getUserName(): ?string; // Returns current linux user who runs script
 
-// Set new memory limit
-Sys::setMemory($newLimit = '256M')
+Sys::getVendorUrl(): string;
 
-// Check PHP version
-Sys::isPHP($version, $current = PHP_VERSION)
+Sys::getVersion(): ?string;
 
-// Get usage memory in KB format
-Sys::getMemory($isPeak = true)
+// Returns true when the runtime used is PHP with the PHPDBG SAPI
+// and the phpdbg_*_oplog() functions are available (PHP >= 7.0).
+Sys::hasPHPDBGCodeCoverage(): bool;
+
+Sys::hasXdebug(): bool; // Returns true when the runtime used is PHP and Xdebug is loaded.
+
+Sys::iniGet(string $varName): ?string; // Alias fo ini_get function
+
+Sys::iniSet(string $phpIniKey, string $newValue): bool; // Alias fo ini_set function
+
+Sys::isFunc($funcName): bool;
+
+Sys::isHHVM(): bool; // Returns true when the runtime used is HHVM.
+
+Sys::isPHP(string $version, string $current = '7.2.31'): bool;
+
+Sys::isPHP5(string $current = '7.2.31'): bool;
+
+Sys::isPHP7(string $current = '7.2.31'): bool;
+
+Sys::isPHPDBG(): bool; // Returns true when the runtime used is PHP with the PHPDBG SAPI.
+
+Sys::isRealPHP(): bool; // Returns true when the runtime used is PHP without the PHPDBG SAPI.
+
+Sys::isRoot(): bool; // Check is current user ROOT
+
+Sys::isWin(): bool; // Check is current OS Windows
+
+Sys::setMemory(string $newLimit = '256M'): void; // Set new memory limit
+
+Sys::setTime(int $newLimit = 0): void; // Set PHP execution time limit (doesn't work in safe mode)
+
 ```
 
 
-## Functions for URL's
+### JBZoo\Utils\Timer
+
 ```php
-use JBZoo\Utils\Url;
+Timer::format(float $milliSeconds): string; // Formats the elapsed time as a string.
 
-// Add or remove query arguments to the URL.
-Url::addArg(array $newParams, $uri = null)
+Timer::formatMS(float $seconds): string; // Formats the elapsed time as a string.
 
-// Return the current URL.
-Url::current()
+Timer::getRequestTime(): float; // Get request time
 
-// Return the current path
-Url::path()
+Timer::timeSinceStart(): float; // Formats the elapsed time since the start of the request as a string.
 
-// Return current root URL
-Url::root()
+```
 
-// Build http query
-Url::build(array $queryParams)
+
+### JBZoo\Utils\Url
+
+```php
+Url::addArg(array $newParams, ?string $uri = null): string; // Add or remove query arguments to the URL.
+
+Url::build(array $queryParams): string;
 
 // Build a URL. The parts of the second URL will be merged into the first according to the flags argument.
-Url::buildAll($url, $parts = array(), $flags = self::URL_REPLACE, &$newUrl = array())
+//                                or associative array like parse_url() returns
+//                                would return
+Url::buildAll($sourceUrl, $destParts = [], int $flags = 1, array $newUrl = []): string;
 
-// Checks to see if the page is being server over SSL or not
-Url::isHttps($trustProxyHeaders = false)
+Url::create(array $parts = []): string;
 
-// Removes an item or list from the query string.
-Url::delArg($keys, $uri = null)
+Url::current(bool $addAuth = false): ?string; // Return the current URL.
+
+Url::delArg($keys, ?string $uri = null): string; // Removes an item or list from the query string.
+
+Url::getAuth(): ?string; // Get current auth info
+
+Url::isAbsolute(string $path): bool; // Is absolute url
+
+Url::isHttps(bool $trustProxyHeaders = false): bool; // Checks to see if the page is being server over SSL or not
 
 // Turns all of the links in a string into HTML links.
 // Part of the LinkifyURL Project <https://github.com/jmrware/LinkifyURL>
-Url::parseLink($text)
+Url::parseLink(string $text): string;
 
-// Convert file path to relative URL
-Url::pathToRel($path)
+Url::path(): ?string; // Return the current path
 
-// Convert file path to absolute URL
-Url::pathToUrl($path)
+Url::pathToRel(string $path): string; // Convert file path to relative URL
+
+Url::pathToUrl(string $path): string; // Convert file path to absolute URL
+
+Url::root(bool $addAuth = false): ?string; // Return current root URL
+
 ```
 
 
-## Variable handlers
+### JBZoo\Utils\Vars
+
 ```php
-use JBZoo\Utils\Vars;
+Vars::isEven(int $number): bool; // Is the current value even?
 
-// Return true if the number is within the min and max.
-Vars::isIn($number, $min, $max)
+Vars::isIn(float $number, float $min, float $max): bool; // Return true if the number is within the min and max.
 
-// Is the current value even?
-Vars::isEven($number)
+Vars::isNegative(float $number): bool; // Is the current value negative; less than zero.
 
-// Is the current value negative; less than zero.
-Vars::isNegative($number)
+Vars::isOdd(int $number): bool; // Is the current value odd?
 
-// Is the current value odd?
-Vars::isOdd($number)
+Vars::isPositive(float $number, bool $zero = true): bool; // Is the current value positive; greater than or equal to zero.
 
-// Is the current value positive; greater than or equal to zero.
-Vars::isPositive($number, $zero = true)
+Vars::limit(float $number, float $min, float $max): int; // Limits the number between two bounds.
 
-// Limits the number between two bounds.
-Vars::limit($number, $min, $max)
+Vars::max(float $number, float $max): int; // Decrease the number to the maximum if above threshold.
 
-// Increase the number to the minimum if below threshold.
-Vars::min($number, $min)
+Vars::min(float $number, float $min): int; // Increase the number to the minimum if below threshold.
 
-// Decrease the number to the maximum if above threshold.
-Vars::max($number, $max)
+Vars::out(float $number, float $min, float $max): bool; // Return true if the number is outside the min and max.
 
-// Return true if the number is outside the min and max.
-Vars::out($number, $min, $max)
-```
+// Ensures $value is always within $min and $max range.
+// If lower, $min is returned. If higher, $max is returned.
+Vars::range(float $value, float $min, float $max): int;
 
-## Email 
-```php
-use JBZoo\Utils\Email;
+Vars::relativePercent(float $normal, float $current): string; // Get relative percent
 
-// Is being always validated the email. Including DNS check for MX records.
-
-// Can be a string or an array of emails. Always return an array with valid emails.
-Email::check('test@gmail.com');
-Email::check(array('test@gmail.com', 'test@hotmail.com'));
-Email::getDomain('test@gmail.com');
-Email::getDomain(array('test@gmail.com', 'test@hotmail.com'));
-
-// It only can be an array of emails
-Email::getDomainSorted(array('test@gmail.com', 'test@hotmail.com'));
-```
-
-## Timer
-```php
-use JBZoo\Utils\Timer;
-
-// Formats the elapsed time as a string.
-Timer::format($time);
-Timer::formatMS($time); // Only ms format
-
-// Formats the elapsed time since the start of the request as a string.
-Timer::timeSinceStart();
-
-// Get request time
-Timer::getRequestTime();
-```
-
-
-## Enviroment
-```php
-use JBZoo\Utils\Env;
-
-// Returns an environment variable.
-Env::get($name, $options = self::VAR_STRING);
-
-// Converts the type of values like "true", "false", "null" or "123".
-Env::convert($value, $options = self::VAR_STRING);
-
-// Returns true when Xdebug is supported or the runtime used is PHPDBG (PHP >= 7.0).
-Env::canCollectCodeCoverage();
-
-// Returns the path to the binary of the current runtime. Appends ' --php' to the path when the runtime is HHVM.
-Env::getBinary();
-
-// PHP Name and version
-Env::getNameWithVersion();
-
-// Get PHP Name
-Env::getName();
-
-// Get PHP Version
-Env::getVersion();
-
-// Returns true when the runtime used is PHP and Xdebug is loaded.
-Env::hasXdebug();
-
-// Returns true when the runtime used is HHVM.
-Env::isHHVM();
-
-// Returns true when the runtime used is PHP without the PHPDBG SAPI.
-Env::isPHP();
-
-// Returns true when the runtime used is PHP with the PHPDBG SAPI.
-Env::isPHPDBG();
-
-// Returns true when the runtime used is PHP with the PHPDBG SAPI and the phpdbg_*_oplog() functions are available (PHP >= 7.0).
-Env::hasPHPDBGCodeCoverage();
 ```
 
 
