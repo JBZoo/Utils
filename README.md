@@ -1,7 +1,9 @@
 # JBZoo / Utils
 
 [![Build Status](https://travis-ci.org/JBZoo/Utils.svg?branch=master)](https://travis-ci.org/JBZoo/Utils)    [![Coverage Status](https://coveralls.io/repos/JBZoo/Utils/badge.svg)](https://coveralls.io/github/JBZoo/Utils?branch=master)    [![Psalm Coverage](https://shepherd.dev/github/JBZoo/Utils/coverage.svg)](https://shepherd.dev/github/JBZoo/Utils)    
-[![Latest Stable Version](https://poser.pugx.org/JBZoo/Utils/v)](https://packagist.org/packages/JBZoo/Utils)    [![Latest Unstable Version](https://poser.pugx.org/JBZoo/Utils/v/unstable)](https://packagist.org/packages/JBZoo/Utils)    [![Dependents](https://poser.pugx.org/JBZoo/Utils/dependents)](https://packagist.org/packages/JBZoo/Utils/dependents?order_by=downloads)    [![GitHub Issues](https://img.shields.io/github/issues/JBZoo/Utils)](https://github.com/JBZoo/Utils/issues)    [![Total Downloads](https://poser.pugx.org/JBZoo/Utils/downloads)](https://packagist.org/packages/JBZoo/Utils/stats)    [![GitHub License](https://img.shields.io/github/license/JBZoo/Utils)](https://github.com/JBZoo/Utils/blob/master/LICENSE)
+[![Stable Version](https://poser.pugx.org/jbzoo/utils/version)](https://packagist.org/packages/jbzoo/utils)    [![Latest Unstable Version](https://poser.pugx.org/jbzoo/utils/v/unstable)](https://packagist.org/packages/jbzoo/utils)    [![Dependents](https://poser.pugx.org/jbzoo/utils/dependents)](https://packagist.org/packages/jbzoo/utils/dependents?order_by=downloads)    [![GitHub Issues](https://img.shields.io/github/issues/jbzoo/utils)](https://github.com/JBZoo/Utils/issues)    [![Total Downloads](https://poser.pugx.org/jbzoo/utils/downloads)](https://packagist.org/packages/jbzoo/utils/stats)    [![GitHub License](https://img.shields.io/github/license/jbzoo/utils)](https://github.com/JBZoo/Utils/blob/master/LICENSE)
+
+
 
 Collection of PHP functions, mini classes and snippets for everyday developer's routine life.
 

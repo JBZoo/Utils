@@ -16,11 +16,10 @@
 namespace JBZoo\PHPUnit;
 
 /**
- * Class UtilsReadmeTest
+ * Class UtilsComposerTest
  *
  * @package JBZoo\PHPUnit
  */
-class UtilsReadmeTest extends AbstractReadmeTest
+class UtilsComposerTest extends AbstractComposerTest
 {
-    protected $packageName = 'Utils';
 }
