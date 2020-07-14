@@ -35,8 +35,8 @@
     },
 
     "require-dev"       : {
-        "jbzoo/toolbox-dev"         : "1.1.x-dev",
-        "jbzoo/data"                : "4.0.x-dev",
+        "jbzoo/toolbox-dev"         : "^2.0.0",
+        "jbzoo/data"                : "^4.0.0",
         "symfony/process"           : "^4.4|^5.0",
         "symfony/polyfill-mbstring" : "^1.12"
     },
