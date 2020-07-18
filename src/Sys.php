@@ -257,7 +257,7 @@ class Sys
         $name = self::getName();
         $version = self::getVersion();
 
-        return (string)trim("{$name} {$version}");
+        return trim("{$name} {$version}");
     }
 
     /**

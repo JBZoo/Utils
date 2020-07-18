@@ -607,7 +607,7 @@ class Str
      */
     public static function trim(string $value, bool $extendMode = false): string
     {
-        $result = (string)trim($value);
+        $result = trim($value);
 
         if ($extendMode) {
             $result = trim($result, chr(0xE3) . chr(0x80) . chr(0x80));

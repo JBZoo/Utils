@@ -119,7 +119,7 @@ class Url
         $root = self::root($addAuth);
         $path = self::path();
 
-        return (string)trim("{$root}{$path}") ?: null;
+        return trim("{$root}{$path}") ?: null;
     }
 
     /**
