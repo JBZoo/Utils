@@ -99,15 +99,11 @@ class Sys
      * Alias fo ini_get function
      *
      * @param string $varName
-     * @return string|null
+     * @return string
      */
-    public static function iniGet(string $varName): ?string
+    public static function iniGet(string $varName): string
     {
-        if (self::isFunc('ini_get')) {
-            return (string)ini_get($varName);
-        }
-
-        return null;
+        return (string)ini_get($varName);
     }
 
     /**
@@ -118,7 +114,12 @@ class Sys
      */
     public static function isFunc($funcName): bool
     {
-        return is_callable($funcName) || (is_string($funcName) && function_exists($funcName));
+        $isEnabled = true;
+        if (is_string($funcName)) {
+            $isEnabled = stripos(self::iniGet('disable_functions'), strtolower(trim($funcName))) === false;
+        }
+
+        return $isEnabled && (is_callable($funcName) || (is_string($funcName) && function_exists($funcName)));
     }
 
     /**
