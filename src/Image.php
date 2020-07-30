@@ -125,6 +125,7 @@ class Image
      *                                Where red, green, blue - integers 0-255, alpha - integer 0-127
      * @return int[]
      * @throws Exception
+     * @SuppressWarnings(PHPMD.DevelopmentCodeFragment)
      */
     public static function normalizeColor($origColor): array
     {
