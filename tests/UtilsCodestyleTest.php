@@ -16,10 +16,10 @@
 namespace JBZoo\PHPUnit;
 
 /**
- * Class UtilsCodestyleTest
+ * Class UtilsCopyrightsTest
  * @package JBZoo\PHPUnit
  */
-class UtilsCodestyleTest extends AbstractCopyrightTest
+class UtilsCopyrightsTest extends AbstractCopyrightTest
 {
     protected $packageName = "Utils";
 }

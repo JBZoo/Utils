@@ -30,7 +30,8 @@
         "ext-posix"    : "*",
         "ext-mbstring" : "*",
         "ext-gd"       : "*",
-        "ext-filter"   : "*"
+        "ext-filter"   : "*",
+        "ext-dom"      : "*"
     },
 
     "require-dev"       : {

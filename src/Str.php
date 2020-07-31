@@ -619,26 +619,16 @@ class Str
     }
 
     /**
-     * Escape string before save it as xml content
+     * Escape string before save it as xml content.
+     * The function is moved. Please, use \JBZoo\Utils\Xml::escape($string). It'll be deprecated soon.
      *
      * @param string $string
      * @return string
+     * @deprecated
      */
     public static function escXml(string $string): string
     {
-        $string = (string)preg_replace(
-            '/[^\x{0009}\x{000a}\x{000d}\x{0020}-\x{D7FF}\x{E000}-\x{FFFD}]+/u',
-            ' ',
-            $string
-        );
-
-        $string = str_replace(
-            ['&', '<', '>', '"', "'"],
-            ['&amp;', '&lt;', '&gt;', '&quot;', '&apos;'],
-            $string
-        );
-
-        return $string;
+        return Xml::escape($string);
     }
 
     /**

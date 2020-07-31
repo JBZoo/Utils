@@ -25,7 +25,7 @@
          stopOnRisky="false"
 >
     <testsuites>
-        <testsuite name="All">
+        <testsuite name="PHPUnit">
             <directory suffix="Test.php">tests</directory>
         </testsuite>
     </testsuites>

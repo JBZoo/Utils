@@ -1,0 +1,293 @@
+<?php
+
+/**
+ * JBZoo Toolbox - Utils
+ *
+ * This file is part of the JBZoo Toolbox project.
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ *
+ * @package    Utils
+ * @license    MIT
+ * @copyright  Copyright (C) JBZoo.com, All rights reserved.
+ * @link       https://github.com/JBZoo/Utils
+ */
+
+namespace JBZoo\PHPUnit;
+
+use JBZoo\Utils\Xml;
+
+/**
+ * Class XmlTest
+ *
+ * @package JBZoo\PHPUnit
+ */
+class XmlTest extends PHPUnit
+{
+    /**
+     * @var array
+     */
+    private $expected = [
+        '_node'     => '#document',
+        '_text'     => null,
+        '_cdata'    => null,
+        '_attrs'    => [],
+        '_children' => [
+            [
+                '_node'     => 'phpunit',
+                '_text'     => null,
+                '_cdata'    => null,
+                '_attrs'    => [
+                    'bootstrap'                       => 'tests/autoload.php',
+                    'convertErrorsToExceptions'       => 'true',
+                    'convertNoticesToExceptions'      => 'true',
+                    'convertWarningsToExceptions'     => 'true',
+                    'convertDeprecationsToExceptions' => 'true',
+                    'executionOrder'                  => 'random',
+                    'processIsolation'                => 'false',
+                    'stopOnError'                     => 'false',
+                    'stopOnFailure'                   => 'false',
+                    'stopOnIncomplete'                => 'false',
+                    'stopOnSkipped'                   => 'false',
+                    'stopOnRisky'                     => 'false',
+                ],
+                '_children' => [
+                    [
+                        '_node'     => 'testsuites',
+                        '_text'     => null,
+                        '_cdata'    => null,
+                        '_attrs'    => [],
+                        '_children' => [
+                            [
+                                '_node'     => 'testsuite',
+                                '_text'     => null,
+                                '_cdata'    => null,
+                                '_attrs'    => ['name' => 'PHPUnit'],
+                                '_children' => [
+                                    [
+                                        '_node'     => 'directory',
+                                        '_text'     => 'tests',
+                                        '_cdata'    => null,
+                                        '_attrs'    => ['suffix' => 'Test.php'],
+                                        '_children' => [],
+                                    ],
+                                ],
+                            ],
+                        ],
+                    ],
+                    [
+                        '_node'     => 'filter',
+                        '_text'     => null,
+                        '_cdata'    => null,
+                        '_attrs'    => [],
+                        '_children' => [
+                            [
+                                '_node'     => 'whitelist',
+                                '_text'     => null,
+                                '_cdata'    => null,
+                                '_attrs'    => ['processUncoveredFilesFromWhitelist' => 'true'],
+                                '_children' => [
+                                    [
+                                        '_node'     => 'directory',
+                                        '_text'     => 'src',
+                                        '_cdata'    => null,
+                                        '_attrs'    => ['suffix' => '.php'],
+                                        '_children' => [],
+                                    ],
+                                ],
+                            ],
+                        ],
+                    ],
+                    [
+                        '_node'     => 'logging',
+                        '_text'     => null,
+                        '_cdata'    => null,
+                        '_attrs'    => [],
+                        '_children' => [
+                            [
+                                '_node'     => 'log',
+                                '_text'     => null,
+                                '_cdata'    => null,
+                                '_attrs'    => ['type' => 'coverage-clover', 'target' => 'build/coverage_xml/main.xml'],
+                                '_children' => [],
+                            ],
+                            [
+                                '_node'     => 'log',
+                                '_text'     => null,
+                                '_cdata'    => null,
+                                '_attrs'    => ['type' => 'coverage-php', 'target' => 'build/coverage_cov/main.cov'],
+                                '_children' => [],
+                            ],
+                            [
+                                '_node'     => 'log',
+                                '_text'     => null,
+                                '_cdata'    => null,
+                                '_attrs'    => ['type' => 'junit', 'target' => 'build/coverage_junit/main.xml'],
+                                '_children' => [],
+                            ],
+                            [
+                                '_node'     => 'log',
+                                '_text'     => null,
+                                '_cdata'    => null,
+                                '_attrs'    => [
+                                    'type'               => 'coverage-text',
+                                    'target'             => 'php://stdout',
+                                    'showUncoveredFiles' => 'false',
+                                    'showOnlySummary'    => 'true',
+                                ],
+                                '_children' => [],
+                            ],
+                        ],
+                    ],
+                ],
+            ],
+        ],
+    ];
+
+    /**
+     * @var string[]
+     */
+    private $expectedXml = [
+        '<?xml version="1.0" encoding="UTF-8"?>',
+        '<phpunit bootstrap="tests/autoload.php" convertErrorsToExceptions="true" convertNoticesToExceptions="true" convertWarningsToExceptions="true" convertDeprecationsToExceptions="true" executionOrder="random" processIsolation="false" stopOnError="false" stopOnFailure="false" stopOnIncomplete="false" stopOnSkipped="false" stopOnRisky="false">',
+        '  <testsuites>',
+        '    <testsuite name="PHPUnit">',
+        '      <directory suffix="Test.php">tests</directory>',
+        '    </testsuite>',
+        '  </testsuites>',
+        '  <filter>',
+        '    <whitelist processUncoveredFilesFromWhitelist="true">',
+        '      <directory suffix=".php">src</directory>',
+        '    </whitelist>',
+        '  </filter>',
+        '  <logging>',
+        '    <log type="coverage-clover" target="build/coverage_xml/main.xml"/>',
+        '    <log type="coverage-php" target="build/coverage_cov/main.cov"/>',
+        '    <log type="junit" target="build/coverage_junit/main.xml"/>',
+        '    <log type="coverage-text" target="php://stdout" showUncoveredFiles="false" showOnlySummary="true"/>',
+        '  </logging>',
+        '</phpunit>',
+        '',
+    ];
+
+    /**
+     * @var array
+     */
+    private $minimalSource = [
+        '_children' => [
+            [
+                '_node'     => 'phpunit',
+                '_attrs'    => [
+                    'bootstrap'                       => 'tests/autoload.php',
+                    'convertErrorsToExceptions'       => 'true',
+                    'convertNoticesToExceptions'      => 'true',
+                    'convertWarningsToExceptions'     => 'true',
+                    'convertDeprecationsToExceptions' => 'true',
+                    'executionOrder'                  => 'random',
+                    'processIsolation'                => 'false',
+                    'stopOnError'                     => 'false',
+                    'stopOnFailure'                   => 'false',
+                    'stopOnIncomplete'                => 'false',
+                    'stopOnSkipped'                   => 'false',
+                    'stopOnRisky'                     => 'false',
+                ],
+                '_children' => [
+                    [
+                        '_node'     => 'testsuites',
+                        '_children' => [
+                            [
+                                '_node'     => 'testsuite',
+                                '_attrs'    => ['name' => 'PHPUnit'],
+                                '_children' => [
+                                    [
+                                        '_node'  => 'directory',
+                                        '_text'  => 'tests',
+                                        '_attrs' => ['suffix' => 'Test.php'],
+                                    ],
+                                ],
+                            ],
+                        ],
+                    ],
+                    [
+                        '_node'     => 'filter',
+                        '_children' => [
+                            [
+                                '_node'     => 'whitelist',
+                                '_attrs'    => ['processUncoveredFilesFromWhitelist' => 'true'],
+                                '_children' => [
+                                    [
+                                        '_node'  => 'directory',
+                                        '_text'  => 'src',
+                                        '_attrs' => ['suffix' => '.php'],
+                                    ],
+                                ],
+                            ],
+                        ],
+                    ],
+                    [
+                        '_node'     => 'logging',
+                        '_children' => [
+                            [
+                                '_node'  => 'log',
+                                '_attrs' => ['type' => 'coverage-clover', 'target' => 'build/coverage_xml/main.xml'],
+                            ],
+                            [
+                                '_node'  => 'log',
+                                '_attrs' => ['type' => 'coverage-php', 'target' => 'build/coverage_cov/main.cov'],
+                            ],
+                            [
+                                '_node'  => 'log',
+                                '_attrs' => ['type' => 'junit', 'target' => 'build/coverage_junit/main.xml'],
+                            ],
+                            [
+                                '_node'  => 'log',
+                                '_attrs' => [
+                                    'type'               => 'coverage-text',
+                                    'target'             => 'php://stdout',
+                                    'showUncoveredFiles' => 'false',
+                                    'showOnlySummary'    => 'true',
+                                ],
+                            ],
+                        ],
+                    ],
+                ],
+            ],
+        ],
+    ];
+
+    public function testEscape()
+    {
+        isSame(
+            '&lt;a href=&quot;/test&quot;&gt;Test!@#$%^&amp;*()_+\/&lt;/a&gt;',
+            Xml::escape('<a href="/test">Test!@#$%^&*()_+\\/</a>')
+        );
+    }
+
+    public function testDomToArray()
+    {
+        $xmlString = file_get_contents(PROJECT_ROOT . '/phpunit.xml.dist');
+        $xmlAsArray = Xml::dom2Array(Xml::createFromString($xmlString));
+        isSame($this->expected, $xmlAsArray);
+    }
+
+    public function testArrayToDomToArray()
+    {
+        $xmlString = file_get_contents(PROJECT_ROOT . '/phpunit.xml.dist');
+        $xmlAsArray = Xml::dom2Array(Xml::createFromString($xmlString));
+
+        $xmlDocument = Xml::array2Dom($xmlAsArray);
+        isClass(\DOMDocument::class, $xmlDocument);
+
+        isSame(implode("\n", $this->expectedXml), $xmlDocument->saveXML());
+        isSame($this->expected, Xml::dom2Array($xmlDocument));
+    }
+
+    public function testArrayToDomMinimal()
+    {
+        $xmlDocument = Xml::array2Dom($this->minimalSource);
+        isClass(\DOMDocument::class, $xmlDocument);
+
+        isSame(implode("\n", $this->expectedXml), $xmlDocument->saveXML());
+        isSame($this->expected, Xml::dom2Array($xmlDocument));
+    }
+}

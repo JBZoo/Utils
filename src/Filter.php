@@ -387,14 +387,14 @@ class Filter
     }
 
     /**
-     * Alias of "Str::escXml($string)"
+     * Alias of "Xml::escape($string)"
      *
      * @param string $string
      * @return string
      */
     public static function xml(string $string): string
     {
-        return Str::escXml($string);
+        return Xml::escape($string);
     }
 
     /**

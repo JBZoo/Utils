@@ -328,7 +328,7 @@ Filter::ucFirst(string $input): string; // First char to upper, other to lower
 
 Filter::up(string $string): string; // String to upper and trim
 
-Filter::xml(string $string): string; // Alias of "Str::escXml($string)"
+Filter::xml(string $string): string; // Alias of "Xml::escape($string)"
 
 ```
 
@@ -524,7 +524,9 @@ Str::clean(string $string, bool $toLower = false, bool $addSlashes = false, bool
 
 Str::esc(string $string): string; // Escape UTF-8 strings
 
-Str::escXml(string $string): string; // Escape string before save it as xml content
+// Escape string before save it as xml content.
+// The function is moved. Please, use \JBZoo\Utils\Xml::escape($string). It'll be deprecated soon.
+Str::escXml(string $string): string;
 
 Str::getClassName($object, bool $toLower = false): string; // Get class name without namespace
 
@@ -638,7 +640,7 @@ Sys::hasPHPDBGCodeCoverage(): bool;
 
 Sys::hasXdebug(): bool; // Returns true when the runtime used is PHP and Xdebug is loaded.
 
-Sys::iniGet(string $varName): ?string; // Alias fo ini_get function
+Sys::iniGet(string $varName): string; // Alias fo ini_get function
 
 Sys::iniSet(string $phpIniKey, string $newValue): bool; // Alias fo ini_set function
 
@@ -742,6 +744,20 @@ Vars::out(float $number, float $min, float $max): bool; // Returns true if the n
 Vars::range(float $value, float $min, float $max): int;
 
 Vars::relativePercent(float $normal, float $current): string; // Get relative percent
+
+```
+
+
+### JBZoo\Utils\Xml
+
+```php
+Xml::array2Dom(array $xmlAsArray, ?DOMElement $domElement = null, ?DOMDocument $document = null): DOMDocument; // Convert array to PHP DOMDocument object
+
+Xml::createFromString(?string $source = null): DOMDocument; // Create DOMDocument object from XML-string
+
+Xml::dom2Array(DOMNode $element): array; // Convert PHP \DOMDocument or \DOMNode object to simple array
+
+Xml::escape(string $string): string; // Escape string before save it as xml content
 
 ```
 

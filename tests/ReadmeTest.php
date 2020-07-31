@@ -35,6 +35,7 @@ use JBZoo\Utils\Sys;
 use JBZoo\Utils\Timer;
 use JBZoo\Utils\Url;
 use JBZoo\Utils\Vars;
+use JBZoo\Utils\Xml;
 use ReflectionClass;
 
 /**
@@ -46,7 +47,9 @@ class ReadmeTest extends PHPUnit
 {
     public function testDocs()
     {
-        skip("Disabled test. It's only for local using");
+        if (Env::isExists('TRAVIS')) {
+            skip("Disabled test. It's only for local using");
+        }
 
         $classes = [
             Arr::class,
@@ -69,6 +72,7 @@ class ReadmeTest extends PHPUnit
             Url::class,
             Vars::class,
             PhpDocs::class,
+            Xml::class,
         ];
 
         sort($classes, SORT_NATURAL);

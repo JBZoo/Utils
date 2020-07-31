@@ -21,7 +21,7 @@ use Symfony\Component\Finder\Finder;
  * Class UtilsCopyrightsTest
  * @package JBZoo\PHPUnit
  */
-class UtilsCopyrightsTest extends AbstractCodestyleTest
+class UtilsCodestyleTest extends AbstractCodestyleTest
 {
     public function testCyrillic(): void
     {
