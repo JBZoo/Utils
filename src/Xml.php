@@ -52,12 +52,13 @@ class Xml
      * Create DOMDocument object from XML-string
      *
      * @param string|null $source
+     * @param bool        $preserveWhiteSpace
      * @return \DOMDocument
      */
-    public static function createFromString(?string $source = null): \DOMDocument
+    public static function createFromString(?string $source = null, bool $preserveWhiteSpace = false): \DOMDocument
     {
         $document = new \DOMDocument();
-        $document->preserveWhiteSpace = false;
+        $document->preserveWhiteSpace = $preserveWhiteSpace;
 
         if ($source) {
             $document->loadXML($source);
@@ -71,7 +72,36 @@ class Xml
     }
 
     /**
-     * Convert array to PHP DOMDocument object
+     * Convert array to PHP DOMDocument object.
+     * Format of input array
+     * $source = [
+     *     '_node'     => '#document',
+     *     '_text'     => null,
+     *     '_cdata'    => null,
+     *     '_attrs'    => [],
+     *     '_children' => [
+     *         [
+     *             '_node'     => 'parent',
+     *             '_text'     => "Content of parent tag",
+     *             '_cdata'    => null,
+     *             '_attrs'    => ['parent-attribute' => 'value'],
+     *             '_children' => [
+     *                 [
+     *                     '_node'     => 'child',
+     *                     '_text'     => "Content of child tag",
+     *                     '_cdata'    => null,
+     *                     '_attrs'    => [],
+     *                     '_children' => [],
+     *                 ],
+     *             ]
+     *         ]
+     *     ]
+     * ];
+     *
+     * Format of output
+     *     <?xml version="1.0" encoding="UTF-8"?>
+     *     <parent parent-attribute="value">Content of parent tag<child>Content of child tag</child></parent>
+     *
      *
      * @param array             $xmlAsArray
      * @param \DOMElement|null  $domElement
@@ -125,6 +155,34 @@ class Xml
 
     /**
      * Convert PHP \DOMDocument or \DOMNode object to simple array
+     * Format of input XML (as string)
+     *     <?xml version="1.0" encoding="UTF-8"?>
+     *     <parent parent-attribute="value">Content of parent tag<child>Content of child tag</child></parent>
+     *
+     * Format of output array
+     * $result = [
+     *     '_node'     => '#document',
+     *     '_text'     => null,
+     *     '_cdata'    => null,
+     *     '_attrs'    => [],
+     *     '_children' => [
+     *         [
+     *             '_node'     => 'parent',
+     *             '_text'     => "Content of parent tag",
+     *             '_cdata'    => null,
+     *             '_attrs'    => ['parent-attribute' => 'value'],
+     *             '_children' => [
+     *                 [
+     *                     '_node'     => 'child',
+     *                     '_text'     => "Content of child tag",
+     *                     '_cdata'    => null,
+     *                     '_attrs'    => [],
+     *                     '_children' => [],
+     *                 ],
+     *             ]
+     *         ]
+     *     ]
+     * ];
      *
      * @param \DOMNode|\DOMElement|\DOMDocument $element
      * @return array

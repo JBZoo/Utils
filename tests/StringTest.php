@@ -25,6 +25,38 @@ use JBZoo\Utils\Str;
  */
 class StringTest extends PHPUnit
 {
+    public function testListToDescription()
+    {
+        $source = [
+            '0'              => 'QWERTY',
+            ''               => 'QWERTY123',
+            'q'              => 123,
+            'q123'           => 0,
+            'qwerty'         => 123,
+            'qwe'            => 123,
+            'qweqwerty 1234' => '',
+        ];
+
+        isSame(implode("\n", [
+            'QWERTY',
+            'QWERTY123',
+            'Q: 123',
+            'Q123: 0',
+            'Qwerty: 123',
+            'Qwe: 123',
+            '',
+        ]), Str::listToDescription($source));
+
+        isSame(implode("\n", [
+            'QWERTY',
+            'QWERTY123',
+            'Q     : 123',
+            'Q123  : 0',
+            'Qwerty: 123',
+            'Qwe   : 123',
+            '',
+        ]), Str::listToDescription($source, true));
+    }
 
     public function testStrip()
     {
@@ -315,7 +347,7 @@ class StringTest extends PHPUnit
         isSame('title (2)', Str::inc('title', 'foo', 0));
     }
 
-    public function test()
+    public function testSplitSql()
     {
         $queries = Str::splitSql('SELECT * FROM #__foo;SELECT * FROM #__bar;');
 

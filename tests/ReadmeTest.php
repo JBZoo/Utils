@@ -85,7 +85,7 @@ class ReadmeTest extends PHPUnit
         }
 
         if (strpos($readme, $expected) === false) {
-            fail($expected);
+            is($expected, $readme, 'Just to see difference');
         }
 
         success();

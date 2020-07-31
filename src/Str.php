@@ -921,4 +921,51 @@ class Str
 
         return $queries;
     }
+
+    /**
+     * Convert array of strings to list as pretty print description
+     * @param array $data
+     * @param bool  $alignByKeys
+     * @return string|null
+     */
+    public static function listToDescription(array $data, bool $alignByKeys = false): ?string
+    {
+        /** @psalm-suppress MissingClosureParamType */
+        $maxWidth = array_reduce(array_keys($data), static function ($acc, $key) use ($data): int {
+            if ('' === trim($data[$key])) {
+                return $acc;
+            }
+
+            if ($acc < strlen($key)) {
+                $acc = strlen($key);
+            }
+
+            return $acc;
+        }, 0);
+
+        $result = [];
+        foreach ($data as $key => $value) {
+            $value = trim($value);
+            $key = trim($key);
+
+            if ('' !== $value) {
+                $keyFormated = $key;
+                if ($alignByKeys) {
+                    $keyFormated = str_pad($key, $maxWidth, ' ', STR_PAD_RIGHT);
+                }
+
+                if (is_numeric($key) || $key === '') {
+                    $result[] = $value;
+                } else {
+                    $result[] = ucfirst($keyFormated) . ': ' . $value;
+                }
+            }
+        }
+
+        if (count($result) === 0) {
+            return null;
+        }
+
+        return implode("\n", $result) . "\n";
+    }
 }

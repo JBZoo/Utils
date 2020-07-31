@@ -558,6 +558,8 @@ Str::limitChars(string $string, int $limit = 100, string $append = '...'): strin
 
 Str::limitWords(string $string, int $limit = 100, string $append = '...'): string; // Truncate the string to given length of words.
 
+Str::listToDescription(array $data, bool $alignByKeys = false): ?string; // Convert array of strings to list as pretty print description
+
 Str::low($string): string; // Make a string lowercase
 
 Str::parseLines(string $text, bool $toAssoc = true): array; // Parse text by lines
@@ -751,15 +753,72 @@ Vars::relativePercent(float $normal, float $current): string; // Get relative pe
 ### JBZoo\Utils\Xml
 
 ```php
-Xml::array2Dom(array $xmlAsArray, ?DOMElement $domElement = null, ?DOMDocument $document = null): DOMDocument; // Convert array to PHP DOMDocument object
+// Convert array to PHP DOMDocument object.
+// Format of input array
+// $source = [
+//     '_node'     => '#document',
+//     '_text'     => null,
+//     '_cdata'    => null,
+//     '_attrs'    => [],
+//     '_children' => [
+//         [
+//             '_node'     => 'parent',
+//             '_text'     => "Content of parent tag",
+//             '_cdata'    => null,
+//             '_attrs'    => ['parent-attribute' => 'value'],
+//             '_children' => [
+//                 [
+//                     '_node'     => 'child',
+//                     '_text'     => "Content of child tag",
+//                     '_cdata'    => null,
+//                     '_attrs'    => [],
+//                     '_children' => [],
+//                 ],
+//             ]
+//         ]
+//     ]
+// ];
+// Format of output
+//     <?xml version="1.0" encoding="UTF-8"?>
+//     <parent parent-attribute="value">Content of parent tag<child>Content of child tag</child></parent>
+Xml::array2Dom(array $xmlAsArray, ?DOMElement $domElement = null, ?DOMDocument $document = null): DOMDocument;
 
-Xml::createFromString(?string $source = null): DOMDocument; // Create DOMDocument object from XML-string
+Xml::createFromString(?string $source = null, bool $preserveWhiteSpace = false): DOMDocument; // Create DOMDocument object from XML-string
 
-Xml::dom2Array(DOMNode $element): array; // Convert PHP \DOMDocument or \DOMNode object to simple array
+// Convert PHP \DOMDocument or \DOMNode object to simple array
+// Format of input XML (as string)
+//     <?xml version="1.0" encoding="UTF-8"?>
+//     <parent parent-attribute="value">Content of parent tag<child>Content of child tag</child></parent>
+// Format of output array
+// $result = [
+//     '_node'     => '#document',
+//     '_text'     => null,
+//     '_cdata'    => null,
+//     '_attrs'    => [],
+//     '_children' => [
+//         [
+//             '_node'     => 'parent',
+//             '_text'     => "Content of parent tag",
+//             '_cdata'    => null,
+//             '_attrs'    => ['parent-attribute' => 'value'],
+//             '_children' => [
+//                 [
+//                     '_node'     => 'child',
+//                     '_text'     => "Content of child tag",
+//                     '_cdata'    => null,
+//                     '_attrs'    => [],
+//                     '_children' => [],
+//                 ],
+//             ]
+//         ]
+//     ]
+// ];
+Xml::dom2Array(DOMNode $element): array;
 
 Xml::escape(string $string): string; // Escape string before save it as xml content
 
 ```
+
 
 
 ## Links (ideas and some functions)

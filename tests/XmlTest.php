@@ -290,4 +290,38 @@ class XmlTest extends PHPUnit
         isSame(implode("\n", $this->expectedXml), $xmlDocument->saveXML());
         isSame($this->expected, Xml::dom2Array($xmlDocument));
     }
+
+    public function testPhpDocs()
+    {
+        $source = [
+            '_node'     => '#document',
+            '_text'     => null,
+            '_cdata'    => null,
+            '_attrs'    => [],
+            '_children' => [
+                [
+                    '_node'     => 'parent',
+                    '_text'     => "Content of parent tag",
+                    '_cdata'    => null,
+                    '_attrs'    => ['parent-attribute' => 'value'],
+                    '_children' => [
+                        [
+                            '_node'     => 'child',
+                            '_text'     => "Content of child tag",
+                            '_cdata'    => null,
+                            '_attrs'    => [],
+                            '_children' => [],
+                        ],
+                    ]
+                ]
+            ]
+        ];
+
+        $xmlDocument = Xml::array2Dom($source);
+        isSame(implode("\n", [
+            '<?xml version="1.0" encoding="UTF-8"?>',
+            '<parent parent-attribute="value">Content of parent tag<child>Content of child tag</child></parent>',
+            ''
+        ]), $xmlDocument->saveXML());
+    }
 }
