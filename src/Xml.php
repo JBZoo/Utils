@@ -28,24 +28,26 @@ class Xml
     /**
      * Escape string before save it as xml content
      *
-     * @param string $string
+     * @param string|float|int|null $rawXmlContent
      * @return string
      */
-    public static function escape(string $string): string
+    public static function escape($rawXmlContent): string
     {
-        $string = (string)preg_replace(
+        $rawXmlContent = (string)$rawXmlContent;
+
+        $rawXmlContent = (string)preg_replace(
             '/[^\x{0009}\x{000a}\x{000d}\x{0020}-\x{D7FF}\x{E000}-\x{FFFD}]+/u',
             ' ',
-            $string
+            $rawXmlContent
         );
 
-        $string = str_replace(
+        $rawXmlContent = str_replace(
             ['&', '<', '>', '"', "'"],
             ['&amp;', '&lt;', '&gt;', '&quot;', '&apos;'],
-            $string
+            $rawXmlContent
         );
 
-        return $string;
+        return $rawXmlContent;
     }
 
     /**

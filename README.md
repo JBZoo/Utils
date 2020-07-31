@@ -815,7 +815,7 @@ Xml::createFromString(?string $source = null, bool $preserveWhiteSpace = false):
 // ];
 Xml::dom2Array(DOMNode $element): array;
 
-Xml::escape(string $string): string; // Escape string before save it as xml content
+Xml::escape($rawXmlContent): string; // Escape string before save it as xml content
 
 ```
 
