@@ -138,11 +138,7 @@ class Xml
 
         if (array_key_exists('_children', $xmlAsArray)) {
             foreach ($xmlAsArray['_children'] as $mixedElement) {
-                if (
-                    array_key_exists('_node', $mixedElement) &&
-                    '#comment' !== $mixedElement['_node'] &&
-                    '#document' !== $mixedElement['_node']
-                ) {
+                if (array_key_exists('_node', $mixedElement) && '#' !== $mixedElement['_node'][0]) {
                     $node = $document->createElement($mixedElement['_node']);
                     $domElement->appendChild($node);
 

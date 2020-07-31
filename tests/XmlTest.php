@@ -24,6 +24,8 @@ use JBZoo\Utils\Xml;
  */
 class XmlTest extends PHPUnit
 {
+    private $xmlFixture = PROJECT_ROOT . '/tests/resources/some-xml-file.xml';
+
     /**
      * @var array
      */
@@ -34,108 +36,79 @@ class XmlTest extends PHPUnit
         '_attrs'    => [],
         '_children' => [
             [
-                '_node'     => 'phpunit',
+                '_node'     => 'slideshow',
                 '_text'     => null,
                 '_cdata'    => null,
                 '_attrs'    => [
-                    'bootstrap'                       => 'tests/autoload.php',
-                    'convertErrorsToExceptions'       => 'true',
-                    'convertNoticesToExceptions'      => 'true',
-                    'convertWarningsToExceptions'     => 'true',
-                    'convertDeprecationsToExceptions' => 'true',
-                    'executionOrder'                  => 'random',
-                    'processIsolation'                => 'false',
-                    'stopOnError'                     => 'false',
-                    'stopOnFailure'                   => 'false',
-                    'stopOnIncomplete'                => 'false',
-                    'stopOnSkipped'                   => 'false',
-                    'stopOnRisky'                     => 'false',
+                    'title'  => 'Sample Slide Show',
+                    'date'   => 'Date of publication',
+                    'author' => 'Yours Truly',
                 ],
                 '_children' => [
                     [
-                        '_node'     => 'testsuites',
+                        '_node'     => 'slide',
                         '_text'     => null,
                         '_cdata'    => null,
-                        '_attrs'    => [],
+                        '_attrs'    => ['type' => 'all',],
                         '_children' => [
                             [
-                                '_node'     => 'testsuite',
-                                '_text'     => null,
+                                '_node'     => 'title',
+                                '_text'     => 'Wake up to WonderWidgets!',
                                 '_cdata'    => null,
-                                '_attrs'    => ['name' => 'PHPUnit'],
-                                '_children' => [
-                                    [
-                                        '_node'     => 'directory',
-                                        '_text'     => 'tests',
-                                        '_cdata'    => null,
-                                        '_attrs'    => ['suffix' => 'Test.php'],
-                                        '_children' => [],
-                                    ],
-                                ],
+                                '_attrs'    => [],
+                                '_children' => [],
                             ],
                         ],
                     ],
                     [
-                        '_node'     => 'filter',
+                        '_node'     => 'slide',
                         '_text'     => null,
                         '_cdata'    => null,
-                        '_attrs'    => [],
+                        '_attrs'    => ['type' => 'all',],
                         '_children' => [
                             [
-                                '_node'     => 'whitelist',
+                                '_node'     => 'title',
+                                '_text'     => 'Overview',
+                                '_cdata'    => null,
+                                '_attrs'    => [],
+                                '_children' => [],
+                            ],
+                            [
+                                '_node'     => 'item',
                                 '_text'     => null,
                                 '_cdata'    => null,
-                                '_attrs'    => ['processUncoveredFilesFromWhitelist' => 'true'],
+                                '_attrs'    => [],
                                 '_children' => [
                                     [
-                                        '_node'     => 'directory',
-                                        '_text'     => 'src',
+                                        '_node'     => 'em',
+                                        '_text'     => 'WonderWidgets',
                                         '_cdata'    => null,
-                                        '_attrs'    => ['suffix' => '.php'],
+                                        '_attrs'    => [],
                                         '_children' => [],
                                     ],
                                 ],
                             ],
-                        ],
-                    ],
-                    [
-                        '_node'     => 'logging',
-                        '_text'     => null,
-                        '_cdata'    => null,
-                        '_attrs'    => [],
-                        '_children' => [
                             [
-                                '_node'     => 'log',
+                                '_node'     => 'item',
                                 '_text'     => null,
                                 '_cdata'    => null,
-                                '_attrs'    => ['type' => 'coverage-clover', 'target' => 'build/coverage_xml/main.xml'],
+                                '_attrs'    => [],
                                 '_children' => [],
                             ],
                             [
-                                '_node'     => 'log',
+                                '_node'     => 'item',
                                 '_text'     => null,
                                 '_cdata'    => null,
-                                '_attrs'    => ['type' => 'coverage-php', 'target' => 'build/coverage_cov/main.cov'],
-                                '_children' => [],
-                            ],
-                            [
-                                '_node'     => 'log',
-                                '_text'     => null,
-                                '_cdata'    => null,
-                                '_attrs'    => ['type' => 'junit', 'target' => 'build/coverage_junit/main.xml'],
-                                '_children' => [],
-                            ],
-                            [
-                                '_node'     => 'log',
-                                '_text'     => null,
-                                '_cdata'    => null,
-                                '_attrs'    => [
-                                    'type'               => 'coverage-text',
-                                    'target'             => 'php://stdout',
-                                    'showUncoveredFiles' => 'false',
-                                    'showOnlySummary'    => 'true',
+                                '_attrs'    => [],
+                                '_children' => [
+                                    [
+                                        '_node'     => 'em',
+                                        '_text'     => 'buys',
+                                        '_cdata'    => null,
+                                        '_attrs'    => [],
+                                        '_children' => [],
+                                    ],
                                 ],
-                                '_children' => [],
                             ],
                         ],
                     ],
@@ -265,9 +238,12 @@ class XmlTest extends PHPUnit
 
     public function testDomToArray()
     {
-        $xmlString = file_get_contents(PROJECT_ROOT . '/phpunit.xml.dist');
+        $xmlString = file_get_contents($this->xmlFixture);
         $xmlAsArray = Xml::dom2Array(Xml::createFromString($xmlString));
+
         isSame($this->expected, $xmlAsArray);
+
+        isSame(Xml::createFromString($xmlString)->saveXML(), Xml::array2Dom($xmlAsArray)->saveXML());
     }
 
     public function testArrayToDomToArray()
@@ -279,16 +255,16 @@ class XmlTest extends PHPUnit
         isClass(\DOMDocument::class, $xmlDocument);
 
         isSame(implode("\n", $this->expectedXml), $xmlDocument->saveXML());
-        isSame($this->expected, Xml::dom2Array($xmlDocument));
     }
 
     public function testArrayToDomMinimal()
     {
-        $xmlDocument = Xml::array2Dom($this->minimalSource);
-        isClass(\DOMDocument::class, $xmlDocument);
+        $actual = Xml::dom2Array(Xml::array2Dom($this->minimalSource));
 
-        isSame(implode("\n", $this->expectedXml), $xmlDocument->saveXML());
-        isSame($this->expected, Xml::dom2Array($xmlDocument));
+        $xmlString = file_get_contents(PROJECT_ROOT . '/phpunit.xml.dist');
+        $expected = Xml::dom2Array(Xml::createFromString($xmlString));
+
+        isSame($expected, $actual);
     }
 
     public function testPhpDocs()
