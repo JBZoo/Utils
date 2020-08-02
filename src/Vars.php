@@ -17,8 +17,7 @@
 namespace JBZoo\Utils;
 
 /**
- * Class Filter
- *
+ * Class Vars
  * @package JBZoo\Utils
  */
 class Vars

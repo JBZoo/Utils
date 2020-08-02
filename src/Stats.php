@@ -17,9 +17,10 @@
 namespace JBZoo\Utils;
 
 /**
- * Class Math
- * @see     Class based on Statistics.php from phpbench/phpbench
+ * Class Stats
  * @package JBZoo\Utils
+ *
+ * @see https://github.com/phpbench/phpbench/blob/master/lib/Math/Statistics.php
  */
 class Stats
 {

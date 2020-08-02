@@ -17,8 +17,7 @@
 namespace JBZoo\Utils;
 
 /**
- * Class Serialize
- *
+ * Class Ser
  * @package JBZoo\Utils
  */
 class Ser
