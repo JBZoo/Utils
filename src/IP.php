@@ -20,6 +20,7 @@ namespace JBZoo\Utils;
  * Class IP
  *
  * @package JBZoo\Utils
+ * @SuppressWarnings(PHPMD.ShortClassName)
  */
 class IP
 {

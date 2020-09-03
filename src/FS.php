@@ -27,6 +27,7 @@ use RuntimeException;
  * @package JBZoo\Utils
  * @SuppressWarnings(PHPMD.TooManyPublicMethods)
  * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
+ * @SuppressWarnings(PHPMD.ShortClassName)
  */
 class FS
 {
