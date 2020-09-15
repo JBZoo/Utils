@@ -79,6 +79,7 @@ class IP
             // fix the range argument
             $blocks = explode('.', $range);
 
+            /** @phan-suppress-next-line PhanPossiblyInfiniteLoop */
             while (count($blocks) < 4) {
                 $blocks[] = '0';
             }
