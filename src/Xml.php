@@ -123,11 +123,17 @@ class Xml
         $domElement = $domElement ?? $document;
 
         if (array_key_exists('_text', $xmlAsArray) && $xmlAsArray['_text'] !== null) {
-            $domElement->appendChild($document->createTextNode($xmlAsArray['_text']));
+            $newNode = $document->createTextNode($xmlAsArray['_text']);
+            if ($newNode !== false) {
+                $domElement->appendChild($newNode);
+            }
         }
 
         if (array_key_exists('_cdata', $xmlAsArray) && $xmlAsArray['_cdata'] !== null) {
-            $domElement->appendChild($document->createCDATASection($xmlAsArray['_cdata']));
+            $newNode = $document->createCDATASection($xmlAsArray['_cdata']);
+            if ($newNode !== false) {
+                $domElement->appendChild($newNode);
+            }
         }
 
         if ($domElement instanceof \DOMElement && array_key_exists('_attrs', $xmlAsArray)) {
@@ -139,11 +145,13 @@ class Xml
         if (array_key_exists('_children', $xmlAsArray)) {
             foreach ($xmlAsArray['_children'] as $mixedElement) {
                 if (array_key_exists('_node', $mixedElement) && '#' !== $mixedElement['_node'][0]) {
-                    $node = $document->createElement($mixedElement['_node']);
-                    $domElement->appendChild($node);
+                    $newNode = $document->createElement($mixedElement['_node']);
+                    if ($newNode !== false) {
+                        $domElement->appendChild($newNode);
+                    }
 
                     /** @phan-suppress-next-line PhanPossiblyFalseTypeArgument */
-                    self::array2Dom($mixedElement, $node, $document);
+                    self::array2Dom($mixedElement, $newNode, $document);
                 }
             }
         }
