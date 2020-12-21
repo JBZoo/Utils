@@ -65,7 +65,7 @@ class Url
         $uri = $uri ?? ($_SERVER['REQUEST_URI'] ?? '');
 
         // Parse the URI into it's components
-        $parsedUri = data((array)parse_url($uri));
+        $parsedUri = data((array)parse_url((string)$uri));
 
         if ($parsedQuery = $parsedUri->get('query')) {
             parse_str($parsedQuery, $queryParams);
@@ -100,7 +100,7 @@ class Url
 
         // Make the URI consistent with our input
         foreach ([':', '/', '?'] as $char) {
-            if ($newUri[0] === $char && false === strpos($uri, $char)) {
+            if ($newUri[0] === $char && false === strpos((string)$uri, $char)) {
                 $newUri = substr($newUri, 1);
             }
         }

@@ -55,7 +55,11 @@ class Sys
     public static function getUserName(): ?string
     {
         $userInfo = posix_getpwuid(posix_geteuid());
-        return $userInfo['name'] ?? null;
+        if ($userInfo && isset($userInfo['name'])) {
+            return $userInfo['name'] ?? null;
+        }
+
+        return null;
     }
 
     /**
@@ -68,8 +72,8 @@ class Sys
     public static function getHome(): ?string
     {
         $userInfo = posix_getpwuid(posix_geteuid());
-        if (isset($userInfo['dir'])) {
-            return $userInfo['dir'];
+        if ($userInfo && isset($userInfo['dir'])) {
+            return (string)$userInfo['dir'];
         }
 
         if (array_key_exists('HOMEDRIVE', $_SERVER)) {

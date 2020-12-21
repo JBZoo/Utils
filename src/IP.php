@@ -127,9 +127,9 @@ class IP
      * Return network mask. For example, '192.0.0.0' => '255.255.255.0'
      *
      * @param string $ipAddress
-     * @return string
+     * @return string|null
      */
-    public static function getNetMask(string $ipAddress): string
+    public static function getNetMask(string $ipAddress): ?string
     {
         $ipAddressLong = ip2long($ipAddress);
 
@@ -142,6 +142,6 @@ class IP
             $mask = 0xFFFFFF00;
         }
 
-        return long2ip($mask);
+        return long2ip($mask) ?: null;
     }
 }
