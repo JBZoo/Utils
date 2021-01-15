@@ -35,10 +35,10 @@
     },
 
     "require-dev"       : {
-        "jbzoo/toolbox-dev"         : "^2.5.0",
+        "jbzoo/toolbox-dev"         : "^2.6.1",
         "jbzoo/data"                : "^4.1.2",
-        "symfony/process"           : "^4.4|^5.0",
-        "symfony/polyfill-mbstring" : "^1.18.1"
+        "symfony/process"           : "^5.2.1",
+        "symfony/polyfill-mbstring" : "^1.20.0"
     },
 
     "suggest"           : {
