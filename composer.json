@@ -38,7 +38,7 @@
         "jbzoo/toolbox-dev"         : "^2.6.2",
         "jbzoo/data"                : "^4.1.3",
         "symfony/process"           : "^5.2.3",
-        "symfony/polyfill-mbstring" : "^1.20.0"
+        "symfony/polyfill-mbstring" : "^1.22.0"
     },
 
     "suggest"           : {
