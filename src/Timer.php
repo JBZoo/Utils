@@ -25,15 +25,6 @@ namespace JBZoo\Utils;
 class Timer
 {
     /**
-     * @var array
-     */
-    private static $times = [
-        'hour' => 3600000,
-        'min'  => 60000,
-        'sec'  => 1000,
-    ];
-
-    /**
      * Formats the elapsed time as a string.
      *
      * @param float $milliSeconds
@@ -41,9 +32,15 @@ class Timer
      */
     public static function format(float $milliSeconds): string
     {
+        $times = [
+            'hour' => 60 * 60 * 1000,
+            'min'  => 60 * 1000,
+            'sec'  => 1000,
+        ];
+
         $time = round($milliSeconds * 1000);
 
-        foreach (self::$times as $unit => $value) {
+        foreach ($times as $unit => $value) {
             if ($time >= $value) {
                 $time = floor($time / $value * 100.0) / 100.0;
                 return $time . ' ' . $unit . ($time === 1.0 ? '' : 's');
