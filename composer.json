@@ -33,7 +33,8 @@
     },
 
     "require-dev"  : {
-        "jbzoo/toolbox-dev"         : "^2.10.0",
+        "jbzoo/codestyle"           : "^2.10.0",
+        "jbzoo/toolbox-ci"          : "^1.3.5",
         "jbzoo/phpunit"             : "^4.7.0",
         "jbzoo/data"                : "^4.1.3",
         "symfony/process"           : "^5.2.4",
