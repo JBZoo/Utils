@@ -11,8 +11,9 @@
  * @license    MIT
  * @copyright  Copyright (C) JBZoo.com, All rights reserved.
  * @link       https://github.com/JBZoo/Utils
- * @author     Denis Smetannikov <denis@jbzoo.com>
  */
+
+declare(strict_types=1);
 
 namespace JBZoo\Utils;
 
@@ -154,8 +155,8 @@ class Cli
 
         if (count($args) > 0) {
             foreach ($args as $key => $value) {
-                $value = trim($value);
-                $key = trim($key);
+                $value = trim((string)$value);
+                $key = trim((string)$key);
 
                 if (strpos($key, '-') !== 0) {
                     $key = strlen($key) === 1 ? '-' . $key : '--' . $key;

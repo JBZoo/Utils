@@ -13,6 +13,8 @@
  * @link       https://github.com/JBZoo/Utils
  */
 
+declare(strict_types=1);
+
 namespace JBZoo\PHPUnit;
 
 use JBZoo\Utils\Ser;
@@ -52,7 +54,7 @@ class SerTest extends PHPUnit
         isFalse(Ser::maybeUn(serialize(false)));
 
         is('This is a string', Ser::maybeUn('This is a string'));
-        is(5.81, Ser::maybeUn(5.81));
+        is(5.81, Ser::maybeUn('5.81'));
         is([], Ser::maybeUn('a:0:{}'));
         is($obj, Ser::maybeUn('O:8:"stdClass":2:{s:5:"prop1";s:5:"Hello";s:5:"prop2";s:5:"World";}'));
         is(

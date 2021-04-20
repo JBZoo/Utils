@@ -13,6 +13,8 @@
  * @link       https://github.com/JBZoo/Utils
  */
 
+declare(strict_types=1);
+
 namespace JBZoo\PHPUnit;
 
 use JBZoo\Utils\Http;
@@ -28,6 +30,7 @@ class HttpTest extends PHPUnit
     protected function setUp(): void
     {
         parent::setUp();
+        require_once __DIR__ . '/autoload.php';
         revertServerVar();
     }
 

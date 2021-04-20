@@ -11,8 +11,9 @@
  * @license    MIT
  * @copyright  Copyright (C) JBZoo.com, All rights reserved.
  * @link       https://github.com/JBZoo/Utils
- * @author     Denis Smetannikov <denis@jbzoo.com>
  */
+
+declare(strict_types=1);
 
 namespace JBZoo\Utils;
 
@@ -932,12 +933,12 @@ class Str
     {
         /** @psalm-suppress MissingClosureParamType */
         $maxWidth = array_reduce(array_keys($data), static function ($acc, $key) use ($data): int {
-            if ('' === trim($data[$key])) {
+            if ('' === trim((string)$data[$key])) {
                 return $acc;
             }
 
-            if ($acc < strlen($key)) {
-                $acc = strlen($key);
+            if ($acc < strlen((string)$key)) {
+                $acc = strlen((string)$key);
             }
 
             return $acc;
@@ -945,8 +946,8 @@ class Str
 
         $result = [];
         foreach ($data as $key => $value) {
-            $value = trim($value);
-            $key = trim($key);
+            $value = trim((string)$value);
+            $key = trim((string)$key);
 
             if ('' !== $value) {
                 $keyFormated = $key;

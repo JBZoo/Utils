@@ -1,15 +1,15 @@
 {
-    "name"              : "jbzoo/utils",
-    "type"              : "library",
-    "description"       : "Collection of PHP functions, mini classes and snippets for everyday developer's routine life.",
-    "license"           : "MIT",
-    "keywords"          : [
+    "name"         : "jbzoo/utils",
+    "type"         : "library",
+    "description"  : "Collection of PHP functions, mini classes and snippets for everyday developer's routine life.",
+    "license"      : "MIT",
+    "keywords"     : [
         "helpers", "helper", "utility", "utils", "collection", "environment", "image", "filesystem",
         "array", "cli", "command line", "dates", "email", "env", "filter", "http", "url", "serialize",
         "slugify", "string", "mbstring", "timer", "misc"
     ],
 
-    "authors"           : [
+    "authors"      : [
         {
             "name"  : "Denis Smetannikov",
             "email" : "admin@jbzoo.com",
@@ -25,31 +25,33 @@
         }
     ],
 
-    "require"           : {
-        "php"          : ">=7.2",
-        "ext-posix"    : "*",
-        "ext-mbstring" : "*",
-        "ext-gd"       : "*",
-        "ext-filter"   : "*",
-        "ext-dom"      : "*"
+    "require"      : {
+        "php"              : ">=7.2",
+        "ext-posix"        : "*",
+        "ext-filter"       : "*",
+        "ext-dom"          : "*",
+
+        "jbzoo/toolbox-ci" : "^1.3.5"
     },
 
-    "require-dev"       : {
-        "jbzoo/toolbox-dev"         : "^2.8.0",
+    "require-dev"  : {
+        "jbzoo/codestyle"           : "^2.10.0",
+        "jbzoo/phpunit"             : "^4.7.0",
         "jbzoo/data"                : "^4.1.3",
         "symfony/process"           : "^5.2.4",
         "symfony/polyfill-mbstring" : "^1.22.1"
     },
 
-    "suggest"           : {
+    "suggest"      : {
         "ext-mbstring"              : "Provides multibyte specific string functions",
         "symfony/process"           : "For Cli::exec() method only",
         "symfony/polyfill-mbstring" : "For UTF-8 if ext-mbstring disabled",
         "jbzoo/data"                : ">=4.0",
+        "ext-gd"                    : "To use Image helper",
         "ext-intl"                  : "*"
     },
 
-    "autoload"          : {
+    "autoload"     : {
         "files" : [
             "src/defines.php",
             "src/aliases.php"
@@ -59,18 +61,15 @@
         }
     },
 
-    "minimum-stability" : "dev",
-    "prefer-stable"     : true,
-
-    "autoload-dev"      : {
+    "autoload-dev" : {
         "classmap" : ["tests"]
     },
 
-    "config"            : {
+    "config"       : {
         "optimize-autoloader" : true
     },
 
-    "extra"             : {
+    "extra"        : {
         "branch-alias" : {
             "dev-master" : "4.x-dev"
         }

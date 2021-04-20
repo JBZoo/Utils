@@ -13,6 +13,8 @@
  * @link       https://github.com/JBZoo/Utils
  */
 
+declare(strict_types=1);
+
 namespace JBZoo\PHPUnit;
 
 /**
@@ -23,4 +25,11 @@ namespace JBZoo\PHPUnit;
 class UtilsReadmeTest extends AbstractReadmeTest
 {
     protected $packageName = 'Utils';
+
+    protected function setUp(): void
+    {
+        parent::setUp();
+
+        $this->params['strict_types'] = true;
+    }
 }

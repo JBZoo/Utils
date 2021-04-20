@@ -13,6 +13,8 @@
  * @link       https://github.com/JBZoo/Utils
  */
 
+declare(strict_types=1);
+
 namespace JBZoo\PHPUnit;
 
 use JBZoo\Utils\Url;
@@ -28,6 +30,7 @@ class UrlTest extends PHPUnit
     protected function setUp(): void
     {
         parent::setUp();
+        require_once __DIR__ . '/autoload.php';
         revertServerVar();
     }
 
