@@ -28,8 +28,6 @@
     "require"           : {
         "php"          : ">=7.2",
         "ext-posix"    : "*",
-        "ext-mbstring" : "*",
-        "ext-gd"       : "*",
         "ext-filter"   : "*",
         "ext-dom"      : "*"
     },
@@ -46,7 +44,8 @@
         "symfony/process"           : "For Cli::exec() method only",
         "symfony/polyfill-mbstring" : "For UTF-8 if ext-mbstring disabled",
         "jbzoo/data"                : ">=4.0",
-        "ext-intl"                  : "*"
+        "ext-intl"                  : "*",
+        "ext-gd"                    : "To use Image helper"
     },
 
     "autoload"          : {
