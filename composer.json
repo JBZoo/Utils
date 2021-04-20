@@ -45,8 +45,8 @@
         "symfony/process"           : "For Cli::exec() method only",
         "symfony/polyfill-mbstring" : "For UTF-8 if ext-mbstring disabled",
         "jbzoo/data"                : ">=4.0",
-        "ext-intl"                  : "*",
-        "ext-gd"                    : "To use Image helper"
+        "ext-gd"                    : "To use Image helper",
+        "ext-intl"                  : "*"
     },
 
     "autoload"     : {
