@@ -13,6 +13,8 @@
  * @link       https://github.com/JBZoo/Utils
  */
 
+declare(strict_types=1);
+
 namespace JBZoo\PHPUnit;
 
 use JBZoo\Utils\Vars;
@@ -65,10 +67,10 @@ class VarsTest extends PHPUnit
     {
         isTrue(Vars::isEven(2));
         isTrue(Vars::isEven(88));
-        isTrue(Vars::isEven(62.3));
+        isTrue(Vars::isEven(62));
         isFalse(Vars::isEven(9));
         isFalse(Vars::isEven(17));
-        isFalse(Vars::isEven(47.9));
+        isFalse(Vars::isEven(47));
     }
 
     public function testIsNegative()
@@ -83,10 +85,10 @@ class VarsTest extends PHPUnit
     {
         isFalse(Vars::isOdd(2));
         isFalse(Vars::isOdd(88));
-        isFalse(Vars::isOdd(62.3));
+        isFalse(Vars::isOdd(62));
         isTrue(Vars::isOdd(9));
         isTrue(Vars::isOdd(17));
-        isTrue(Vars::isOdd(47.9));
+        isTrue(Vars::isOdd(47));
     }
 
     public function testIsPositive()

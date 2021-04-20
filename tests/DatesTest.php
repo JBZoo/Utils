@@ -13,6 +13,8 @@
  * @link       https://github.com/JBZoo/Utils
  */
 
+declare(strict_types=1);
+
 namespace JBZoo\PHPUnit;
 
 use DateTime;
@@ -87,11 +89,10 @@ class DatesTest extends PHPUnit
     {
         isFalse(Dates::is(''));
         isFalse(Dates::is(null));
-        isFalse(Dates::is(false));
+        isFalse(Dates::is('false'));
         // isFalse(Dates::is('-0100')); // WAT????
         isFalse(Dates::is('string'));
         isFalse(Dates::is('1446203259'));
-        isFalse(Dates::is(1446203259));
 
         isTrue(Dates::is('now'));
         isTrue(Dates::is('2015-10-30'));

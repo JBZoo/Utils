@@ -13,6 +13,8 @@
  * @link       https://github.com/JBZoo/Utils
  */
 
+declare(strict_types=1);
+
 namespace JBZoo\PHPUnit;
 
 use JBZoo\Utils\Slug;
@@ -134,9 +136,9 @@ class StringTest extends PHPUnit
     public function testZeroPad()
     {
         is('0341', Str::zeroPad('0341', 1));
-        is('341', Str::zeroPad(341, 3));
-        is('0341', Str::zeroPad(341, 4));
-        is('000341', Str::zeroPad(341, 6));
+        is('341', Str::zeroPad('341', 3));
+        is('0341', Str::zeroPad('341', 4));
+        is('000341', Str::zeroPad('341', 6));
     }
 
     public function testTruncateSafe()

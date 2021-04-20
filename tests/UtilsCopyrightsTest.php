@@ -13,6 +13,8 @@
  * @link       https://github.com/JBZoo/Utils
  */
 
+declare(strict_types=1);
+
 namespace JBZoo\PHPUnit;
 
 /**
@@ -21,5 +23,6 @@ namespace JBZoo\PHPUnit;
  */
 class UtilsCopyrightsTest extends AbstractCopyrightTest
 {
-    protected $packageName = "Utils";
+    protected $packageName     = "Utils";
+    protected $isPhpStrictType = true;
 }

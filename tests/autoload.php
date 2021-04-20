@@ -13,12 +13,13 @@
  * @link       https://github.com/JBZoo/Utils
  */
 
-namespace JBZoo\PHPUnit;
+declare(strict_types=1);
 
+namespace JBZoo\PHPUnit;
 
 // @codingStandardsIgnoreFile
 if (!defined('ROOT_PATH')) { // for PHPUnit process isolation
-    define('ROOT_PATH', realpath('.'));
+    define('ROOT_PATH', dirname(__DIR__));
 }
 
 // main autoload

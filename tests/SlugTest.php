@@ -13,6 +13,8 @@
  * @link       https://github.com/JBZoo/Utils
  */
 
+declare(strict_types=1);
+
 namespace JBZoo\PHPUnit;
 
 use JBZoo\Utils\Slug;
@@ -24,7 +26,6 @@ use JBZoo\Utils\Slug;
  */
 class SlugTest extends PHPUnit
 {
-
     public function test()
     {
         isTrue(Slug::seemsUTF8('Денис'));

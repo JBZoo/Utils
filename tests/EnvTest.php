@@ -13,6 +13,8 @@
  * @link       https://github.com/JBZoo/Utils
  */
 
+declare(strict_types=1);
+
 namespace JBZoo\PHPUnit;
 
 use JBZoo\Utils\Env;
@@ -36,10 +38,10 @@ class EnvTest extends PHPUnit
 
             ['false', Env::VAR_BOOL, false],
             ['FALSE', Env::VAR_BOOL, false],
-            [0, Env::VAR_BOOL, false],
+            ['0', Env::VAR_BOOL, false],
             ['true', Env::VAR_BOOL, true],
             ['True', Env::VAR_BOOL, true],
-            [1, Env::VAR_BOOL, true],
+            ['1', Env::VAR_BOOL, true],
 
             ['42', Env::VAR_INT, 42],
             ['FALSE', Env::VAR_INT, 0],
@@ -110,7 +112,7 @@ class EnvTest extends PHPUnit
         putenv("FOO= {$value} ");
         isSame($value, Env::string('FOO'));
         isSame('', Env::string('UNDEFINED_VAR'));
-        isSame('42', Env::string('UNDEFINED_VAR', 42));
+        isSame('42', Env::string('UNDEFINED_VAR', '42'));
 
         $_ENV['SOME_VAR'] = '0.5';
         isSame('0.5', Env::string('SOME_VAR'));
@@ -121,7 +123,7 @@ class EnvTest extends PHPUnit
         putenv("FOO={$value}");
         isSame($value, Env::string('FOO'));
         isSame('', Env::string('UNDEFINED_VAR'));
-        isSame('42', Env::string('UNDEFINED_VAR', 42));
+        isSame('42', Env::string('UNDEFINED_VAR', '42'));
 
         $_ENV['SOME_VAR'] = '0.5';
         isSame('0.5', Env::string('SOME_VAR'));

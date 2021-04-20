@@ -11,8 +11,9 @@
  * @license    MIT
  * @copyright  Copyright (C) JBZoo.com, All rights reserved.
  * @link       https://github.com/JBZoo/Utils
- * @author     Denis Smetannikov <denis@jbzoo.com>
  */
+
+declare(strict_types=1);
 
 namespace JBZoo\Utils;
 
@@ -190,7 +191,7 @@ class Image
                 self::color((int)$origColor['r']),
                 self::color((int)$origColor['g']),
                 self::color((int)$origColor['b']),
-                self::alpha($origColor['a'] ?? 0),
+                self::alpha((float)($origColor['a'] ?? 0)),
             ];
         } elseif (
             array_key_exists('0', $origColor) &&
@@ -201,7 +202,7 @@ class Image
                 self::color((int)$origColor[0]),
                 self::color((int)$origColor[1]),
                 self::color((int)$origColor[2]),
-                self::alpha($origColor[3] ?? 0),
+                self::alpha((float)($origColor[3] ?? 0)),
             ];
         }
 

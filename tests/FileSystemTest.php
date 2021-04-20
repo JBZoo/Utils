@@ -13,6 +13,8 @@
  * @link       https://github.com/JBZoo/Utils
  */
 
+declare(strict_types=1);
+
 namespace JBZoo\PHPUnit;
 
 use JBZoo\Utils\FS;
@@ -306,7 +308,7 @@ class FileSystemTest extends PHPUnit
         $size = FS::format(2748779069440, 1);
         is('2.5 TB', $size);
 
-        $size = FS::format(2.81475e15, 1);
+        $size = FS::format((int)2.81475e15, 1);
         is('2.5 PB', $size);
     }
 
@@ -318,7 +320,6 @@ class FileSystemTest extends PHPUnit
         isSame('', FS::ext('image'));
         isSame('', FS::ext(''));
         isSame('', FS::ext(null));
-        isSame('', FS::ext(false));
 
         // URl
         isSame('txt', FS::ext('file.txt?some_var=123456'));
@@ -347,7 +348,6 @@ class FileSystemTest extends PHPUnit
         isSame('image', FS::base('image'));
         isSame('', FS::base(''));
         isSame('', FS::base(null));
-        isSame('', FS::base(false));
     }
 
     public function testFilename()
@@ -358,7 +358,6 @@ class FileSystemTest extends PHPUnit
         isSame('image', FS::filename('image'));
         isSame('', FS::filename(''));
         isSame('', FS::filename(null));
-        isSame('', FS::filename(false));
     }
 
     public function testDirname()
@@ -369,7 +368,6 @@ class FileSystemTest extends PHPUnit
         isSame('.', FS::dirName('image'));
         isSame('', FS::dirName(''));
         isSame('', FS::dirName(null));
-        isSame('', FS::dirName(false));
     }
 
     public function testReal()
@@ -380,7 +378,6 @@ class FileSystemTest extends PHPUnit
     public function testClean()
     {
         isSame('', FS::clean(''));
-        isSame('', FS::clean(false));
         isSame('', FS::clean(null));
 
         isSame('path', FS::clean('path'));
@@ -409,7 +406,6 @@ class FileSystemTest extends PHPUnit
 
     public function testIsDir()
     {
-        isFalse(FS::isDir(false));
         isFalse(FS::isDir(__FILE__));
         isTrue(FS::isDir(__DIR__));
     }

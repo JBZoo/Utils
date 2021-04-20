@@ -13,6 +13,8 @@
  * @link       https://github.com/JBZoo/Utils
  */
 
+declare(strict_types=1);
+
 namespace JBZoo\PHPUnit;
 
 use JBZoo\Utils\Image;
@@ -213,21 +215,21 @@ class ImageTest extends PHPUnit
 
     public function testPercent()
     {
-        isSame(0, Image::percent('0'));
-        isSame(100, Image::percent('100'));
-        isSame(50, Image::percent('50'));
-        isSame(50, Image::percent('50.5'));
-        isSame(0, Image::percent('-1'));
-        isSame(100, Image::percent('200'));
+        isSame(0, Image::percent(0));
+        isSame(100, Image::percent(100));
+        isSame(50, Image::percent(50));
+        isSame(50, Image::percent(50.5));
+        isSame(0, Image::percent(-1));
+        isSame(100, Image::percent(200));
     }
 
     public function testQuality()
     {
-        isSame(0, Image::quality('0'));
-        isSame(100, Image::quality('100'));
-        isSame(50, Image::quality('50'));
-        isSame(0, Image::quality('-1'));
-        isSame(100, Image::quality('200'));
+        isSame(0, Image::quality(0));
+        isSame(100, Image::quality(100));
+        isSame(50, Image::quality(50));
+        isSame(0, Image::quality(-1));
+        isSame(100, Image::quality(200));
     }
 
     public function testStrToBin()
