@@ -194,7 +194,7 @@ class FilterTest extends PHPUnit
 
     public function testPath()
     {
-        isSame('', Filter::_(false, 'path'));
+        isSame('', Filter::_('', 'path'));
         isSame('', Filter::_('http://www.fred.com/josephus', 'path'));
         isSame('images/system', Filter::_('images/system', 'path'));
         isSame('/images/system', Filter::_('/images/system', 'path'));
