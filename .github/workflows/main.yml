@@ -54,7 +54,7 @@ jobs:
         with:
           php-version: ${{ matrix.php-version }}
           coverage: xdebug
-          tools: composer:v2
+          tools: composer
 
       - name: Build the Project
         continue-on-error: ${{ matrix.experimental }}
