@@ -1,0 +1,68 @@
+#
+# JBZoo Toolbox - Toolbox-CI
+#
+# This file is part of the JBZoo Toolbox project.
+# For the full copyright and license information, please view the LICENSE
+# file that was distributed with this source code.
+#
+# @package    Toolbox-CI
+# @license    MIT
+# @copyright  Copyright (C) JBZoo.com, All rights reserved.
+# @link       https://github.com/JBZoo/Toolbox-CI
+#
+
+name: Continuous Integration
+
+on:
+  pull_request:
+    branches:
+      - "*"
+  push:
+    branches:
+      - 'master'
+  schedule:
+    - cron: '15 */8 * * *'
+
+env:
+  COLUMNS: 120
+  TERM_PROGRAM: Hyper
+
+jobs:
+  phpunit:
+    name: PHPUnit
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        php-version: [ 7.2, 7.3, 7.4 ]
+        experimental: [ false ]
+        include:
+          - php-version: "8.0"
+            experimental: true
+          - php-version: "8.1"
+            experimental: true
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Setup PHP and composer
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: ${{ matrix.php-version }}
+          coverage: xdebug
+          tools: composer
+
+      - name: Build the Project
+        continue-on-error: ${{ matrix.experimental }}
+        run: make update --no-print-directory
+
+      - name: 🧪 PHPUnit Tests
+        continue-on-error: ${{ matrix.experimental }}
+        run: make test --no-print-directory
+
+      - name: 👍 Code Quality
+        continue-on-error: ${{ matrix.experimental }}
+        run: make codestyle --no-print-directory
+
+      - name: 📝 Build All Reports at Once
+        continue-on-error: ${{ matrix.experimental }}
+        run: make report-all --no-print-directory
