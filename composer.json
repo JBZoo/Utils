@@ -32,6 +32,10 @@
         "ext-dom"          : "*"
     },
 
+    "require-dev": {
+        "jbzoo/toolbox-dev": "^2.9.0"
+    },
+
     "suggest"      : {
         "ext-mbstring"              : "Provides multibyte specific string functions",
         "symfony/process"           : "For Cli::exec() method only",
@@ -63,8 +67,5 @@
         "branch-alias" : {
             "dev-master" : "4.x-dev"
         }
-    },
-    "require-dev": {
-        "jbzoo/toolbox-dev": "^2.11"
     }
 }
