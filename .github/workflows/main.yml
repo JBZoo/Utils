@@ -31,10 +31,13 @@ jobs:
   phpunit:
     name: PHPUnit
     runs-on: ubuntu-latest
+    env:
+      JBZOO_COMPOSER_UPDATE_FLAGS: ${{ matrix.composer_flags }}
     strategy:
       matrix:
         php-version: [ 7.2, 7.3, 7.4 ]
         experimental: [ false ]
+        composer_flags: [ "--prefer-lowest", "" ]
         include:
           - php-version: "8.0"
             experimental: true
