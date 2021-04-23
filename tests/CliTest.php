@@ -18,6 +18,7 @@ declare(strict_types=1);
 namespace JBZoo\PHPUnit;
 
 use JBZoo\Utils\Cli;
+use JBZoo\Utils\Env;
 use Symfony\Component\Process\Exception\ProcessFailedException;
 
 /**
@@ -68,24 +69,15 @@ class CliTest extends PHPUnit
         Cli::exec('undefined-command');
     }
 
-    public function testCanDetectIfStdoutIsInteractiveByDefault()
-    {
-        isTrue(Cli::isInteractive());
-    }
-
-    public function testCanDetectIfFileDescriptorIsInteractive()
-    {
-        $this->assertIsBool(Cli::isInteractive(STDOUT));
-    }
-
     public function testCanDetectColorSupport()
     {
+        skip('it needs a new idea to test it');
         isTrue(Cli::hasColorSupport());
     }
 
     public function testCanDetectNumberOfColumns()
     {
-        $this->assertIsInt(Cli::getNumberOfColumns());
+        self::assertIsInt(Cli::getNumberOfColumns());
     }
 
     public function testStdMessage()
