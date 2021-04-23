@@ -59,6 +59,8 @@
         "classmap" : ["tests"]
     },
 
+    "prefer-stable" : true,
+    "minimum-stability" : "dev",
     "config"       : {
         "optimize-autoloader" : true
     },
