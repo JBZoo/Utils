@@ -44,7 +44,7 @@ class Filter
     {
         if (is_string($filters)) {
             $filters = Str::trim($filters);
-            $filters = (array)explode(',', $filters);
+            $filters = explode(',', $filters);
 
             foreach ($filters as $filter) {
                 $filterName = self::cmd($filter);
@@ -236,7 +236,7 @@ class Filter
     {
         $pattern = '#^[A-Za-z0-9_\/-]+[A-Za-z0-9_\.-]*([\\\\\/][A-Za-z0-9_-]+[A-Za-z0-9_\.-]*)*$#';
         preg_match($pattern, $value, $matches);
-        return isset($matches[0]) ? (string)$matches[0] : '';
+        return $matches[0] ?? '';
     }
 
     /**

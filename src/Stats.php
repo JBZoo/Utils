@@ -21,7 +21,7 @@ namespace JBZoo\Utils;
  * Class Stats
  * @package JBZoo\Utils
  *
- * @see https://github.com/phpbench/phpbench/blob/master/lib/Math/Statistics.php
+ * @see     https://github.com/phpbench/phpbench/blob/master/lib/Math/Statistics.php
  */
 class Stats
 {
@@ -128,7 +128,7 @@ class Stats
      * For a better implementation copy:
      *   http://docs.scipy.org/doc/numpy-1.10.1/reference/generated/numpy.histogram.html
      *
-     * @param array      $values
+     * @param float[]    $values
      * @param int        $steps
      * @param float|null $lowerBound
      * @param float|null $upperBound
@@ -141,6 +141,10 @@ class Stats
         ?float $lowerBound = null,
         ?float $upperBound = null
     ): array {
+        if (empty($values)) {
+            throw new Exception('Empty array of values is given');
+        }
+
         $min = $lowerBound ?? min($values);
         $max = $upperBound ?? max($values);
 
