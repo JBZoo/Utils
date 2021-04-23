@@ -15,6 +15,9 @@ language: php
 os: linux
 dist: xenial
 
+git:
+  depth: false
+
 php:
   - 7.2
   - 7.3
