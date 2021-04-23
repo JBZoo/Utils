@@ -33,7 +33,7 @@
     },
 
     "require-dev"  : {
-        "jbzoo/toolbox-dev" : "^2.11.0"
+        "jbzoo/toolbox-dev" : "^2.10.0"
     },
 
     "suggest"      : {
@@ -59,8 +59,6 @@
         "classmap" : ["tests"]
     },
 
-    "prefer-stable" : true,
-    "minimum-stability" : "dev",
     "config"       : {
         "optimize-autoloader" : true
     },

@@ -37,7 +37,7 @@ jobs:
       matrix:
         php-version: [ 7.2, 7.3, 7.4 ]
         experimental: [ false ]
-        composer_flags: [ "--prefer-lowest --prefer-stable", "" ]
+        composer_flags: [ "--prefer-lowest", "" ]
         include:
           - php-version: "8.0"
             experimental: true
