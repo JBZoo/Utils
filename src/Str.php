@@ -58,7 +58,7 @@ class Str
         $text = self::clean($text, false, false, false);
 
         $text = str_replace(["\n", "\r", "\r\n", PHP_EOL], "\n", $text);
-        $lines = (array)explode("\n", $text);
+        $lines = explode("\n", $text);
 
         $result = [];
         foreach ($lines as $line) {
@@ -135,7 +135,7 @@ class Str
             return (string)preg_replace($regExp, '&amp;', strtr($string, $transTable));
         }
 
-        return (string)htmlentities($string, ENT_QUOTES, self::$encoding);
+        return htmlentities($string, ENT_QUOTES, self::$encoding);
     }
 
     /**
@@ -385,7 +385,7 @@ class Str
             return (int)mb_strlen($string, self::$encoding);
         }
 
-        return (int)strlen($string);
+        return strlen($string);
     }
 
     /**
@@ -526,7 +526,7 @@ class Str
             return (string)mb_strtolower((string)$string, self::$encoding);
         }
 
-        return (string)strtolower((string)$string);
+        return strtolower((string)$string);
     }
 
     /**
@@ -543,7 +543,7 @@ class Str
             return (string)mb_strtoupper((string)$string, self::$encoding);
         }
 
-        return (string)strtoupper((string)$string);
+        return strtoupper((string)$string);
     }
 
     /**
@@ -559,7 +559,7 @@ class Str
             return (int)mb_substr_count($haystack, $needle, self::$encoding);
         }
 
-        return (int)substr_count($haystack, $needle);
+        return substr_count($haystack, $needle);
     }
 
     /**

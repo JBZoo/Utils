@@ -226,7 +226,7 @@ class Email
     private static function extractDomain(string $email): string
     {
         $parts = explode('@', $email);
-        $domain = (string)array_pop($parts);
+        $domain = array_pop($parts);
 
         if (Sys::isFunc('idn_to_utf8')) {
             return (string)idn_to_ascii($domain, 0, INTL_IDNA_VARIANT_UTS46);

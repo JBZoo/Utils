@@ -76,7 +76,7 @@ class DatesTest extends PHPUnit
         is(date($format), Dates::sql(''));
         is(date($format), Dates::sql(0));
         is(date($format), Dates::sql());
-        is(date($format), Dates::sql(false));
+        is(date($format), Dates::sql(null));
 
         is(date($format), Dates::sql('string'));
         is('2015-10-30 11:07:39', Dates::sql('1446203259'));

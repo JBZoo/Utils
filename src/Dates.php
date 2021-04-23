@@ -51,7 +51,7 @@ class Dates
         }
 
         if (null !== $time) {
-            $time = is_numeric($time) ? (int)$time : (int)strtotime((string)$time);
+            $time = is_numeric($time) ? (int)$time : (int)strtotime($time);
         }
 
         if (!$time) {

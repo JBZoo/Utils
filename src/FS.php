@@ -424,7 +424,7 @@ class FS
      */
     public static function base(?string $path): string
     {
-        return (string)pathinfo((string)$path, PATHINFO_BASENAME);
+        return pathinfo((string)$path, PATHINFO_BASENAME);
     }
 
     /**
@@ -435,7 +435,7 @@ class FS
      */
     public static function filename(?string $path): string
     {
-        return (string)pathinfo((string)$path, PATHINFO_FILENAME);
+        return pathinfo((string)$path, PATHINFO_FILENAME);
     }
 
     /**
@@ -446,7 +446,7 @@ class FS
      */
     public static function dirName(?string $path): string
     {
-        return (string)pathinfo((string)$path, PATHINFO_DIRNAME);
+        return pathinfo((string)$path, PATHINFO_DIRNAME);
     }
 
     /**

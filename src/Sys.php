@@ -57,7 +57,7 @@ class Sys
     {
         $userInfo = posix_getpwuid(posix_geteuid());
         if ($userInfo && isset($userInfo['name'])) {
-            return $userInfo['name'] ?? null;
+            return $userInfo['name'];
         }
 
         return null;
@@ -74,7 +74,7 @@ class Sys
     {
         $userInfo = posix_getpwuid(posix_geteuid());
         if ($userInfo && isset($userInfo['dir'])) {
-            return (string)$userInfo['dir'];
+            return $userInfo['dir'];
         }
 
         if (array_key_exists('HOMEDRIVE', $_SERVER)) {
