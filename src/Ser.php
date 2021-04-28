@@ -159,6 +159,9 @@ class Ser
      */
     protected static function checkBasic(string $data, int $length): bool
     {
-        return $length < 4 || $data[1] !== ':' || ($data[$length - 1] !== ';' && $data[$length - 1] !== '}');
+        $minLength = 4;
+        return $length < $minLength
+            || $data[1] !== ':'
+            || ($data[$length - 1] !== ';' && $data[$length - 1] !== '}');
     }
 }

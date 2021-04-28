@@ -475,4 +475,23 @@ class Arr
 
         return $result;
     }
+
+    /**
+     * @param array                      $array
+     * @param string|float|int|bool|null $value
+     * @return array
+     */
+    public static function removeByValue(array $array, $value): array
+    {
+        return array_filter(
+            $array,
+            /**
+             * @param string|float|int|bool|null $arrayItem
+             */
+            static function ($arrayItem) use ($value): bool {
+                return $value !== $arrayItem;
+            },
+            ARRAY_FILTER_USE_BOTH
+        );
+    }
 }

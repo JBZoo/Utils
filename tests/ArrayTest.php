@@ -454,4 +454,21 @@ class ArrayTest extends PHPUnit
 
         isSame('1,2,3', Arr::implode(',', ['key1' => 1, 'key2' => 2, 'key3' => 3]));
     }
+
+    public function testRemoveByValue()
+    {
+        $array = [0, '0', 1, '1', 1.5, '1.5', true, false, null];
+
+        isSame(['0', 1, '1', 1.5, '1.5', true, false, null], array_values(Arr::removeByValue($array, 0)));
+        isSame([0, 1, '1', 1.5, '1.5', true, false, null], array_values(Arr::removeByValue($array, '0')));
+        isSame([0, '0', '1', 1.5, '1.5', true, false, null], array_values(Arr::removeByValue($array, 1)));
+        isSame([0, '0', 1, 1.5, '1.5', true, false, null], array_values(Arr::removeByValue($array, '1')));
+        isSame([0, '0', 1, '1', '1.5', true, false, null], array_values(Arr::removeByValue($array, 1.5)));
+        isSame([0, '0', 1, '1', 1.5, true, false, null], array_values(Arr::removeByValue($array, '1.5')));
+        isSame([0, '0', 1, '1', 1.5, '1.5', false, null], array_values(Arr::removeByValue($array, true)));
+        isSame([0, '0', 1, '1', 1.5, '1.5', true, null], array_values(Arr::removeByValue($array, false)));
+        isSame([0, '0', 1, '1', 1.5, '1.5', true, false], array_values(Arr::removeByValue($array, null)));
+
+        isSame([1, '1', 1.5, '1.5', true], array_values(Arr::removeByValue([0, 0, 1, '1', 1.5, '1.5', true, 0], 0)));
+    }
 }

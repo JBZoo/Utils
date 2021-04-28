@@ -36,6 +36,10 @@ class Image
     public const RIGHT        = 'r';
     public const BOTTOM_RIGHT = 'bt';
 
+    private const BASE_PARTS     = 3;
+    private const EXTENDS_PARTS  = 4;
+    private const DETAILED_PARTS = 6;
+
     /**
      * Require GD library
      *
@@ -134,11 +138,11 @@ class Image
 
         if (is_string($origColor)) {
             $result = self::normalizeColorString($origColor);
-        } elseif ((count($origColor) === 3 || count($origColor) === 4)) {
+        } elseif ((count($origColor) === self::BASE_PARTS || count($origColor) === self::EXTENDS_PARTS)) {
             $result = self::normalizeColorArray($origColor);
         }
 
-        if (count($result) !== 4) {
+        if (count($result) !== self::EXTENDS_PARTS) {
             throw new Exception('Undefined color format (string): ' . print_r($origColor, true));
         }
 
@@ -157,9 +161,9 @@ class Image
         $color = trim($origColor, '#');
         $color = trim($color);
 
-        if (strlen($color) === 6) {
+        if (strlen($color) === self::DETAILED_PARTS) {
             [$red, $green, $blue] = [$color[0] . $color[1], $color[2] . $color[3], $color[4] . $color[5]];
-        } elseif (strlen($color) === 3) {
+        } elseif (strlen($color) === self::BASE_PARTS) {
             [$red, $green, $blue] = [$color[0] . $color[0], $color[1] . $color[1], $color[2] . $color[2]];
         } else {
             throw new Exception('Undefined color format (string): ' . $origColor);
@@ -242,7 +246,8 @@ class Image
         self::addAlpha($srcImg, false);
 
         // Find the most opaque pixel in the image (the one with the smallest alpha value)
-        $minAlpha = 127;
+        $minBaseAlpha = 127;
+        $minAlpha = $minBaseAlpha;
         for ($x = 0; $x < $width; $x++) {
             for ($y = 0; $y < $height; $y++) {
                 $alpha = (imagecolorat($srcImg, $x, $y) >> 24) & 0xFF;
@@ -260,10 +265,11 @@ class Image
                 $alpha = ($colorXY >> 24) & 0xFF;
 
                 // Calculate new alpha
-                if ($minAlpha !== 127) {
-                    $alpha = 127 + 127 * $opacity * ($alpha - 127) / (127 - $minAlpha);
+                if ($minAlpha !== $minBaseAlpha) {
+                    $alpha = $minBaseAlpha + $minBaseAlpha * $opacity * ($alpha - $minBaseAlpha)
+                        / ($minBaseAlpha - $minAlpha);
                 } else {
-                    $alpha += 127 * $opacity;
+                    $alpha += $minBaseAlpha * $opacity;
                 }
 
                 // Get the color index with new alpha
