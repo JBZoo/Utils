@@ -679,7 +679,7 @@ final class Str
     public static function testName2Human(string $input): string
     {
         $original = $input;
-        $input = self::getClassName($input);
+        $input = (string)self::getClassName($input);
 
         /** @noinspection NotOptimalRegularExpressionsInspection */
         if (!preg_match('#^tests#i', $input)) {
