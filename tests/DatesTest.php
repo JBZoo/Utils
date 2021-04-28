@@ -33,7 +33,7 @@ class DatesTest extends PHPUnit
         date_default_timezone_set('UTC');
     }
 
-    public function testToStamp()
+    public function testToStamp(): void
     {
         is('1446203259', Dates::toStamp(new \DateTime('2015-10-30 11:07:39')));
         is(0, Dates::toStamp('undefined date', false));
@@ -50,7 +50,7 @@ class DatesTest extends PHPUnit
     /**
      * Test that factory() returns a DateTime object.
      */
-    public function testFactory()
+    public function testFactory(): void
     {
         isClass(DateTime::class, Dates::factory());
         isClass(DateTime::class, Dates::factory('1988-02-26 12:23:12'));
@@ -60,7 +60,7 @@ class DatesTest extends PHPUnit
         isSame($datetime, Dates::factory($datetime));
     }
 
-    public function testTimezone()
+    public function testTimezone(): void
     {
         isClass(DateTimeZone::class, Dates::timezone());
 
@@ -68,7 +68,7 @@ class DatesTest extends PHPUnit
         isSame($dtz, Dates::timezone($dtz));
     }
 
-    public function testSql()
+    public function testSql(): void
     {
         $format = Dates::SQL_FORMAT;
 
@@ -85,7 +85,7 @@ class DatesTest extends PHPUnit
         is('2015-10-30 00:00:00', Dates::sql('2015-10-30'));
     }
 
-    public function testIsDate()
+    public function testIsDate(): void
     {
         isFalse(Dates::is(''));
         isFalse(Dates::is(null));
@@ -99,62 +99,62 @@ class DatesTest extends PHPUnit
         isTrue(Dates::is('2015-10-30 11:07:39'));
     }
 
-    public function testHuman()
+    public function testHuman(): void
     {
         is('30 Oct 2015 00:00', Dates::human('2015-10-30'));
         is('30 October 2015', Dates::human('2015-10-30', 'd F Y'));
         is('30 Oct 2015', Dates::human('2015-10-30', 'd M Y'));
     }
 
-    public function testIsThisWeek()
+    public function testIsThisWeek(): void
     {
         isTrue(Dates::isThisWeek('+0 week'));
         isFalse(Dates::isThisWeek('+2 week'));
         isFalse(Dates::isThisWeek('-2 week'));
     }
 
-    public function testIsThisMonth()
+    public function testIsThisMonth(): void
     {
         isTrue(Dates::isThisMonth('+0 month'));
         isFalse(Dates::isThisMonth('+2 month'));
         isFalse(Dates::isThisMonth('-2 month'));
     }
 
-    public function testIsThisYear()
+    public function testIsThisYear(): void
     {
         isTrue(Dates::isThisYear('+0 year'));
         isFalse(Dates::isThisYear('+2 year'));
         isFalse(Dates::isThisYear('-2 year'));
     }
 
-    public function testIsTomorrow()
+    public function testIsTomorrow(): void
     {
         isTrue(Dates::isTomorrow('+1 day'));
         isFalse(Dates::isTomorrow('+0 day'));
         isFalse(Dates::isTomorrow('-1 day'));
     }
 
-    public function testIsToday()
+    public function testIsToday(): void
     {
         isTrue(Dates::isToday('+0 day'));
         isFalse(Dates::isToday('+2 day'));
         isFalse(Dates::isToday('-2 day'));
     }
 
-    public function testIsYesterday()
+    public function testIsYesterday(): void
     {
         isTrue(Dates::isYesterday('-1 day'));
         isFalse(Dates::isYesterday('+0 day'));
         isFalse(Dates::isYesterday('+1 day'));
     }
 
-    public function testConst()
+    public function testConst(): void
     {
         isSame('Y-m-d H:i:s', Dates::SQL_FORMAT);
         isSame('0000-00-00 00:00:00', Dates::SQL_NULL);
     }
 
-    public function testTimeFormat()
+    public function testTimeFormat(): void
     {
         isSame('0.000 sec', Dates::formatTime(0));
         isSame('0.568 sec', Dates::formatTime(0.56789));

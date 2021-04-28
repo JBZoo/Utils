@@ -22,7 +22,7 @@ namespace JBZoo\Utils;
  *
  * @package JBZoo\Utils
  */
-class Csv
+final class Csv
 {
     public const LENGTH_LIMIT = 10000000;
 

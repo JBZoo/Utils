@@ -28,7 +28,7 @@ use ReflectionClass;
  */
 class PhpDocTest extends PHPUnit
 {
-    public function testParse()
+    public function testParse(): void
     {
         $oReflectionClass = new ReflectionClass(Str::class);
         $comment = $oReflectionClass->getMethod('splitSql')->getDocComment();

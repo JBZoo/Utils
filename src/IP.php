@@ -23,7 +23,7 @@ namespace JBZoo\Utils;
  * @package JBZoo\Utils
  * @SuppressWarnings(PHPMD.ShortClassName)
  */
-class IP
+final class IP
 {
     /**
      * Returns the IP address of the client.

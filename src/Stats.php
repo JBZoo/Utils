@@ -23,7 +23,7 @@ namespace JBZoo\Utils;
  *
  * @see     https://github.com/phpbench/phpbench/blob/master/lib/Math/Statistics.php
  */
-class Stats
+final class Stats
 {
     /**
      * Returns the standard deviation of a given population.

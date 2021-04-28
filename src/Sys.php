@@ -23,7 +23,7 @@ namespace JBZoo\Utils;
  * @package JBZoo\Utils
  * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
  */
-class Sys
+final class Sys
 {
     /**
      * Check is current OS Windows

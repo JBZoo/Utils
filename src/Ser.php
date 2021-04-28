@@ -21,7 +21,7 @@ namespace JBZoo\Utils;
  * Class Ser
  * @package JBZoo\Utils
  */
-class Ser
+final class Ser
 {
     /**
      * Check value to find if it was serialized.

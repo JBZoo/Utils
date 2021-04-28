@@ -22,7 +22,7 @@ namespace JBZoo\Utils;
  *
  * @package JBZoo\Utils
  */
-class Email
+final class Email
 {
     /**
      * Create random email

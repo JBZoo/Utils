@@ -64,12 +64,12 @@ class EnvTest extends PHPUnit
      * @param int   $options
      * @param mixed $expected
      */
-    public function testConvertOptions($value, $options, $expected)
+    public function testConvertOptions($value, $options, $expected): void
     {
         isSame($expected, Env::convert($value, $options));
     }
 
-    public function testGet()
+    public function testGet(): void
     {
         putenv('FOO= 123 ');
         isSame('123', Env::get('FOO'));
@@ -81,7 +81,7 @@ class EnvTest extends PHPUnit
         isSame('123', Env::get('SOME_VAR', 42, Env::VAR_STRING));
     }
 
-    public function testInt()
+    public function testInt(): void
     {
         putenv('FOO= 123 ');
         isSame(123, Env::int('FOO'));
@@ -92,7 +92,7 @@ class EnvTest extends PHPUnit
         isSame(123, Env::int('SOME_VAR'));
     }
 
-    public function testFloat()
+    public function testFloat(): void
     {
         $value = 1 / 3;
 
@@ -105,7 +105,7 @@ class EnvTest extends PHPUnit
         isSame(0.5, Env::float('SOME_VAR'));
     }
 
-    public function testString()
+    public function testString(): void
     {
         $value = '"qwerty"';
 
@@ -129,7 +129,7 @@ class EnvTest extends PHPUnit
         isSame('0.5', Env::string('SOME_VAR'));
     }
 
-    public function testIsExists()
+    public function testIsExists(): void
     {
         $notEmptyValue = '"qwerty';
         $emptyValue = '';

@@ -28,13 +28,12 @@ use Symfony\Component\Process\Exception\ProcessFailedException;
  */
 class CliTest extends PHPUnit
 {
-
-    public function testCheck()
+    public function testCheck(): void
     {
         isTrue(Cli::check());
     }
 
-    public function testBuild()
+    public function testBuild(): void
     {
         is('ls', Cli::build('ls'));
         is('ls -0="qwerty"', Cli::build('ls', ['qwerty']));
@@ -55,32 +54,32 @@ class CliTest extends PHPUnit
         is('ls --option', Cli::build('ls', ['option' => 0]));
     }
 
-    public function testExec()
+    public function testExec(): void
     {
         $output1 = Cli::exec('php -v');
         $output2 = Cli::exec('php', ['v' => '']);
         isSame($output1, $output2);
     }
 
-    public function testExecFail()
+    public function testExecFail(): void
     {
         $this->expectException(ProcessFailedException::class);
 
         Cli::exec('undefined-command');
     }
 
-    public function testCanDetectColorSupport()
+    public function testCanDetectColorSupport(): void
     {
         skip('it needs a new idea to test it');
         isTrue(Cli::hasColorSupport());
     }
 
-    public function testCanDetectNumberOfColumns()
+    public function testCanDetectNumberOfColumns(): void
     {
         self::assertIsInt(Cli::getNumberOfColumns());
     }
 
-    public function testStdMessage()
+    public function testStdMessage(): void
     {
         // Just no errors
         isTrue(Cli::out('message1'));
@@ -88,7 +87,7 @@ class CliTest extends PHPUnit
         success();
     }
 
-    public function testErrorMessage()
+    public function testErrorMessage(): void
     {
         // Just no errors
         isTrue(Cli::err('error1'));
@@ -96,7 +95,7 @@ class CliTest extends PHPUnit
         success();
     }
 
-    public function testGetNumberOfColumns()
+    public function testGetNumberOfColumns(): void
     {
         isTrue(Cli::getNumberOfColumns() >= 80);
     }

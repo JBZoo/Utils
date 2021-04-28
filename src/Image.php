@@ -24,7 +24,7 @@ namespace JBZoo\Utils;
  * @SuppressWarnings(PHPMD.TooManyPublicMethods)
  * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
  */
-class Image
+final class Image
 {
     public const TOP_LEFT     = 'tl';
     public const LEFT         = 'l';

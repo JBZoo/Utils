@@ -26,7 +26,7 @@ use Closure;
  * @SuppressWarnings(PHPMD.TooManyPublicMethods)
  * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
  */
-class Arr
+final class Arr
 {
     /**
      * Remove the duplicates from an array.

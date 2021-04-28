@@ -22,7 +22,7 @@ namespace JBZoo\Utils;
  *
  * @package JBZoo\Utils
  */
-class Slug
+final class Slug
 {
     /**
      * The character map.

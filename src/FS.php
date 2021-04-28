@@ -30,7 +30,7 @@ use RuntimeException;
  * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
  * @SuppressWarnings(PHPMD.ShortClassName)
  */
-class FS
+final class FS
 {
     public const TYPE_SOCKET    = 0xC000;
     public const TYPE_SYMLINK   = 0xA000;

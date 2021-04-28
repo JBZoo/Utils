@@ -26,7 +26,7 @@ use JBZoo\Utils\Stats;
  */
 class StatsTest extends PHPUnit
 {
-    public function testMean()
+    public function testMean(): void
     {
         isSame(0.0, Stats::mean([]));
         isSame(0.0, Stats::mean(null));
@@ -37,7 +37,7 @@ class StatsTest extends PHPUnit
         isSame(2.0, Stats::mean([1, 3]));
     }
 
-    public function testStdDev()
+    public function testStdDev(): void
     {
         isSame(0.0, Stats::stdDev([]));
         isSame(0.0, Stats::stdDev([1]));
@@ -48,13 +48,13 @@ class StatsTest extends PHPUnit
         isSame(1.0, Stats::stdDev([1, 3, 2], true));
     }
 
-    public function testLinSpace()
+    public function testLinSpace(): void
     {
         isSame([0.0, 5.0, 10.0, 15.0, 20.0], Stats::linSpace(0, 20, 5));
         isSame([0.0, 4.0, 8.0, 12.0, 16.0], Stats::linSpace(0, 20, 5, false));
     }
 
-    public function testHistogram()
+    public function testHistogram(): void
     {
         isSame([1 => 0], Stats::histogram([1]));
         isSame([1 => 0], Stats::histogram([1, 1, 1]));
@@ -85,7 +85,7 @@ class StatsTest extends PHPUnit
         isSame(['2' => 0], Stats::histogram([1, 2, 1], 5, 2, 2));
     }
 
-    public function testRenderAverage()
+    public function testRenderAverage(): void
     {
         isSame('1.500±0.500', Stats::renderAverage([1, 2, 1, 2]));
         isSame('1.5±0.5', Stats::renderAverage([1, 2, 1, 2], 1));

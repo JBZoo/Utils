@@ -38,7 +38,7 @@ class HttpTest extends PHPUnit
      * @param array $vars
      * @SuppressWarnings(PHPMD.Superglobals)
      */
-    protected function setServerVar(array $vars)
+    protected function setServerVar(array $vars): void
     {
         revertServerVar();
         foreach ($vars as $key => $value) {
@@ -46,7 +46,7 @@ class HttpTest extends PHPUnit
         }
     }
 
-    public function testShouldExtractHeadersFromServerArray()
+    public function testShouldExtractHeadersFromServerArray(): void
     {
         $this->setServerVar([
             'SOME_SERVER_VARIABLE'  => 'value',
@@ -69,7 +69,7 @@ class HttpTest extends PHPUnit
         ], Http::getHeaders());
     }
 
-    public function testHttpPasswordIsOptional()
+    public function testHttpPasswordIsOptional(): void
     {
         $this->setServerVar(['PHP_AUTH_USER' => 'foo']);
 
@@ -80,7 +80,7 @@ class HttpTest extends PHPUnit
         ], Http::getHeaders());
     }
 
-    public function testHttpBasicAuthWithPhpCgi()
+    public function testHttpBasicAuthWithPhpCgi(): void
     {
         $this->setServerVar(['HTTP_AUTHORIZATION' => 'Basic ' . base64_encode('foo:bar')]);
 
@@ -91,7 +91,7 @@ class HttpTest extends PHPUnit
         ], Http::getHeaders());
     }
 
-    public function testHttpBasicAuthWithPhpCgiBogus()
+    public function testHttpBasicAuthWithPhpCgiBogus(): void
     {
         $this->setServerVar(['HTTP_AUTHORIZATION' => 'Basic_' . base64_encode('foo:bar')]);
 
@@ -101,7 +101,7 @@ class HttpTest extends PHPUnit
         isFalse(isset($headers['PHP_AUTH_PW']));
     }
 
-    public function testHttpBasicAuthWithPhpCgiRedirect()
+    public function testHttpBasicAuthWithPhpCgiRedirect(): void
     {
         $this->setServerVar(['REDIRECT_HTTP_AUTHORIZATION' => 'Basic ' . base64_encode('username:pass:word')]);
 
@@ -112,7 +112,7 @@ class HttpTest extends PHPUnit
         ], Http::getHeaders());
     }
 
-    public function testHttpBasicAuthWithPhpCgiEmptyPassword()
+    public function testHttpBasicAuthWithPhpCgiEmptyPassword(): void
     {
         $this->setServerVar(['HTTP_AUTHORIZATION' => 'Basic ' . base64_encode('foo:')]);
 
@@ -123,7 +123,7 @@ class HttpTest extends PHPUnit
         ], Http::getHeaders());
     }
 
-    public function testHttpDigestAuthWithPhpCgi()
+    public function testHttpDigestAuthWithPhpCgi(): void
     {
         $digest = 'Digest username="foo", realm="acme", nonce="' . md5('secret') . '", uri="/protected, qop="auth"';
         $this->setServerVar(['HTTP_AUTHORIZATION' => $digest]);
@@ -134,7 +134,7 @@ class HttpTest extends PHPUnit
         ], Http::getHeaders());
     }
 
-    public function testHttpDigestAuthWithPhpCgiBogus()
+    public function testHttpDigestAuthWithPhpCgiBogus(): void
     {
         $digest = 'Digest_username="foo", realm="acme", nonce="' . md5('secret') . '", uri="/protected, qop="auth"';
         $this->setServerVar(['HTTP_AUTHORIZATION' => $digest]);
@@ -145,7 +145,7 @@ class HttpTest extends PHPUnit
         isFalse(isset($headers['PHP_AUTH_PW']));
     }
 
-    public function testHttpDigestAuthWithPhpCgiRedirect()
+    public function testHttpDigestAuthWithPhpCgiRedirect(): void
     {
         $digest = 'Digest username="foo", realm="acme", nonce="' . md5('secret') . '", uri="/protected, qop="auth"';
         $this->setServerVar(['REDIRECT_HTTP_AUTHORIZATION' => $digest]);
@@ -156,7 +156,7 @@ class HttpTest extends PHPUnit
         ], Http::getHeaders());
     }
 
-    public function testOAuthBearerAuth()
+    public function testOAuthBearerAuth(): void
     {
         $headerContent = 'Bearer L-yLEOr9zhmUYRkzN1jwwxwQ-PBNiKDc8dgfB4hTfvo';
         $this->setServerVar(['HTTP_AUTHORIZATION' => $headerContent]);
@@ -166,7 +166,7 @@ class HttpTest extends PHPUnit
         ], Http::getHeaders());
     }
 
-    public function testOAuthBearerAuthWithRedirect()
+    public function testOAuthBearerAuthWithRedirect(): void
     {
         $headerContent = 'Bearer L-yLEOr9zhmUYRkzN1jwwxwQ-PBNiKDc8dgfB4hTfvo';
         $this->setServerVar(['REDIRECT_HTTP_AUTHORIZATION' => $headerContent]);
@@ -179,7 +179,7 @@ class HttpTest extends PHPUnit
     /**
      * @see https://github.com/symfony/symfony/issues/17345
      */
-    public function testItDoesNotOverwriteTheAuthorizationHeaderIfItIsAlreadySet()
+    public function testItDoesNotOverwriteTheAuthorizationHeaderIfItIsAlreadySet(): void
     {
         $headerContent = 'Bearer L-yLEOr9zhmUYRkzN1jwwxwQ-PBNiKDc8dgfB4hTfvo';
         $this->setServerVar([

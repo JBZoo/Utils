@@ -31,7 +31,7 @@ class EmailTest extends PHPUnit
      * @param $input
      * @param $outcome
      */
-    public function testCheck($input, $outcome)
+    public function testCheck($input, $outcome): void
     {
         is($outcome, Email::check($input));
     }
@@ -40,7 +40,7 @@ class EmailTest extends PHPUnit
      * @dataProvider getEmptyProvider
      * @param $input
      */
-    public function testCheckWithEmptyEmails($input)
+    public function testCheckWithEmptyEmails($input): void
     {
         is([], Email::check($input));
     }
@@ -50,7 +50,7 @@ class EmailTest extends PHPUnit
      * @param $input
      * @param $outcome
      */
-    public function testGetDomains($input, $outcome)
+    public function testGetDomains($input, $outcome): void
     {
         is($outcome, Email::getDomain($input));
     }
@@ -59,12 +59,12 @@ class EmailTest extends PHPUnit
      * @dataProvider getEmptyProvider
      * @param $input
      */
-    public function testGetDomainsWithEmptyEmails($input)
+    public function testGetDomainsWithEmptyEmails($input): void
     {
         is([], Email::getDomain($input));
     }
 
-    public function testGetDomainsWithStringParam()
+    public function testGetDomainsWithStringParam(): void
     {
         is(['test.pt'], Email::getDomain('test@test.pt'));
     }
@@ -74,12 +74,12 @@ class EmailTest extends PHPUnit
      * @param $input
      * @param $outcome
      */
-    public function testGetDomainsInAlphabeticalOrder($input, $outcome)
+    public function testGetDomainsInAlphabeticalOrder($input, $outcome): void
     {
         is($outcome, Email::getDomainSorted($input));
     }
 
-    public function testGetDomainsInAlphabeticalOrderWithOneSizeArray()
+    public function testGetDomainsInAlphabeticalOrderWithOneSizeArray(): void
     {
         is(['test.pt'], Email::getDomainSorted(['test@test.pt']));
     }
@@ -91,7 +91,7 @@ class EmailTest extends PHPUnit
      * @param string $expectedHttps
      * @SuppressWarnings(PHPMD.Superglobals)
      */
-    public function testGetGravatarUrl($input, $expectedHttp, $expectedHttps)
+    public function testGetGravatarUrl($input, $expectedHttp, $expectedHttps): void
     {
         $_SERVER['HTTPS'] = 'off';
         isSame($expectedHttp, Email::getGravatarUrl($input[0], $input[1], $input[2] ?? 'identicon'));
@@ -100,12 +100,12 @@ class EmailTest extends PHPUnit
         isSame($expectedHttps, Email::getGravatarUrl($input[0], $input[1], $input[2] ?? 'identicon'));
     }
 
-    public function testGetGravatarUrlWithEmptyEmails()
+    public function testGetGravatarUrlWithEmptyEmails(): void
     {
         is(null, Email::getGravatarUrl(''));
     }
 
-    public function getCheckProvider()
+    public function getCheckProvider(): array
     {
         return [
             [
@@ -134,7 +134,7 @@ class EmailTest extends PHPUnit
         ];
     }
 
-    public function getDomainsProvider()
+    public function getDomainsProvider(): array
     {
         return [
             [
@@ -205,12 +205,12 @@ class EmailTest extends PHPUnit
         ];
     }
 
-    public function getEmptyProvider()
+    public function getEmptyProvider(): array
     {
         return [[[]], [false], [''], [0],];
     }
 
-    public function getGravatarUrlProvider()
+    public function getGravatarUrlProvider(): array
     {
         return [
             0 => [
@@ -258,7 +258,7 @@ class EmailTest extends PHPUnit
         ];
     }
 
-    public function testRandomEmail()
+    public function testRandomEmail(): void
     {
         isTrue(Email::check(Email::random()));
         isTrue(Email::isValid(Email::random()));
@@ -268,7 +268,7 @@ class EmailTest extends PHPUnit
         isNotSame(Email::random(), Email::random());
     }
 
-    public function testCheckDns()
+    public function testCheckDns(): void
     {
         isFalse(Email::checkDns('123'));
         isTrue(Email::checkDns('denis@gmail.com'));

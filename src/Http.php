@@ -22,7 +22,7 @@ namespace JBZoo\Utils;
  *
  * @package JBZoo\Utils
  */
-class Http
+final class Http
 {
     /**
      * Transmit headers that force a browser to display the download file dialog.

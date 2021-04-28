@@ -23,7 +23,7 @@ namespace JBZoo\Utils;
  * @see     https://github.com/sebastianbergmann/php-timer
  * @package JBZoo\Utils
  */
-class Timer
+final class Timer
 {
     /**
      * Formats the elapsed time as a string.

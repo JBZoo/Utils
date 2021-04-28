@@ -33,7 +33,7 @@ class TimerTest extends PHPUnit
      * @param string $string
      * @param mixed  $seconds
      */
-    public function testSecondsToTimeString($string, $seconds)
+    public function testSecondsToTimeString($string, $seconds): void
     {
         isSame($string, Timer::format($seconds));
     }
@@ -43,17 +43,17 @@ class TimerTest extends PHPUnit
      * @param string $string
      * @param mixed  $seconds
      */
-    public function testSecondsToTimeStringInMillisecond($string, $seconds)
+    public function testSecondsToTimeStringInMillisecond($string, $seconds): void
     {
         isSame($string, Timer::formatMS($seconds));
     }
 
-    public function testGetRequestTime()
+    public function testGetRequestTime(): void
     {
         isTrue(Timer::getRequestTime());
     }
 
-    public function testTimeSinceStart()
+    public function testTimeSinceStart(): void
     {
         isTrue(Timer::timeSinceStart());
     }

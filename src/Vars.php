@@ -21,7 +21,7 @@ namespace JBZoo\Utils;
  * Class Vars
  * @package JBZoo\Utils
  */
-class Vars
+final class Vars
 {
     /**
      * Returns true if the number is within the min and max.

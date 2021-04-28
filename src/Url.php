@@ -26,7 +26,7 @@ use function JBZoo\Data\data;
  * @SuppressWarnings(PHPMD.TooManyPublicMethods)
  * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
  */
-class Url
+final class Url
 {
     /**
      * URL constants as defined in the PHP Manual under "Constants usable with http_build_url()".

@@ -26,7 +26,7 @@ use JBZoo\Utils\Slug;
  */
 class SlugTest extends PHPUnit
 {
-    public function test()
+    public function test(): void
     {
         isTrue(Slug::seemsUTF8('Денис'));
 

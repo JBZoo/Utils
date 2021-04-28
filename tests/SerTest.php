@@ -26,8 +26,7 @@ use JBZoo\Utils\Ser;
  */
 class SerTest extends PHPUnit
 {
-
-    public function testMaybe()
+    public function testMaybe(): void
     {
         $obj = new \stdClass();
         $obj->prop1 = 'Hello';
@@ -44,7 +43,7 @@ class SerTest extends PHPUnit
         );
     }
 
-    public function testMaybeUn()
+    public function testMaybeUn(): void
     {
         $obj = new \stdClass();
         $obj->prop1 = 'Hello';
@@ -89,7 +88,7 @@ class SerTest extends PHPUnit
         );
     }
 
-    public function testIs()
+    public function testIs(): void
     {
         isFalse(Ser::is(1));
         isFalse(Ser::is(null));
@@ -105,7 +104,7 @@ class SerTest extends PHPUnit
         isTrue(Ser::is('O:8:"stdClass":2:{s:5:"prop1";s:5:"Hello";s:5:"prop2";s:5:"World";}'));
     }
 
-    public function testFix()
+    public function testFix(): void
     {
         $expectedData = [
             'Normal',

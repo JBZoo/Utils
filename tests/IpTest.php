@@ -29,7 +29,7 @@ class IpTest extends PHPUnit
     /**
      * @SuppressWarnings(PHPMD.Superglobals)
      */
-    public function testGetRemote()
+    public function testGetRemote(): void
     {
         $_SERVER['REMOTE_ADDR'] = '192.168.0.1';
         $_SERVER['HTTP_CLIENT_IP'] = '192.168.0.2';
@@ -50,7 +50,7 @@ class IpTest extends PHPUnit
         is('192.168.0.1', IP::getRemote(true));
     }
 
-    public function testCidrMatch()
+    public function testCidrMatch(): void
     {
         isTrue(IP::v4InRange('127.0.0.1', '0.0.0.0/0'));
         isTrue(IP::v4InRange('10.2.1.100', '10.2.0.0/16'));
@@ -71,7 +71,7 @@ class IpTest extends PHPUnit
         isFalse(IP::v4InRange('192.168.1.42', '192.168.3.0'));
     }
 
-    public function testGetNetMask()
+    public function testGetNetMask(): void
     {
         is('255.0.0.0', IP::getNetMask('127.0.0.1'));
         is('255.0.0.0', IP::getNetMask('127.0.0.0'));
