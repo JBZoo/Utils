@@ -213,7 +213,6 @@ class StringTest extends PHPUnit
     public function testMbString()
     {
         isSame(Str::isMBString(), function_exists('mb_strtoupper'));
-        isSame(Str::isOverload(), (bool)(ini_get('mbstring.func_overload') & MB_OVERLOAD_STRING));
 
         is(5, Str::len('Денис'));
 

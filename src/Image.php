@@ -494,9 +494,14 @@ class Image
      *
      * @param mixed $image
      * @return bool
+     * @phan-suppress PhanUndeclaredClass
      */
     public static function isGdRes($image): bool
     {
+        if (class_exists(GdImage::class)) {
+            return $image instanceof GdImage;
+        }
+
         return is_resource($image) && strtolower(get_resource_type($image)) === 'gd';
     }
 

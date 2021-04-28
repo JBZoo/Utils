@@ -172,7 +172,7 @@ class Url
         // We want the user to stay on the same host they are currently on,
         // but beware of security issues
         // see http://shiflett.org/blog/2006/mar/server-name-versus-http-host
-        $host = $serverData->get('HTTP_HOST');
+        $host = (string)$serverData->get('HTTP_HOST');
         $port = (int)$serverData->get('SERVER_PORT');
         $url .= str_replace(':' . $port, '', $host);
 

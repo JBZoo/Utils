@@ -15,9 +15,11 @@
 
 declare(strict_types=1);
 
+use JBZoo\Utils\Arr;
+
 $default = include __DIR__ . '/vendor/jbzoo/codestyle/src/phan/default.php';
 
-return array_merge($default, [
+$config = array_merge($default, [
     'directory_list' => [
         'src',
 
@@ -25,3 +27,7 @@ return array_merge($default, [
         'vendor/jbzoo/data',
     ]
 ]);
+
+$config['plugins'] = Arr::removeByValue($config['plugins'], 'UnusedSuppressionPlugin');
+
+return $config;
