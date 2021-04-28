@@ -748,10 +748,14 @@ final class Str
      *
      * @param mixed $object
      * @param bool  $toLower
-     * @return string
+     * @return string|null
      */
-    public static function getClassName($object, bool $toLower = false): string
+    public static function getClassName($object, bool $toLower = false): ?string
     {
+        if (!$object) {
+            return null;
+        }
+
         $className = $object;
         if (is_object($object)) {
             $className = get_class($object);

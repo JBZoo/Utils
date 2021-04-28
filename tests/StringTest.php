@@ -326,6 +326,7 @@ class StringTest extends PHPUnit
 
     public function testGetClassName(): void
     {
+        isSame(null, Str::getClassName(null));
         isSame('JBZoo', Str::getClassName('JBZoo'));
         isSame('JBZoo', Str::getClassName('\JBZoo'));
         isSame('CCK', Str::getClassName('\JBZoo\CCK'));
