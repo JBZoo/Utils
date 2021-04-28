@@ -15,8 +15,6 @@
 
 declare(strict_types=1);
 
-use JBZoo\Utils\Arr;
-
 $default = include __DIR__ . '/vendor/jbzoo/codestyle/src/phan/default.php';
 
 $config = array_merge($default, [
@@ -28,6 +26,9 @@ $config = array_merge($default, [
     ]
 ]);
 
-$config['plugins'] = Arr::removeByValue($config['plugins'], 'UnusedSuppressionPlugin');
+$configIndex = array_search('UnusedSuppressionPlugin', $config['plugins'], true);
+if ($configIndex !== false) {
+    unset($config['plugins'][$configIndex]);
+}
 
 return $config;
