@@ -261,13 +261,6 @@ class ImageTest extends PHPUnit
         isFalse(Image::isSupportedFormat(''));
     }
 
-    public function testIsGdRes()
-    {
-        $imgRes = imagecreatefromgif(PROJECT_TESTS . '/resources/1x1.gif');
-        isTrue(Image::isGdRes($imgRes));
-        isFalse(Image::isGdRes(''));
-    }
-
     public function testPositionUtils()
     {
         // Top Right

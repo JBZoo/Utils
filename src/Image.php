@@ -490,24 +490,6 @@ class Image
     }
 
     /**
-     * Check is var image GD resource
-     *
-     * @param mixed $image
-     * @return bool
-     * @phan-suppress PhanUndeclaredClass
-     * @phan-suppress PhanUndeclaredClassInstanceof
-     * @phan-suppress PhanUndeclaredClassReference
-     */
-    public static function isGdRes($image): bool
-    {
-        if (class_exists(GdImage::class)) {
-            return $image instanceof GdImage;
-        }
-
-        return is_resource($image) && strtolower(get_resource_type($image)) === 'gd';
-    }
-
-    /**
      * Check position name
      *
      * @param string $position

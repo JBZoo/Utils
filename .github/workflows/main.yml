@@ -51,7 +51,6 @@ jobs:
       - name: Setup PHP
         uses: shivammathur/setup-php@v2
         with:
-          extensions: gd
           php-version: ${{ matrix.php-version }}
           coverage: ${{ matrix.coverage }}
           tools: composer
@@ -90,7 +89,6 @@ jobs:
       - name: Setup PHP
         uses: shivammathur/setup-php@v2
         with:
-          extensions: gd
           php-version: ${{ matrix.php-version }}
           tools: composer
 
@@ -128,7 +126,6 @@ jobs:
       - name: Setup PHP
         uses: shivammathur/setup-php@v2
         with:
-          extensions: gd
           php-version: ${{ matrix.php-version }}
           tools: composer
 
