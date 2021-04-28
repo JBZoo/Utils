@@ -37,7 +37,7 @@ use function JBZoo\Utils\stripQuotes;
  */
 class AliasesTest extends PHPUnit
 {
-    public function testAliases()
+    public function testAliases(): void
     {
         isSame(1, int('1'));
         isSame(1.0, float('1'));

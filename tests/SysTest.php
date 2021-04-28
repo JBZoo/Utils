@@ -27,7 +27,7 @@ use JBZoo\Utils\Sys;
  */
 class SysTest extends PHPUnit
 {
-    public function testIsFunc()
+    public function testIsFunc(): void
     {
         isFalse(Sys::isFunc('qwerty'));
         isTrue(Sys::isFunc('trim'));
@@ -38,7 +38,7 @@ class SysTest extends PHPUnit
         isTrue(Sys::isFunc($func));
     }
 
-    public function testSetTimeAndMemory()
+    public function testSetTimeAndMemory(): void
     {
         Sys::setTime(1800);
         Sys::setMemory('128M');
@@ -48,12 +48,12 @@ class SysTest extends PHPUnit
         //isSame('1800', Sys::iniGet('max_execution_time'));
     }
 
-    public function testGetUserName()
+    public function testGetUserName(): void
     {
         isNotEmpty(Sys::getUserName());
     }
 
-    public function testIsPHPVersion()
+    public function testIsPHPVersion(): void
     {
         isFalse(Sys::isPHP('5.3', '4'));
         isFalse(Sys::isPHP('5.3', '4.0'));
@@ -75,14 +75,14 @@ class SysTest extends PHPUnit
         isFalse(Sys::isPHP('5.3', '5.5.0'));
     }
 
-    public function testGetMemory()
+    public function testGetMemory(): void
     {
         isTrue(Sys::getMemory());
         isTrue(Sys::getMemory(true));
         isTrue(Sys::getMemory(false));
     }
 
-    public function testGetDocumentRoot()
+    public function testGetDocumentRoot(): void
     {
         $_SERVER['DOCUMENT_ROOT'] = null;
         isSame(realpath('.'), Sys::getDocRoot());
@@ -98,40 +98,40 @@ class SysTest extends PHPUnit
     }
 
     /**
-     * @covers JBZoo\Utils\Sys::canCollectCodeCoverage
-     * @uses   JBZoo\Utils\Sys::hasXdebug
-     * @uses   JBZoo\Utils\Sys::isHHVM
-     * @uses   JBZoo\Utils\Sys::isPHP
+     * @covers \JBZoo\Utils\Sys::canCollectCodeCoverage
+     * @uses   \JBZoo\Utils\Sys::hasXdebug
+     * @uses   \JBZoo\Utils\Sys::isHHVM
+     * @uses   \JBZoo\Utils\Sys::isPHP
      */
-    public function testAbilityToCollectCodeCoverageCanBeAssessed()
+    public function testAbilityToCollectCodeCoverageCanBeAssessed(): void
     {
-        $this->assertIsBool(Sys::canCollectCodeCoverage());
+        self::assertIsBool(Sys::canCollectCodeCoverage());
     }
 
     /**
      * @covers \JBZoo\Utils\Sys::getBinary
      * @uses   \JBZoo\Utils\Sys::isHHVM
      */
-    public function testBinaryCanBeRetrieved()
+    public function testBinaryCanBeRetrieved(): void
     {
-        $this->assertIsString(Sys::getBinary());
+        self::assertIsString(Sys::getBinary());
     }
 
     /**
      * @covers \JBZoo\Utils\Sys::isHHVM
      */
-    public function testCanBeDetected()
+    public function testCanBeDetected(): void
     {
-        $this->assertIsBool(Sys::isHHVM());
+        self::assertIsBool(Sys::isHHVM());
     }
 
     /**
      * @covers \JBZoo\Utils\Sys::isRealPHP
      * @uses   \JBZoo\Utils\Sys::isHHVM
      */
-    public function testCanBeDetected2()
+    public function testCanBeDetected2(): void
     {
-        $this->assertIsBool(Sys::isRealPHP());
+        self::assertIsBool(Sys::isRealPHP());
     }
 
     /**
@@ -139,9 +139,9 @@ class SysTest extends PHPUnit
      * @uses   \JBZoo\Utils\Sys::isHHVM
      * @uses   \JBZoo\Utils\Sys::isPHP
      */
-    public function testXdebugCanBeDetected()
+    public function testXdebugCanBeDetected(): void
     {
-        $this->assertIsBool(Sys::hasXdebug());
+        self::assertIsBool(Sys::hasXdebug());
     }
 
     /**
@@ -151,35 +151,35 @@ class SysTest extends PHPUnit
      * @uses   \JBZoo\Utils\Sys::isHHVM
      * @uses   \JBZoo\Utils\Sys::isPHP
      */
-    public function testNameAndVersionCanBeRetrieved()
+    public function testNameAndVersionCanBeRetrieved(): void
     {
-        $this->assertIsString(Sys::getNameWithVersion());
+        self::assertIsString(Sys::getNameWithVersion());
     }
 
     /**
      * @covers \JBZoo\Utils\Sys::getName
      * @uses   \JBZoo\Utils\Sys::isHHVM
      */
-    public function testNameCanBeRetrieved()
+    public function testNameCanBeRetrieved(): void
     {
-        $this->assertIsString(Sys::getName());
+        self::assertIsString(Sys::getName());
     }
 
     /**
      * @covers \JBZoo\Utils\Sys::getVersion
      * @uses   \JBZoo\Utils\Sys::isHHVM
      */
-    public function testVersionCanBeRetrieved()
+    public function testVersionCanBeRetrieved(): void
     {
-        $this->assertIsString(Sys::getVersion());
+        self::assertIsString(Sys::getVersion());
     }
 
     /**
      * @covers \JBZoo\Utils\Sys::getVendorUrl
      * @uses   \JBZoo\Utils\Sys::isHHVM
      */
-    public function testVendorUrlCanBeRetrieved()
+    public function testVendorUrlCanBeRetrieved(): void
     {
-        $this->assertIsString(Sys::getVendorUrl());
+        self::assertIsString(Sys::getVendorUrl());
     }
 }

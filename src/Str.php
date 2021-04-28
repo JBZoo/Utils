@@ -25,7 +25,7 @@ namespace JBZoo\Utils;
  * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
  * @SuppressWarnings(PHPMD.TooManyMethods)
  */
-class Str
+final class Str
 {
     /**
      * Default charset is UTF-8

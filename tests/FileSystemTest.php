@@ -34,7 +34,7 @@ class FileSystemTest extends PHPUnit
         $_SERVER['DOCUMENT_ROOT'] = PROJECT_ROOT;
     }
 
-    public function testRemoveDir()
+    public function testRemoveDir(): void
     {
         $dirname = __DIR__;
 
@@ -125,27 +125,27 @@ class FileSystemTest extends PHPUnit
         isFalse(is_dir($dir), 'Could not delete a directory with a symlinked directory inside of it.');
     }
 
-    public function testOpenFile()
+    public function testOpenFile(): void
     {
         isContain('FS::openFile(', FS::openFile(__FILE__));
     }
 
-    public function testFirstLine()
+    public function testFirstLine(): void
     {
         isContain('<?php', FS::firstLine(__FILE__));
         isNull(FS::firstLine(__FILE__ . '_noexists'));
     }
 
-    public function testPerms()
+    public function testPerms(): void
     {
         isFalse(FS::perms('/no/such/file'));
     }
 
-    public function testWritable()
+    public function testWritable(): void
     {
         if (Sys::isWin()) {
             //skip('This functionality is not working on Windows.');
-            return false;
+            return;
         }
 
         if (Sys::isRoot()) {
@@ -180,11 +180,11 @@ class FileSystemTest extends PHPUnit
         unlink($file);
     }
 
-    public function testReadable()
+    public function testReadable(): void
     {
         if (Sys::isWin()) {
             //skip('This functionality is not working on Windows.');
-            return false;
+            return;
         }
 
         if (Sys::isRoot()) {
@@ -211,7 +211,7 @@ class FileSystemTest extends PHPUnit
         unlink($file);
     }
 
-    public function testExecutable()
+    public function testExecutable(): void
     {
         isFalse(FS::executable('/no/such/file'));
 
@@ -236,7 +236,7 @@ class FileSystemTest extends PHPUnit
     /**
      * @SuppressWarnings(PHPMD.Superglobals)
      */
-    public function testGetHome()
+    public function testGetHome(): void
     {
         isTrue(is_writable(Sys::getHome()));
         isNotEmpty(Sys::getHome());
@@ -262,7 +262,7 @@ class FileSystemTest extends PHPUnit
         //$_SERVER = $oldServer;
     }
 
-    public function testDirSize()
+    public function testDirSize(): void
     {
         $dir = __DIR__ . '/dir1';
 
@@ -275,7 +275,7 @@ class FileSystemTest extends PHPUnit
         FS::rmDir($dir);
     }
 
-    public function testLS()
+    public function testLS(): void
     {
         $dir = __DIR__ . DIRECTORY_SEPARATOR . 'dir1';
 
@@ -288,7 +288,7 @@ class FileSystemTest extends PHPUnit
         FS::rmDir($dir);
     }
 
-    public function testFormat()
+    public function testFormat(): void
     {
         $size = FS::format(512, 0);
         is('512 B', $size);
@@ -312,7 +312,7 @@ class FileSystemTest extends PHPUnit
         is('2.5 PB', $size);
     }
 
-    public function testExt()
+    public function testExt(): void
     {
         isSame('png', FS::ext('image.png'));
         isSame('png', FS::ext('image.jpg.png'));
@@ -340,7 +340,7 @@ class FileSystemTest extends PHPUnit
         isSame('png', FS::ext('image.PnG'));
     }
 
-    public function testBase()
+    public function testBase(): void
     {
         isSame('image.png', FS::base('image.png'));
         isSame('image.jpg.png', FS::base('image.jpg.png'));
@@ -350,7 +350,7 @@ class FileSystemTest extends PHPUnit
         isSame('', FS::base(null));
     }
 
-    public function testFilename()
+    public function testFilename(): void
     {
         isSame('image', FS::filename('image.png'));
         isSame('image.jpg', FS::filename('image.jpg.png'));
@@ -360,7 +360,7 @@ class FileSystemTest extends PHPUnit
         isSame('', FS::filename(null));
     }
 
-    public function testDirname()
+    public function testDirname(): void
     {
         isSame('.', FS::dirName('image.png'));
         isSame('.', FS::dirName('image.jpg.png'));
@@ -370,12 +370,12 @@ class FileSystemTest extends PHPUnit
         isSame('', FS::dirName(null));
     }
 
-    public function testReal()
+    public function testReal(): void
     {
         isSame(__FILE__, FS::real(__FILE__));
     }
 
-    public function testClean()
+    public function testClean(): void
     {
         isSame('', FS::clean(''));
         isSame('', FS::clean(null));
@@ -397,32 +397,32 @@ class FileSystemTest extends PHPUnit
         isSame('/../../path/', FS::clean('/..///..///path/', '/'));
     }
 
-    public function testStripExt()
+    public function testStripExt(): void
     {
         isSame('image', FS::stripExt('image.png'));
         isSame('image.jpg', FS::stripExt('image.jpg.png'));
         isSame('/file/path/image.jpg', FS::stripExt('/file/path/image.jpg.png'));
     }
 
-    public function testIsDir()
+    public function testIsDir(): void
     {
         isFalse(FS::isDir(__FILE__));
         isTrue(FS::isDir(__DIR__));
     }
 
-    public function testIsFile()
+    public function testIsFile(): void
     {
         isFalse(FS::isFile(__DIR__));
         isTrue(FS::isFile(__FILE__));
     }
 
-    public function testIsReal()
+    public function testIsReal(): void
     {
         isTrue(FS::isReal(__FILE__));
         isFalse(FS::isReal(__DIR__ . '/../'));
     }
 
-    public function testGetRelative()
+    public function testGetRelative(): void
     {
         $file = __FILE__;
 

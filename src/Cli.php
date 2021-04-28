@@ -26,7 +26,7 @@ use Symfony\Component\Process\Process;
  *
  * @package JBZoo\Utils
  */
-class Cli
+final class Cli
 {
     public const STDIN  = 0;
     public const STDOUT = 1;

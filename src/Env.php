@@ -22,7 +22,7 @@ namespace JBZoo\Utils;
  *
  * @package JBZoo\Utils
  */
-class Env
+final class Env
 {
     public const VAR_NULL   = 1;
     public const VAR_BOOL   = 2;

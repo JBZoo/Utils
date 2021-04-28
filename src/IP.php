@@ -23,7 +23,7 @@ namespace JBZoo\Utils;
  * @package JBZoo\Utils
  * @SuppressWarnings(PHPMD.ShortClassName)
  */
-class IP
+final class IP
 {
     /**
      * Returns the IP address of the client.
@@ -80,8 +80,9 @@ class IP
             // fix the range argument
             $blocks = explode('.', $range);
 
+            $expectedNumOfParts = 4;
             /** @phan-suppress-next-line PhanPossiblyInfiniteLoop */
-            while (count($blocks) < 4) {
+            while (count($blocks) < $expectedNumOfParts) {
                 $blocks[] = '0';
             }
 
@@ -134,15 +135,19 @@ class IP
     {
         $ipAddressLong = ip2long($ipAddress);
 
-        $mask = 0xFFFFFFFF;
-        if (($ipAddressLong & 0x80000000) === 0) {
-            $mask = 0xFF000000;
-        } elseif (($ipAddressLong & 0xC0000000) === 0x80000000) {
-            $mask = 0xFFFF0000;
-        } elseif (($ipAddressLong & 0xE0000000) === 0xC0000000) {
-            $mask = 0xFFFFFF00;
+        $maskLevel1 = 0x80000000;
+        $maskLevel2 = 0xC0000000;
+        $maskLevel3 = 0xE0000000;
+
+        $resultMask = 0xFFFFFFFF;
+        if (($ipAddressLong & $maskLevel1) === 0) {
+            $resultMask = 0xFF000000;
+        } elseif (($ipAddressLong & $maskLevel2) === $maskLevel1) {
+            $resultMask = 0xFFFF0000;
+        } elseif (($ipAddressLong & $maskLevel3) === $maskLevel2) {
+            $resultMask = 0xFFFFFF00;
         }
 
-        return long2ip($mask) ?: null;
+        return long2ip($resultMask) ?: null;
     }
 }

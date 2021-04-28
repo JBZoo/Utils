@@ -26,12 +26,12 @@ use JBZoo\Utils\Image;
  */
 class ImageTest extends PHPUnit
 {
-    public function testCheckSystem()
+    public function testCheckSystem(): void
     {
         isTrue(Image::checkGD());
     }
 
-    public function testisJpeg()
+    public function testisJpeg(): void
     {
         isTrue(Image::isJpeg('jpeg'));
         isTrue(Image::isJpeg('JPG'));
@@ -42,7 +42,7 @@ class ImageTest extends PHPUnit
         isFalse(Image::isJpeg('gif'));
     }
 
-    public function testIsGif()
+    public function testIsGif(): void
     {
         isTrue(Image::isGif('gif'));
         isTrue(Image::isGif('image/gif'));
@@ -52,7 +52,7 @@ class ImageTest extends PHPUnit
         isFalse(Image::isGif('jpg'));
     }
 
-    public function testIsPng()
+    public function testIsPng(): void
     {
         isTrue(Image::isPng('PnG'));
         isTrue(Image::isPng('image/PNG'));
@@ -62,7 +62,7 @@ class ImageTest extends PHPUnit
         isFalse(Image::isPng('gif'));
     }
 
-    public function testNormalizeColor()
+    public function testNormalizeColor(): void
     {
         isSame(
             [0, 136, 204, 0],
@@ -122,7 +122,7 @@ class ImageTest extends PHPUnit
 
     }
 
-    public function testOpacity()
+    public function testOpacity(): void
     {
         isSame(0, Image::opacity(-10));
         isSame(0, Image::opacity(0));
@@ -137,7 +137,7 @@ class ImageTest extends PHPUnit
         isSame(100, Image::opacity(800));
     }
 
-    public function testOpacity2Alpha()
+    public function testOpacity2Alpha(): void
     {
         isSame(127, Image::opacity2Alpha(-200));
         isSame(127, Image::opacity2Alpha(-127));
@@ -163,48 +163,48 @@ class ImageTest extends PHPUnit
         isSame(0, Image::opacity2Alpha(200));
     }
 
-    public function testRotate()
+    public function testRotate(): void
     {
         isSame(-360, Image::rotate(-700));
         isSame(0, Image::rotate(0));
         isSame(360, Image::rotate(700));
     }
 
-    public function testBrightness()
+    public function testBrightness(): void
     {
         isSame(-255, Image::brightness(-700));
         isSame(0, Image::brightness(0));
         isSame(255, Image::brightness(700));
     }
 
-    public function testContrast()
+    public function testContrast(): void
     {
         isSame(-100, Image::contrast(-700));
         isSame(0, Image::contrast(0));
         isSame(100, Image::contrast(700));
     }
 
-    public function testColorize()
+    public function testColorize(): void
     {
         isSame(-255, Image::colorize(-700));
         isSame(0, Image::colorize(0));
         isSame(255, Image::colorize(700));
     }
 
-    public function testSmooth()
+    public function testSmooth(): void
     {
         isSame(1, Image::smooth(0));
         isSame(10, Image::smooth(700));
     }
 
-    public function testBlur()
+    public function testBlur(): void
     {
         isSame(1, Image::blur(0));
         isSame(3, Image::blur(3));
         isSame(10, Image::blur(10));
     }
 
-    public function testDirection()
+    public function testDirection(): void
     {
         isSame('x', Image::direction(''));
         isSame('x', Image::direction('X'));
@@ -213,7 +213,7 @@ class ImageTest extends PHPUnit
         isSame('yx', Image::direction('Yx'));
     }
 
-    public function testPercent()
+    public function testPercent(): void
     {
         isSame(0, Image::percent(0));
         isSame(100, Image::percent(100));
@@ -223,7 +223,7 @@ class ImageTest extends PHPUnit
         isSame(100, Image::percent(200));
     }
 
-    public function testQuality()
+    public function testQuality(): void
     {
         isSame(0, Image::quality(0));
         isSame(100, Image::quality(100));
@@ -232,7 +232,7 @@ class ImageTest extends PHPUnit
         isSame(100, Image::quality(200));
     }
 
-    public function testStrToBin()
+    public function testStrToBin(): void
     {
         $str = 'R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAICRAEAOw==';
         $base64 = 'data:image/gif;base64,' . $str;
@@ -243,7 +243,7 @@ class ImageTest extends PHPUnit
         isSame($bin, Image::strToBin($bin));
     }
 
-    public function testIsSupportedFormat()
+    public function testIsSupportedFormat(): void
     {
         isTrue(Image::isSupportedFormat('png'));
         isTrue(Image::isSupportedFormat('image/png'));
@@ -261,14 +261,7 @@ class ImageTest extends PHPUnit
         isFalse(Image::isSupportedFormat(''));
     }
 
-    public function testIsGdRes()
-    {
-        $imgRes = imagecreatefromgif(PROJECT_TESTS . '/resources/1x1.gif');
-        isTrue(Image::isGdRes($imgRes));
-        isFalse(Image::isGdRes(''));
-    }
-
-    public function testPositionUtils()
+    public function testPositionUtils(): void
     {
         // Top Right
         isSame(Image::TOP_RIGHT, Image::position('   tr  '));
@@ -279,7 +272,7 @@ class ImageTest extends PHPUnit
         isSame(Image::TOP_RIGHT, Image::position('top_right'));
     }
 
-    public function testPosition()
+    public function testPosition(): void
     {
         // Top
         isSame(Image::TOP, Image::position('t'));
@@ -335,7 +328,7 @@ class ImageTest extends PHPUnit
         isSame(Image::CENTER, Image::position(Image::CENTER));
     }
 
-    public function testGetInnerCoords()
+    public function testGetInnerCoords(): void
     {
         isSame([18, 6], Image::getInnerCoords('c', [72, 36], [36, 24], [0, 0]));
         isSame([18, 0], Image::getInnerCoords('t', [72, 36], [36, 24], [0, 0]));
@@ -351,7 +344,7 @@ class ImageTest extends PHPUnit
         isSame([17, 5], Image::getInnerCoords('с', [72, 36], [36, 24], [-1, -1]));
     }
 
-    public function testAddAlpha()
+    public function testAddAlpha(): void
     {
         $imgRes = imagecreatefromgif(PROJECT_TESTS . '/resources/1x1.gif');
         Image::addAlpha($imgRes);
@@ -360,7 +353,7 @@ class ImageTest extends PHPUnit
         isTrue(true);
     }
 
-    public function testImageCopyMergeAlpha()
+    public function testImageCopyMergeAlpha(): void
     {
         $image = imagecreatefromgif(PROJECT_TESTS . '/resources/1x1.gif');
 

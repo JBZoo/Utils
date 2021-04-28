@@ -32,12 +32,12 @@ class FilterTest extends PHPUnit
      * @param $actual
      * @dataProvider providerInt
      */
-    public function testInt($exepted, $actual)
+    public function testInt($exepted, $actual): void
     {
         isSame($exepted, Filter::_($actual, 'int'));
     }
 
-    public function providerInt()
+    public function providerInt(): array
     {
         return [
             [0, null],
@@ -66,7 +66,7 @@ class FilterTest extends PHPUnit
      * @param $round
      * @dataProvider providerFloat
      */
-    public function testFloat($excepted, $actual, $round = null)
+    public function testFloat($excepted, $actual, $round = null): void
     {
         if (null === $round) {
             isSame($excepted, Filter::_($actual, 'float'));
@@ -75,7 +75,7 @@ class FilterTest extends PHPUnit
         }
     }
 
-    public function providerFloat()
+    public function providerFloat(): array
     {
         return [
             [0.0, null],
@@ -110,12 +110,12 @@ class FilterTest extends PHPUnit
      * @param $actual
      * @dataProvider providerBool
      */
-    public function testBool($excepted, $actual)
+    public function testBool($excepted, $actual): void
     {
         isSame($excepted, Filter::_($actual, 'bool'));
     }
 
-    public function providerBool()
+    public function providerBool(): array
     {
         return [
             [true, '1'],
@@ -169,7 +169,7 @@ class FilterTest extends PHPUnit
         ];
     }
 
-    public function testDigests()
+    public function testDigests(): void
     {
         $string = " 0 1 a2b 3c!@#$%^&*()-= <>\t";
 
@@ -178,13 +178,13 @@ class FilterTest extends PHPUnit
         isSame('01a2b3c', Filter::_($string, 'alphanum'));
     }
 
-    public function testBase64()
+    public function testBase64(): void
     {
         $string = '+/0123456789=ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz';
         isSame($string, Filter::_($string, 'base64'));
     }
 
-    public function testTrimExtend()
+    public function testTrimExtend(): void
     {
         isSame('multi', Filter::_("\n\r" . ' multi　' . chr(0xE3) . chr(0x80) . chr(0x80), 'trimExtend'));
         isSame('multi', Filter::_(chr(0xC2) . chr(0xA0) . "\n\r" . ' multi　' . "\t", 'trimExtend'));
@@ -192,7 +192,7 @@ class FilterTest extends PHPUnit
         isSame('clean', Filter::_('clean', 'trim'));
     }
 
-    public function testPath()
+    public function testPath(): void
     {
         isSame('', Filter::_('', 'path'));
         isSame('', Filter::_('http://www.fred.com/josephus', 'path'));
@@ -200,7 +200,7 @@ class FilterTest extends PHPUnit
         isSame('/images/system', Filter::_('/images/system', 'path'));
     }
 
-    public function testArray()
+    public function testArray(): void
     {
         $object = (object)['p' => 'PPP', 'i' => 'III', 'z' => '', 'w' => 123];
 
@@ -211,7 +211,7 @@ class FilterTest extends PHPUnit
         }));
     }
 
-    public function testCmd()
+    public function testCmd(): void
     {
         $excepted = '0123456789-abcdefghijklmnopqrstuvwxyz_abcdefghijklmnopqrstuvwxyz';
         $string = ' 0123456789-ABCDEFGHIJKLMNOPQRSTUVWXYZ_abcdefghijklmnopqrstuvwxyz  йцуке ';
@@ -219,17 +219,17 @@ class FilterTest extends PHPUnit
         isSame($excepted, Filter::_($string, 'cmd'));
     }
 
-    public function testString()
+    public function testString(): void
     {
         isSame('some word', Filter::_(' <img> some word ' . "\t", 'strip'));
     }
 
-    public function testAlias()
+    public function testAlias(): void
     {
         isSame('some-word', Filter::_(' <img> some word ' . "\t", 'alias'));
     }
 
-    public function testApplyRaw()
+    public function testApplyRaw(): void
     {
         $source = ' <img> some-<b>WORD</b> ' . "\t";
 
@@ -240,7 +240,7 @@ class FilterTest extends PHPUnit
         isSame($source, Filter::_($source, ' R A W '));
     }
 
-    public function testParseLines()
+    public function testParseLines(): void
     {
         $source = " qw\rer\n ty \r\n12\n\r34 ";
         $expected = [
@@ -255,7 +255,7 @@ class FilterTest extends PHPUnit
         isSame($expected, Filter::parseLines([$source]));
     }
 
-    public function testOthers()
+    public function testOthers(): void
     {
         isSame('low', Filter::_(' LOW ', 'low'));
         isSame('UP', Filter::_(' up ', 'up'));
@@ -266,7 +266,7 @@ class FilterTest extends PHPUnit
         isSame(' One &amp; Two &lt;&gt; &amp;mdash; ', Filter::_(' One & Two <> &mdash; ', 'esc'));
     }
 
-    public function testApplyOneRule()
+    public function testApplyOneRule(): void
     {
         $source = '127.0001 <img> some-<b>WORD</b> ' . "\t";
 
@@ -274,7 +274,7 @@ class FilterTest extends PHPUnit
         isSame($excepted, Filter::_($source, 'strip'));
     }
 
-    public function testApplySeveralRules()
+    public function testApplySeveralRules(): void
     {
         $source = '127.0001 <img> some-<b>WORD</b> ' . "\t";
 
@@ -284,14 +284,14 @@ class FilterTest extends PHPUnit
         isSame($excepted, Filter::_($source, 'Strip, alias,int'));
     }
 
-    public function testApplyUnderfinedRule()
+    public function testApplyUnderfinedRule(): void
     {
         $this->expectException(\JBZoo\Utils\Exception::class);
 
         Filter::_('123', 'qwertY');
     }
 
-    public function testApplyFunction()
+    public function testApplyFunction(): void
     {
         $source = 'some-WORD';
 
@@ -301,7 +301,7 @@ class FilterTest extends PHPUnit
         }));
     }
 
-    public function testUcfirst()
+    public function testUcfirst(): void
     {
         isSame('Test', Filter::ucFirst('test'));
         isSame('Test', Filter::ucFirst('Test'));
@@ -309,7 +309,7 @@ class FilterTest extends PHPUnit
         isSame('Test', Filter::ucFirst('tEST'));
     }
 
-    public function testClassname()
+    public function testClassname(): void
     {
         isSame('Class123Name456', Filter::className('Class123Name456'));
         isSame('Class123Name456', Filter::className('Class123 Name456'));
@@ -326,7 +326,7 @@ class FilterTest extends PHPUnit
         isSame('Classname', Filter::className('CLASSNAME'));
     }
 
-    public function tstStripQuotes()
+    public function tstStripQuotes(): void
     {
         isSame('qwerty', Filter::stripQuotes('qwerty'));
         isSame('qwerty"', Filter::stripQuotes('qwerty"'));
@@ -342,7 +342,7 @@ class FilterTest extends PHPUnit
         isSame("\"qwerty'", Filter::stripQuotes('"qwerty\''));
     }
 
-    public function testData()
+    public function testData(): void
     {
         $data = [
             'key' => 'value',

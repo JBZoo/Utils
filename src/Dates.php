@@ -25,7 +25,7 @@ use DateTimeZone;
  *
  * @package JBZoo\Utils
  */
-class Dates
+final class Dates
 {
     public const MINUTE = 60;
     public const HOUR   = 3600;
@@ -110,7 +110,7 @@ class Dates
     public static function is(?string $date): bool
     {
         $time = strtotime((string)$date);
-        return $time > 10000;
+        return $time > 0;
     }
 
     /**
@@ -210,7 +210,9 @@ class Dates
      */
     public static function formatTime(float $seconds): string
     {
-        if ($seconds < 2) {
+        $minValuableSeconds = 2;
+
+        if ($seconds < $minValuableSeconds) {
             return number_format($seconds, 3) . ' sec';
         }
 

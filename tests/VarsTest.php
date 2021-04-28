@@ -26,28 +26,28 @@ use JBZoo\Utils\Vars;
  */
 class VarsTest extends PHPUnit
 {
-    public function testIn()
+    public function testIn(): void
     {
         isTrue(Vars::isIn(0.5, 0, 5));
         isTrue(Vars::isIn(0.5, 0.5, 5));
         isFalse(Vars::isIn(0.5, 1, 5));
     }
 
-    public function testLimit()
+    public function testLimit(): void
     {
         isSame(100, Vars::limit(125, 50, 100));
         isSame(50, Vars::limit(45, 50, 100));
         isSame(77, Vars::limit(77, 50, 100));
     }
 
-    public function testMin()
+    public function testMin(): void
     {
         is(50, Vars::min(12, 50));
         is(55, Vars::min(55, 50));
         is(123, Vars::min(123, 50));
     }
 
-    public function testMax()
+    public function testMax(): void
     {
         isSame(-15, Vars::max(-15, 50));
         isSame(12, Vars::max(12, 50));
@@ -56,14 +56,14 @@ class VarsTest extends PHPUnit
         isSame(50, Vars::max(123.5, 50.9));
     }
 
-    public function testOut()
+    public function testOut(): void
     {
         isTrue(Vars::out(15, 5, 10));
         isTrue(Vars::out(3, 5, 10));
         isFalse(Vars::out(8, 5, 10));
     }
 
-    public function testIsEven()
+    public function testIsEven(): void
     {
         isTrue(Vars::isEven(2));
         isTrue(Vars::isEven(88));
@@ -73,7 +73,7 @@ class VarsTest extends PHPUnit
         isFalse(Vars::isEven(47));
     }
 
-    public function testIsNegative()
+    public function testIsNegative(): void
     {
         isTrue(Vars::isNegative(-1));
         isTrue(Vars::isNegative(-384));
@@ -81,7 +81,7 @@ class VarsTest extends PHPUnit
         isFalse(Vars::isNegative(34));
     }
 
-    public function testIsOdd()
+    public function testIsOdd(): void
     {
         isFalse(Vars::isOdd(2));
         isFalse(Vars::isOdd(88));
@@ -91,7 +91,7 @@ class VarsTest extends PHPUnit
         isTrue(Vars::isOdd(47));
     }
 
-    public function testIsPositive()
+    public function testIsPositive(): void
     {
         isTrue(Vars::isPositive(343));
         isTrue(Vars::isPositive(79));
@@ -100,7 +100,7 @@ class VarsTest extends PHPUnit
         isFalse(Vars::isPositive(-1));
     }
 
-    public function testRelativePercent()
+    public function testRelativePercent(): void
     {
         isSame('200', Vars::relativePercent(50, 100));
         isSame('33', Vars::relativePercent(150, 50));

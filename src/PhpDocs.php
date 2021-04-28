@@ -21,7 +21,7 @@ namespace JBZoo\Utils;
  * Class PhpDocs
  * @package JBZoo\Utils
  */
-class PhpDocs
+final class PhpDocs
 {
     /**
      * Simple parse of PHPDocs.

@@ -34,7 +34,7 @@ class UrlTest extends PHPUnit
         revertServerVar();
     }
 
-    public function testRootPath()
+    public function testRootPath(): void
     {
         $_SERVER['HTTP_HOST'] = 'test.dev';
         $_SERVER['SERVER_PORT'] = 80;
@@ -85,7 +85,7 @@ class UrlTest extends PHPUnit
         is('http://test.dev', Url::root());
     }
 
-    public function testParseLinky()
+    public function testParseLinky(): void
     {
         $input = 'great websites: http://www.google.com?param=test and http://yahoo.com/a/nested/folder';
         $expect = 'great websites: <a href="http://www.google.com?param=test">http://www.google.com?param=test</a>'
@@ -95,7 +95,7 @@ class UrlTest extends PHPUnit
         is($expect, Url::parseLink($expect));
     }
 
-    public function testAddArg()
+    public function testAddArg(): void
     {
         // Regular tests
         is('user=5', Url::addArg(['user' => 5], ''));
@@ -132,7 +132,7 @@ class UrlTest extends PHPUnit
         is('/app/admin/users?user=7', Url::addArg(['user' => 7]));
     }
 
-    public function testRemoveArg()
+    public function testRemoveArg(): void
     {
         is('/app/admin/users', Url::delArg('user', '/app/admin/users?user=5'));
         is('/app/admin/users?action=edit', Url::delArg('user', '/app/admin/users?action=edit&user=5'));
@@ -142,7 +142,7 @@ class UrlTest extends PHPUnit
         );
     }
 
-    public function testHttpBuildUrl()
+    public function testHttpBuildUrl(): void
     {
         $url = 'http://user:pass@example.com:8080/path/?query#fragment';
 
@@ -172,7 +172,7 @@ class UrlTest extends PHPUnit
         is('http://admin:1@example.com/', Url::buildAll('http://example.com/', ['user' => 'admin', 'pass' => '1']));
     }
 
-    public function testPathToUrl()
+    public function testPathToUrl(): void
     {
         $_SERVER['HTTP_HOST'] = 'test.dev';
         $_SERVER['SERVER_PORT'] = 80;
@@ -189,7 +189,7 @@ class UrlTest extends PHPUnit
         isSame('http://test.dev/tests/UrlTest.php', Url::pathToUrl(__FILE__));
     }
 
-    public function testIsAbsolute()
+    public function testIsAbsolute(): void
     {
         isTrue(Url::isAbsolute('https://site.com'));
         isTrue(Url::isAbsolute('http://site.com'));
@@ -202,7 +202,7 @@ class UrlTest extends PHPUnit
         isFalse(Url::isAbsolute('W:\path\to\file'));
     }
 
-    public function testEmpty()
+    public function testEmpty(): void
     {
         isNull(Url::root());
         isNull(Url::path());
@@ -260,7 +260,7 @@ class UrlTest extends PHPUnit
         ]));
     }
 
-    public function testRootBugWithPost()
+    public function testRootBugWithPost(): void
     {
         $_SERVER['HTTP_HOST'] = '127.0.0.1:8081';
         $_SERVER['SERVER_PORT'] = 8081;
@@ -268,7 +268,7 @@ class UrlTest extends PHPUnit
         isSame('http://127.0.0.1:8081', Url::root());
     }
 
-    public function testRootBugWithPost2()
+    public function testRootBugWithPost2(): void
     {
         $_SERVER['HTTP_HOST'] = '127.0.0.1:80';
         $_SERVER['SERVER_PORT'] = 80;
@@ -276,7 +276,7 @@ class UrlTest extends PHPUnit
         isSame('http://127.0.0.1', Url::root());
     }
 
-    public function testRootBugWithPost3()
+    public function testRootBugWithPost3(): void
     {
         $_SERVER['HTTP_HOST'] = '127.0.0.1';
         $_SERVER['SERVER_PORT'] = 80;

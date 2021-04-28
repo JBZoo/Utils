@@ -230,7 +230,7 @@ class XmlTest extends PHPUnit
         ],
     ];
 
-    public function testEscape()
+    public function testEscape(): void
     {
         isSame(
             '&lt;a href=&quot;/test&quot;&gt;Test!@#$%^&amp;*()_+\/&lt;/a&gt;',
@@ -238,7 +238,7 @@ class XmlTest extends PHPUnit
         );
     }
 
-    public function testDomToArray()
+    public function testDomToArray(): void
     {
         $xmlString = file_get_contents($this->xmlFixture);
         $xmlAsArray = Xml::dom2Array(Xml::createFromString($xmlString));
@@ -248,7 +248,7 @@ class XmlTest extends PHPUnit
         isSame(Xml::createFromString($xmlString)->saveXML(), Xml::array2Dom($xmlAsArray)->saveXML());
     }
 
-    public function testArrayToDomToArray()
+    public function testArrayToDomToArray(): void
     {
         $xmlString = file_get_contents(PROJECT_ROOT . '/phpunit.xml.dist');
         $xmlAsArray = Xml::dom2Array(Xml::createFromString($xmlString));
@@ -259,7 +259,7 @@ class XmlTest extends PHPUnit
         isSame(implode("\n", $this->expectedXml), $xmlDocument->saveXML());
     }
 
-    public function testArrayToDomMinimal()
+    public function testArrayToDomMinimal(): void
     {
         $actual = Xml::dom2Array(Xml::array2Dom($this->minimalSource));
 
@@ -269,7 +269,7 @@ class XmlTest extends PHPUnit
         isSame($expected, $actual);
     }
 
-    public function testPhpDocs()
+    public function testPhpDocs(): void
     {
         $source = [
             '_node'     => '#document',

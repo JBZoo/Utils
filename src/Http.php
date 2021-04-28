@@ -22,7 +22,7 @@ namespace JBZoo\Utils;
  *
  * @package JBZoo\Utils
  */
-class Http
+final class Http
 {
     /**
      * Transmit headers that force a browser to display the download file dialog.
@@ -164,7 +164,9 @@ class Http
                 if (0 === stripos($authorizationHeader, 'basic ')) {
                     // Decode AUTHORIZATION header into PHP_AUTH_USER and PHP_AUTH_PW when authorization header is basic
                     $exploded = explode(':', (string)base64_decode((string)substr($authorizationHeader, 6)), 2);
-                    if (count($exploded) === 2) {
+
+                    $expectedNumOfParts = 2;
+                    if (count($exploded) === $expectedNumOfParts) {
                         [$headers['PHP_AUTH_USER'], $headers['PHP_AUTH_PW']] = $exploded;
                     }
                 } elseif (empty($_SERVER['PHP_AUTH_DIGEST']) && (0 === stripos($authorizationHeader, 'digest '))) {

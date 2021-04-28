@@ -28,7 +28,7 @@ use JBZoo\Data\JSON;
  * @SuppressWarnings(PHPMD.TooManyMethods)
  * @SuppressWarnings(PHPMD.TooManyPublicMethods)
  */
-class Filter
+final class Filter
 {
     /**
      * Apply custom filter to variable

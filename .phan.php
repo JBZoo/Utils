@@ -15,7 +15,7 @@
 
 declare(strict_types=1);
 
-$default = include __DIR__ . '/../vendor/jbzoo/codestyle/src/phan/default.php';
+$default = include __DIR__ . '/vendor/jbzoo/codestyle/src/phan/default.php';
 
 return array_merge($default, [
     'directory_list' => [

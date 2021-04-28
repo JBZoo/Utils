@@ -26,7 +26,7 @@ use JBZoo\Utils\Csv;
  */
 class CsvTest extends PHPUnit
 {
-    public function testParse()
+    public function testParse(): void
     {
         /** @noinspection ArgumentEqualsDefaultValueInspection */
         $result = Csv::parse(__DIR__ . '/resources/parse.csv', ';', '"', true);

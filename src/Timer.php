@@ -23,7 +23,7 @@ namespace JBZoo\Utils;
  * @see     https://github.com/sebastianbergmann/php-timer
  * @package JBZoo\Utils
  */
-class Timer
+final class Timer
 {
     /**
      * Formats the elapsed time as a string.
@@ -40,11 +40,13 @@ class Timer
         ];
 
         $time = round($milliSeconds * 1000);
+        $minValue = 1.0;
 
         foreach ($times as $unit => $value) {
             if ($time >= $value) {
                 $time = floor($time / $value * 100.0) / 100.0;
-                return $time . ' ' . $unit . ($time === 1.0 ? '' : 's');
+
+                return $time . ' ' . $unit . ($time === $minValue ? '' : 's');
             }
         }
 
@@ -62,10 +64,16 @@ class Timer
         $time = round($seconds * 1000, 3);
         $dec = 3;
 
-        if (!$time || $time >= 10 || $time >= 100) {
-            $dec = 0;
-        } elseif ($time < 10 && $time >= 0.1) {
-            $dec = 1;
+        $decLevel01 = 0.1;
+        $decLevel0 = 0;
+        $decLevel1 = 1;
+        $decLevel10 = 10;
+        $decLevel100 = 100;
+
+        if (!$time || $time >= $decLevel10 || $time >= $decLevel100) {
+            $dec = $decLevel0;
+        } elseif ($time < $decLevel10 && $time >= $decLevel01) {
+            $dec = $decLevel1;
         }
 
         return number_format($time, $dec, '.', ' ') . ' ms';

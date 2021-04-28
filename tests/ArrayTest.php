@@ -27,7 +27,7 @@ use JBZoo\Utils\Arr;
 class ArrayTest extends PHPUnit
 {
 
-    public function testUnique()
+    public function testUnique(): void
     {
         $array = [10, 100, 1231, 10, 600, 20, 40, 1231, 20, 6, 1];
         isSame([10, 100, 1231, 600, 20, 40, 6, 1], Arr::unique($array));
@@ -43,7 +43,7 @@ class ArrayTest extends PHPUnit
         isSame(['asd_1' => 'asd'], Arr::unique($array, true));
     }
 
-    public function testFlatten()
+    public function testFlatten(): void
     {
         $input = [
             'a',
@@ -84,7 +84,7 @@ class ArrayTest extends PHPUnit
         is($expectWithKeys, Arr::flat($input, true));
     }
 
-    public function testSearch()
+    public function testSearch(): void
     {
         $users = [
             1 => (object)['username' => 'brandon', 'age' => 20],
@@ -114,7 +114,7 @@ class ArrayTest extends PHPUnit
         is(1, Arr::search($users, 'brandon'));
     }
 
-    public function testMapDeep()
+    public function testMapDeep(): void
     {
         $input = [
             '<',
@@ -137,14 +137,14 @@ class ArrayTest extends PHPUnit
         is($expect, Arr::mapDeep($input, 'htmlentities'));
     }
 
-    public function testClean()
+    public function testClean(): void
     {
         $input = ['a', 'b', '', null, false, 0];
         $expect = ['a', 'b'];
         isSame($expect, Arr::clean($input));
     }
 
-    public function testIsAssoc()
+    public function testIsAssoc(): void
     {
         isFalse(Arr::isAssoc(['a', 'b', 'c']));
         isFalse(Arr::isAssoc(['0' => 'a', '1' => 'b', '2' => 'c']));
@@ -153,7 +153,7 @@ class ArrayTest extends PHPUnit
         isTrue(Arr::isAssoc(['a' => 'a', 'b' => 'b', 'c' => 'c']));
     }
 
-    public function testUnshiftAssoc()
+    public function testUnshiftAssoc(): void
     {
         $array = ['a' => 1, 'b' => 2, 'c' => 3];
         Arr::unshiftAssoc($array, 'new', 0);
@@ -164,7 +164,7 @@ class ArrayTest extends PHPUnit
         isSame($newArray, ['new' => 42, 'a' => 1, 'b' => 2, 'c' => 3]);
     }
 
-    public function testGetField()
+    public function testGetField(): void
     {
         $array = [
             ['name' => 'Bob', 'age' => 37],
@@ -185,7 +185,7 @@ class ArrayTest extends PHPUnit
         isSame(['Bob', 'Fred', 'Jane', 'Brandon'], Arr::getField($array, 'name'));
     }
 
-    public function testGroupByKey()
+    public function testGroupByKey(): void
     {
         $array = [
             ['name' => 'Bob', 'age' => 37],
@@ -222,7 +222,7 @@ class ArrayTest extends PHPUnit
         ], Arr::groupByKey($array, 'name'));
     }
 
-    public function testMapRecursive()
+    public function testMapRecursive(): void
     {
         $array = [1, 2, 3, 4, 5];
         $result = Arr::map(function ($number) {
@@ -239,7 +239,7 @@ class ArrayTest extends PHPUnit
         is([1, 4, 9, 16, 25, [36, 49, [64, [[[81]]]]]], $result);
     }
 
-    public function testSortByArray()
+    public function testSortByArray(): void
     {
         $array = [
             'address'   => '1',
@@ -258,7 +258,7 @@ class ArrayTest extends PHPUnit
         ], Arr::sortByArray($array, ['dob', 'name', 'address']));
     }
 
-    public function testAddEachKey()
+    public function testAddEachKey(): void
     {
         $array = [1, 2, 3, 4, 5];
         isSame([
@@ -279,7 +279,7 @@ class ArrayTest extends PHPUnit
         ], Arr::addEachKey($array, 'prefix_'));
     }
 
-    public function testToComment()
+    public function testToComment(): void
     {
         $array = [
             'Name' => 'Denis  ',
@@ -289,7 +289,7 @@ class ArrayTest extends PHPUnit
         is('Name: Denis  ;' . PHP_EOL . 'Date: 2015;', Arr::toComment($array));
     }
 
-    public function testCleanBeforeJson()
+    public function testCleanBeforeJson(): void
     {
         $array = [
             'str_empty' => '',
@@ -326,7 +326,7 @@ class ArrayTest extends PHPUnit
         ], Arr::cleanBeforeJson($array));
     }
 
-    public function testIsAttr()
+    public function testIsAttr(): void
     {
         $array = [
             'key'   => 'asd',
@@ -356,7 +356,7 @@ class ArrayTest extends PHPUnit
         isFalse(Arr::key(false, $array));
     }
 
-    public function testIn()
+    public function testIn(): void
     {
         $array = [
             'key'         => 'asd',
@@ -380,7 +380,7 @@ class ArrayTest extends PHPUnit
         isSame(null, Arr::in('qwerty', $array, true));
     }
 
-    public function testFirst()
+    public function testFirst(): void
     {
         $array = [1, 2, 3];
 
@@ -390,7 +390,7 @@ class ArrayTest extends PHPUnit
         isSame(1, Arr::first($array));
     }
 
-    public function testEnd()
+    public function testEnd(): void
     {
         $array = [1, 2, 3];
 
@@ -400,7 +400,7 @@ class ArrayTest extends PHPUnit
         isSame(3, Arr::last($array));
     }
 
-    public function testFirstKey()
+    public function testFirstKey(): void
     {
         $array = [
             'key'         => 'asd',
@@ -416,7 +416,7 @@ class ArrayTest extends PHPUnit
         isSame('key', Arr::firstKey($array));
     }
 
-    public function testLastKey()
+    public function testLastKey(): void
     {
         $array = [
             'key'         => 'asd',
@@ -432,7 +432,7 @@ class ArrayTest extends PHPUnit
         isSame('some-int', Arr::lastKey($array));
     }
 
-    public function testWrap()
+    public function testWrap(): void
     {
         is([], Arr::wrap(null));
         is([1, 2, 3], Arr::wrap([1, 2, 3]));
@@ -440,7 +440,7 @@ class ArrayTest extends PHPUnit
         is([['key' => 'value']], Arr::wrap(['key' => 'value']));
     }
 
-    public function testImplodeNested()
+    public function testImplodeNested(): void
     {
         isSame('1,2,3', Arr::implode(',', [1, 2, 3]));
         isSame('123', Arr::implode('', [1, 2, 3]));
@@ -453,5 +453,22 @@ class ArrayTest extends PHPUnit
         );
 
         isSame('1,2,3', Arr::implode(',', ['key1' => 1, 'key2' => 2, 'key3' => 3]));
+    }
+
+    public function testRemoveByValue(): void
+    {
+        $array = [0, '0', 1, '1', 1.5, '1.5', true, false, null];
+
+        isSame(['0', 1, '1', 1.5, '1.5', true, false, null], array_values(Arr::removeByValue($array, 0)));
+        isSame([0, 1, '1', 1.5, '1.5', true, false, null], array_values(Arr::removeByValue($array, '0')));
+        isSame([0, '0', '1', 1.5, '1.5', true, false, null], array_values(Arr::removeByValue($array, 1)));
+        isSame([0, '0', 1, 1.5, '1.5', true, false, null], array_values(Arr::removeByValue($array, '1')));
+        isSame([0, '0', 1, '1', '1.5', true, false, null], array_values(Arr::removeByValue($array, 1.5)));
+        isSame([0, '0', 1, '1', 1.5, true, false, null], array_values(Arr::removeByValue($array, '1.5')));
+        isSame([0, '0', 1, '1', 1.5, '1.5', false, null], array_values(Arr::removeByValue($array, true)));
+        isSame([0, '0', 1, '1', 1.5, '1.5', true, null], array_values(Arr::removeByValue($array, false)));
+        isSame([0, '0', 1, '1', 1.5, '1.5', true, false], array_values(Arr::removeByValue($array, null)));
+
+        isSame([1, '1', 1.5, '1.5', true], array_values(Arr::removeByValue([0, 0, 1, '1', 1.5, '1.5', true, 0], 0)));
     }
 }

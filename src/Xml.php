@@ -21,7 +21,7 @@ namespace JBZoo\Utils;
  * Class Xml
  * @package JBZoo\Utils
  */
-class Xml
+final class Xml
 {
     public const VERSION  = '1.0';
     public const ENCODING = 'UTF-8';

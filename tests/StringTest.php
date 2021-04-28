@@ -27,7 +27,7 @@ use JBZoo\Utils\Str;
  */
 class StringTest extends PHPUnit
 {
-    public function testListToDescription()
+    public function testListToDescription(): void
     {
         $source = [
             '0'              => 'QWERTY',
@@ -60,14 +60,14 @@ class StringTest extends PHPUnit
         ]), Str::listToDescription($source, true));
     }
 
-    public function testStrip()
+    public function testStrip(): void
     {
         $input = ' The quick brown fox jumps over the lazy dog ';
         $expect = 'Thequickbrownfoxjumpsoverthelazydog';
         is($expect, Str::stripSpace($input));
     }
 
-    public function testClean()
+    public function testClean(): void
     {
         $input = ' <b>ASDF</b> !@#$%^&*()_+"\';:>< ';
 
@@ -75,7 +75,7 @@ class StringTest extends PHPUnit
         isSame('asdf !@#$%^&*()_+\\"\\\';:><', Str::clean($input, true, true));
     }
 
-    public function testParseLines()
+    public function testParseLines(): void
     {
         isSame(['asd'], Str::parseLines('asd', false));
         isSame(['asd' => 'asd'], Str::parseLines('asd', true));
@@ -106,13 +106,13 @@ class StringTest extends PHPUnit
         ], Str::parseLines(implode("\r\n", $lines), false));
     }
 
-    public function testHtmlentities()
+    public function testHtmlentities(): void
     {
         is('One &amp; Two &lt;&gt; &amp;mdash;', Str::htmlEnt('One & Two <> &mdash;'));
         is('One &amp; Two &lt;&gt; &mdash;', Str::htmlEnt('One &amp; Two <> &mdash;', true));
     }
 
-    public function testUnique()
+    public function testUnique(): void
     {
         is(15, strlen(Str::unique()));
         is(10, strlen(Str::unique('t-')));
@@ -121,7 +121,7 @@ class StringTest extends PHPUnit
         isNotSame(Str::unique(), Str::unique());
     }
 
-    public function testRandom()
+    public function testRandom(): void
     {
         is(10, strlen(Str::random()));
         is(10, strlen(Str::random(10)));
@@ -133,7 +133,7 @@ class StringTest extends PHPUnit
         isNotSame(Str::random(), Str::random());
     }
 
-    public function testZeroPad()
+    public function testZeroPad(): void
     {
         is('0341', Str::zeroPad('0341', 1));
         is('341', Str::zeroPad('341', 3));
@@ -141,7 +141,7 @@ class StringTest extends PHPUnit
         is('000341', Str::zeroPad('341', 6));
     }
 
-    public function testTruncateSafe()
+    public function testTruncateSafe(): void
     {
         is('The quick brown fox...', Str::truncateSafe('The quick brown fox jumps over the lazy dog', 24));
         is('The quick brown fox jumps over the lazy dog',
@@ -151,7 +151,7 @@ class StringTest extends PHPUnit
         is('The...', Str::truncateSafe('The quick brown fox jumps over the lazy dog', 7));
     }
 
-    public function testLimitChars()
+    public function testLimitChars(): void
     {
         is('The quick brown fox jump...', Str::limitChars('The quick brown fox jumps over the lazy dog', 24));
         is('The quick brown fox jumps over the lazy dog',
@@ -163,7 +163,7 @@ class StringTest extends PHPUnit
             Str::limitChars('The quick brown fox jumps over the lazy dog', 150));
     }
 
-    public function testLimitWords()
+    public function testLimitWords(): void
     {
         is('The quick brown...', Str::limitWords('The quick brown fox jumps over the lazy dog', 3));
         is('The quick brown fox jumps...', Str::limitWords('The quick brown fox jumps over the lazy dog', 5));
@@ -173,7 +173,7 @@ class StringTest extends PHPUnit
         is('The quick brown fox jumps over the...', Str::limitWords('The quick brown fox jumps over the lazy dog', 7));
     }
 
-    public function testLike()
+    public function testLike(): void
     {
         isTrue(Str::like('a', 'a'));
         isTrue(Str::like('test/*', 'test/first/second'));
@@ -186,7 +186,7 @@ class StringTest extends PHPUnit
         isFalse(Str::like('/', '/something'));
     }
 
-    public function testSlug()
+    public function testSlug(): void
     {
         is('a-simple-title', Slug::filter(' A simple     title '));
         is('this-post-it-has-a-dash', Slug::filter('This post -- it has a dash'));
@@ -210,10 +210,9 @@ class StringTest extends PHPUnit
         is('one231251251', Slug::filter('123----1251251', '', true));
     }
 
-    public function testMbString()
+    public function testMbString(): void
     {
         isSame(Str::isMBString(), function_exists('mb_strtoupper'));
-        isSame(Str::isOverload(), (bool)(ini_get('mbstring.func_overload') & MB_OVERLOAD_STRING));
 
         is(5, Str::len('Денис'));
 
@@ -247,7 +246,7 @@ class StringTest extends PHPUnit
         isFalse(Str::isEnd('денис', 'ДЕНИС', true));
     }
 
-    public function testEsc()
+    public function testEsc(): void
     {
         isSame(
             '&lt;a href="/test"&gt;Test !@#$%^&amp;*()_+\/&lt;/a&gt;',
@@ -255,7 +254,7 @@ class StringTest extends PHPUnit
         );
     }
 
-    public function testEscXML()
+    public function testEscXML(): void
     {
         isSame(
             '&lt;a href=&quot;/test&quot;&gt;Test!@#$%^&amp;*()_+\/&lt;/a&gt;',
@@ -263,7 +262,7 @@ class StringTest extends PHPUnit
         );
     }
 
-    public function testSplitCamelCase()
+    public function testSplitCamelCase(): void
     {
         isSame('_', Str::splitCamelCase('_'));
         isSame('word', Str::splitCamelCase('word'));
@@ -275,7 +274,7 @@ class StringTest extends PHPUnit
         isSame('Word_Number', Str::splitCamelCase('WordNumber', '_', false));
     }
 
-    public function testTestName2Human()
+    public function testTestName2Human(): void
     {
         isSame('test', Str::testName2Human('test'));
         isSame('testTest', Str::testName2Human('testTest'));
@@ -318,14 +317,14 @@ class StringTest extends PHPUnit
         isSame('Function IE', Str::testName2Human('\\JBZoo\\PHPHunit\\Some\\Some\\Test_FunctionIE_Test'));
     }
 
-    public function testGenerateUUID()
+    public function testGenerateUUID(): void
     {
         isNotSame(Str::uuid(), Str::uuid());
         isNotSame(Str::uuid(), Str::uuid());
         isNotSame(Str::uuid(), Str::uuid());
     }
 
-    public function testGetClassName()
+    public function testGetClassName(): void
     {
         isSame('JBZoo', Str::getClassName('JBZoo'));
         isSame('JBZoo', Str::getClassName('\JBZoo'));
@@ -349,7 +348,8 @@ class StringTest extends PHPUnit
         isSame('title (2)', Str::inc('title', 'foo', 0));
     }
 
-    public function testSplitSql()
+    /** @noinspection SqlNoDataSourceInspection */
+    public function testSplitSql(): void
     {
         $queries = Str::splitSql('SELECT * FROM #__foo;SELECT * FROM #__bar;');
 

@@ -21,7 +21,7 @@ namespace JBZoo\Utils;
  * Class Exception
  * @package JBZoo\Utils
  */
-class Exception extends \RuntimeException
+final class Exception extends \RuntimeException
 {
 
 }
