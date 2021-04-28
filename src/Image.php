@@ -495,6 +495,8 @@ class Image
      * @param mixed $image
      * @return bool
      * @phan-suppress PhanUndeclaredClass
+     * @phan-suppress PhanUndeclaredClassInstanceof
+     * @phan-suppress PhanUndeclaredClassReference
      */
     public static function isGdRes($image): bool
     {
