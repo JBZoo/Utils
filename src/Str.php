@@ -679,7 +679,7 @@ final class Str
     public static function testName2Human(string $input): string
     {
         $original = $input;
-        $input = (string)self::getClassName($input);
+        $input = self::getClassName($input);
 
         /** @noinspection NotOptimalRegularExpressionsInspection */
         if (!preg_match('#^tests#i', $input)) {
@@ -748,12 +748,12 @@ final class Str
      *
      * @param mixed $object
      * @param bool  $toLower
-     * @return string|null
+     * @return string
      */
-    public static function getClassName($object, bool $toLower = false): ?string
+    public static function getClassName($object, bool $toLower = false): string
     {
         if (!$object) {
-            return null;
+            return '';
         }
 
         $className = $object;
