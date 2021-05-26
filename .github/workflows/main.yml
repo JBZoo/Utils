@@ -75,11 +75,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        php-version: [ 7.2, 7.3, 7.4, 8.0 ]
-        experimental: [ false ]
-        include:
-          - php-version: "8.1"
-            experimental: true
+        php-version: [ 7.2, 7.3, 7.4 ]
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
@@ -93,11 +89,9 @@ jobs:
           tools: composer
 
       - name: Build the Project
-        continue-on-error: ${{ matrix.experimental }}
         run: make update --no-print-directory
 
       - name: 👍 Code Quality
-        continue-on-error: ${{ matrix.experimental }}
         run: make codestyle --no-print-directory
 
       - name: Upload Artifacts
@@ -113,10 +107,6 @@ jobs:
     strategy:
       matrix:
         php-version: [ 7.2, 7.3, 7.4, 8.0 ]
-        experimental: [ false ]
-        include:
-          - php-version: "8.1"
-            experimental: true
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
