@@ -382,7 +382,7 @@ final class Str
     public static function len(string $string): int
     {
         if (self::isMBString()) {
-            return (int)mb_strlen($string, self::$encoding);
+            return mb_strlen($string, self::$encoding) ?: 0;
         }
 
         return strlen($string);
@@ -508,7 +508,7 @@ final class Str
                 $length = self::len($string);
             }
 
-            return (string)mb_substr($string, $start, $length, self::$encoding);
+            return mb_substr($string, $start, $length, self::$encoding) ?: '';
         }
 
         return (string)substr($string, $start, $length);
@@ -523,7 +523,7 @@ final class Str
     public static function low($string): string
     {
         if (self::isMBString()) {
-            return (string)mb_strtolower((string)$string, self::$encoding);
+            return mb_strtolower((string)$string, self::$encoding) ?: '';
         }
 
         return strtolower((string)$string);
@@ -540,7 +540,7 @@ final class Str
     public static function up($string): string
     {
         if (self::isMBString()) {
-            return (string)mb_strtoupper((string)$string, self::$encoding);
+            return mb_strtoupper((string)$string, self::$encoding) ?: '';
         }
 
         return strtoupper((string)$string);
@@ -556,7 +556,7 @@ final class Str
     public static function subCount(string $haystack, string $needle): int
     {
         if (self::isMBString()) {
-            return (int)mb_substr_count($haystack, $needle, self::$encoding);
+            return mb_substr_count($haystack, $needle, self::$encoding) ?: 0;
         }
 
         return substr_count($haystack, $needle);

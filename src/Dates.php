@@ -203,19 +203,18 @@ final class Dates
     }
 
     /**
-     * Convert seconds to human readable format "H:i:s"
+     * Convert seconds to human-readable format "H:i:s"
      *
      * @param float $seconds
+     * @param int   $minValuableSeconds
      * @return string
      */
-    public static function formatTime(float $seconds): string
+    public static function formatTime(float $seconds, int $minValuableSeconds = 2): string
     {
-        $minValuableSeconds = 2;
-
         if ($seconds < $minValuableSeconds) {
             return number_format($seconds, 3) . ' sec';
         }
 
-        return (string)gmdate('H:i:s', (int)round($seconds, 0));
+        return gmdate('H:i:s', (int)round($seconds, 0)) ?: '';
     }
 }

@@ -163,5 +163,9 @@ class DatesTest extends PHPUnit
         isSame('00:00:03', Dates::formatTime(2.56789));
         isSame('00:00:02', Dates::formatTime(2));
         isSame('00:00:50', Dates::formatTime(50));
+        isSame('00:00:00', Dates::formatTime(0, 0));
+        isSame('00:00:01', Dates::formatTime(1, 0));
+        isSame('00:00:02', Dates::formatTime(2, 0));
+        isSame('00:00:02', Dates::formatTime(1.9999, 0));
     }
 }
