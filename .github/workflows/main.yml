@@ -35,7 +35,7 @@ jobs:
       JBZOO_COMPOSER_UPDATE_FLAGS: ${{ matrix.composer_flags }}
     strategy:
       matrix:
-        php-version: [ 7.2, 7.3, 7.4, 8.0, 8.1 ]
+        php-version: [ 7.2, 7.3, 7.4, 8.0 ]
         experimental: [ false ]
         coverage: [ xdebug, none ]
         composer_flags: [ "--prefer-lowest", "" ]
@@ -81,7 +81,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        php-version: [ 7.2, 7.3, 7.4, 8.0 ]
+        php-version: [ 7.2, 7.3, 7.4 ]
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
