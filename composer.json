@@ -61,10 +61,7 @@
     },
 
     "config"       : {
-        "optimize-autoloader" : true,
-        "allow-plugins": {
-            "composer/package-versions-deprecated": true
-        }
+        "optimize-autoloader" : true
     },
 
     "extra"        : {
