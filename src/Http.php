@@ -34,7 +34,7 @@ final class Http
      */
     public static function download(string $filename): bool
     {
-        if (headers_sent()) {
+        if (\headers_sent()) {
             return false;
         }
 
@@ -46,26 +46,26 @@ final class Http
         Sys::setTime();
 
         // Set headers
-        header('Pragma: public');
-        header('Expires: 0');
-        header('Cache-Control: must-revalidate, post-check=0, pre-check=0');
-        header('Cache-Control: private', false);
-        header('Content-Disposition: attachment; filename="' . basename(str_replace('"', '', $filename)) . '";');
-        header('Content-Type: application/force-download');
-        header('Content-Transfer-Encoding: binary');
-        header('Content-Length: ' . filesize($filename));
+        \header('Pragma: public');
+        \header('Expires: 0');
+        \header('Cache-Control: must-revalidate, post-check=0, pre-check=0');
+        \header('Cache-Control: private', false);
+        \header('Content-Disposition: attachment; filename="' . \basename(\str_replace('"', '', $filename)) . '";');
+        \header('Content-Type: application/force-download');
+        \header('Content-Transfer-Encoding: binary');
+        \header('Content-Length: ' . \filesize($filename));
 
         // output file
         if (Sys::isFunc('fpassthru')) {
-            $handle = fopen($filename, 'rb');
+            $handle = \fopen($filename, 'rb');
             if (!$handle) {
                 throw new Exception("Can't open file '{$filename}'");
             }
-            fpassthru($handle);
-            fclose($handle);
+            \fpassthru($handle);
+            \fclose($handle);
         } else {
             /** @phan-suppress-next-line PhanPluginRemoveDebugEcho */
-            echo file_get_contents($filename);
+            echo \file_get_contents($filename);
         }
 
         return true;
@@ -81,11 +81,11 @@ final class Http
      */
     public static function nocache(): bool
     {
-        if (!headers_sent()) {
-            header('Expires: Wed, 11 Jan 1984 05:00:00 GMT');
-            header('Last-Modified: ' . gmdate('D, d M Y H:i:s') . ' GMT');
-            header('Cache-Control: no-cache, must-revalidate, max-age=0');
-            header('Pragma: no-cache');
+        if (!\headers_sent()) {
+            \header('Expires: Wed, 11 Jan 1984 05:00:00 GMT');
+            \header('Last-Modified: ' . \gmdate('D, d M Y H:i:s') . ' GMT');
+            \header('Cache-Control: no-cache, must-revalidate, max-age=0');
+            \header('Pragma: no-cache');
 
             return true;
         }
@@ -102,8 +102,8 @@ final class Http
      */
     public static function utf8(string $contentType = 'text/html'): bool
     {
-        if (!headers_sent()) {
-            header('Content-type: ' . $contentType . '; charset=utf-8');
+        if (!\headers_sent()) {
+            \header('Content-type: ' . $contentType . '; charset=utf-8');
 
             return true;
         }
@@ -129,8 +129,8 @@ final class Http
         $contentHeaders = ['CONTENT_LENGTH' => true, 'CONTENT_MD5' => true, 'CONTENT_TYPE' => true];
 
         foreach ($_SERVER as $key => $value) {
-            if (0 === strpos($key, 'HTTP_')) {
-                $headers[substr($key, 5)] = $value;
+            if (0 === \strpos($key, 'HTTP_')) {
+                $headers[\substr($key, 5)] = $value;
             } elseif (isset($contentHeaders[$key])) { // CONTENT_* are not prefixed with HTTP_
                 $headers[$key] = $value;
             }
@@ -161,19 +161,19 @@ final class Http
             }
 
             if ($authorizationHeader) {
-                if (0 === stripos($authorizationHeader, 'basic ')) {
+                if (0 === \stripos($authorizationHeader, 'basic ')) {
                     // Decode AUTHORIZATION header into PHP_AUTH_USER and PHP_AUTH_PW when authorization header is basic
-                    $exploded = explode(':', (string)base64_decode((string)substr($authorizationHeader, 6)), 2);
+                    $exploded = \explode(':', (string)\base64_decode((string)\substr($authorizationHeader, 6)), 2);
 
                     $expectedNumOfParts = 2;
-                    if (count($exploded) === $expectedNumOfParts) {
+                    if (\count($exploded) === $expectedNumOfParts) {
                         [$headers['PHP_AUTH_USER'], $headers['PHP_AUTH_PW']] = $exploded;
                     }
-                } elseif (empty($_SERVER['PHP_AUTH_DIGEST']) && (0 === stripos($authorizationHeader, 'digest '))) {
+                } elseif (empty($_SERVER['PHP_AUTH_DIGEST']) && (0 === \stripos($authorizationHeader, 'digest '))) {
                     // In some circumstances PHP_AUTH_DIGEST needs to be set
                     $headers['PHP_AUTH_DIGEST'] = $authorizationHeader;
                     $_SERVER['PHP_AUTH_DIGEST'] = $authorizationHeader;
-                } elseif (0 === stripos($authorizationHeader, 'bearer ')) {
+                } elseif (0 === \stripos($authorizationHeader, 'bearer ')) {
                     /*
                      * XXX: Since there is no PHP_AUTH_BEARER in PHP predefined variables,
                      *      I'll just set $headers['AUTHORIZATION'] here.
@@ -193,7 +193,7 @@ final class Http
             $user = $headers['PHP_AUTH_USER'] ?? '';
             $password = $headers['PHP_AUTH_PW'] ?? '';
 
-            $authorization = 'Basic ' . base64_encode($user . ':' . $password);
+            $authorization = 'Basic ' . \base64_encode($user . ':' . $password);
             $headers['AUTHORIZATION'] = $authorization;
         } elseif (isset($headers['PHP_AUTH_DIGEST'])) {
             $headers['AUTHORIZATION'] = $headers['PHP_AUTH_DIGEST'];

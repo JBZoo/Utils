@@ -39,12 +39,12 @@ final class Timer
             'sec'  => 1000,
         ];
 
-        $time = round($milliSeconds * 1000);
+        $time = \round($milliSeconds * 1000);
         $minValue = 1.0;
 
         foreach ($times as $unit => $value) {
             if ($time >= $value) {
-                $time = floor($time / $value * 100.0) / 100.0;
+                $time = \floor($time / $value * 100.0) / 100.0;
 
                 return $time . ' ' . $unit . ($time === $minValue ? '' : 's');
             }
@@ -61,7 +61,7 @@ final class Timer
      */
     public static function formatMS(float $seconds): string
     {
-        $time = round($seconds * 1000, 3);
+        $time = \round($seconds * 1000, 3);
         $dec = 3;
 
         $decLevel01 = 0.1;
@@ -76,7 +76,7 @@ final class Timer
             $dec = $decLevel1;
         }
 
-        return number_format($time, $dec, '.', ' ') . ' ms';
+        return \number_format($time, $dec, '.', ' ') . ' ms';
     }
 
     /**
@@ -86,7 +86,7 @@ final class Timer
      */
     public static function timeSinceStart(): float
     {
-        return microtime(true) - self::getRequestTime();
+        return \microtime(true) - self::getRequestTime();
     }
 
     /**

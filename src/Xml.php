@@ -36,13 +36,13 @@ final class Xml
     {
         $rawXmlContent = (string)$rawXmlContent;
 
-        $rawXmlContent = (string)preg_replace(
+        $rawXmlContent = (string)\preg_replace(
             '/[^\x{0009}\x{000a}\x{000d}\x{0020}-\x{D7FF}\x{E000}-\x{FFFD}]+/u',
             ' ',
             $rawXmlContent
         );
 
-        $rawXmlContent = str_replace(
+        $rawXmlContent = \str_replace(
             ['&', '<', '>', '"', "'"],
             ['&amp;', '&lt;', '&gt;', '&quot;', '&apos;'],
             $rawXmlContent
@@ -123,29 +123,29 @@ final class Xml
 
         $domElement = $domElement ?? $document;
 
-        if (array_key_exists('_text', $xmlAsArray) && $xmlAsArray['_text'] !== null) {
+        if (\array_key_exists('_text', $xmlAsArray) && $xmlAsArray['_text'] !== null) {
             $newNode = $document->createTextNode($xmlAsArray['_text']);
             if ($newNode !== false) {
                 $domElement->appendChild($newNode);
             }
         }
 
-        if (array_key_exists('_cdata', $xmlAsArray) && $xmlAsArray['_cdata'] !== null) {
+        if (\array_key_exists('_cdata', $xmlAsArray) && $xmlAsArray['_cdata'] !== null) {
             $newNode = $document->createCDATASection($xmlAsArray['_cdata']);
             if ($newNode !== false) {
                 $domElement->appendChild($newNode);
             }
         }
 
-        if ($domElement instanceof \DOMElement && array_key_exists('_attrs', $xmlAsArray)) {
+        if ($domElement instanceof \DOMElement && \array_key_exists('_attrs', $xmlAsArray)) {
             foreach ($xmlAsArray['_attrs'] as $name => $value) {
                 $domElement->setAttribute($name, $value);
             }
         }
 
-        if (array_key_exists('_children', $xmlAsArray)) {
+        if (\array_key_exists('_children', $xmlAsArray)) {
             foreach ($xmlAsArray['_children'] as $mixedElement) {
-                if (array_key_exists('_node', $mixedElement) && '#' !== $mixedElement['_node'][0]) {
+                if (\array_key_exists('_node', $mixedElement) && '#' !== $mixedElement['_node'][0]) {
                     $newNode = $document->createElement($mixedElement['_node']);
                     if ($newNode !== false) {
                         $domElement->appendChild($newNode);
@@ -215,19 +215,19 @@ final class Xml
             $children = $element->childNodes;
 
             if ($children->length === 1 && $child = $children->item(0)) {
-                if ($child->nodeType === XML_TEXT_NODE) {
+                if ($child->nodeType === \XML_TEXT_NODE) {
                     $result['_text'] = $child->nodeValue;
                     return $result;
                 }
 
-                if ($child->nodeType === XML_CDATA_SECTION_NODE) {
+                if ($child->nodeType === \XML_CDATA_SECTION_NODE) {
                     $result['_cdata'] = $child->nodeValue;
                     return $result;
                 }
             }
 
             foreach ($children as $child) {
-                if ($child->nodeType !== XML_COMMENT_NODE) {
+                if ($child->nodeType !== \XML_COMMENT_NODE) {
                     $result['_children'][] = self::dom2Array($child);
                 }
             }

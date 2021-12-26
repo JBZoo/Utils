@@ -64,31 +64,31 @@ final class IP
      */
     public static function v4InRange(string $ipAddress, string $range): bool
     {
-        if (strpos($range, '/') !== false) {
+        if (\strpos($range, '/') !== false) {
             // $range is in IP/NETMASK format
-            [$range, $netMask] = explode('/', $range, 2);
+            [$range, $netMask] = \explode('/', $range, 2);
 
-            if (strpos($netMask, '.') !== false) {
+            if (\strpos($netMask, '.') !== false) {
                 // $netMask is a 255.255.0.0 format
-                $netMask = str_replace('*', '0', $netMask);
-                $netMaskDec = ip2long($netMask);
+                $netMask = \str_replace('*', '0', $netMask);
+                $netMaskDec = \ip2long($netMask);
 
-                return ((ip2long($ipAddress) & $netMaskDec) === (ip2long($range) & $netMaskDec));
+                return ((\ip2long($ipAddress) & $netMaskDec) === (\ip2long($range) & $netMaskDec));
             }
 
             // $netMask is a CIDR size block
             // fix the range argument
-            $blocks = explode('.', $range);
+            $blocks = \explode('.', $range);
 
             $expectedNumOfParts = 4;
             /** @phan-suppress-next-line PhanPossiblyInfiniteLoop */
-            while (count($blocks) < $expectedNumOfParts) {
+            while (\count($blocks) < $expectedNumOfParts) {
                 $blocks[] = '0';
             }
 
             [$blockA, $blockB, $blockC, $blockD] = $blocks;
 
-            $range = sprintf(
+            $range = \sprintf(
                 '%u.%u.%u.%u',
                 (int)(empty($blockA) ? '0' : $blockA),
                 (int)(empty($blockB) ? '0' : $blockB),
@@ -96,8 +96,8 @@ final class IP
                 (int)(empty($blockD) ? '0' : $blockD)
             );
 
-            $rangeDec = ip2long($range);
-            $ipDec = ip2long($ipAddress);
+            $rangeDec = \ip2long($range);
+            $ipDec = \ip2long($ipAddress);
 
             $netMask = (int)$netMask;
             $wildcardDec = (2 ** (32 - $netMask)) - 1;
@@ -107,18 +107,18 @@ final class IP
         }
 
         // range might be 255.255.*.* or 1.2.3.0-1.2.3.255
-        if (strpos($range, '*') !== false) { // a.b.*.* format
+        if (\strpos($range, '*') !== false) { // a.b.*.* format
             // Just convert to A-B format by setting * to 0 for A and 255 for B
-            $lower = str_replace('*', '0', $range);
-            $upper = str_replace('*', '255', $range);
+            $lower = \str_replace('*', '0', $range);
+            $upper = \str_replace('*', '255', $range);
             $range = "$lower-$upper";
         }
 
-        if (strpos($range, '-') !== false) { // A-B format
-            [$lower, $upper] = explode('-', $range, 2);
-            $lowerDec = (float)sprintf('%u', (int)ip2long($lower));
-            $upperDec = (float)sprintf('%u', (int)ip2long($upper));
-            $ipDec = (float)sprintf('%u', (int)ip2long($ipAddress));
+        if (\strpos($range, '-') !== false) { // A-B format
+            [$lower, $upper] = \explode('-', $range, 2);
+            $lowerDec = (float)\sprintf('%u', (int)\ip2long($lower));
+            $upperDec = (float)\sprintf('%u', (int)\ip2long($upper));
+            $ipDec = (float)\sprintf('%u', (int)\ip2long($ipAddress));
             return (($ipDec >= $lowerDec) && ($ipDec <= $upperDec));
         }
 
@@ -133,7 +133,7 @@ final class IP
      */
     public static function getNetMask(string $ipAddress): ?string
     {
-        $ipAddressLong = ip2long($ipAddress);
+        $ipAddressLong = \ip2long($ipAddress);
 
         $maskLevel1 = 0x80000000;
         $maskLevel2 = 0xC0000000;
@@ -148,6 +148,6 @@ final class IP
             $resultMask = 0xFFFFFF00;
         }
 
-        return long2ip($resultMask) ?: null;
+        return \long2ip($resultMask) ?: null;
     }
 }

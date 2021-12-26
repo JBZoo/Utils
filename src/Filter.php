@@ -42,15 +42,15 @@ final class Filter
      */
     public static function _($value, $filters = 'raw')
     {
-        if (is_string($filters)) {
+        if (\is_string($filters)) {
             $filters = Str::trim($filters);
-            $filters = explode(',', $filters);
+            $filters = \explode(',', $filters);
 
             foreach ($filters as $filter) {
                 $filterName = self::cmd($filter);
 
                 if ($filterName) {
-                    if (method_exists(__CLASS__, $filterName)) {
+                    if (\method_exists(__CLASS__, $filterName)) {
                         $value = self::$filterName($value);
                     } else {
                         throw new Exception('Undefined filter method: ' . $filter);
@@ -140,7 +140,7 @@ final class Filter
             return false;
         }
 
-        return filter_var($variable, FILTER_VALIDATE_BOOLEAN);
+        return \filter_var($variable, \FILTER_VALIDATE_BOOLEAN);
     }
 
     /**
@@ -152,13 +152,13 @@ final class Filter
      */
     public static function float($value, int $round = 10): float
     {
-        $cleaned = (string)preg_replace('#[^\deE\-\.\,]#iu', '', (string)$value);
-        $cleaned = str_replace(',', '.', $cleaned);
+        $cleaned = (string)\preg_replace('#[^\deE\-\.\,]#iu', '', (string)$value);
+        $cleaned = \str_replace(',', '.', $cleaned);
 
-        preg_match('#[-+]?[\d]+(\.[\d]+)?([eE][-+]?[\d]+)?#', $cleaned, $matches);
+        \preg_match('#[-+]?[\d]+(\.[\d]+)?([eE][-+]?[\d]+)?#', $cleaned, $matches);
         $result = (float)($matches[0] ?? 0.0);
 
-        $result = round($result, $round);
+        $result = \round($result, $round);
 
         return $result;
     }
@@ -171,8 +171,8 @@ final class Filter
      */
     public static function int($value): int
     {
-        $cleaned = (string)preg_replace('#[^0-9-+.,]#', '', (string)$value);
-        preg_match('#[-+]?[\d]+#', $cleaned, $matches);
+        $cleaned = (string)\preg_replace('#[^0-9-+.,]#', '', (string)$value);
+        \preg_match('#[-+]?[\d]+#', $cleaned, $matches);
         $result = $matches[0] ?? 0;
 
         return (int)$result;
@@ -187,8 +187,8 @@ final class Filter
     public static function digits(?string $value): string
     {
         // we need to remove - and + because they're allowed in the filter
-        $cleaned = str_replace(['-', '+'], '', (string)$value);
-        $cleaned = (string)filter_var($cleaned, FILTER_SANITIZE_NUMBER_INT);
+        $cleaned = \str_replace(['-', '+'], '', (string)$value);
+        $cleaned = (string)\filter_var($cleaned, \FILTER_SANITIZE_NUMBER_INT);
 
         return $cleaned;
     }
@@ -201,7 +201,7 @@ final class Filter
      */
     public static function alpha(?string $value): string
     {
-        return (string)preg_replace('#[^[:alpha:]]#', '', (string)$value);
+        return (string)\preg_replace('#[^[:alpha:]]#', '', (string)$value);
     }
 
     /**
@@ -212,7 +212,7 @@ final class Filter
      */
     public static function alphanum(?string $value): string
     {
-        return (string)preg_replace('#[^[:alnum:]]#', '', (string)$value);
+        return (string)\preg_replace('#[^[:alnum:]]#', '', (string)$value);
     }
 
     /**
@@ -223,7 +223,7 @@ final class Filter
      */
     public static function base64(string $value): string
     {
-        return (string)preg_replace('#[^A-Z0-9\/+=]#i', '', $value);
+        return (string)\preg_replace('#[^A-Z0-9\/+=]#i', '', $value);
     }
 
     /**
@@ -235,7 +235,7 @@ final class Filter
     public static function path(string $value): string
     {
         $pattern = '#^[A-Za-z0-9_\/-]+[A-Za-z0-9_\.-]*([\\\\\/][A-Za-z0-9_-]+[A-Za-z0-9_\.-]*)*$#';
-        preg_match($pattern, $value, $matches);
+        \preg_match($pattern, $value, $matches);
         return $matches[0] ?? '';
     }
 
@@ -274,8 +274,8 @@ final class Filter
 
         if ($filter === 'noempty') {
             $array = Arr::clean($array);
-        } elseif ($filter instanceof Closure) {
-            $array = array_filter($array, $filter); // TODO add support both - key + value
+        } elseif ($filter instanceof \Closure) {
+            $array = \array_filter($array, $filter); // TODO add support both - key + value
         }
 
         return $array;
@@ -290,7 +290,7 @@ final class Filter
     public static function cmd(string $value): string
     {
         $value = Str::low($value);
-        $value = (string)preg_replace('#[^a-z0-9\_\-\.]#', '', $value);
+        $value = (string)\preg_replace('#[^a-z0-9\_\-\.]#', '', $value);
         $value = Str::trim($value);
 
         return $value;
@@ -304,7 +304,7 @@ final class Filter
      */
     public static function strip(string $string): string
     {
-        $cleaned = strip_tags($string);
+        $cleaned = \strip_tags($string);
         $cleaned = Str::trim($cleaned);
 
         return $cleaned;
@@ -444,7 +444,7 @@ final class Filter
     public static function ucFirst(string $input): string
     {
         $string = Str::low($input);
-        $string = ucfirst($string);
+        $string = \ucfirst($string);
 
         return $string;
     }
@@ -457,8 +457,8 @@ final class Filter
      */
     public static function parseLines($input): array
     {
-        if (is_array($input)) {
-            $input = implode(PHP_EOL, $input);
+        if (\is_array($input)) {
+            $input = \implode(\PHP_EOL, $input);
         }
 
         return Str::parseLines($input);
@@ -472,18 +472,18 @@ final class Filter
      */
     public static function className(string $input): string
     {
-        $output = (string)preg_replace(['#(?<=[^A-Z\s])([A-Z\s])#i'], ' $0', $input);
-        $output = explode(' ', $output);
+        $output = (string)\preg_replace(['#(?<=[^A-Z\s])([A-Z\s])#i'], ' $0', $input);
+        $output = \explode(' ', $output);
 
-        $output = array_map(static function ($item) {
-            $item = (string)preg_replace('#[^a-z0-9]#i', '', $item);
+        $output = \array_map(static function ($item) {
+            $item = (string)\preg_replace('#[^a-z0-9]#i', '', $item);
             $item = Filter::ucFirst($item);
             return $item;
         }, $output);
 
-        $output = array_filter($output);
+        $output = \array_filter($output);
 
-        return implode('', $output);
+        return \implode('', $output);
     }
 
     /**
@@ -494,12 +494,12 @@ final class Filter
      */
     public static function stripQuotes(string $value): string
     {
-        if (strpos($value, '"') === 0 && substr($value, -1) === '"') {
-            $value = trim($value, '"');
+        if (\strpos($value, '"') === 0 && \substr($value, -1) === '"') {
+            $value = \trim($value, '"');
         }
 
-        if (strpos($value, "'") === 0 && substr($value, -1) === "'") {
-            $value = trim($value, "'");
+        if (\strpos($value, "'") === 0 && \substr($value, -1) === "'") {
+            $value = \trim($value, "'");
         }
 
         return $value;

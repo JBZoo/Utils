@@ -46,8 +46,8 @@ final class Csv
         $headerKeys = [];
         $rowCounter = 0;
 
-        if (($handle = fopen($csvFile, 'rb')) !== false) {
-            while (($row = fgetcsv($handle, self::LENGTH_LIMIT, $delimiter, $enclosure)) !== false) {
+        if (($handle = \fopen($csvFile, 'rb')) !== false) {
+            while (($row = \fgetcsv($handle, self::LENGTH_LIMIT, $delimiter, $enclosure)) !== false) {
                 $row = (array)$row;
                 if ($rowCounter === 0 && $hasHeader) {
                     $headerKeys = $row;
@@ -67,7 +67,7 @@ final class Csv
                 $rowCounter++;
             }
 
-            fclose($handle);
+            \fclose($handle);
         }
 
         return $result;

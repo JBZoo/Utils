@@ -41,7 +41,7 @@ final class Cli
      */
     public static function check(): bool
     {
-        return PHP_SAPI === 'cli' && defined('STDOUT') && defined('STDERR');
+        return \PHP_SAPI === 'cli' && \defined('STDOUT') && \defined('STDERR');
     }
 
     /**
@@ -54,11 +54,11 @@ final class Cli
     public static function out(string $message, bool $addEol = true): bool
     {
         if ($addEol) {
-            $message .= PHP_EOL;
+            $message .= \PHP_EOL;
         }
 
-        if (self::check() && $stdout = fopen('php://stdout', 'wb')) {
-            fwrite($stdout, $message);
+        if (self::check() && $stdout = \fopen('php://stdout', 'wb')) {
+            \fwrite($stdout, $message);
             return true;
         }
 
@@ -77,11 +77,11 @@ final class Cli
     public static function err(string $message, bool $addEol = true): bool
     {
         if ($addEol) {
-            $message .= PHP_EOL;
+            $message .= \PHP_EOL;
         }
 
-        if (self::check() && $stderr = fopen('php://stderr', 'wb')) {
-            fwrite($stderr, $message);
+        if (self::check() && $stderr = \fopen('php://stderr', 'wb')) {
+            \fwrite($stderr, $message);
             return true;
         }
 
@@ -103,7 +103,7 @@ final class Cli
      */
     public static function exec(string $command, array $args = [], ?string $cwd = null, bool $verbose = false): string
     {
-        if (!class_exists(Process::class)) {
+        if (!\class_exists(Process::class)) {
             throw new Exception('Symfony/Process package required for Cli::exec() method');
         }
 
@@ -111,7 +111,7 @@ final class Cli
 
         if ($cwd) {
             /** @noinspection CallableParameterUseCaseInTypeContextInspection */
-            $cwd = realpath($cwd) ?: null;
+            $cwd = \realpath($cwd) ?: null;
         } else {
             $cwd = null;
         }
@@ -122,7 +122,7 @@ final class Cli
         }
 
         try {
-            if (method_exists(Process::class, 'fromShellCommandline')) {
+            if (\method_exists(Process::class, 'fromShellCommandline')) {
                 $process = Process::fromShellCommandline($realCommand, $cwd, null, null, 3600);
             } else {
                 $process = new Process([$realCommand], $cwd, null, null, 3600);
@@ -153,25 +153,25 @@ final class Cli
         $stringArgs = [];
         $realCommand = $command;
 
-        if (count($args) > 0) {
+        if (\count($args) > 0) {
             foreach ($args as $key => $value) {
-                $value = trim((string)$value);
-                $key = trim((string)$key);
+                $value = \trim((string)$value);
+                $key = \trim((string)$key);
 
-                if (strpos($key, '-') !== 0) {
-                    $key = strlen($key) === 1 ? '-' . $key : '--' . $key;
+                if (\strpos($key, '-') !== 0) {
+                    $key = \strlen($key) === 1 ? '-' . $key : '--' . $key;
                 }
 
                 if ($value) {
-                    $stringArgs[] = $key . '="' . addcslashes($value, '"') . '"';
+                    $stringArgs[] = $key . '="' . \addcslashes($value, '"') . '"';
                 } else {
                     $stringArgs[] = $key;
                 }
             }
         }
 
-        if (count($stringArgs)) {
-            $realCommand = $command . ' ' . implode(' ', $stringArgs);
+        if (\count($stringArgs)) {
+            $realCommand = $command . ' ' . \implode(' ', $stringArgs);
         }
 
         return $realCommand;
@@ -197,7 +197,7 @@ final class Cli
         }
         // @codeCoverageIgnoreEnd
 
-        return self::isInteractive(STDOUT);
+        return self::isInteractive(\STDOUT);
     }
 
     /**
@@ -211,10 +211,10 @@ final class Cli
         if (Sys::isWin()) {
             $columns = self::DEFAULT_WIDTH;
 
-            if (preg_match('/^(\d+)x\d+ \(\d+x(\d+)\)$/', Env::string('ANSICON'), $matches)) {
+            if (\preg_match('/^(\d+)x\d+ \(\d+x(\d+)\)$/', Env::string('ANSICON'), $matches)) {
                 $columns = $matches[1];
-            } elseif (function_exists('proc_open')) {
-                $process = proc_open(
+            } elseif (\function_exists('proc_open')) {
+                $process = \proc_open(
                     'mode CON',
                     [1 => ['pipe', 'w'], 2 => ['pipe', 'w']],
                     $pipes,
@@ -223,14 +223,14 @@ final class Cli
                     ['suppress_errors' => true]
                 );
 
-                if (is_resource($process)) {
-                    $info = (string)stream_get_contents($pipes[1]);
+                if (\is_resource($process)) {
+                    $info = (string)\stream_get_contents($pipes[1]);
 
-                    fclose($pipes[1]);
-                    fclose($pipes[2]);
-                    proc_close($process);
+                    \fclose($pipes[1]);
+                    \fclose($pipes[2]);
+                    \proc_close($process);
 
-                    if (preg_match('/--------+\r?\n.+?(\d+)\r?\n.+?(\d+)\r?\n/', $info, $matches)) {
+                    if (\preg_match('/--------+\r?\n.+?(\d+)\r?\n.+?(\d+)\r?\n/', $info, $matches)) {
                         $columns = $matches[2];
                     }
                 }
@@ -245,12 +245,12 @@ final class Cli
         }
 
         /** @psalm-suppress ForbiddenCode */
-        if ((preg_match('#\d+ (\d+)#', (string)shell_exec('stty size'), $match) === 1) && (int)$match[1] > 0) {
+        if ((\preg_match('#\d+ (\d+)#', (string)\shell_exec('stty size'), $match) === 1) && (int)$match[1] > 0) {
             return (int)$match[1];
         }
 
         /** @psalm-suppress ForbiddenCode */
-        if ((preg_match('#columns = (\d+);#', (string)shell_exec('stty'), $match) === 1) && (int)$match[1] > 0) {
+        if ((\preg_match('#columns = (\d+);#', (string)\shell_exec('stty'), $match) === 1) && (int)$match[1] > 0) {
             return (int)$match[1];
         }
 
@@ -265,6 +265,6 @@ final class Cli
      */
     public static function isInteractive($fileDescriptor = self::STDOUT): bool
     {
-        return function_exists('posix_isatty') && @posix_isatty($fileDescriptor);
+        return \function_exists('posix_isatty') && @\posix_isatty($fileDescriptor);
     }
 }

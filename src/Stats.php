@@ -57,11 +57,11 @@ final class Stats
             $sum += $diff;
         }
 
-        if (count($values) === 0) {
+        if (\count($values) === 0) {
             return 0;
         }
 
-        return $sum / (count($values) - ($sample ? 1 : 0));
+        return $sum / (\count($values) - ($sample ? 1 : 0));
     }
 
     /**
@@ -76,13 +76,13 @@ final class Stats
             return 0;
         }
 
-        $sum = array_sum($values);
+        $sum = \array_sum($values);
 
         if (!$sum) {
             return 0;
         }
 
-        $count = count($values);
+        $count = \count($values);
 
         return $sum / $count;
     }
@@ -113,7 +113,7 @@ final class Stats
         }
 
         if (!$endpoint) {
-            array_pop($space);
+            \array_pop($space);
         }
 
         return $space;
@@ -145,8 +145,8 @@ final class Stats
             throw new Exception('Empty array of values is given');
         }
 
-        $min = $lowerBound ?? min($values);
-        $max = $upperBound ?? max($values);
+        $min = $lowerBound ?? \min($values);
+        $max = $upperBound ?? \max($values);
 
         $range = $max - $min;
 
@@ -185,8 +185,8 @@ final class Stats
      */
     public static function renderAverage(array $values, int $rounding = 3): string
     {
-        $avg = number_format(self::mean($values), $rounding);
-        $stdDev = number_format(self::stdDev($values), $rounding);
+        $avg = \number_format(self::mean($values), $rounding);
+        $stdDev = \number_format(self::stdDev($values), $rounding);
 
         return "{$avg}±{$stdDev}";
     }

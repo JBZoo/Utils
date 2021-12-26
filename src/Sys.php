@@ -32,7 +32,7 @@ final class Sys
      */
     public static function isWin(): bool
     {
-        return strncasecmp(PHP_OS_FAMILY, 'WIN', 3) === 0 || DIRECTORY_SEPARATOR === '\\';
+        return \strncasecmp(\PHP_OS_FAMILY, 'WIN', 3) === 0 || \DIRECTORY_SEPARATOR === '\\';
     }
 
     /**
@@ -43,7 +43,7 @@ final class Sys
     public static function isRoot(): bool
     {
         if (self::isFunc('posix_geteuid')) {
-            return 0 === posix_geteuid();
+            return 0 === \posix_geteuid();
         }
 
         return false;
@@ -55,7 +55,7 @@ final class Sys
      */
     public static function getUserName(): ?string
     {
-        $userInfo = posix_getpwuid(posix_geteuid());
+        $userInfo = \posix_getpwuid(\posix_geteuid());
         if ($userInfo && isset($userInfo['name'])) {
             return $userInfo['name'];
         }
@@ -72,12 +72,12 @@ final class Sys
      */
     public static function getHome(): ?string
     {
-        $userInfo = posix_getpwuid(posix_geteuid());
+        $userInfo = \posix_getpwuid(\posix_geteuid());
         if ($userInfo && isset($userInfo['dir'])) {
             return $userInfo['dir'];
         }
 
-        if (array_key_exists('HOMEDRIVE', $_SERVER)) {
+        if (\array_key_exists('HOMEDRIVE', $_SERVER)) {
             return $_SERVER['HOMEDRIVE'] . $_SERVER['HOMEPATH'];
         }
 
@@ -94,7 +94,7 @@ final class Sys
     public static function iniSet(string $phpIniKey, string $newValue): bool
     {
         if (self::isFunc('ini_set')) {
-            return Filter::bool(ini_set($phpIniKey, $newValue));
+            return Filter::bool(\ini_set($phpIniKey, $newValue));
         }
 
         return false;
@@ -108,7 +108,7 @@ final class Sys
      */
     public static function iniGet(string $varName): string
     {
-        return (string)ini_get($varName);
+        return (string)\ini_get($varName);
     }
 
     /**
@@ -120,11 +120,11 @@ final class Sys
     public static function isFunc($funcName): bool
     {
         $isEnabled = true;
-        if (is_string($funcName)) {
-            $isEnabled = stripos(self::iniGet('disable_functions'), strtolower(trim($funcName))) === false;
+        if (\is_string($funcName)) {
+            $isEnabled = \stripos(self::iniGet('disable_functions'), \strtolower(\trim($funcName))) === false;
         }
 
-        return $isEnabled && (is_callable($funcName) || (is_string($funcName) && function_exists($funcName)));
+        return $isEnabled && (\is_callable($funcName) || (\is_string($funcName) && \function_exists($funcName)));
     }
 
     /**
@@ -138,7 +138,7 @@ final class Sys
         self::iniSet('max_execution_time', (string)$newLimit);
 
         if (self::isFunc('set_time_limit')) {
-            set_time_limit($newLimit);
+            \set_time_limit($newLimit);
         }
     }
 
@@ -159,10 +159,10 @@ final class Sys
      * @param string $current
      * @return bool
      */
-    public static function isPHP(string $version, string $current = PHP_VERSION): bool
+    public static function isPHP(string $version, string $current = \PHP_VERSION): bool
     {
-        $version = trim($version, '.');
-        return (bool)preg_match('#^' . preg_quote($version, '') . '#i', $current);
+        $version = \trim($version, '.');
+        return (bool)\preg_match('#^' . \preg_quote($version, '') . '#i', $current);
     }
 
     /**
@@ -174,9 +174,9 @@ final class Sys
     public static function getMemory(bool $isPeak = true): string
     {
         if ($isPeak) {
-            $memory = memory_get_peak_usage(false);
+            $memory = \memory_get_peak_usage(false);
         } else {
-            $memory = memory_get_usage(false);
+            $memory = \memory_get_usage(false);
         }
 
         return FS::format($memory);
@@ -228,24 +228,24 @@ final class Sys
 
         // HHVM
         if (self::isHHVM()) {
-            if (($binary = getenv('PHP_BINARY')) === false) {
-                $binary = PHP_BINARY;
+            if (($binary = \getenv('PHP_BINARY')) === false) {
+                $binary = \PHP_BINARY;
             }
-            return escapeshellarg($binary) . ' --php';
+            return \escapeshellarg($binary) . ' --php';
         }
 
-        if (defined('PHP_BINARY')) {
-            return escapeshellarg(PHP_BINARY);
+        if (\defined('PHP_BINARY')) {
+            return \escapeshellarg(\PHP_BINARY);
         }
 
         $binaryLocations = [
-            PHP_BINDIR . '/php',
-            PHP_BINDIR . '/php-cli.exe',
-            PHP_BINDIR . '/php.exe',
+            \PHP_BINDIR . '/php',
+            \PHP_BINDIR . '/php-cli.exe',
+            \PHP_BINDIR . '/php.exe',
         ];
 
         foreach ($binaryLocations as $binary) {
-            if (is_readable($binary)) {
+            if (\is_readable($binary)) {
                 return $binary;
             }
         }
@@ -263,7 +263,7 @@ final class Sys
         $name = self::getName();
         $version = self::getVersion();
 
-        return trim("{$name} {$version}");
+        return \trim("{$name} {$version}");
     }
 
     /**
@@ -305,7 +305,7 @@ final class Sys
      */
     public static function getVersion(): ?string
     {
-        return defined('PHP_VERSION') ? PHP_VERSION : null;
+        return \defined('PHP_VERSION') ? \PHP_VERSION : null;
     }
 
     /**
@@ -315,7 +315,7 @@ final class Sys
      */
     public static function hasXdebug(): bool
     {
-        return (self::isRealPHP() || self::isHHVM()) && extension_loaded('xdebug');
+        return (self::isRealPHP() || self::isHHVM()) && \extension_loaded('xdebug');
     }
 
     /**
@@ -325,7 +325,7 @@ final class Sys
      */
     public static function isHHVM(): bool
     {
-        return defined('HHVM_VERSION');
+        return \defined('HHVM_VERSION');
     }
 
     /**
@@ -345,7 +345,7 @@ final class Sys
      */
     public static function isPHPDBG(): bool
     {
-        return PHP_SAPI === 'phpdbg' && !self::isHHVM();
+        return \PHP_SAPI === 'phpdbg' && !self::isHHVM();
     }
 
     /**
@@ -356,6 +356,6 @@ final class Sys
      */
     public static function hasPHPDBGCodeCoverage(): bool
     {
-        return self::isPHPDBG() && function_exists('phpdbg_start_oplog');
+        return self::isPHPDBG() && \function_exists('phpdbg_start_oplog');
     }
 }

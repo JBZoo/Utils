@@ -66,16 +66,16 @@ final class Url
         $uri = $uri ?? ($_SERVER['REQUEST_URI'] ?? '');
 
         // Parse the URI into it's components
-        $parsedUri = data((array)parse_url((string)$uri));
+        $parsedUri = data((array)\parse_url((string)$uri));
 
         if ($parsedQuery = $parsedUri->get('query')) {
-            parse_str($parsedQuery, $queryParams);
-            $queryParams = array_merge($queryParams, $newParams);
-        } elseif ((string)$parsedUri->get('path') && false !== strpos((string)$parsedUri['path'], '=')) {
+            \parse_str($parsedQuery, $queryParams);
+            $queryParams = \array_merge($queryParams, $newParams);
+        } elseif ((string)$parsedUri->get('path') && false !== \strpos((string)$parsedUri['path'], '=')) {
             $parsedUri['query'] = $parsedUri['path'];
             $parsedUri->remove('path');
-            parse_str((string)$parsedUri['query'], $queryParams);
-            $queryParams = array_merge($queryParams, $newParams);
+            \parse_str((string)$parsedUri['query'], $queryParams);
+            $queryParams = \array_merge($queryParams, $newParams);
         } else {
             $queryParams = $newParams;
         }
@@ -94,19 +94,19 @@ final class Url
         $parsedUri['query'] = self::build($queryParams);
 
         // Strip = from valueless parameters.
-        $parsedUri['query'] = (string)preg_replace('/=(?=&|$)/', '', (string)$parsedUri['query']);
+        $parsedUri['query'] = (string)\preg_replace('/=(?=&|$)/', '', (string)$parsedUri['query']);
 
         // Re-construct the entire URL
         $newUri = self::buildAll((array)$parsedUri);
 
         // Make the URI consistent with our input
         foreach ([':', '/', '?'] as $char) {
-            if ($newUri[0] === $char && false === strpos((string)$uri, $char)) {
-                $newUri = substr($newUri, 1);
+            if ($newUri[0] === $char && false === \strpos((string)$uri, $char)) {
+                $newUri = \substr($newUri, 1);
             }
         }
 
-        return rtrim((string)$newUri, '?');
+        return \rtrim((string)$newUri, '?');
     }
 
     /**
@@ -120,7 +120,7 @@ final class Url
         $root = self::root($addAuth);
         $path = self::path();
 
-        return trim("{$root}{$path}") ?: null;
+        return \trim("{$root}{$path}") ?: null;
     }
 
     /**
@@ -134,7 +134,7 @@ final class Url
         $url = '';
 
         // Get the rest of the URL
-        if (!array_key_exists('REQUEST_URI', $_SERVER)) {
+        if (!\array_key_exists('REQUEST_URI', $_SERVER)) {
             // Microsoft IIS doesn't set REQUEST_URI by default
             if ($queryString = $_SERVER['QUERY_STRING'] ?? null) {
                 $url .= '?' . $queryString;
@@ -174,7 +174,7 @@ final class Url
         // see http://shiflett.org/blog/2006/mar/server-name-versus-http-host
         $host = (string)$serverData->get('HTTP_HOST');
         $port = (int)$serverData->get('SERVER_PORT');
-        $url .= str_replace(':' . $port, '', $host);
+        $url .= \str_replace(':' . $port, '', $host);
 
         // Is it on a non standard port?
         if ($isHttps && $port !== self::PORT_HTTPS) {
@@ -224,7 +224,7 @@ final class Url
      */
     public static function build(array $queryParams): string
     {
-        return http_build_query($queryParams, '', self::ARG_SEPARATOR);
+        return \http_build_query($queryParams, '', self::ARG_SEPARATOR);
     }
 
     /**
@@ -252,8 +252,8 @@ final class Url
         int $flags = self::URL_REPLACE,
         array &$newUrl = []
     ): string {
-        is_array($sourceUrl) || $sourceUrl = parse_url($sourceUrl);
-        is_array($destParts) || $destParts = parse_url($destParts);
+        \is_array($sourceUrl) || $sourceUrl = \parse_url($sourceUrl);
+        \is_array($destParts) || $destParts = \parse_url($destParts);
 
         $url = data((array)$sourceUrl);
         $parts = data((array)$destParts);
@@ -287,9 +287,9 @@ final class Url
             if (($flags & self::URL_JOIN_PATH) && $parts->has('path')) {
                 if ($url->has('path') && $parts->get('path')[0] !== '/') {
                     $url['path'] =
-                        rtrim(str_replace(basename((string)$url['path']), '', (string)$url['path']), '/')
+                        \rtrim(\str_replace(\basename((string)$url['path']), '', (string)$url['path']), '/')
                         . '/'
-                        . ltrim((string)$parts['path'], '/');
+                        . \ltrim((string)$parts['path'], '/');
                 } else {
                     $url['path'] = $parts['path'];
                 }
@@ -297,21 +297,21 @@ final class Url
 
             // QUERY
             if ($flags & self::URL_JOIN_QUERY && $parts->has('query')) {
-                parse_str($url->get('query', ''), $urlQuery);
-                parse_str($parts->get('query', ''), $partsQuery);
+                \parse_str($url->get('query', ''), $urlQuery);
+                \parse_str($parts->get('query', ''), $partsQuery);
 
-                $queryParams = array_replace_recursive($urlQuery, $partsQuery);
+                $queryParams = \array_replace_recursive($urlQuery, $partsQuery);
                 $url['query'] = self::build($queryParams);
             }
         }
 
         if ($url->get('path')) {
-            $url['path'] = '/' . ltrim((string)$url['path'], '/');
+            $url['path'] = '/' . \ltrim((string)$url['path'], '/');
         }
 
         foreach ($allKeys as $key) {
-            $strip = 'URL_STRIP_' . strtoupper($key);
-            if ($flags & (int)constant(__CLASS__ . '::' . $strip)) {
+            $strip = 'URL_STRIP_' . \strtoupper($key);
+            if ($flags & (int)\constant(__CLASS__ . '::' . $strip)) {
                 $url->remove($key);
             }
         }
@@ -355,7 +355,7 @@ final class Url
         }
 
         if ($url->get('fragment')) {
-            $parsedString .= '#' . trim($url->get('fragment'), '#');
+            $parsedString .= '#' . \trim($url->get('fragment'), '#');
         }
 
         $newUrl = $url->getArrayCopy();
@@ -374,11 +374,11 @@ final class Url
     public static function isHttps(bool $trustProxyHeaders = false): bool
     {
         // Check standard HTTPS header
-        if (array_key_exists('HTTPS', $_SERVER)) {
+        if (\array_key_exists('HTTPS', $_SERVER)) {
             return !empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off';
         }
 
-        if ($trustProxyHeaders && array_key_exists('X-FORWARDED-PROTO', $_SERVER)) {
+        if ($trustProxyHeaders && \array_key_exists('X-FORWARDED-PROTO', $_SERVER)) {
             return $_SERVER['X-FORWARDED-PROTO'] === 'https';
         }
 
@@ -395,8 +395,8 @@ final class Url
      */
     public static function delArg($keys, ?string $uri = null): string
     {
-        if (is_array($keys)) {
-            $params = array_combine($keys, array_fill(0, count($keys), false)) ?: [];
+        if (\is_array($keys)) {
+            $params = \array_combine($keys, \array_fill(0, \count($keys), false)) ?: [];
             return self::addArg($params, (string)$uri);
         }
 
@@ -412,7 +412,7 @@ final class Url
      */
     public static function parseLink(string $text): string
     {
-        $text = (string)preg_replace('/&apos;/', '&#39;', $text); // IE does not handle &apos; entity!
+        $text = (string)\preg_replace('/&apos;/', '&#39;', $text); // IE does not handle &apos; entity!
 
         $sectionHtmlPattern = '%            # Rev:20100913_0900 github.com/jmrware/LinkifyURL
                                             # Section text into HTML <A> tags  and everything else.
@@ -427,7 +427,7 @@ final class Url
              )                              # End $2:
              %ix';
 
-        return (string)preg_replace_callback(
+        return (string)\preg_replace_callback(
             $sectionHtmlPattern,
             /**
              * @param array $matches
@@ -504,7 +504,7 @@ final class Url
 
         $urlReplace = '$1$4$7$10$13<a href="$2$5$8$11$14">$2$5$8$11$14</a>$3$6$9$12';
 
-        return (string)preg_replace($urlPattern, $urlReplace, $text);
+        return (string)\preg_replace($urlPattern, $urlReplace, $text);
     }
 
     /**
@@ -520,13 +520,13 @@ final class Url
         $root = FS::clean($_SERVER['DOCUMENT_ROOT'] ?? null);
         $path = FS::clean($path);
 
-        $normRoot = str_replace(DIRECTORY_SEPARATOR, '/', $root);
-        $normPath = str_replace(DIRECTORY_SEPARATOR, '/', $path);
+        $normRoot = \str_replace(\DIRECTORY_SEPARATOR, '/', $root);
+        $normPath = \str_replace(\DIRECTORY_SEPARATOR, '/', $path);
 
-        $regExp = '/^' . preg_quote($normRoot, '/') . '/i';
-        $relative = (string)preg_replace($regExp, '', $normPath);
+        $regExp = '/^' . \preg_quote($normRoot, '/') . '/i';
+        $relative = (string)\preg_replace($regExp, '', $normPath);
 
-        $relative = ltrim($relative, '/');
+        $relative = \ltrim($relative, '/');
 
         return $relative;
     }
@@ -552,7 +552,7 @@ final class Url
      */
     public static function isAbsolute(string $path): bool
     {
-        return strpos($path, '//') === 0 || preg_match('#^[a-z-]{3,}:\/\/#i', $path);
+        return \strpos($path, '//') === 0 || \preg_match('#^[a-z-]{3,}:\/\/#i', $path);
     }
 
     /**
@@ -563,12 +563,12 @@ final class Url
      */
     public static function create(array $parts = []): string
     {
-        $parts = array_merge([
+        $parts = \array_merge([
             'scheme' => 'https',
             'query'  => [],
         ], $parts);
 
-        if (is_array($parts['query'])) {
+        if (\is_array($parts['query'])) {
             $parts['query'] = self::build($parts['query']);
         }
 

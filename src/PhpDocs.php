@@ -45,15 +45,15 @@ final class PhpDocs
         ];
 
         // split at each line
-        $lines = (array)preg_split("/(\r?\n)/", $phpDoc);
+        $lines = (array)\preg_split("/(\r?\n)/", $phpDoc);
         foreach ($lines as $line) {
             // if starts with an asterisk
-            if (preg_match('/^(?=\s+?\*[^\/])(.+)/', (string)$line, $matches)) {
+            if (\preg_match('/^(?=\s+?\*[^\/])(.+)/', (string)$line, $matches)) {
                 // remove wrapping whitespace
-                $info = trim($matches[1]);
+                $info = \trim($matches[1]);
 
                 // remove leading asterisk
-                $info = (string)preg_replace('/^(\*\s+?)/', '', $info);
+                $info = (string)\preg_replace('/^(\*\s+?)/', '', $info);
 
                 // if it doesn't start with an "@" symbol
                 // then add to the description
@@ -65,11 +65,11 @@ final class PhpDocs
                 }
 
                 // get the name of the param
-                preg_match('/@(\w+)/', $info, $matches);
+                \preg_match('/@(\w+)/', $info, $matches);
                 $paramName = $matches[1];
 
                 // remove the param from the string
-                $value = str_replace("@{$paramName} ", '', $info);
+                $value = \str_replace("@{$paramName} ", '', $info);
 
                 // if the param hasn't been added yet, create a key for it
                 if (!isset($result['params'][$paramName])) {
@@ -77,11 +77,11 @@ final class PhpDocs
                 }
 
                 // push the param value into place
-                $result['params'][$paramName][] = trim($value);
+                $result['params'][$paramName][] = \trim($value);
             }
         }
 
-        $result['description'] = trim($result['description']);
+        $result['description'] = \trim($result['description']);
 
         return $result;
     }

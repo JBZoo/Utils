@@ -689,13 +689,13 @@ final class Slug
      */
     private static function initLanguageMap(string $language = ''): void
     {
-        if ((!$language || $language === self::$language) && count(self::$map) > 0) {
+        if ((!$language || $language === self::$language) && \count(self::$map) > 0) {
             return;
         }
 
         // Is a specific map associated with $language?
 
-        if (array_key_exists($language, self::$maps) && is_array(self::$maps[$language])) {
+        if (\array_key_exists($language, self::$maps) && \is_array(self::$maps[$language])) {
             // Move this map to end. This means it will have priority over others
             $langMap = self::$maps[$language];
             unset(self::$maps[$language]);
@@ -731,14 +731,14 @@ final class Slug
      */
     public static function filter(?string $string, string $separator = '-', bool $cssMode = false): string
     {
-        $slug = (string)preg_replace('/([^a-z0-9]+)/', $separator, strtolower(self::removeAccents((string)$string)));
-        $slug = trim($slug, $separator);
+        $slug = (string)\preg_replace('/([^a-z0-9]+)/', $separator, \strtolower(self::removeAccents((string)$string)));
+        $slug = \trim($slug, $separator);
 
         if ($cssMode) {
             $firstLetter = (int)$slug[0];
             $digits = ['zero', 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine'];
             if ($firstLetter && isset($digits[$firstLetter])) {
-                $slug = $digits[$firstLetter] . substr($slug, 1);
+                $slug = $digits[$firstLetter] . \substr($slug, 1);
             }
         }
 
@@ -758,7 +758,7 @@ final class Slug
         if (Str::isMBString()) {
             // If mbstring is available, this is significantly faster than
             // using PHP regexps.
-            return mb_check_encoding($string, Str::$encoding);
+            return \mb_check_encoding($string, Str::$encoding);
         }
 
         return self::seemsUtf8Regex($string);
@@ -790,7 +790,7 @@ final class Slug
             | (?<=[\xF0-\xF4][\x80-\xBF])[\x80-\xBF](?![\x80-\xBF])             # Short 4 byte sequence (2)
         )/x';
 
-        return !preg_match($regex, $string);
+        return !\preg_match($regex, $string);
     }
 
     /**
@@ -808,14 +808,14 @@ final class Slug
         self::initLanguageMap($language);
 
         if (self::seemsUTF8($text)) {
-            if (preg_match_all(self::$regex, $text, $matches)) {
-                $matchesCount = count($matches[0]);
+            if (\preg_match_all(self::$regex, $text, $matches)) {
+                $matchesCount = \count($matches[0]);
                 /** @noinspection ForeachInvariantsInspection */
                 for ($i = 0; $i < $matchesCount; $i++) {
                     $char = $matches[0][$i];
 
-                    if (array_key_exists($char, self::$map)) {
-                        $text = str_replace($char, self::$map[$char], $text);
+                    if (\array_key_exists($char, self::$map)) {
+                        $text = \str_replace($char, self::$map[$char], $text);
                     }
                 }
             }
@@ -824,13 +824,13 @@ final class Slug
             $search = "\x80\x83\x8a\x8e\x9a\x9e\x9f\xa2\xa5\xb5\xc0\xc1\xc2\xc3\xc4\xc5\xc7\xc8\xc9\xca\xcb\xcc\xcd";
             $search .= "\xce\xcf\xd1\xd2\xd3\xd4\xd5\xd6\xd8\xd9\xda\xdb\xdc\xdd\xe0\xe1\xe2\xe3\xe4\xe5\xe7\xe8\xe9";
             $search .= "\xea\xeb\xec\xed\xee\xef\xf1\xf2\xf3\xf4\xf5\xf6\xf8\xf9\xfa\xfb\xfc\xfd\xff";
-            $text = strtr($text, $search, 'EfSZszYcYuAAAAAACEEEEIIIINOOOOOOUUUUYaaaaaaceeeeiiiinoooooouuuuyy');
+            $text = \strtr($text, $search, 'EfSZszYcYuAAAAAACEEEEIIIINOOOOOOUUUUYaaaaaaceeeeiiiinoooooouuuuyy');
 
             // These latin characters should be represented by two characters so
             // we can't use strtr
             $complexSearch = ["\x8c", "\x9c", "\xc6", "\xd0", "\xde", "\xdf", "\xe6", "\xf0", "\xfe"];
             $complexReplace = ['OE', 'oe', 'AE', 'DH', 'TH', 'ss', 'ae', 'dh', 'th'];
-            $text = str_replace($complexSearch, $complexReplace, $text);
+            $text = \str_replace($complexSearch, $complexReplace, $text);
         }
 
         return $text;
@@ -846,7 +846,7 @@ final class Slug
      */
     public static function removeAccents(string $string, string $language = ''): string
     {
-        if (!preg_match('/[\x80-\xff]/', $string)) {
+        if (!\preg_match('/[\x80-\xff]/', $string)) {
             return $string;
         }
 

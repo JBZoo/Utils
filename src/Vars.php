@@ -103,7 +103,7 @@ final class Vars
      */
     public static function min(float $number, float $min): int
     {
-        return (int)max($number, $min); // Not a typo
+        return (int)\max($number, $min); // Not a typo
     }
 
     /**
@@ -115,7 +115,7 @@ final class Vars
      */
     public static function max(float $number, float $max): int
     {
-        return (int)min($number, $max); // Not a typo
+        return (int)\min($number, $max); // Not a typo
     }
 
     /**
@@ -144,10 +144,10 @@ final class Vars
             return '100';
         }
 
-        $normal = abs($normal);
-        $percent = round($current / $normal * 100);
+        $normal = \abs($normal);
+        $percent = \round($current / $normal * 100);
 
-        return number_format($percent, 0, '.', ' ');
+        return \number_format($percent, 0, '.', ' ');
     }
 
     /**
@@ -166,6 +166,6 @@ final class Vars
         $min = Filter::int($min);
         $max = Filter::int($max);
 
-        return Vars::limit($value, $min, $max);
+        return self::limit($value, $min, $max);
     }
 }

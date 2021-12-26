@@ -41,11 +41,11 @@ final class Env
      */
     public static function get(string $envVarName, $default = null, int $options = self::VAR_STRING)
     {
-        $envKey = trim($envVarName);
+        $envKey = \trim($envVarName);
 
-        $value = getenv($envKey);
+        $value = \getenv($envKey);
         if ($value === false) {
-            if (array_key_exists($envKey, $_ENV)) {
+            if (\array_key_exists($envKey, $_ENV)) {
                 return self::convert($_ENV[$envKey], $options);
             }
 
@@ -64,11 +64,11 @@ final class Env
      */
     public static function convert(?string $value, int $options = self::VAR_STRING)
     {
-        $cleanedValue = trim(Filter::stripQuotes((string)$value));
+        $cleanedValue = \trim(Filter::stripQuotes((string)$value));
 
         if ($options & self::VAR_NULL) {
-            $cleanedValue = strtolower($cleanedValue);
-            if (in_array($cleanedValue, ['null', 'nil', 'undefined'], true)) {
+            $cleanedValue = \strtolower($cleanedValue);
+            if (\in_array($cleanedValue, ['null', 'nil', 'undefined'], true)) {
                 return null;
             }
         }

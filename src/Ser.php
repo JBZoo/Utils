@@ -35,11 +35,11 @@ final class Ser
     public static function is($data): bool
     {
         // If it isn't a string, it isn't serialized
-        if (!is_string($data)) {
+        if (!\is_string($data)) {
             return false;
         }
 
-        $data = trim($data);
+        $data = \trim($data);
 
         // Is it the serialized NULL value?
         if ($data === 'N;') {
@@ -50,7 +50,7 @@ final class Ser
             return true;
         }
 
-        $length = strlen($data);
+        $length = \strlen($data);
 
         // Check some basic requirements of all serialized strings
         if (self::checkBasic($data, $length)) {
@@ -59,7 +59,7 @@ final class Ser
 
         /** @noinspection ArgumentEqualsDefaultValueInspection */
         /** @noinspection UnserializeExploitsInspection */
-        return @unserialize($data, []) !== false;
+        return @\unserialize($data, []) !== false;
     }
 
     /**
@@ -70,8 +70,8 @@ final class Ser
      */
     public static function maybe($data)
     {
-        if (is_array($data) || is_object($data)) {
-            return serialize($data);
+        if (\is_array($data) || \is_object($data)) {
+            return \serialize($data);
         }
 
         return $data;
@@ -85,14 +85,14 @@ final class Ser
      */
     public static function maybeUn(string $data)
     {
-        $data = trim($data);
+        $data = \trim($data);
 
         // Is it the serialized NULL value?
         if ($data === 'N;') {
             return null;
         }
 
-        $length = strlen($data);
+        $length = \strlen($data);
 
         // Check some basic requirements of all serialized strings
         if (self::checkBasic($data, $length)) {
@@ -106,12 +106,12 @@ final class Ser
 
         // Don't attempt to unserialize data that isn't serialized
         /** @noinspection UnserializeExploitsInspection */
-        $uns = @unserialize($data, []);
+        $uns = @\unserialize($data, []);
 
         // Data failed to unserialize?
         if ($uns === false) {
             /** @noinspection UnserializeExploitsInspection */
-            $uns = @unserialize(self::fix($data), []);
+            $uns = @\unserialize(self::fix($data), []);
 
             if ($uns === false) {
                 return $data;
@@ -134,7 +134,7 @@ final class Ser
      */
     public static function fix(string $brokenSerializedData): string
     {
-        $fixedSerializedData = preg_replace_callback(
+        $fixedSerializedData = \preg_replace_callback(
             '!s:(\d+):"(.*?)";!',
             /**
              * @param array $matches
@@ -142,7 +142,7 @@ final class Ser
              */
             static function (array $matches): string {
                 $snip = $matches[2];
-                return 's:' . strlen($snip) . ':"' . $snip . '";';
+                return 's:' . \strlen($snip) . ':"' . $snip . '";';
             },
             $brokenSerializedData
         );

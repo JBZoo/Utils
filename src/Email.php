@@ -55,7 +55,7 @@ final class Email
             if (!self::isValid($email)) {
                 continue;
             }
-            if (!in_array($email, $result, true)) {
+            if (!\in_array($email, $result, true)) {
                 $result[] = $email;
             }
         }
@@ -80,7 +80,7 @@ final class Email
 
         $domain = self::extractDomain($email);
 
-        return !(checkdnsrr($domain, 'MX') === false);
+        return !(\checkdnsrr($domain, 'MX') === false);
     }
 
     /**
@@ -106,7 +106,7 @@ final class Email
             }
 
             $domain = self::extractDomain($email);
-            if (!empty($domain) && !in_array($domain, $result, true)) {
+            if (!empty($domain) && !\in_array($domain, $result, true)) {
                 $result[] = $domain;
             }
         }
@@ -123,7 +123,7 @@ final class Email
     public static function getDomainSorted(array $emails): array
     {
         $domains = self::getDomain($emails);
-        sort($domains, SORT_STRING);
+        \sort($domains, \SORT_STRING);
 
         return $domains;
     }
@@ -153,7 +153,7 @@ final class Email
             return null;
         }
 
-        $hash = md5(strtolower(trim($email)));
+        $hash = \md5(\strtolower(\trim($email)));
 
         $parts = ['scheme' => 'http', 'host' => 'www.gravatar.com'];
         if (Url::isHttps()) {
@@ -164,11 +164,11 @@ final class Email
         $size = Vars::limit(Filter::int($size), 32, 2048);
 
         // Prepare default images
-        $defaultImage = trim($defaultImage);
-        if (preg_match('/^(http|https)./', $defaultImage)) {
-            $defaultImage = urldecode($defaultImage);
+        $defaultImage = \trim($defaultImage);
+        if (\preg_match('/^(http|https)./', $defaultImage)) {
+            $defaultImage = \urldecode($defaultImage);
         } else {
-            $defaultImage = strtolower($defaultImage);
+            $defaultImage = \strtolower($defaultImage);
             if (!Arr::in($defaultImage, self::getGravatarBuiltInImages())) {
                 $defaultImage = self::getGravatarBuiltInImages()[2];
             }
@@ -214,9 +214,9 @@ final class Email
             return false;
         }
 
-        $email = filter_var($email, FILTER_SANITIZE_STRING);
+        $email = \filter_var($email, \FILTER_SANITIZE_STRING);
 
-        return !(filter_var($email, FILTER_VALIDATE_EMAIL) === false);
+        return !(\filter_var($email, \FILTER_VALIDATE_EMAIL) === false);
     }
 
     /**
@@ -225,11 +225,11 @@ final class Email
      */
     private static function extractDomain(string $email): string
     {
-        $parts = explode('@', $email);
-        $domain = array_pop($parts);
+        $parts = \explode('@', $email);
+        $domain = \array_pop($parts);
 
         if (Sys::isFunc('idn_to_utf8')) {
-            return (string)idn_to_ascii($domain, 0, INTL_IDNA_VARIANT_UTS46);
+            return (string)\idn_to_ascii($domain, 0, \INTL_IDNA_VARIANT_UTS46);
         }
 
         return $domain;
@@ -247,6 +247,6 @@ final class Email
      */
     private static function handleEmailsInput($emails): array
     {
-        return is_array($emails) ? array_keys(array_flip($emails)) : [$emails];
+        return \is_array($emails) ? \array_keys(\array_flip($emails)) : [$emails];
     }
 }

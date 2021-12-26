@@ -51,11 +51,11 @@ final class Dates
         }
 
         if (null !== $time) {
-            $time = is_numeric($time) ? (int)$time : (int)strtotime($time);
+            $time = \is_numeric($time) ? (int)$time : (int)\strtotime($time);
         }
 
         if (!$time) {
-            $time = $currentIsDefault ? time() : 0;
+            $time = $currentIsDefault ? \time() : 0;
         }
 
         return $time;
@@ -85,18 +85,18 @@ final class Dates
     /**
      * Returns a DateTimeZone object based on the current timezone.
      *
-     * @param DateTimeZone|string|null $timezone
-     * @return DateTimeZone
+     * @param \DateTimeZone|string|null $timezone
+     * @return \DateTimeZone
      */
     public static function timezone($timezone = null): DateTimeZone
     {
-        if ($timezone instanceof DateTimeZone) {
+        if ($timezone instanceof \DateTimeZone) {
             return $timezone;
         }
 
-        $timezone = $timezone ?: date_default_timezone_get();
+        $timezone = $timezone ?: \date_default_timezone_get();
 
-        return new DateTimeZone($timezone);
+        return new \DateTimeZone($timezone);
     }
 
     /**
@@ -109,7 +109,7 @@ final class Dates
      */
     public static function is(?string $date): bool
     {
-        $time = strtotime((string)$date);
+        $time = \strtotime((string)$date);
         return $time > 0;
     }
 
@@ -212,9 +212,9 @@ final class Dates
     public static function formatTime(float $seconds, int $minValuableSeconds = 2): string
     {
         if ($seconds < $minValuableSeconds) {
-            return number_format($seconds, 3) . ' sec';
+            return \number_format($seconds, 3) . ' sec';
         }
 
-        return gmdate('H:i:s', (int)round($seconds, 0)) ?: '';
+        return \gmdate('H:i:s', (int)\round($seconds, 0)) ?: '';
     }
 }

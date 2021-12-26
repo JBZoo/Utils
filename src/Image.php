@@ -49,7 +49,7 @@ final class Image
      */
     public static function checkGD(bool $throwException = true): bool
     {
-        $isGd = extension_loaded('gd');
+        $isGd = \extension_loaded('gd');
 
         // Require GD library
         if ($throwException && !$isGd) {
@@ -71,7 +71,7 @@ final class Image
             return false;
         }
 
-        $format = strtolower($format);
+        $format = \strtolower($format);
         return 'image/jpg' === $format || 'jpg' === $format || 'image/jpeg' === $format || 'jpeg' === $format;
     }
 
@@ -87,7 +87,7 @@ final class Image
             return false;
         }
 
-        $format = strtolower($format);
+        $format = \strtolower($format);
         return 'image/gif' === $format || 'gif' === $format;
     }
 
@@ -103,7 +103,7 @@ final class Image
             return false;
         }
 
-        $format = strtolower($format);
+        $format = \strtolower($format);
         return 'image/png' === $format || 'png' === $format;
     }
 
@@ -119,7 +119,7 @@ final class Image
             return false;
         }
 
-        $format = strtolower($format);
+        $format = \strtolower($format);
         return 'image/webp' === $format || 'webp' === $format;
     }
 
@@ -136,14 +136,14 @@ final class Image
     {
         $result = [];
 
-        if (is_string($origColor)) {
+        if (\is_string($origColor)) {
             $result = self::normalizeColorString($origColor);
-        } elseif ((count($origColor) === self::BASE_PARTS || count($origColor) === self::EXTENDS_PARTS)) {
+        } elseif ((\count($origColor) === self::BASE_PARTS || \count($origColor) === self::EXTENDS_PARTS)) {
             $result = self::normalizeColorArray($origColor);
         }
 
-        if (count($result) !== self::EXTENDS_PARTS) {
-            throw new Exception('Undefined color format (string): ' . print_r($origColor, true));
+        if (\count($result) !== self::EXTENDS_PARTS) {
+            throw new Exception('Undefined color format (string): ' . \print_r($origColor, true));
         }
 
         return $result;
@@ -158,20 +158,20 @@ final class Image
      */
     protected static function normalizeColorString(string $origColor): array
     {
-        $color = trim($origColor, '#');
-        $color = trim($color);
+        $color = \trim($origColor, '#');
+        $color = \trim($color);
 
-        if (strlen($color) === self::DETAILED_PARTS) {
+        if (\strlen($color) === self::DETAILED_PARTS) {
             [$red, $green, $blue] = [$color[0] . $color[1], $color[2] . $color[3], $color[4] . $color[5]];
-        } elseif (strlen($color) === self::BASE_PARTS) {
+        } elseif (\strlen($color) === self::BASE_PARTS) {
             [$red, $green, $blue] = [$color[0] . $color[0], $color[1] . $color[1], $color[2] . $color[2]];
         } else {
             throw new Exception('Undefined color format (string): ' . $origColor);
         }
 
-        $red = hexdec($red);
-        $green = hexdec($green);
-        $blue = hexdec($blue);
+        $red = \hexdec($red);
+        $green = \hexdec($green);
+        $blue = \hexdec($blue);
 
         return [$red, $green, $blue, 0];
     }
@@ -187,9 +187,9 @@ final class Image
         $result = [];
 
         if (
-            array_key_exists('r', $origColor) &&
-            array_key_exists('g', $origColor) &&
-            array_key_exists('b', $origColor)
+            \array_key_exists('r', $origColor) &&
+            \array_key_exists('g', $origColor) &&
+            \array_key_exists('b', $origColor)
         ) {
             $result = [
                 self::color((int)$origColor['r']),
@@ -198,9 +198,9 @@ final class Image
                 self::alpha((float)($origColor['a'] ?? 0)),
             ];
         } elseif (
-            array_key_exists('0', $origColor) &&
-            array_key_exists(1, $origColor) &&
-            array_key_exists(2, $origColor)
+            \array_key_exists('0', $origColor) &&
+            \array_key_exists(1, $origColor) &&
+            \array_key_exists(2, $origColor)
         ) {
             $result = [
                 self::color((int)$origColor[0]),
@@ -239,8 +239,8 @@ final class Image
 
         // Get image width and height and percentage
         $opacity /= 100;
-        $width = (int)imagesx($srcImg);
-        $height = (int)imagesy($srcImg);
+        $width = (int)\imagesx($srcImg);
+        $height = (int)\imagesy($srcImg);
 
         // Turn alpha blending off
         self::addAlpha($srcImg, false);
@@ -250,7 +250,7 @@ final class Image
         $minAlpha = $minBaseAlpha;
         for ($x = 0; $x < $width; $x++) {
             for ($y = 0; $y < $height; $y++) {
-                $alpha = (imagecolorat($srcImg, $x, $y) >> 24) & 0xFF;
+                $alpha = (\imagecolorat($srcImg, $x, $y) >> 24) & 0xFF;
                 if ($alpha < $minAlpha) {
                     $minAlpha = $alpha;
                 }
@@ -261,7 +261,7 @@ final class Image
         for ($x = 0; $x < $width; $x++) {
             for ($y = 0; $y < $height; $y++) {
                 // Get current alpha value (represents the TRANSPARENCY!)
-                $colorXY = imagecolorat($srcImg, $x, $y);
+                $colorXY = \imagecolorat($srcImg, $x, $y);
                 $alpha = ($colorXY >> 24) & 0xFF;
 
                 // Calculate new alpha
@@ -273,7 +273,7 @@ final class Image
                 }
 
                 // Get the color index with new alpha
-                $alphaColorXY = imagecolorallocatealpha(
+                $alphaColorXY = \imagecolorallocatealpha(
                     $srcImg,
                     ($colorXY >> 16) & 0xFF,
                     ($colorXY >> 8) & 0xFF,
@@ -282,7 +282,7 @@ final class Image
                 );
 
                 // Set pixel with the new color + opacity
-                if (!imagesetpixel($srcImg, $x, $y, (int)$alphaColorXY)) {
+                if (!\imagesetpixel($srcImg, $x, $y, (int)$alphaColorXY)) {
                     return;
                 }
             }
@@ -291,7 +291,7 @@ final class Image
         // Copy it
         self::addAlpha($srcImg);
         self::addAlpha($dstImg);
-        imagecopy($dstImg, $srcImg, $dstX, $dstY, $srcX, $srcY, $srcWidth, $srcHeight);
+        \imagecopy($dstImg, $srcImg, $dstX, $dstY, $srcX, $srcY, $srcWidth, $srcHeight);
     }
 
     /**
@@ -414,9 +414,9 @@ final class Image
      */
     public static function direction(string $direction): string
     {
-        $direction = strtolower(trim($direction));
+        $direction = \strtolower(\trim($direction));
 
-        if (in_array($direction, ['x', 'y', 'xy', 'yx'], true)) {
+        if (\in_array($direction, ['x', 'y', 'xy', 'yx'], true)) {
             return $direction;
         }
 
@@ -464,8 +464,8 @@ final class Image
      */
     public static function strToBin(string $imageString): string
     {
-        $cleanedString = str_replace(' ', '+', (string)preg_replace('#^data:image/[^;]+;base64,#', '', $imageString));
-        $result = base64_decode($cleanedString, true);
+        $cleanedString = \str_replace(' ', '+', (string)\preg_replace('#^data:image/[^;]+;base64,#', '', $imageString));
+        $result = \base64_decode($cleanedString, true);
 
         if (!$result) {
             $result = $imageString;
@@ -498,38 +498,38 @@ final class Image
      */
     public static function position(string $position): string
     {
-        $position = strtolower(trim($position));
-        $position = str_replace(['-', '_'], ' ', $position);
+        $position = \strtolower(\trim($position));
+        $position = \str_replace(['-', '_'], ' ', $position);
 
-        if (in_array($position, [self::TOP, 'top', 't'], true)) {
+        if (\in_array($position, [self::TOP, 'top', 't'], true)) {
             return self::TOP;
         }
 
-        if (in_array($position, [self::TOP_RIGHT, 'top right', 'right top', 'tr', 'rt'], true)) {
+        if (\in_array($position, [self::TOP_RIGHT, 'top right', 'right top', 'tr', 'rt'], true)) {
             return self::TOP_RIGHT;
         }
 
-        if (in_array($position, [self::RIGHT, 'right', 'r'], true)) {
+        if (\in_array($position, [self::RIGHT, 'right', 'r'], true)) {
             return self::RIGHT;
         }
 
-        if (in_array($position, [self::BOTTOM_RIGHT, 'bottom right', 'right bottom', 'br', 'rb'], true)) {
+        if (\in_array($position, [self::BOTTOM_RIGHT, 'bottom right', 'right bottom', 'br', 'rb'], true)) {
             return self::BOTTOM_RIGHT;
         }
 
-        if (in_array($position, [self::BOTTOM, 'bottom', 'b'], true)) {
+        if (\in_array($position, [self::BOTTOM, 'bottom', 'b'], true)) {
             return self::BOTTOM;
         }
 
-        if (in_array($position, [self::BOTTOM_LEFT, 'bottom left', 'left bottom', 'bl', 'lb'], true)) {
+        if (\in_array($position, [self::BOTTOM_LEFT, 'bottom left', 'left bottom', 'bl', 'lb'], true)) {
             return self::BOTTOM_LEFT;
         }
 
-        if (in_array($position, [self::LEFT, 'left', 'l'], true)) {
+        if (\in_array($position, [self::LEFT, 'left', 'l'], true)) {
             return self::LEFT;
         }
 
-        if (in_array($position, [self::TOP_LEFT, 'top left', 'left top', 'tl', 'lt'], true)) {
+        if (\in_array($position, [self::TOP_LEFT, 'top left', 'left top', 'tl', 'lt'], true)) {
             return self::TOP_LEFT;
         }
 
@@ -611,7 +611,7 @@ final class Image
      */
     public static function addAlpha($image, bool $isBlend = true): void
     {
-        imagesavealpha($image, true);
-        imagealphablending($image, $isBlend);
+        \imagesavealpha($image, true);
+        \imagealphablending($image, $isBlend);
     }
 }

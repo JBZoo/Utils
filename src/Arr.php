@@ -38,12 +38,12 @@ final class Arr
     public static function unique(array $array, bool $keepKeys = false): array
     {
         if ($keepKeys) {
-            $array = array_unique($array);
+            $array = \array_unique($array);
         } else {
             // This is faster version than the builtin array_unique().
             // http://stackoverflow.com/questions/8321620/array-unique-vs-array-flip
             // http://php.net/manual/en/function.array-unique.php
-            $array = array_keys(array_flip($array));
+            $array = \array_keys(\array_flip($array));
         }
 
         return $array;
@@ -60,7 +60,7 @@ final class Arr
      */
     public static function key($key, array $array, bool $returnValue = false)
     {
-        $isExists = array_key_exists((string)$key, $array);
+        $isExists = \array_key_exists((string)$key, $array);
 
         if ($returnValue) {
             if ($isExists) {
@@ -85,11 +85,11 @@ final class Arr
      */
     public static function in($value, array $array, bool $returnKey = false)
     {
-        $inArray = in_array($value, $array, true);
+        $inArray = \in_array($value, $array, true);
 
         if ($returnKey) {
             if ($inArray) {
-                return array_search($value, $array, true);
+                return \array_search($value, $array, true);
             }
 
             return null;
@@ -106,7 +106,7 @@ final class Arr
      */
     public static function first(array $array)
     {
-        return reset($array);
+        return \reset($array);
     }
 
     /**
@@ -117,7 +117,7 @@ final class Arr
      */
     public static function last(array $array)
     {
-        return end($array);
+        return \end($array);
     }
 
     /**
@@ -128,8 +128,8 @@ final class Arr
      */
     public static function firstKey(array $array)
     {
-        reset($array);
-        return key($array);
+        \reset($array);
+        return \key($array);
     }
 
     /**
@@ -140,8 +140,8 @@ final class Arr
      */
     public static function lastKey(array $array)
     {
-        end($array);
-        return key($array);
+        \end($array);
+        return \key($array);
     }
 
     /**
@@ -156,14 +156,14 @@ final class Arr
     {
         $flattened = [];
 
-        array_walk_recursive(
+        \array_walk_recursive(
             $array,
             /**
              * @param mixed      $value
              * @param string|int $key
              */
             static function ($value, $key) use (&$flattened, $preserveKeys): void {
-                if ($preserveKeys && !is_int($key)) {
+                if ($preserveKeys && !\is_int($key)) {
                     $flattened[$key] = $value;
                 } else {
                     $flattened[] = $value;
@@ -195,28 +195,25 @@ final class Arr
             $key = (string)$key;
 
             if ($field) {
-                /** @noinspection NotOptimalIfConditionsInspection */
-                if (is_object($element) && $element->{$field} === $search) {
+                if (\is_object($element) && $element->{$field} === $search) {
                     return $key;
                 }
 
-                /** @noinspection NotOptimalIfConditionsInspection */
-                if (is_array($element) && $element[$field] === $search) {
+                if (\is_array($element) && $element[$field] === $search) {
                     return $key;
                 }
 
-                /** @noinspection NotOptimalIfConditionsInspection */
-                if (is_scalar($element) && $element === $search) {
+                if (\is_scalar($element) && $element === $search) {
                     return $key;
                 }
-            } elseif (is_object($element)) {
+            } elseif (\is_object($element)) {
                 $element = (array)$element;
-                if (in_array($search, $element, false)) {
+                if (\in_array($search, $element, false)) {
                     return $key;
                 }
-            } elseif (is_array($element) && in_array($search, $element, false)) {
+            } elseif (\is_array($element) && \in_array($search, $element, false)) {
                 return $key;
-            } elseif (is_scalar($element) && $element === $search) {
+            } elseif (\is_scalar($element) && $element === $search) {
                 return $key;
             }
         }
@@ -237,10 +234,10 @@ final class Arr
     public static function mapDeep(array $array, callable $callback, bool $onNoScalar = false): array
     {
         foreach ($array as $key => $value) {
-            if (is_array($value)) {
+            if (\is_array($value)) {
                 $args = [$value, $callback, $onNoScalar];
-                $array[$key] = call_user_func_array([__CLASS__, __FUNCTION__], $args);
-            } elseif (is_scalar($value) || $onNoScalar) {
+                $array[$key] = \call_user_func_array([__CLASS__, __FUNCTION__], $args);
+            } elseif (\is_scalar($value) || $onNoScalar) {
                 $array[$key] = $callback($value);
             }
         }
@@ -256,7 +253,7 @@ final class Arr
      */
     public static function clean(array $haystack): array
     {
-        return array_filter($haystack);
+        return \array_filter($haystack);
     }
 
     /**
@@ -268,8 +265,8 @@ final class Arr
     public static function cleanBeforeJson(array $array): array
     {
         foreach ($array as $key => $value) {
-            if (is_array($value)) {
-                $array[$key] = self::cleanBeforeJson($array[$key]);
+            if (\is_array($value)) {
+                $array[$key] = self::cleanBeforeJson($value);
             }
 
             if ($array[$key] === '' || null === $array[$key]) {
@@ -288,7 +285,7 @@ final class Arr
      */
     public static function isAssoc(array $array): bool
     {
-        return array_keys($array) !== range(0, count($array) - 1);
+        return \array_keys($array) !== \range(0, \count($array) - 1);
     }
 
     /**
@@ -301,9 +298,9 @@ final class Arr
      */
     public static function unshiftAssoc(array &$array, $key, $value): array
     {
-        $array = array_reverse($array, true);
+        $array = \array_reverse($array, true);
         $array[$key] = $value;
-        $array = array_reverse($array, true);
+        $array = \array_reverse($array, true);
 
         return $array;
     }
@@ -320,9 +317,9 @@ final class Arr
         $result = [];
 
         foreach ($arrayList as $option) {
-            if (is_array($option)) {
+            if (\is_array($option)) {
                 $result[] = $option[$fieldName];
-            } elseif (is_object($option)) {
+            } elseif (\is_object($option)) {
                 if (isset($option->{$fieldName})) {
                     $result[] = $option->{$fieldName};
                 }
@@ -344,12 +341,12 @@ final class Arr
         $result = [];
 
         foreach ($arrayList as $item) {
-            if (is_object($item)) {
+            if (\is_object($item)) {
                 if (isset($item->{$key})) {
                     $result[$item->{$key}][] = $item;
                 }
-            } elseif (is_array($item)) {
-                if (array_key_exists($key, $item)) {
+            } elseif (\is_array($item)) {
+                if (\array_key_exists($key, $item)) {
                     $result[$item[$key]][] = $item;
                 }
             }
@@ -370,7 +367,7 @@ final class Arr
         $result = [];
 
         foreach ($array as $key => $value) {
-            if (is_array($value)) {
+            if (\is_array($value)) {
                 $result[$key] = self::map($function, $value);
             } else {
                 $result[$key] = $function($value);
@@ -389,7 +386,7 @@ final class Arr
      */
     public static function sortByArray(array $array, array $orderArray): array
     {
-        return array_merge(array_flip($orderArray), $array);
+        return \array_merge(\array_flip($orderArray), $array);
     }
 
     /**
@@ -423,7 +420,7 @@ final class Arr
             $result[] = $key . ': ' . $value . ';';
         }
 
-        return implode(PHP_EOL, $result);
+        return \implode(\PHP_EOL, $result);
     }
 
     /**
@@ -443,7 +440,7 @@ final class Arr
             return [];
         }
 
-        if (is_array($object) && !self::isAssoc($object)) {
+        if (\is_array($object) && !self::isAssoc($object)) {
             return $object;
         }
 
@@ -462,7 +459,7 @@ final class Arr
         $result = '';
 
         foreach ($array as $item) {
-            if (is_array($item)) {
+            if (\is_array($item)) {
                 $result .= self::implode($glue, $item) . $glue;
             } else {
                 $result .= $item . $glue;
@@ -483,7 +480,7 @@ final class Arr
      */
     public static function removeByValue(array $array, $value): array
     {
-        return array_filter(
+        return \array_filter(
             $array,
             /**
              * @param string|float|int|bool|null $arrayItem
@@ -491,7 +488,7 @@ final class Arr
             static function ($arrayItem) use ($value): bool {
                 return $value !== $arrayItem;
             },
-            ARRAY_FILTER_USE_BOTH
+            \ARRAY_FILTER_USE_BOTH
         );
     }
 }
