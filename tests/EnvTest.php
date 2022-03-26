@@ -18,6 +18,7 @@ declare(strict_types=1);
 namespace JBZoo\PHPUnit;
 
 use JBZoo\Utils\Env;
+use JBZoo\Utils\Filter;
 
 /**
  * Class EnvTest
@@ -94,7 +95,7 @@ class EnvTest extends PHPUnit
 
     public function testFloat(): void
     {
-        $value = 1 / 3;
+        $value = Filter::float(1 / 3);
 
         putenv("FOO= {$value} ");
         isSame($value, Env::float('FOO'));

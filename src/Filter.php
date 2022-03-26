@@ -150,7 +150,7 @@ final class Filter
      * @param int   $round
      * @return float
      */
-    public static function float($value, int $round = 16): float
+    public static function float($value, int $round = 10): float
     {
         $cleaned = (string)\preg_replace('#[^\deE\-\.\,]#iu', '', (string)$value);
         $cleaned = \str_replace(',', '.', $cleaned);
