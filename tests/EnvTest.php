@@ -94,7 +94,7 @@ class EnvTest extends PHPUnit
 
     public function testFloat(): void
     {
-        $value = (float)(1 / 3);
+        $value = 1 / 3;
 
         putenv("FOO= {$value} ");
         isSame($value, Env::float('FOO'));
