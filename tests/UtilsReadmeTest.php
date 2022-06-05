@@ -47,7 +47,7 @@ use ReflectionClass;
  */
 class UtilsReadmeTest extends AbstractReadmeTest
 {
-    protected $packageName = 'Utils';
+    protected string $packageName = 'Utils';
 
     protected function setUp(): void
     {

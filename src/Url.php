@@ -63,7 +63,7 @@ final class Url
      */
     public static function addArg(array $newParams, ?string $uri = null): string
     {
-        $uri = $uri ?? ($_SERVER['REQUEST_URI'] ?? '');
+        $uri ??= ($_SERVER['REQUEST_URI'] ?? '');
 
         // Parse the URI into it's components
         $parsedUri = data((array)\parse_url((string)$uri));

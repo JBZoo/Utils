@@ -42,13 +42,11 @@ final class Xml
             $rawXmlContent
         );
 
-        $rawXmlContent = \str_replace(
+        return \str_replace(
             ['&', '<', '>', '"', "'"],
             ['&amp;', '&lt;', '&gt;', '&quot;', '&apos;'],
             $rawXmlContent
         );
-
-        return $rawXmlContent;
     }
 
     /**
@@ -121,13 +119,10 @@ final class Xml
             $document = self::createFromString();
         }
 
-        $domElement = $domElement ?? $document;
+        $domElement ??= $document;
 
         if (\array_key_exists('_text', $xmlAsArray) && $xmlAsArray['_text'] !== null) {
-            $newNode = $document->createTextNode($xmlAsArray['_text']);
-            if ($newNode !== false) {
-                $domElement->appendChild($newNode);
-            }
+            $domElement->appendChild(new \DOMText($xmlAsArray['_text']));
         }
 
         if (\array_key_exists('_cdata', $xmlAsArray) && $xmlAsArray['_cdata'] !== null) {

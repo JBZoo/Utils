@@ -50,12 +50,12 @@ class TimerTest extends PHPUnit
 
     public function testGetRequestTime(): void
     {
-        isTrue(Timer::getRequestTime());
+        isTrue(Timer::getRequestTime() > 0);
     }
 
     public function testTimeSinceStart(): void
     {
-        isTrue(Timer::timeSinceStart());
+        isTrue(Timer::timeSinceStart() > 0);
     }
 
     /**

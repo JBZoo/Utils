@@ -32,7 +32,7 @@ final class Str
      *
      * @var string
      */
-    public static $encoding = 'UTF-8';
+    public static string $encoding = 'UTF-8';
 
     /**
      * Strip all whitespaces from the given string.
@@ -338,19 +338,6 @@ final class Str
         }
 
         return $cache[$text];
-    }
-
-    /**
-     * Check is mbstring overload standard functions
-     * @return bool
-     */
-    public static function isOverload(): bool
-    {
-        if (\defined('MB_OVERLOAD_STRING') && self::isMBString()) {
-            return (bool)(Filter::int(Sys::iniGet('mbstring.func_overload')) & \MB_OVERLOAD_STRING);
-        }
-
-        return false;
     }
 
     /**

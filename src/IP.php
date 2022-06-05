@@ -78,22 +78,14 @@ final class IP
 
             // $netMask is a CIDR size block
             // fix the range argument
-            $blocks = \explode('.', $range);
-
-            $expectedNumOfParts = 4;
-            /** @phan-suppress-next-line PhanPossiblyInfiniteLoop */
-            while (\count($blocks) < $expectedNumOfParts) {
-                $blocks[] = '0';
-            }
-
-            [$blockA, $blockB, $blockC, $blockD] = $blocks;
+            $blocks = \explode('.', $range, 4);
 
             $range = \sprintf(
                 '%u.%u.%u.%u',
-                (int)(empty($blockA) ? '0' : $blockA),
-                (int)(empty($blockB) ? '0' : $blockB),
-                (int)(empty($blockC) ? '0' : $blockC),
-                (int)(empty($blockD) ? '0' : $blockD)
+                (int)($blocks[0] ?? 0),
+                (int)($blocks[1] ?? 0),
+                (int)($blocks[2] ?? 0),
+                (int)($blocks[3] ?? 0)
             );
 
             $rangeDec = \ip2long($range);

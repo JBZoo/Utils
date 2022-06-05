@@ -77,9 +77,9 @@ class SysTest extends PHPUnit
 
     public function testGetMemory(): void
     {
-        isTrue(Sys::getMemory());
-        isTrue(Sys::getMemory(true));
-        isTrue(Sys::getMemory(false));
+        isTrue((bool)Sys::getMemory());
+        isTrue((bool)Sys::getMemory(true));
+        isTrue((bool)Sys::getMemory(false));
     }
 
     public function testGetDocumentRoot(): void
