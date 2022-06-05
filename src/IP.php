@@ -78,15 +78,14 @@ final class IP
 
             // $netMask is a CIDR size block
             // fix the range argument
-            $blocks = \explode('.', $range) + ['0', '0', '0', '0'];
-            [$blockA, $blockB, $blockC, $blockD] = $blocks;
+            $blocks = \explode('.', $range, 4);
 
             $range = \sprintf(
                 '%u.%u.%u.%u',
-                (int)(empty($blockA) ? '0' : $blockA),
-                (int)(empty($blockB) ? '0' : $blockB),
-                (int)(empty($blockC) ? '0' : $blockC),
-                (int)(empty($blockD) ? '0' : $blockD)
+                $blocks[0] ?? '0',
+                $blocks[1] ?? '0',
+                $blocks[2] ?? '0',
+                $blocks[3] ?? '0'
             );
 
             $rangeDec = \ip2long($range);
