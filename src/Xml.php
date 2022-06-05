@@ -121,7 +121,7 @@ final class Xml
             $document = self::createFromString();
         }
 
-        $domElement = $domElement ?? $document;
+        $domElement ??= $document;
 
         if (\array_key_exists('_text', $xmlAsArray) && $xmlAsArray['_text'] !== null) {
             $newNode = $document->createTextNode($xmlAsArray['_text']);
