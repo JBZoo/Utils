@@ -123,7 +123,7 @@ final class Xml
 
         if (\array_key_exists('_text', $xmlAsArray) && $xmlAsArray['_text'] !== null) {
             $newNode = $document->createTextNode($xmlAsArray['_text']);
-            if ($newNode instanceof \DOMNode) {
+            if ($newNode !== false) {
                 $domElement->appendChild($newNode);
             }
         }

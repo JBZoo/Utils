@@ -82,10 +82,10 @@ final class IP
 
             $range = \sprintf(
                 '%u.%u.%u.%u',
-                int($blocks[0] ?? 0),
-                int($blocks[1] ?? 0),
-                int($blocks[2] ?? 0),
-                int($blocks[3] ?? 0)
+                (int)($blocks[0] ?? 0),
+                (int)($blocks[1] ?? 0),
+                (int)($blocks[2] ?? 0),
+                (int)($blocks[3] ?? 0)
             );
 
             $rangeDec = \ip2long($range);
