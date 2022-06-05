@@ -122,11 +122,7 @@ final class Xml
         $domElement ??= $document;
 
         if (\array_key_exists('_text', $xmlAsArray) && $xmlAsArray['_text'] !== null) {
-            $newNode = $document->createTextNode($xmlAsArray['_text']);
-            /** @phan-suppress-next-line PhanImpossibleTypeComparison */
-            if ($newNode !== false) {
-                $domElement->appendChild($newNode);
-            }
+            $domElement->appendChild(new \DOMText($xmlAsArray['_text']));
         }
 
         if (\array_key_exists('_cdata', $xmlAsArray) && $xmlAsArray['_cdata'] !== null) {
