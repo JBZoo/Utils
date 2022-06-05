@@ -78,13 +78,7 @@ final class IP
 
             // $netMask is a CIDR size block
             // fix the range argument
-            $blocks = \explode('.', $range);
-
-            $expectedNumOfParts = 4;
-            while (\count($blocks) < $expectedNumOfParts) {
-                $blocks[] = '0';
-            }
-
+            $blocks = \explode('.', $range) + ['0', '0', '0', '0'];
             [$blockA, $blockB, $blockC, $blockD] = $blocks;
 
             $range = \sprintf(
