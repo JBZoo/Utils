@@ -81,7 +81,6 @@ final class IP
             $blocks = \explode('.', $range);
 
             $expectedNumOfParts = 4;
-            /** @phan-suppress-next-line PhanPossiblyInfiniteLoop */
             while (\count($blocks) < $expectedNumOfParts) {
                 $blocks[] = '0';
             }

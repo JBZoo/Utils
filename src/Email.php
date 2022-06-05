@@ -80,7 +80,7 @@ final class Email
 
         $domain = self::extractDomain($email);
 
-        return !(\checkdnsrr($domain, 'MX') === false);
+        return \checkdnsrr($domain) !== false;
     }
 
     /**
