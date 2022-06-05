@@ -26,12 +26,12 @@ use JBZoo\Utils\Xml;
  */
 class XmlTest extends PHPUnit
 {
-    private $xmlFixture = PROJECT_ROOT . '/tests/resources/some-xml-file.xml';
+    private string $xmlFixture = PROJECT_ROOT . '/tests/resources/some-xml-file.xml';
 
     /**
      * @var array
      */
-    private $expected = [
+    private array $expected = [
         '_node'     => '#document',
         '_text'     => null,
         '_cdata'    => null,
@@ -122,24 +122,26 @@ class XmlTest extends PHPUnit
     /**
      * @var string[]
      */
-    private $expectedXml = [
+    private array $expectedXml = [
         '<?xml version="1.0" encoding="UTF-8"?>',
-        '<phpunit bootstrap="tests/autoload.php" convertErrorsToExceptions="true" convertNoticesToExceptions="true" convertWarningsToExceptions="true" convertDeprecationsToExceptions="true" executionOrder="random" processIsolation="false" stopOnError="false" stopOnFailure="false" stopOnIncomplete="false" stopOnSkipped="false" stopOnRisky="false">',
+        '<phpunit bootstrap="tests/autoload.php" convertErrorsToExceptions="true" convertNoticesToExceptions="true" convertWarningsToExceptions="true" convertDeprecationsToExceptions="true" executionOrder="random" processIsolation="false" stopOnError="false" stopOnFailure="false" stopOnIncomplete="false" stopOnSkipped="false" stopOnRisky="false" noNamespaceSchemaLocation="https://schema.phpunit.de/9.3/phpunit.xsd">',
+        '  <coverage processUncoveredFiles="true">',
+        '    <include>',
+        '      <directory suffix=".php">src</directory>',
+        '    </include>',
+        '    <report>',
+        '      <clover outputFile="build/coverage_xml/main.xml"/>',
+        '      <php outputFile="build/coverage_cov/main.cov"/>',
+        '      <text outputFile="php://stdout" showUncoveredFiles="false" showOnlySummary="true"/>',
+        '    </report>',
+        '  </coverage>',
         '  <testsuites>',
         '    <testsuite name="PHPUnit">',
         '      <directory suffix="Test.php">tests</directory>',
         '    </testsuite>',
         '  </testsuites>',
-        '  <filter>',
-        '    <whitelist processUncoveredFilesFromWhitelist="true">',
-        '      <directory suffix=".php">src</directory>',
-        '    </whitelist>',
-        '  </filter>',
         '  <logging>',
-        '    <log type="coverage-clover" target="build/coverage_xml/main.xml"/>',
-        '    <log type="coverage-php" target="build/coverage_cov/main.cov"/>',
-        '    <log type="junit" target="build/coverage_junit/main.xml"/>',
-        '    <log type="coverage-text" target="php://stdout" showUncoveredFiles="false" showOnlySummary="true"/>',
+        '    <junit outputFile="build/coverage_junit/main.xml"/>',
         '  </logging>',
         '</phpunit>',
         '',
@@ -148,86 +150,125 @@ class XmlTest extends PHPUnit
     /**
      * @var array
      */
-    private $minimalSource = [
+    private array $minimalSource = [
         '_children' => [
             [
-                '_node'     => 'phpunit',
-                '_attrs'    => [
-                    'bootstrap'                       => 'tests/autoload.php',
-                    'convertErrorsToExceptions'       => 'true',
-                    'convertNoticesToExceptions'      => 'true',
-                    'convertWarningsToExceptions'     => 'true',
-                    'convertDeprecationsToExceptions' => 'true',
-                    'executionOrder'                  => 'random',
-                    'processIsolation'                => 'false',
-                    'stopOnError'                     => 'false',
-                    'stopOnFailure'                   => 'false',
-                    'stopOnIncomplete'                => 'false',
-                    'stopOnSkipped'                   => 'false',
-                    'stopOnRisky'                     => 'false',
+                "_node"     => "phpunit",
+                "_text"     => null,
+                "_cdata"    => null,
+                "_attrs"    => [
+                    "bootstrap"                       => "tests/autoload.php",
+                    "convertErrorsToExceptions"       => "true",
+                    "convertNoticesToExceptions"      => "true",
+                    "convertWarningsToExceptions"     => "true",
+                    "convertDeprecationsToExceptions" => "true",
+                    "executionOrder"                  => "random",
+                    "processIsolation"                => "false",
+                    "stopOnError"                     => "false",
+                    "stopOnFailure"                   => "false",
+                    "stopOnIncomplete"                => "false",
+                    "stopOnSkipped"                   => "false",
+                    "stopOnRisky"                     => "false",
+                    "noNamespaceSchemaLocation"       => "https://schema.phpunit.de/9.3/phpunit.xsd"
                 ],
-                '_children' => [
+                "_children" => [
                     [
-                        '_node'     => 'testsuites',
-                        '_children' => [
+                        "_node"     => "coverage",
+                        "_text"     => null,
+                        "_cdata"    => null,
+                        "_attrs"    => ["processUncoveredFiles" => "true"],
+                        "_children" => [
                             [
-                                '_node'     => 'testsuite',
-                                '_attrs'    => ['name' => 'PHPUnit'],
-                                '_children' => [
+                                "_node"     => "include",
+                                "_text"     => null,
+                                "_cdata"    => null,
+                                "_attrs"    => [],
+                                "_children" => [
                                     [
-                                        '_node'  => 'directory',
-                                        '_text'  => 'tests',
-                                        '_attrs' => ['suffix' => 'Test.php'],
-                                    ],
-                                ],
+                                        "_node"     => "directory",
+                                        "_text"     => "src",
+                                        "_cdata"    => null,
+                                        "_attrs"    => ["suffix" => ".php"],
+                                        "_children" => []
+                                    ]
+                                ]
                             ],
-                        ],
-                    ],
-                    [
-                        '_node'     => 'filter',
-                        '_children' => [
                             [
-                                '_node'     => 'whitelist',
-                                '_attrs'    => ['processUncoveredFilesFromWhitelist' => 'true'],
-                                '_children' => [
+                                "_node"     => "report",
+                                "_text"     => null,
+                                "_cdata"    => null,
+                                "_attrs"    => [],
+                                "_children" => [
                                     [
-                                        '_node'  => 'directory',
-                                        '_text'  => 'src',
-                                        '_attrs' => ['suffix' => '.php'],
+                                        "_node"     => "clover",
+                                        "_text"     => null,
+                                        "_cdata"    => null,
+                                        "_attrs"    => ["outputFile" => "build/coverage_xml/main.xml"],
+                                        "_children" => []
                                     ],
-                                ],
-                            ],
-                        ],
+                                    [
+                                        "_node"     => "php",
+                                        "_text"     => null,
+                                        "_cdata"    => null,
+                                        "_attrs"    => ["outputFile" => "build/coverage_cov/main.cov"],
+                                        "_children" => []
+                                    ],
+                                    [
+                                        "_node"     => "text",
+                                        "_text"     => null,
+                                        "_cdata"    => null,
+                                        "_attrs"    => [
+                                            "outputFile"         => "php://stdout",
+                                            "showUncoveredFiles" => "false",
+                                            "showOnlySummary"    => "true"
+                                        ],
+                                        "_children" => []
+                                    ]
+                                ]
+                            ]
+                        ]
                     ],
                     [
-                        '_node'     => 'logging',
-                        '_children' => [
+                        "_node"     => "testsuites",
+                        "_text"     => null,
+                        "_cdata"    => null,
+                        "_attrs"    => [],
+                        "_children" => [
                             [
-                                '_node'  => 'log',
-                                '_attrs' => ['type' => 'coverage-clover', 'target' => 'build/coverage_xml/main.xml'],
-                            ],
-                            [
-                                '_node'  => 'log',
-                                '_attrs' => ['type' => 'coverage-php', 'target' => 'build/coverage_cov/main.cov'],
-                            ],
-                            [
-                                '_node'  => 'log',
-                                '_attrs' => ['type' => 'junit', 'target' => 'build/coverage_junit/main.xml'],
-                            ],
-                            [
-                                '_node'  => 'log',
-                                '_attrs' => [
-                                    'type'               => 'coverage-text',
-                                    'target'             => 'php://stdout',
-                                    'showUncoveredFiles' => 'false',
-                                    'showOnlySummary'    => 'true',
-                                ],
-                            ],
-                        ],
+                                "_node"     => "testsuite",
+                                "_text"     => null,
+                                "_cdata"    => null,
+                                "_attrs"    => ["name" => "PHPUnit"],
+                                "_children" => [
+                                    [
+                                        "_node"     => "directory",
+                                        "_text"     => "tests",
+                                        "_cdata"    => null,
+                                        "_attrs"    => ["suffix" => "Test.php"],
+                                        "_children" => []
+                                    ]
+                                ]
+                            ]
+                        ]
                     ],
-                ],
-            ],
-        ],
+                    [
+                        "_node"     => "logging",
+                        "_text"     => null,
+                        "_cdata"    => null,
+                        "_attrs"    => [],
+                        "_children" => [
+                            [
+                                "_node"     => "junit",
+                                "_text"     => null,
+                                "_cdata"    => null,
+                                "_attrs"    => ["outputFile" => "build/coverage_junit/main.xml"],
+                                "_children" => []
+                            ]
+                        ]
+                    ]
+                ]
+            ]
+        ]
     ];
 
     public function testEscape(): void

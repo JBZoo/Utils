@@ -138,7 +138,7 @@ class FileSystemTest extends PHPUnit
 
     public function testPerms(): void
     {
-        isFalse(FS::perms('/no/such/file'));
+        isFalse((bool)FS::perms('/no/such/file'));
     }
 
     public function testWritable(): void

@@ -260,7 +260,7 @@ class EmailTest extends PHPUnit
 
     public function testRandomEmail(): void
     {
-        isTrue(Email::check(Email::random()));
+        isTrue((bool)Email::check(Email::random()));
         isTrue(Email::isValid(Email::random()));
 
         isNotSame(Email::random(), Email::random());
