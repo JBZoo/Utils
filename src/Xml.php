@@ -42,13 +42,11 @@ final class Xml
             $rawXmlContent
         );
 
-        $rawXmlContent = \str_replace(
+        return \str_replace(
             ['&', '<', '>', '"', "'"],
             ['&amp;', '&lt;', '&gt;', '&quot;', '&apos;'],
             $rawXmlContent
         );
-
-        return $rawXmlContent;
     }
 
     /**
@@ -125,7 +123,7 @@ final class Xml
 
         if (\array_key_exists('_text', $xmlAsArray) && $xmlAsArray['_text'] !== null) {
             $newNode = $document->createTextNode($xmlAsArray['_text']);
-            if ($newNode !== false) {
+            if ($newNode instanceof \DOMNode) {
                 $domElement->appendChild($newNode);
             }
         }
