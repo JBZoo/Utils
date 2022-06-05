@@ -86,7 +86,6 @@ jobs:
         with:
           php-version: ${{ matrix.php-version }}
           tools: composer
-          extensions: ast
 
       - name: Build the Project
         run: make update --no-print-directory
