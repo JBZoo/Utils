@@ -341,20 +341,6 @@ final class Str
     }
 
     /**
-     * Check is mbstring overload standard functions
-     * @return bool
-     */
-    public static function isOverload(): bool
-    {
-        if (\defined('MB_OVERLOAD_STRING') && self::isMBString()) {
-            $funcOverload = int(Sys::iniGet('mbstring.func_overload'));
-            return (bool)($funcOverload & \MB_OVERLOAD_STRING);
-        }
-
-        return false;
-    }
-
-    /**
      * Check is mbstring loaded
      *
      * @return bool
