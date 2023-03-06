@@ -4,9 +4,29 @@
     "description"  : "Collection of PHP functions, mini classes and snippets for everyday developer's routine life.",
     "license"      : "MIT",
     "keywords"     : [
-        "helpers", "helper", "utility", "utils", "collection", "environment", "image", "filesystem",
-        "array", "cli", "command line", "dates", "email", "env", "filter", "http", "url", "serialize",
-        "slugify", "string", "mbstring", "timer", "misc"
+        "helpers",
+        "helper",
+        "utility",
+        "utils",
+        "collection",
+        "environment",
+        "image",
+        "filesystem",
+        "array",
+        "cli",
+        "command line",
+        "dates",
+        "email",
+        "env",
+        "filter",
+        "http",
+        "url",
+        "serialize",
+        "slugify",
+        "string",
+        "mbstring",
+        "timer",
+        "misc"
     ],
 
     "authors"      : [
@@ -26,15 +46,15 @@
     ],
 
     "require"      : {
-        "php"        : ">=7.4",
+        "php"        : "^8.1",
         "ext-posix"  : "*",
         "ext-filter" : "*",
         "ext-dom"    : "*"
     },
 
     "require-dev"  : {
-        "jbzoo/toolbox-dev" : "^4.0.1",
-        "symfony/process"   : ">=4.4,<6.0"
+        "jbzoo/toolbox-dev" : "dev-master|7.x-dev",
+        "symfony/process"   : ">=4.4"
     },
 
     "suggest"      : {
@@ -47,29 +67,25 @@
     },
 
     "autoload"     : {
+        "psr-4" : {"JBZoo\\Utils\\" : "src"},
         "files" : [
             "src/defines.php",
             "src/aliases.php"
-        ],
-        "psr-4" : {
-            "JBZoo\\Utils\\" : "src"
-        }
+        ]
+
     },
 
     "autoload-dev" : {
-        "classmap" : ["tests"]
+        "psr-4" : {"JBZoo\\PHPUnit\\" : "tests"}
     },
 
     "config"       : {
-        "optimize-autoloader" : true,
-        "allow-plugins"       : {
-            "composer/package-versions-deprecated" : false
-        }
+        "optimize-autoloader" : true
     },
 
     "extra"        : {
         "branch-alias" : {
-            "dev-master" : "4.x-dev"
+            "dev-master" : "7.x-dev"
         }
     }
 }
