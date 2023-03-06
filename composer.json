@@ -1,9 +1,9 @@
 {
-    "name"         : "jbzoo/utils",
-    "type"         : "library",
-    "description"  : "Collection of PHP functions, mini classes and snippets for everyday developer's routine life.",
-    "license"      : "MIT",
-    "keywords"     : [
+    "name"              : "jbzoo/utils",
+    "type"              : "library",
+    "description"       : "Collection of PHP functions, mini classes and snippets for everyday developer's routine life.",
+    "license"           : "MIT",
+    "keywords"          : [
         "helpers",
         "helper",
         "utility",
@@ -28,8 +28,9 @@
         "timer",
         "misc"
     ],
+    "minimum-stability" : "dev",
 
-    "authors"      : [
+    "authors"           : [
         {
             "name"  : "Denis Smetannikov",
             "email" : "admin@jbzoo.com",
@@ -45,19 +46,20 @@
         }
     ],
 
-    "require"      : {
+    "require"           : {
         "php"        : "^8.1",
         "ext-posix"  : "*",
         "ext-filter" : "*",
         "ext-dom"    : "*"
     },
 
-    "require-dev"  : {
-        "jbzoo/toolbox-dev" : "dev-master|7.x-dev",
+    "require-dev"       : {
+        "jbzoo/toolbox-dev" : "7.x-dev",
+        "jbzoo/data"        : "7.x-dev",
         "symfony/process"   : ">=4.4"
     },
 
-    "suggest"      : {
+    "suggest"           : {
         "ext-mbstring"              : "Provides multibyte specific string functions",
         "symfony/process"           : "For Cli::exec() method only",
         "symfony/polyfill-mbstring" : "For UTF-8 if ext-mbstring disabled",
@@ -66,7 +68,7 @@
         "ext-intl"                  : "*"
     },
 
-    "autoload"     : {
+    "autoload"          : {
         "psr-4" : {"JBZoo\\Utils\\" : "src"},
         "files" : [
             "src/defines.php",
@@ -75,15 +77,18 @@
 
     },
 
-    "autoload-dev" : {
+    "autoload-dev"      : {
         "psr-4" : {"JBZoo\\PHPUnit\\" : "tests"}
     },
 
-    "config"       : {
-        "optimize-autoloader" : true
+    "config"            : {
+        "optimize-autoloader" : true,
+        "allow-plugins"       : {
+            "composer/package-versions-deprecated" : true
+        }
     },
 
-    "extra"        : {
+    "extra"             : {
         "branch-alias" : {
             "dev-master" : "7.x-dev"
         }
