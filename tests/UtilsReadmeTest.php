@@ -1,16 +1,15 @@
 <?php
 
 /**
- * JBZoo Toolbox - Utils
+ * JBZoo Toolbox - Utils.
  *
  * This file is part of the JBZoo Toolbox project.
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  *
- * @package    Utils
  * @license    MIT
  * @copyright  Copyright (C) JBZoo.com, All rights reserved.
- * @link       https://github.com/JBZoo/Utils
+ * @see        https://github.com/JBZoo/Utils
  */
 
 declare(strict_types=1);
@@ -38,13 +37,7 @@ use JBZoo\Utils\Timer;
 use JBZoo\Utils\Url;
 use JBZoo\Utils\Vars;
 use JBZoo\Utils\Xml;
-use ReflectionClass;
 
-/**
- * Class UtilsReadmeTest
- *
- * @package JBZoo\PHPUnit
- */
 class UtilsReadmeTest extends AbstractReadmeTest
 {
     protected string $packageName = 'Utils';
@@ -54,7 +47,7 @@ class UtilsReadmeTest extends AbstractReadmeTest
         parent::setUp();
 
         $this->params['strict_types'] = true;
-        $this->params['travis'] = false;
+        $this->params['travis']       = false;
     }
 
     public function testDocs(): void
@@ -85,29 +78,26 @@ class UtilsReadmeTest extends AbstractReadmeTest
             Xml::class,
         ];
 
-        sort($classes, SORT_NATURAL);
+        \sort($classes, \SORT_NATURAL);
 
-        $readme = file_get_contents(PROJECT_ROOT . '/README.md');
+        $readme = \file_get_contents(PROJECT_ROOT . '/README.md');
 
         $expected = '';
+
         foreach ($classes as $class) {
             $expected .= $this->renderClass($class);
         }
 
-        if (strpos($readme, $expected) === false) {
+        if (!\str_contains($readme, $expected)) {
             is($expected, $readme, 'Just to see difference');
         }
 
         success();
     }
 
-    /**
-     * @param string $className
-     * @return string
-     */
     public function renderClass(string $className): string
     {
-        $methods = $this->parseClass($className);
+        $methods  = $this->parseClass($className);
         $realDocs = [
             "### {$className}",
             '',
@@ -117,10 +107,10 @@ class UtilsReadmeTest extends AbstractReadmeTest
         foreach ($methods as $methodName => $method) {
             if (!$method['comment']) {
                 fail("Method {$className}::{$methodName } doesn't have comment");
-            } elseif (strpos($method['comment'], "\n") === false) {
+            } elseif (!\str_contains($method['comment'], "\n")) {
                 $realDocs[] = "{$method['sign']} // {$method['comment']}";
             } else {
-                $realDocs[] = '// ' . str_replace("\n", "\n// ", $method['comment']);
+                $realDocs[] = '// ' . \str_replace("\n", "\n// ", $method['comment']);
                 $realDocs[] = $method['sign'];
             }
 
@@ -132,44 +122,42 @@ class UtilsReadmeTest extends AbstractReadmeTest
         $realDocs[] = '';
         $realDocs[] = '';
 
-        return implode("\n", $realDocs);
+        return \implode("\n", $realDocs);
     }
 
-    /**
-     * @param string $class
-     * @return array
-     */
     private function parseClass(string $class): array
     {
-        $result = [];
+        $result    = [];
         $className = Str::getClassName($class);
 
-        $oReflectionClass = new ReflectionClass($class);
+        $oReflectionClass = new \ReflectionClass($class);
+
         foreach ($oReflectionClass->getMethods() as $method) {
             if (!$method->isPublic() || !$method->isStatic()) {
                 continue;
             }
 
             $arguments = [];
+
             foreach ($method->getParameters() as $parameter) {
                 $typeString = '';
                 if ($parameter->hasType()) {
-                    $type = $parameter->getType();
+                    $type       = $parameter->getType();
                     $typeString = $type->allowsNull() ? "?{$type} " : "{$type} ";
                 }
 
                 $defaultValue = '';
                 if ($parameter->isOptional()) {
                     $defValue = $parameter->getDefaultValue();
-                    if (is_string($defValue)) {
+                    if (\is_string($defValue)) {
                         $defValue = "'{$defValue}'";
-                    } elseif (null === $defValue) {
+                    } elseif ($defValue === null) {
                         $defValue = 'null';
-                    } elseif (is_array($defValue)) {
+                    } elseif (\is_array($defValue)) {
                         $defValue = '[]';
-                    } elseif (false === $defValue) {
+                    } elseif ($defValue === false) {
                         $defValue = 'false';
-                    } elseif (true === $defValue) {
+                    } elseif ($defValue === true) {
                         $defValue = 'true';
                     }
                     $defaultValue = " = {$defValue}";
@@ -178,15 +166,15 @@ class UtilsReadmeTest extends AbstractReadmeTest
                 $arguments[] = "{$typeString}\${$parameter->name}{$defaultValue}";
             }
 
-            $arguments = implode(', ', $arguments);
+            $arguments = \implode(', ', $arguments);
 
             $returnTypePrint = '';
             if ($method->hasReturnType()) {
-                $returnType = $method->getReturnType();
+                $returnType      = $method->getReturnType();
                 $returnTypePrint = $returnType->allowsNull() ? ": ?{$returnType}" : ": {$returnType}";
             }
 
-            $comment = PhpDocs::parse($method->getDocComment())['description'];
+            $comment    = PhpDocs::parse($method->getDocComment())['description'];
             $methodName = $method->getName();
 
             $result[$methodName] = [
@@ -195,7 +183,7 @@ class UtilsReadmeTest extends AbstractReadmeTest
             ];
         }
 
-        ksort($result, SORT_NATURAL);
+        \ksort($result, \SORT_NATURAL);
 
         return $result;
     }

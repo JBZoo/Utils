@@ -1,16 +1,15 @@
 <?php
 
 /**
- * JBZoo Toolbox - Utils
+ * JBZoo Toolbox - Utils.
  *
  * This file is part of the JBZoo Toolbox project.
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  *
- * @package    Utils
  * @license    MIT
  * @copyright  Copyright (C) JBZoo.com, All rights reserved.
- * @link       https://github.com/JBZoo/Utils
+ * @see        https://github.com/JBZoo/Utils
  */
 
 declare(strict_types=1);
@@ -20,9 +19,6 @@ namespace JBZoo\PHPUnit;
 use JBZoo\Utils\Sys;
 
 /**
- * Class SysTest
- *
- * @package JBZoo\PHPUnit
  * @SuppressWarnings(PHPMD.Superglobals)
  */
 class SysTest extends PHPUnit
@@ -32,7 +28,7 @@ class SysTest extends PHPUnit
         isFalse(Sys::isFunc('qwerty'));
         isTrue(Sys::isFunc('trim'));
 
-        $func = function () {
+        $func = static function (): void {
         };
 
         isTrue(Sys::isFunc($func));
@@ -44,8 +40,8 @@ class SysTest extends PHPUnit
         Sys::setMemory('128M');
 
         isSame('128M', Sys::iniGet('memory_limit'));
-        //isSame('1800', Sys::iniGet('set_time_limit'));
-        //isSame('1800', Sys::iniGet('max_execution_time'));
+        // isSame('1800', Sys::iniGet('set_time_limit'));
+        // isSame('1800', Sys::iniGet('max_execution_time'));
     }
 
     public function testGetUserName(): void
@@ -85,13 +81,13 @@ class SysTest extends PHPUnit
     public function testGetDocumentRoot(): void
     {
         $_SERVER['DOCUMENT_ROOT'] = null;
-        isSame(realpath('.'), Sys::getDocRoot());
+        isSame(\realpath('.'), Sys::getDocRoot());
 
         $_SERVER['DOCUMENT_ROOT'] = __DIR__;
         isSame(__DIR__, Sys::getDocRoot());
 
         $_SERVER['DOCUMENT_ROOT'] = '../../';
-        isSame(realpath('../../'), Sys::getDocRoot());
+        isSame(\realpath('../../'), Sys::getDocRoot());
 
         $_SERVER['DOCUMENT_ROOT'] = __DIR__ . '\\..\\';
         isSame(PROJECT_ROOT, Sys::getDocRoot());

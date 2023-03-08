@@ -1,16 +1,15 @@
 <?php
 
 /**
- * JBZoo Toolbox - Utils
+ * JBZoo Toolbox - Utils.
  *
  * This file is part of the JBZoo Toolbox project.
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  *
- * @package    Utils
  * @license    MIT
  * @copyright  Copyright (C) JBZoo.com, All rights reserved.
- * @link       https://github.com/JBZoo/Utils
+ * @see        https://github.com/JBZoo/Utils
  */
 
 declare(strict_types=1);
@@ -18,14 +17,8 @@ declare(strict_types=1);
 namespace JBZoo\PHPUnit;
 
 use JBZoo\Utils\Cli;
-use JBZoo\Utils\Env;
 use Symfony\Component\Process\Exception\ProcessFailedException;
 
-/**
- * Class CliTest
- *
- * @package JBZoo\PHPUnit
- */
 class CliTest extends PHPUnit
 {
     public function testCheck(): void
@@ -42,16 +35,13 @@ class CliTest extends PHPUnit
         is('ls -a', Cli::build('ls', ['a' => false]));
         is('ls -a="1"', Cli::build('ls', ['a' => true]));
 
-        is('ls -a -l', Cli::build('ls', [
-            'a' => '',
-            'l' => '',
-        ]));
+        is('ls -a -l', Cli::build('ls', ['a' => '', 'l' => '']));
 
         is('ls --help', Cli::build('ls', ['help' => '']));
         is('ls --option="qwerty"', Cli::build('ls', ['option' => 'qwerty']));
         is('ls --option="qwert\'y"', Cli::build('ls', ['option' => 'qwert\'y']));
         is('ls --option="qwert\"y"', Cli::build('ls', ['option' => 'qwert"y']));
-        is('ls --option', Cli::build('ls', ['option' => 0]));
+        is('ls --option="0"', Cli::build('ls', ['option' => 0]));
     }
 
     public function testExec(): void

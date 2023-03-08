@@ -1,16 +1,15 @@
 <?php
 
 /**
- * JBZoo Toolbox - Utils
+ * JBZoo Toolbox - Utils.
  *
  * This file is part of the JBZoo Toolbox project.
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  *
- * @package    Utils
  * @license    MIT
  * @copyright  Copyright (C) JBZoo.com, All rights reserved.
- * @link       https://github.com/JBZoo/Utils
+ * @see        https://github.com/JBZoo/Utils
  */
 
 declare(strict_types=1);
@@ -18,39 +17,27 @@ declare(strict_types=1);
 namespace JBZoo\Utils;
 
 /**
- * Class Stats
- * @package JBZoo\Utils
- *
- * @see     https://github.com/phpbench/phpbench/blob/master/lib/Math/Statistics.php
+ * @see https://github.com/phpbench/phpbench/blob/master/lib/Math/Statistics.php
  */
 final class Stats
 {
     /**
      * Returns the standard deviation of a given population.
-     *
-     * @param array $values
-     * @param bool  $sample
-     *
-     * @return float
      */
     public static function stdDev(array $values, bool $sample = false): float
     {
         $variance = self::variance($values, $sample);
+
         return \sqrt($variance);
     }
 
     /**
      * Returns the variance for a given population.
-     *
-     * @param array $values
-     * @param bool  $sample
-     *
-     * @return float
      */
     public static function variance(array $values, bool $sample = false): float
     {
         $average = self::mean($values);
-        $sum = 0;
+        $sum     = 0;
 
         foreach ($values as $value) {
             $diff = ($value - $average) ** 2;
@@ -66,19 +53,16 @@ final class Stats
 
     /**
      * Returns the mean (average) value of the given values.
-     *
-     * @param array|null $values
-     * @return float
      */
     public static function mean(?array $values): float
     {
-        if (empty($values)) {
+        if ($values === null || \count($values) === 0) {
             return 0;
         }
 
         $sum = \array_sum($values);
 
-        if (!$sum) {
+        if ($sum === 0) {
             return 0;
         }
 
@@ -89,12 +73,6 @@ final class Stats
 
     /**
      * Returns an array populated with $num numbers from $min to $max.
-     *
-     * @param float $min
-     * @param float $max
-     * @param int   $num
-     * @param bool  $endpoint
-     *
      * @return float[]
      */
     public static function linSpace(float $min, float $max, int $num = 50, bool $endpoint = true): array
@@ -105,7 +83,7 @@ final class Stats
             throw new Exception("Min and max cannot be the same number: {$max}");
         }
 
-        $unit = $range / ($endpoint ? $num - 1 : $num);
+        $unit  = $range / ($endpoint ? $num - 1 : $num);
         $space = [];
 
         for ($value = $min; $value <= $max; $value += $unit) {
@@ -120,28 +98,17 @@ final class Stats
     }
 
     /**
-     * Generate a histogram.
-     *
-     * Note this is not a great function, and should not be relied upon
-     * for serious use.
-     *
-     * For a better implementation copy:
-     *   http://docs.scipy.org/doc/numpy-1.10.1/reference/generated/numpy.histogram.html
-     *
-     * @param float[]    $values
-     * @param int        $steps
-     * @param float|null $lowerBound
-     * @param float|null $upperBound
-     *
-     * @return array
+     * Generate a histogram. Note this is not a great function, and should not be relied upon for serious use.
+     * @see http://docs.scipy.org/doc/numpy-1.10.1/reference/generated/numpy.histogram.html
+     * @param float[] $values
      */
     public static function histogram(
         array $values,
         int $steps = 10,
         ?float $lowerBound = null,
-        ?float $upperBound = null
+        ?float $upperBound = null,
     ): array {
-        if (empty($values)) {
+        if (\count($values) === 0) {
             throw new Exception('Empty array of values is given');
         }
 
@@ -177,15 +144,11 @@ final class Stats
     }
 
     /**
-     * Render human readable string of average value and system error
-     *
-     * @param array $values
-     * @param int   $rounding
-     * @return string
+     * Render human readable string of average value and system error.
      */
     public static function renderAverage(array $values, int $rounding = 3): string
     {
-        $avg = \number_format(self::mean($values), $rounding);
+        $avg    = \number_format(self::mean($values), $rounding);
         $stdDev = \number_format(self::stdDev($values), $rounding);
 
         return "{$avg}±{$stdDev}";

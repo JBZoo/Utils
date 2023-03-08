@@ -1,16 +1,15 @@
 <?php
 
 /**
- * JBZoo Toolbox - Utils
+ * JBZoo Toolbox - Utils.
  *
  * This file is part of the JBZoo Toolbox project.
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  *
- * @package    Utils
  * @license    MIT
  * @copyright  Copyright (C) JBZoo.com, All rights reserved.
- * @link       https://github.com/JBZoo/Utils
+ * @see        https://github.com/JBZoo/Utils
  */
 
 declare(strict_types=1);
@@ -19,11 +18,6 @@ namespace JBZoo\PHPUnit;
 
 use JBZoo\Utils\IP;
 
-/**
- * Class ArrayTest
- *
- * @package JBZoo\PHPUnit
- */
 class IpTest extends PHPUnit
 {
     /**
@@ -31,9 +25,9 @@ class IpTest extends PHPUnit
      */
     public function testGetRemote(): void
     {
-        $_SERVER['REMOTE_ADDR'] = '192.168.0.1';
-        $_SERVER['HTTP_CLIENT_IP'] = '192.168.0.2';
-        $_SERVER['HTTP_X_REAL_IP'] = '192.168.0.3';
+        $_SERVER['REMOTE_ADDR']          = '192.168.0.1';
+        $_SERVER['HTTP_CLIENT_IP']       = '192.168.0.2';
+        $_SERVER['HTTP_X_REAL_IP']       = '192.168.0.3';
         $_SERVER['HTTP_X_FORWARDED_FOR'] = '192.168.0.4';
 
         is('192.168.0.1', IP::getRemote());

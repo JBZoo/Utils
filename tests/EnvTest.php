@@ -1,16 +1,15 @@
 <?php
 
 /**
- * JBZoo Toolbox - Utils
+ * JBZoo Toolbox - Utils.
  *
  * This file is part of the JBZoo Toolbox project.
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  *
- * @package    Utils
  * @license    MIT
  * @copyright  Copyright (C) JBZoo.com, All rights reserved.
- * @link       https://github.com/JBZoo/Utils
+ * @see        https://github.com/JBZoo/Utils
  */
 
 declare(strict_types=1);
@@ -21,16 +20,10 @@ use JBZoo\Utils\Env;
 use JBZoo\Utils\Filter;
 
 /**
- * Class EnvTest
- *
- * @package JBZoo\PHPUnit
  * @SuppressWarnings(PHPMD.Superglobals)
  */
 class EnvTest extends PHPUnit
 {
-    /**
-     * @return array
-     */
     public function dataProvider(): array
     {
         return [
@@ -72,7 +65,7 @@ class EnvTest extends PHPUnit
 
     public function testGet(): void
     {
-        putenv('FOO= 123 ');
+        \putenv('FOO= 123 ');
         isSame('123', Env::get('FOO'));
         isSame(null, Env::get('UNDEFINED_VAR'));
         isSame(42, Env::get('UNDEFINED_VAR', 42));
@@ -84,7 +77,7 @@ class EnvTest extends PHPUnit
 
     public function testInt(): void
     {
-        putenv('FOO= 123 ');
+        \putenv('FOO= 123 ');
         isSame(123, Env::int('FOO'));
         isSame(0, Env::int('UNDEFINED_VAR'));
         isSame(42, Env::int('UNDEFINED_VAR', 42));
@@ -97,7 +90,7 @@ class EnvTest extends PHPUnit
     {
         $value = Filter::float(1 / 3);
 
-        putenv("FOO= {$value} ");
+        \putenv("FOO= {$value} ");
         isSame($value, Env::float('FOO'));
         isSame(0.0, Env::float('UNDEFINED_VAR'));
         isSame(42.0, Env::float('UNDEFINED_VAR', 42));
@@ -110,7 +103,7 @@ class EnvTest extends PHPUnit
     {
         $value = '"qwerty"';
 
-        putenv("FOO= {$value} ");
+        \putenv("FOO= {$value} ");
         isSame($value, Env::string('FOO'));
         isSame('', Env::string('UNDEFINED_VAR'));
         isSame('42', Env::string('UNDEFINED_VAR', '42'));
@@ -118,10 +111,9 @@ class EnvTest extends PHPUnit
         $_ENV['SOME_VAR'] = '0.5';
         isSame('0.5', Env::string('SOME_VAR'));
 
-
         $value = '"qwerty123';
 
-        putenv("FOO={$value}");
+        \putenv("FOO={$value}");
         isSame($value, Env::string('FOO'));
         isSame('', Env::string('UNDEFINED_VAR'));
         isSame('42', Env::string('UNDEFINED_VAR', '42'));
@@ -133,17 +125,17 @@ class EnvTest extends PHPUnit
     public function testIsExists(): void
     {
         $notEmptyValue = '"qwerty';
-        $emptyValue = '';
+        $emptyValue    = '';
 
-        putenv("FOO_STRING={$notEmptyValue}");
-        putenv("FOO_EMPTY={$emptyValue}");
+        \putenv("FOO_STRING={$notEmptyValue}");
+        \putenv("FOO_EMPTY={$emptyValue}");
 
         isTrue(Env::isExists('FOO_STRING'));
         isTrue(Env::isExists('FOO_EMPTY'));
         isFalse(Env::isExists('FOO_QWERTY'));
 
         $_ENV['FOO_STRING_2'] = $notEmptyValue;
-        $_ENV['FOO_EMPTY_2'] = $emptyValue;
+        $_ENV['FOO_EMPTY_2']  = $emptyValue;
 
         isTrue(Env::isExists('FOO_STRING_2'));
         isTrue(Env::isExists('FOO_EMPTY_2'));

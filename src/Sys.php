@@ -1,16 +1,15 @@
 <?php
 
 /**
- * JBZoo Toolbox - Utils
+ * JBZoo Toolbox - Utils.
  *
  * This file is part of the JBZoo Toolbox project.
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  *
- * @package    Utils
  * @license    MIT
  * @copyright  Copyright (C) JBZoo.com, All rights reserved.
- * @link       https://github.com/JBZoo/Utils
+ * @see        https://github.com/JBZoo/Utils
  */
 
 declare(strict_types=1);
@@ -18,17 +17,12 @@ declare(strict_types=1);
 namespace JBZoo\Utils;
 
 /**
- * Class Sys
- *
- * @package JBZoo\Utils
  * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
  */
 final class Sys
 {
     /**
-     * Check is current OS Windows
-     *
-     * @return bool
+     * Check is current OS Windows.
      */
     public static function isWin(): bool
     {
@@ -36,44 +30,38 @@ final class Sys
     }
 
     /**
-     * Check is current user ROOT
-     *
-     * @return bool
+     * Check is current user ROOT.
      */
     public static function isRoot(): bool
     {
         if (self::isFunc('posix_geteuid')) {
-            return 0 === \posix_geteuid();
+            return \posix_geteuid() === 0;
         }
 
         return false;
     }
 
     /**
-     * Returns current linux user who runs script
-     * @return string|null
+     * Returns current linux user who runs script.
      */
     public static function getUserName(): ?string
     {
-        $userInfo = \posix_getpwuid(\posix_geteuid());
-        if ($userInfo && isset($userInfo['name'])) {
-            return $userInfo['name'];
-        }
+        /** @phpstan-ignore-next-line */
+        $userInfo = (array)\posix_getpwuid(\posix_geteuid());
 
-        return null;
+        /** @phpstan-ignore-next-line */
+        return $userInfo['name'] ?? null;
     }
 
     /**
      * Returns a home directory of current user.
-     *
-     * @return string|null
-     *
      * @SuppressWarnings(PHPMD.Superglobals)
      */
     public static function getHome(): ?string
     {
-        $userInfo = \posix_getpwuid(\posix_geteuid());
-        if ($userInfo && isset($userInfo['dir'])) {
+        /** @phpstan-ignore-next-line */
+        $userInfo = (array)\posix_getpwuid(\posix_geteuid());
+        if (isset($userInfo['dir'])) {
             return $userInfo['dir'];
         }
 
@@ -85,11 +73,7 @@ final class Sys
     }
 
     /**
-     * Alias fo ini_set function
-     *
-     * @param string $phpIniKey
-     * @param string $newValue
-     * @return bool
+     * Alias fo ini_set function.
      */
     public static function iniSet(string $phpIniKey, string $newValue): bool
     {
@@ -101,10 +85,7 @@ final class Sys
     }
 
     /**
-     * Alias fo ini_get function
-     *
-     * @param string $varName
-     * @return string
+     * Alias fo ini_get function.
      */
     public static function iniGet(string $varName): string
     {
@@ -112,25 +93,24 @@ final class Sys
     }
 
     /**
-     * Checks if function exists and callable
-     *
-     * @param string|\Closure $funcName
-     * @return bool
+     * Checks if function exists and callable.
      */
-    public static function isFunc($funcName): bool
+    public static function isFunc(\Closure|string $funcName): bool
     {
-        $isEnabled = true;
+        $disabledOnPhpIni = false;
+
         if (\is_string($funcName)) {
-            $isEnabled = \stripos(self::iniGet('disable_functions'), \strtolower(\trim($funcName))) === false;
+            $disabledOnPhpIni = \str_contains(
+                \strtolower(self::iniGet('disable_functions')),
+                \strtolower(\trim($funcName)),
+            );
         }
 
-        return $isEnabled && (\is_callable($funcName) || (\is_string($funcName) && \function_exists($funcName)));
+        return !$disabledOnPhpIni && (\is_callable($funcName) || \function_exists($funcName));
     }
 
     /**
-     * Set PHP execution time limit (doesn't work in safe mode)
-     *
-     * @param int $newLimit
+     * Set PHP execution time limit (doesn't work in safe mode).
      */
     public static function setTime(int $newLimit = 0): void
     {
@@ -143,9 +123,7 @@ final class Sys
     }
 
     /**
-     * Set new memory limit
-     *
-     * @param string $newLimit
+     * Set new memory limit.
      */
     public static function setMemory(string $newLimit = '256M'): void
     {
@@ -153,23 +131,17 @@ final class Sys
     }
 
     /**
-     * Compares PHP versions
-     *
-     * @param string $version
-     * @param string $current
-     * @return bool
+     * Compares PHP versions.
      */
     public static function isPHP(string $version, string $current = \PHP_VERSION): bool
     {
         $version = \trim($version, '.');
+
         return (bool)\preg_match('#^' . \preg_quote($version, '') . '#i', $current);
     }
 
     /**
-     * Get usage memory
-     *
-     * @param bool $isPeak
-     * @return string
+     * Get usage memory.
      */
     public static function getMemory(bool $isPeak = true): string
     {
@@ -183,10 +155,8 @@ final class Sys
     }
 
     /**
-     * Returns current document root
-     *
+     * Returns current document root.
      * @SuppressWarnings(PHPMD.Superglobals)
-     * @return string|null
      */
     public static function getDocRoot(): ?string
     {
@@ -194,7 +164,7 @@ final class Sys
         $result = FS::clean($result);
         $result = FS::real($result);
 
-        if (!$result) {
+        if (isStrEmpty($result)) {
             $result = FS::real('.');
         }
 
@@ -204,8 +174,6 @@ final class Sys
     /**
      * Returns true when Xdebug is supported or
      * the runtime used is PHPDBG (PHP >= 7.0).
-     *
-     * @return bool
      */
     public static function canCollectCodeCoverage(): bool
     {
@@ -215,14 +183,12 @@ final class Sys
     /**
      * Returns the path to the binary of the current runtime.
      * Appends ' --php' to the path when the runtime is HHVM.
-     *
-     * @return string
-     *
      * @SuppressWarnings(PHPMD.Superglobals)
      */
     public static function getBinary(): string
     {
-        if ($customPath = Env::string('PHP_BINARY_CUSTOM')) {
+        $customPath = Env::string('PHP_BINARY_CUSTOM');
+        if (!isStrEmpty($customPath)) {
             return $customPath;
         }
 
@@ -231,6 +197,7 @@ final class Sys
             if (($binary = \getenv('PHP_BINARY')) === false) {
                 $binary = \PHP_BINARY;
             }
+
             return \escapeshellarg($binary) . ' --php';
         }
 
@@ -254,22 +221,18 @@ final class Sys
     }
 
     /**
-     * Return type and version of current PHP
-     *
-     * @return string
+     * Return type and version of current PHP.
      */
     public static function getNameWithVersion(): string
     {
-        $name = self::getName();
+        $name    = self::getName();
         $version = self::getVersion();
 
         return \trim("{$name} {$version}");
     }
 
     /**
-     * Returns type of PHP
-     *
-     * @return string
+     * Returns type of PHP.
      */
     public static function getName(): string
     {
@@ -285,9 +248,7 @@ final class Sys
     }
 
     /**
-     * Return URL of PHP official web-site. It depends of PHP vendor.
-     *
-     * @return string
+     * Return URL of PHP official web-site. It depends on PHP vendor.
      */
     public static function getVendorUrl(): string
     {
@@ -299,9 +260,7 @@ final class Sys
     }
 
     /**
-     * Returns current PHP version
-     *
-     * @return string|null
+     * Returns current PHP version.
      */
     public static function getVersion(): ?string
     {
@@ -310,8 +269,6 @@ final class Sys
 
     /**
      * Returns true when the runtime used is PHP and Xdebug is loaded.
-     *
-     * @return bool
      */
     public static function hasXdebug(): bool
     {
@@ -320,8 +277,6 @@ final class Sys
 
     /**
      * Returns true when the runtime used is HHVM.
-     *
-     * @return bool
      */
     public static function isHHVM(): bool
     {
@@ -330,8 +285,6 @@ final class Sys
 
     /**
      * Returns true when the runtime used is PHP without the PHPDBG SAPI.
-     *
-     * @return bool
      */
     public static function isRealPHP(): bool
     {
@@ -340,8 +293,6 @@ final class Sys
 
     /**
      * Returns true when the runtime used is PHP with the PHPDBG SAPI.
-     *
-     * @return bool
      */
     public static function isPHPDBG(): bool
     {
@@ -351,8 +302,6 @@ final class Sys
     /**
      * Returns true when the runtime used is PHP with the PHPDBG SAPI
      * and the phpdbg_*_oplog() functions are available (PHP >= 7.0).
-     *
-     * @return bool
      */
     public static function hasPHPDBGCodeCoverage(): bool
     {

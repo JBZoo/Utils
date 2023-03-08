@@ -1,35 +1,27 @@
 <?php
 
 /**
- * JBZoo Toolbox - Utils
+ * JBZoo Toolbox - Utils.
  *
  * This file is part of the JBZoo Toolbox project.
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  *
- * @package    Utils
  * @license    MIT
  * @copyright  Copyright (C) JBZoo.com, All rights reserved.
- * @link       https://github.com/JBZoo/Utils
+ * @see        https://github.com/JBZoo/Utils
  */
 
 declare(strict_types=1);
 
 namespace JBZoo\Utils;
 
-/**
- * Class Http
- *
- * @package JBZoo\Utils
- */
 final class Http
 {
     /**
      * Transmit headers that force a browser to display the download file dialog.
      * Cross browser compatible. Only fires if headers have not already been sent.
-     *
      * @param string $filename The name of the filename to display to browsers
-     * @return bool
      * @codeCoverageIgnore
      */
     public static function download(string $filename): bool
@@ -39,7 +31,7 @@ final class Http
         }
 
         // required for IE, otherwise Content-disposition is ignored
-        if (Sys::iniGet('zlib.output_compression')) {
+        if (isStrEmpty(Sys::iniGet('zlib.output_compression'))) {
             Sys::iniSet('zlib.output_compression', 'Off');
         }
 
@@ -57,8 +49,8 @@ final class Http
 
         // output file
         if (Sys::isFunc('fpassthru')) {
-            $handle = \fopen($filename, 'rb');
-            if (!$handle) {
+            $handle = \fopen($filename, 'r');
+            if ($handle === false) {
                 throw new Exception("Can't open file '{$filename}'");
             }
             \fpassthru($handle);
@@ -74,9 +66,7 @@ final class Http
     /**
      * Sets the headers to prevent caching for the different browsers.
      * Different browsers support different nocache headers, so several
-     * headers must be sent so that all of them get the point that no caching should occur
-     *
-     * @return bool
+     * headers must be sent so that all of them get the point that no caching should occur.
      * @codeCoverageIgnore
      */
     public static function nocache(): bool
@@ -97,7 +87,6 @@ final class Http
      * Transmit UTF-8 content headers if the headers haven't already been sent.
      *
      * @param string $contentType The content type to send out
-     * @return bool
      * @codeCoverageIgnore
      */
     public static function utf8(string $contentType = 'text/html'): bool
@@ -112,12 +101,8 @@ final class Http
     }
 
     /**
-     * Get all HTTP headers
-     *
+     * Get all HTTP headers.
      * @see https://github.com/symfony/http-foundation/blob/master/ServerBag.php
-     *
-     * @return array
-     *
      * @SuppressWarnings(PHPMD.Superglobals)
      * @SuppressWarnings(PHPMD.NPathComplexity)
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
@@ -129,7 +114,7 @@ final class Http
         $contentHeaders = ['CONTENT_LENGTH' => true, 'CONTENT_MD5' => true, 'CONTENT_TYPE' => true];
 
         foreach ($_SERVER as $key => $value) {
-            if (0 === \strpos($key, 'HTTP_')) {
+            if (\str_starts_with($key, 'HTTP_')) {
                 $headers[\substr($key, 5)] = $value;
             } elseif (isset($contentHeaders[$key])) { // CONTENT_* are not prefixed with HTTP_
                 $headers[$key] = $value;
@@ -138,7 +123,7 @@ final class Http
 
         if (isset($_SERVER['PHP_AUTH_USER'])) {
             $headers['PHP_AUTH_USER'] = $_SERVER['PHP_AUTH_USER'];
-            $headers['PHP_AUTH_PW'] = $_SERVER['PHP_AUTH_PW'] ?? '';
+            $headers['PHP_AUTH_PW']   = $_SERVER['PHP_AUTH_PW'] ?? '';
         } else {
             /*
              * php-cgi under Apache does not pass HTTP Basic user/pass to PHP by default
@@ -161,19 +146,28 @@ final class Http
             }
 
             if ($authorizationHeader) {
-                if (0 === \stripos($authorizationHeader, 'basic ')) {
-                    // Decode AUTHORIZATION header into PHP_AUTH_USER and PHP_AUTH_PW when authorization header is basic
-                    $exploded = \explode(':', (string)\base64_decode((string)\substr($authorizationHeader, 6)), 2);
+                if (\stripos($authorizationHeader, 'basic ') === 0) {
+                    // Decode AUTHORIZATION header into PHP_AUTH_USER
+                    // and PHP_AUTH_PW when authorization header is basic
+                    $exploded = \explode(
+                        ':',
+                        (string)\base64_decode(\substr($authorizationHeader, 6), true),
+                        2,
+                    );
 
                     $expectedNumOfParts = 2;
                     if (\count($exploded) === $expectedNumOfParts) {
-                        [$headers['PHP_AUTH_USER'], $headers['PHP_AUTH_PW']] = $exploded;
+                        $headers['PHP_AUTH_USER'] = $exploded[0];
+                        $headers['PHP_AUTH_PW']   = $exploded[1] ?? '';
                     }
-                } elseif (empty($_SERVER['PHP_AUTH_DIGEST']) && (0 === \stripos($authorizationHeader, 'digest '))) {
+                } elseif (
+                    isStrEmpty($_SERVER['PHP_AUTH_DIGEST'] ?? '')
+                    && (\stripos($authorizationHeader, 'digest ') === 0)
+                ) {
                     // In some circumstances PHP_AUTH_DIGEST needs to be set
                     $headers['PHP_AUTH_DIGEST'] = $authorizationHeader;
                     $_SERVER['PHP_AUTH_DIGEST'] = $authorizationHeader;
-                } elseif (0 === \stripos($authorizationHeader, 'bearer ')) {
+                } elseif (\stripos($authorizationHeader, 'bearer ') === 0) {
                     /*
                      * XXX: Since there is no PHP_AUTH_BEARER in PHP predefined variables,
                      *      I'll just set $headers['AUTHORIZATION'] here.
@@ -190,10 +184,10 @@ final class Http
 
         // PHP_AUTH_USER/PHP_AUTH_PW
         if (isset($headers['PHP_AUTH_USER'])) {
-            $user = $headers['PHP_AUTH_USER'] ?? '';
-            $password = $headers['PHP_AUTH_PW'] ?? '';
-
+            $user          = $headers['PHP_AUTH_USER'];
+            $password      = $headers['PHP_AUTH_PW'] ?? '';
             $authorization = 'Basic ' . \base64_encode($user . ':' . $password);
+
             $headers['AUTHORIZATION'] = $authorization;
         } elseif (isset($headers['PHP_AUTH_DIGEST'])) {
             $headers['AUTHORIZATION'] = $headers['PHP_AUTH_DIGEST'];

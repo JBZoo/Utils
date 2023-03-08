@@ -1,127 +1,82 @@
 <?php
 
 /**
- * JBZoo Toolbox - Utils
+ * JBZoo Toolbox - Utils.
  *
  * This file is part of the JBZoo Toolbox project.
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  *
- * @package    Utils
  * @license    MIT
  * @copyright  Copyright (C) JBZoo.com, All rights reserved.
- * @link       https://github.com/JBZoo/Utils
+ * @see        https://github.com/JBZoo/Utils
  */
 
 declare(strict_types=1);
 
 namespace JBZoo\Utils;
 
-/**
- * @param mixed $variable
- * @return int
- */
-function int($variable): int
+function int(mixed $variable): int
 {
     return Filter::int($variable);
 }
 
-/**
- * @param mixed $variable
- * @param int   $round
- * @return float
- */
-function float($variable, int $round = 10): float
+function float(mixed $variable, int $round = 10): float
 {
     return Filter::float($variable, $round);
 }
 
-/**
- * @param mixed $variable
- * @return bool
- */
-function bool($variable): bool
+function bool(mixed $variable): bool
 {
     return Filter::bool($variable);
 }
 
-/**
- * @param mixed $variable
- * @return string
- */
-function slug($variable): string
+function slug(mixed $variable): string
 {
     return Filter::alias($variable);
 }
 
-/**
- * @param mixed $variable
- * @return string
- */
-function digits($variable): string
+function digits(mixed $variable): string
 {
     return Filter::digits($variable);
 }
 
-/**
- * @param mixed $variable
- * @return string
- */
-function alpha($variable): string
+function alpha(mixed $variable): string
 {
     return Filter::alpha($variable);
 }
 
-/**
- * @param mixed $variable
- * @return string
- */
-function alphanum($variable): string
+function alphanum(mixed $variable): string
 {
     return Filter::alphanum($variable);
 }
 
-/**
- * @param mixed $variable
- * @return string
- */
-function isPath($variable): string
+function isPath(mixed $variable): string
 {
     return Filter::path($variable);
 }
 
-/**
- * @param mixed $variable
- * @return string
- */
-function cleanCmd($variable): string
+function cleanCmd(mixed $variable): string
 {
     return Filter::cmd($variable);
 }
 
-/**
- * @param mixed $variable
- * @return string
- */
-function strip($variable): string
+function strip(mixed $variable): string
 {
     return Filter::strip($variable);
 }
 
-/**
- * @param mixed $variable
- * @return string
- */
-function alias($variable): string
+function alias(mixed $variable): string
 {
     return Filter::alias($variable);
 }
 
-/**
- * @param mixed $variable
- * @return string
- */
-function stripQuotes($variable): string
+function stripQuotes(mixed $variable): string
 {
     return Filter::stripQuotes($variable);
+}
+
+function isStrEmpty(null|bool|string $variable): bool
+{
+    return Str::isEmpty($variable);
 }

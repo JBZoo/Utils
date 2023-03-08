@@ -1,46 +1,36 @@
 <?php
 
 /**
- * JBZoo Toolbox - Utils
+ * JBZoo Toolbox - Utils.
  *
  * This file is part of the JBZoo Toolbox project.
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  *
- * @package    Utils
  * @license    MIT
  * @copyright  Copyright (C) JBZoo.com, All rights reserved.
- * @link       https://github.com/JBZoo/Utils
+ * @see        https://github.com/JBZoo/Utils
  */
 
 declare(strict_types=1);
 
 namespace JBZoo\Utils;
 
-use Closure;
 use JBZoo\Data\Data;
 use JBZoo\Data\JSON;
 
 /**
- * Class Filter
- *
- * @package JBZoo\Utils
  * @SuppressWarnings(PHPMD.TooManyMethods)
  * @SuppressWarnings(PHPMD.TooManyPublicMethods)
  */
 final class Filter
 {
     /**
-     * Apply custom filter to variable
-     *
-     * @param mixed          $value
-     * @param string|Closure $filters
-     * @return mixed
-     * @throws Exception
+     * Apply custom filter to variable.
      * @SuppressWarnings(PHPMD.CamelCaseMethodName)
      * @SuppressWarnings(PHPMD.ShortMethodName)
      */
-    public static function _($value, $filters = 'raw')
+    public static function _(mixed $value, \Closure|string $filters = 'raw'): mixed
     {
         if (\is_string($filters)) {
             $filters = Str::trim($filters);
@@ -49,8 +39,9 @@ final class Filter
             foreach ($filters as $filter) {
                 $filterName = self::cmd($filter);
 
-                if ($filterName) {
-                    if (\method_exists(__CLASS__, $filterName)) {
+                if (!isStrEmpty($filterName)) {
+                    if (\method_exists(self::class, $filterName)) {
+                        /** @phpstan-ignore-next-line */
                         $value = self::$filterName($value);
                     } else {
                         throw new Exception('Undefined filter method: ' . $filter);
@@ -68,75 +59,97 @@ final class Filter
      * Converts many english words that equate to true or false to boolean.
      *
      * @param mixed $variable The string to convert to boolean
-     * @return bool
      */
-    public static function bool($variable): bool
+    public static function bool(mixed $variable): bool
     {
+        if ($variable === null) {
+            return false;
+        }
+
+        if (\is_bool($variable)) {
+            return $variable;
+        }
+
+        if (\is_array($variable)) {
+            return \count($variable) > 0;
+        }
+
+        if (
+            !\is_float($variable)
+            && !\is_int($variable)
+            && !\is_numeric($variable)
+            && !\is_string($variable)
+        ) {
+            // @phpstan-ignore-next-line
+            return empty($variable);
+        }
+
         $yesList = [
-            'affirmative',
-            'all right',
-            'aye',
-            'indubitably',
-            'most assuredly',
-            'ok',
-            'of course',
-            'oui',
-            'okay',
-            'sure thing',
-            'y',
-            'yes',
-            'yea',
-            'yep',
-            'sure',
-            'yeah',
-            'true',
-            't',
-            'on',
-            '1',
-            'vrai',
-            'да',
-            'д',
+            '*',
             '+',
             '++',
             '+++',
             '++++',
             '+++++',
-            '*',
+            '1',
+            'affirmative',
+            'all right',
+            'aye',
+            'indubitably',
+            'most assuredly',
+            'of course',
+            'ok',
+            'okay',
+            'on',
+            'oui',
+            'sure thing',
+            'sure',
+            't',
+            'true',
+            'vrai',
+            'y',
+            'yea',
+            'yeah',
+            'yep',
+            'yes',
+            'д',
+            'да',
         ];
 
         $noList = [
-            'no*',
-            'no way',
-            'nope',
-            'nah',
-            'na',
-            'never',
+            '0',
+            '-',
             'absolutely not',
             'by no means',
+            'f',
+            'false',
+            'faux',
+            'na',
+            'nah',
             'negative',
             'never ever',
-            'false',
-            'f',
-            'off',
-            '0',
+            'never',
+            'nil',
+            'nill',
+            'no way',
+            'no*',
             'non',
-            'faux',
-            'нет',
+            'nope',
+            'null',
+            'off',
+            'undefined',
             'н',
             'немає',
-            '-',
-            'null',
-            'nill',
-            'undefined',
+            'нет',
         ];
 
-        $variable = Str::low($variable);
+        $variable = Str::low((string)$variable);
 
-        if (Arr::in($variable, $yesList) || self::float($variable) !== 0.0) {
+        if (\in_array($variable, $yesList, true) || self::float($variable) !== 0.0) {
             return true;
         }
 
-        if (Arr::in($variable, $noList)) {
+        if (\in_array($variable, $noList, true)) {
             return false;
         }
 
@@ -144,13 +157,9 @@ final class Filter
     }
 
     /**
-     * Smart converter string to float
-     *
-     * @param mixed $value
-     * @param int   $round
-     * @return float
+     * Smart converter string to float.
      */
-    public static function float($value, int $round = 10): float
+    public static function float(mixed $value, int $round = 10): float
     {
         $cleaned = (string)\preg_replace('#[^\deE\-\.\,]#iu', '', (string)$value);
         $cleaned = \str_replace(',', '.', $cleaned);
@@ -158,18 +167,13 @@ final class Filter
         \preg_match('#[-+]?[\d]+(\.[\d]+)?([eE][-+]?[\d]+)?#', $cleaned, $matches);
         $result = (float)($matches[0] ?? 0.0);
 
-        $result = \round($result, $round);
-
-        return $result;
+        return \round($result, $round);
     }
 
     /**
-     * Smart convert any string to int
-     *
-     * @param string|float|int|null $value
-     * @return int
+     * Smart convert any string to int.
      */
-    public static function int($value): int
+    public static function int(float|bool|int|string|null $value): int
     {
         $cleaned = (string)\preg_replace('#[^0-9-+.,]#', '', (string)$value);
         \preg_match('#[-+]?[\d]+#', $cleaned, $matches);
@@ -179,25 +183,18 @@ final class Filter
     }
 
     /**
-     * Returns only digits chars
-     *
-     * @param string|null $value
-     * @return string
+     * Returns only digits chars.
      */
     public static function digits(?string $value): string
     {
         // we need to remove - and + because they're allowed in the filter
         $cleaned = \str_replace(['-', '+'], '', (string)$value);
-        $cleaned = (string)\filter_var($cleaned, \FILTER_SANITIZE_NUMBER_INT);
 
-        return $cleaned;
+        return (string)\filter_var($cleaned, \FILTER_SANITIZE_NUMBER_INT);
     }
 
     /**
-     * Returns only alpha chars
-     *
-     * @param string|null $value
-     * @return string
+     * Returns only alpha chars.
      */
     public static function alpha(?string $value): string
     {
@@ -205,10 +202,7 @@ final class Filter
     }
 
     /**
-     * Returns only alpha and digits chars
-     *
-     * @param string|null $value
-     * @return string
+     * Returns only alpha and digits chars.
      */
     public static function alphanum(?string $value): string
     {
@@ -216,59 +210,35 @@ final class Filter
     }
 
     /**
-     * Returns only chars for base64
-     *
-     * @param string $value
-     * @return string
+     * Returns only chars for base64.
      */
     public static function base64(string $value): string
     {
         return (string)\preg_replace('#[^A-Z0-9\/+=]#i', '', $value);
     }
 
-    /**
-     * Remove whitespaces
-     *
-     * @param string $value
-     * @return string
-     */
     public static function path(string $value): string
     {
         $pattern = '#^[A-Za-z0-9_\/-]+[A-Za-z0-9_\.-]*([\\\\\/][A-Za-z0-9_-]+[A-Za-z0-9_\.-]*)*$#';
         \preg_match($pattern, $value, $matches);
+
         return $matches[0] ?? '';
     }
 
-    /**
-     * Remove whitespaces
-     *
-     * @param string $value
-     * @return string
-     */
     public static function trim(string $value): string
     {
         return Str::trim($value);
     }
 
-    /**
-     * Remove whitespaces
-     *
-     * @param string $value
-     * @return string
-     */
     public static function trimExtend(string $value): string
     {
         return Str::trim($value, true);
     }
 
     /**
-     * Cleanup array
-     *
-     * @param mixed          $value
-     * @param string|Closure $filter
-     * @return array
+     * Cleanup array.
      */
-    public static function arr($value, $filter = null): array
+    public static function arr(mixed $value, string|\Closure $filter = null): array
     {
         $array = (array)$value;
 
@@ -282,83 +252,59 @@ final class Filter
     }
 
     /**
-     * Cleanup system command
-     *
-     * @param string $value
-     * @return string
+     * Cleanup system command.
      */
     public static function cmd(string $value): string
     {
         $value = Str::low($value);
         $value = (string)\preg_replace('#[^a-z0-9\_\-\.]#', '', $value);
-        $value = Str::trim($value);
 
-        return $value;
+        return Str::trim($value);
     }
 
     /**
-     * Get safe string
-     *
-     * @param string $string
-     * @return string
+     * Get safe string.
      */
     public static function strip(string $string): string
     {
         $cleaned = \strip_tags($string);
-        $cleaned = Str::trim($cleaned);
 
-        return $cleaned;
+        return Str::trim($cleaned);
     }
 
     /**
-     * Get safe string
-     *
-     * @param string $string
-     * @return string
+     * Get safe string.
      */
     public static function alias(string $string): string
     {
         $cleaned = self::strip($string);
-        $cleaned = Str::slug($cleaned);
 
-        return $cleaned;
+        return Str::slug($cleaned);
     }
 
     /**
-     * String to lower and trim
-     *
-     * @param string $string
-     * @return string
+     * String to lower and trim.
      */
     public static function low(string $string): string
     {
         $cleaned = Str::low($string);
-        $cleaned = Str::trim($cleaned);
 
-        return $cleaned;
+        return Str::trim($cleaned);
     }
 
     /**
-     * String to upper and trim
-     *
-     * @param string $string
-     * @return string
-     *
+     * String to upper and trim.
      * @SuppressWarnings(PHPMD.ShortMethodName)
      */
     public static function up(string $string): string
     {
         $cleaned = Str::up($string);
-        $cleaned = Str::trim($cleaned);
 
-        return $cleaned;
+        return Str::trim($cleaned);
     }
 
     /**
-     * Strip spaces
-     *
-     * @param string $string
-     * @return string
+     * Strip spaces.
      */
     public static function stripSpace(string $string): string
     {
@@ -366,10 +312,7 @@ final class Filter
     }
 
     /**
-     * Alias of "Str::clean($string, true, true)"
-     *
-     * @param string $string
-     * @return string
+     * Alias of "Str::clean($string, true, true)".
      */
     public static function clean(string $string): string
     {
@@ -377,10 +320,7 @@ final class Filter
     }
 
     /**
-     * Alias of "Str::htmlEnt($string)"
-     *
-     * @param string $string
-     * @return string
+     * Alias of "Str::htmlEnt($string)".
      */
     public static function html(string $string): string
     {
@@ -388,10 +328,7 @@ final class Filter
     }
 
     /**
-     * Alias of "Xml::escape($string)"
-     *
-     * @param string $string
-     * @return string
+     * Alias of "Xml::escape($string)".
      */
     public static function xml(string $string): string
     {
@@ -399,10 +336,7 @@ final class Filter
     }
 
     /**
-     * Alias of "Str::esc($string)"
-     *
-     * @param string $string
-     * @return string
+     * Alias of "Str::esc($string)".
      */
     public static function esc(string $string): string
     {
@@ -410,12 +344,9 @@ final class Filter
     }
 
     /**
-     * Returns JSON object from array
-     *
-     * @param array|Data $data
-     * @return Data
+     * Returns JSON object from array.
      */
-    public static function data($data): Data
+    public static function data(Data|array $data): Data
     {
         if ($data instanceof Data) {
             return $data;
@@ -425,37 +356,27 @@ final class Filter
     }
 
     /**
-     * RAW placeholder
-     *
-     * @param mixed $string
-     * @return mixed
+     * RAW placeholder.
      */
-    public static function raw($string)
+    public static function raw(mixed $string): mixed
     {
         return $string;
     }
 
     /**
-     * First char to upper, other to lower
-     *
-     * @param string $input
-     * @return string
+     * First char to upper, other to lower.
      */
     public static function ucFirst(string $input): string
     {
         $string = Str::low($input);
-        $string = \ucfirst($string);
 
-        return $string;
+        return \ucfirst($string);
     }
 
     /**
-     * Parse lines to assoc list
-     *
-     * @param string|array $input
-     * @return array
+     * Parse lines to assoc list.
      */
-    public static function parseLines($input): array
+    public static function parseLines(array|string $input): array
     {
         if (\is_array($input)) {
             $input = \implode(\PHP_EOL, $input);
@@ -465,10 +386,7 @@ final class Filter
     }
 
     /**
-     * Convert words to PHP Class name
-     *
-     * @param string $input
-     * @return string
+     * Convert words to PHP Class name.
      */
     public static function className(string $input): string
     {
@@ -477,8 +395,8 @@ final class Filter
 
         $output = \array_map(static function ($item) {
             $item = (string)\preg_replace('#[^a-z0-9]#i', '', $item);
-            $item = Filter::ucFirst($item);
-            return $item;
+
+            return self::ucFirst($item);
         }, $output);
 
         $output = \array_filter($output);
@@ -488,17 +406,14 @@ final class Filter
 
     /**
      * Strip quotes.
-     *
-     * @param string $value
-     * @return string
      */
     public static function stripQuotes(string $value): string
     {
-        if (\strpos($value, '"') === 0 && \substr($value, -1) === '"') {
+        if (\str_starts_with($value, '"') && \str_ends_with($value, '"')) {
             $value = \trim($value, '"');
         }
 
-        if (\strpos($value, "'") === 0 && \substr($value, -1) === "'") {
+        if (\str_starts_with($value, "'") && \str_ends_with($value, "'")) {
             $value = \trim($value, "'");
         }
 

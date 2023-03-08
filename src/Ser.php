@@ -1,38 +1,30 @@
 <?php
 
 /**
- * JBZoo Toolbox - Utils
+ * JBZoo Toolbox - Utils.
  *
  * This file is part of the JBZoo Toolbox project.
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  *
- * @package    Utils
  * @license    MIT
  * @copyright  Copyright (C) JBZoo.com, All rights reserved.
- * @link       https://github.com/JBZoo/Utils
+ * @see        https://github.com/JBZoo/Utils
  */
 
 declare(strict_types=1);
 
 namespace JBZoo\Utils;
 
-/**
- * Class Ser
- * @package JBZoo\Utils
- */
 final class Ser
 {
     /**
      * Check value to find if it was serialized.
-     * If $data is not an string, then returned value will always be false. Serialized data is always a string.
-     *
+     * If $data is not a string, then returned value will always be false. Serialized data is always a string.
      * @param mixed $data Value to check to see if was serialized
-     * @return bool
-     *
      * @SuppressWarnings(PHPMD.ShortMethodName)
      */
-    public static function is($data): bool
+    public static function is(mixed $data): bool
     {
         // If it isn't a string, it isn't serialized
         if (!\is_string($data)) {
@@ -57,18 +49,15 @@ final class Ser
             return false;
         }
 
-        /** @noinspection ArgumentEqualsDefaultValueInspection */
         /** @noinspection UnserializeExploitsInspection */
         return @\unserialize($data, []) !== false;
     }
 
     /**
      * Serialize data, if needed.
-     *
      * @param mixed $data Data that might need to be serialized
-     * @return mixed
      */
-    public static function maybe($data)
+    public static function maybe(mixed $data): mixed
     {
         if (\is_array($data) || \is_object($data)) {
             return \serialize($data);
@@ -79,11 +68,9 @@ final class Ser
 
     /**
      * Unserialize value only if it is serialized.
-     *
      * @param string $data A variable that may or may not be serialized
-     * @return mixed
      */
-    public static function maybeUn(string $data)
+    public static function maybeUn(string $data): mixed
     {
         $data = \trim($data);
 
@@ -116,6 +103,7 @@ final class Ser
             if ($uns === false) {
                 return $data;
             }
+
             return $uns;
         }
 
@@ -125,41 +113,31 @@ final class Ser
     /**
      * UnSerializes partially-corrupted arrays that occur sometimes. Addresses
      * specifically the `unserialize(): Error at offset xxx of yyy bytes` error.
-     *
      * NOTE: This error can *frequently* occur with mismatched character sets and higher-than-ASCII characters.
-     * Contributed by Theodore R. Smith of PHP Experts, Inc. <http://www.phpexperts.pro/>
-     *
-     * @param string $brokenSerializedData
-     * @return string
+     * Contributed by Theodore R. Smith of PHP Experts, Inc. <http://www.phpexperts.pro/>.
      */
     public static function fix(string $brokenSerializedData): string
     {
         $fixedSerializedData = \preg_replace_callback(
-            '!s:(\d+):"(.*?)";!',
-            /**
-             * @param array $matches
-             * @return string
-             */
+            '/s:(\d+):"(.*?)";/',
             static function (array $matches): string {
                 $snip = $matches[2];
+
                 return 's:' . \strlen($snip) . ':"' . $snip . '";';
             },
-            $brokenSerializedData
+            $brokenSerializedData,
         );
 
         return (string)$fixedSerializedData;
     }
 
     /**
-     * Check some basic requirements of all serialized strings
-     *
-     * @param string $data
-     * @param int    $length
-     * @return bool
+     * Check some basic requirements of all serialized strings.
      */
-    protected static function checkBasic(string $data, int $length): bool
+    private static function checkBasic(string $data, int $length): bool
     {
         $minLength = 4;
+
         return $length < $minLength
             || $data[1] !== ':'
             || ($data[$length - 1] !== ';' && $data[$length - 1] !== '}');

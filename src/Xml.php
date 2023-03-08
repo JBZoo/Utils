@@ -1,72 +1,61 @@
 <?php
 
 /**
- * JBZoo Toolbox - Utils
+ * JBZoo Toolbox - Utils.
  *
  * This file is part of the JBZoo Toolbox project.
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  *
- * @package    Utils
  * @license    MIT
  * @copyright  Copyright (C) JBZoo.com, All rights reserved.
- * @link       https://github.com/JBZoo/Utils
+ * @see        https://github.com/JBZoo/Utils
  */
 
 declare(strict_types=1);
 
 namespace JBZoo\Utils;
 
-/**
- * Class Xml
- * @package JBZoo\Utils
- */
 final class Xml
 {
     public const VERSION  = '1.0';
     public const ENCODING = 'UTF-8';
 
     /**
-     * Escape string before save it as xml content
-     *
-     * @param string|float|int|null $rawXmlContent
-     * @return string
+     * Escape string before save it as xml content.
      */
-    public static function escape($rawXmlContent): string
+    public static function escape(float|int|string|null $rawXmlContent): string
     {
         $rawXmlContent = (string)$rawXmlContent;
 
         $rawXmlContent = (string)\preg_replace(
             '/[^\x{0009}\x{000a}\x{000d}\x{0020}-\x{D7FF}\x{E000}-\x{FFFD}]+/u',
             ' ',
-            $rawXmlContent
+            $rawXmlContent,
         );
 
         return \str_replace(
             ['&', '<', '>', '"', "'"],
             ['&amp;', '&lt;', '&gt;', '&quot;', '&apos;'],
-            $rawXmlContent
+            $rawXmlContent,
         );
     }
 
     /**
-     * Create DOMDocument object from XML-string
-     *
-     * @param string|null $source
-     * @param bool        $preserveWhiteSpace
-     * @return \DOMDocument
+     * Create DOMDocument object from XML-string.
      */
     public static function createFromString(?string $source = null, bool $preserveWhiteSpace = false): \DOMDocument
     {
         $document = new \DOMDocument();
+
         $document->preserveWhiteSpace = $preserveWhiteSpace;
 
-        if ($source) {
-            $document->loadXML($source);
+        if (!isStrEmpty($source)) {
+            $document->loadXML($source ?? '');
         }
 
-        $document->version = self::VERSION;
-        $document->encoding = self::ENCODING;
+        $document->xmlVersion   = self::VERSION;
+        $document->encoding     = self::ENCODING;
         $document->formatOutput = true;
 
         return $document;
@@ -97,25 +86,21 @@ final class Xml
      *             ]
      *         ]
      *     ]
-     * ];
+     * ];.
      *
      * Format of output
      *     <?xml version="1.0" encoding="UTF-8"?>
      *     <parent parent-attribute="value">Content of parent tag<child>Content of child tag</child></parent>
      *
-     *
-     * @param array             $xmlAsArray
-     * @param \DOMElement|null  $domElement
-     * @param \DOMDocument|null $document
-     * @return \DOMDocument
      * @SuppressWarnings(PHPMD.NPathComplexity)
+     * @suppress PhanPossiblyFalseTypeArgumentInternal
      */
     public static function array2Dom(
         array $xmlAsArray,
         ?\DOMElement $domElement = null,
-        ?\DOMDocument $document = null
+        ?\DOMDocument $document = null,
     ): \DOMDocument {
-        if (null === $document) {
+        if ($document === null) {
             $document = self::createFromString();
         }
 
@@ -126,10 +111,7 @@ final class Xml
         }
 
         if (\array_key_exists('_cdata', $xmlAsArray) && $xmlAsArray['_cdata'] !== null) {
-            $newNode = $document->createCDATASection($xmlAsArray['_cdata']);
-            if ($newNode !== false) {
-                $domElement->appendChild($newNode);
-            }
+            $domElement->appendChild($document->createCDATASection($xmlAsArray['_cdata']));
         }
 
         if ($domElement instanceof \DOMElement && \array_key_exists('_attrs', $xmlAsArray)) {
@@ -140,11 +122,9 @@ final class Xml
 
         if (\array_key_exists('_children', $xmlAsArray)) {
             foreach ($xmlAsArray['_children'] as $mixedElement) {
-                if (\array_key_exists('_node', $mixedElement) && '#' !== $mixedElement['_node'][0]) {
+                if (\array_key_exists('_node', $mixedElement) && $mixedElement['_node'][0] !== '#') {
                     $newNode = $document->createElement($mixedElement['_node']);
-                    if ($newNode !== false) {
-                        $domElement->appendChild($newNode);
-                    }
+                    $domElement->appendChild($newNode);
 
                     /** @phan-suppress-next-line PhanPossiblyFalseTypeArgument */
                     self::array2Dom($mixedElement, $newNode, $document);
@@ -159,7 +139,7 @@ final class Xml
      * Convert PHP \DOMDocument or \DOMNode object to simple array
      * Format of input XML (as string)
      *     <?xml version="1.0" encoding="UTF-8"?>
-     *     <parent parent-attribute="value">Content of parent tag<child>Content of child tag</child></parent>
+     *     <parent parent-attribute="value">Content of parent tag<child>Content of child tag</child></parent>.
      *
      * Format of output array
      * $result = [
@@ -186,8 +166,6 @@ final class Xml
      *     ]
      * ];
      *
-     * @param \DOMNode|\DOMElement|\DOMDocument $element
-     * @return array
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     public static function dom2Array(\DOMNode $element): array
@@ -200,30 +178,34 @@ final class Xml
             '_children' => [],
         ];
 
-        if ($element->attributes && $element->hasAttributes()) {
-            foreach ($element->attributes as $attr) {
-                $result['_attrs'][$attr->name] = $attr->value;
+        if ($element->attributes !== null && $element->hasAttributes()) {
+            /** @var \DOMAttr $domAttr */
+            foreach ($element->attributes as $domAttr) {
+                $result['_attrs'][$domAttr->name] = $domAttr->value;
             }
         }
 
         if ($element->hasChildNodes()) {
             $children = $element->childNodes;
 
-            if ($children->length === 1 && $child = $children->item(0)) {
+            $child = $children->item(0);
+            if ($children->length === 1 && $child !== null) {
                 if ($child->nodeType === \XML_TEXT_NODE) {
                     $result['_text'] = $child->nodeValue;
+
                     return $result;
                 }
 
                 if ($child->nodeType === \XML_CDATA_SECTION_NODE) {
                     $result['_cdata'] = $child->nodeValue;
+
                     return $result;
                 }
             }
 
-            foreach ($children as $child) {
-                if ($child->nodeType !== \XML_COMMENT_NODE) {
-                    $result['_children'][] = self::dom2Array($child);
+            foreach ($children as $child2) {
+                if ($child2->nodeType !== \XML_COMMENT_NODE) {
+                    $result['_children'][] = self::dom2Array($child2);
                 }
             }
         }

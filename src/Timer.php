@@ -1,16 +1,15 @@
 <?php
 
 /**
- * JBZoo Toolbox - Utils
+ * JBZoo Toolbox - Utils.
  *
  * This file is part of the JBZoo Toolbox project.
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  *
- * @package    Utils
  * @license    MIT
  * @copyright  Copyright (C) JBZoo.com, All rights reserved.
- * @link       https://github.com/JBZoo/Utils
+ * @see        https://github.com/JBZoo/Utils
  */
 
 declare(strict_types=1);
@@ -18,18 +17,12 @@ declare(strict_types=1);
 namespace JBZoo\Utils;
 
 /**
- * Class Timer
- *
  * @see     https://github.com/sebastianbergmann/php-timer
- * @package JBZoo\Utils
  */
 final class Timer
 {
     /**
      * Formats the elapsed time as a string.
-     *
-     * @param float $milliSeconds
-     * @return string
      */
     public static function format(float $milliSeconds): string
     {
@@ -39,7 +32,7 @@ final class Timer
             'sec'  => 1000,
         ];
 
-        $time = \round($milliSeconds * 1000);
+        $time     = \round($milliSeconds * 1000);
         $minValue = 1.0;
 
         foreach ($times as $unit => $value) {
@@ -55,24 +48,21 @@ final class Timer
 
     /**
      * Formats the elapsed time as a string.
-     *
-     * @param float $seconds
-     * @return string
      */
     public static function formatMS(float $seconds): string
     {
         $time = \round($seconds * 1000, 3);
-        $dec = 3;
+        $dec  = 3;
 
-        $decLevel01 = 0.1;
-        $decLevel0 = 0;
-        $decLevel1 = 1;
-        $decLevel10 = 10;
+        $decLevel01  = 0.1;
+        $decLevel0   = 0;
+        $decLevel1   = 1;
+        $decLevel10  = 10;
         $decLevel100 = 100;
 
-        if (!$time || $time >= $decLevel10 || $time >= $decLevel100) {
+        if ($time === 0.0 || $time >= $decLevel10 || $time >= $decLevel100) {
             $dec = $decLevel0;
-        } elseif ($time < $decLevel10 && $time >= $decLevel01) {
+        } elseif ($time >= $decLevel01) {
             $dec = $decLevel1;
         }
 
@@ -81,8 +71,6 @@ final class Timer
 
     /**
      * Formats the elapsed time since the start of the request as a string.
-     *
-     * @return float
      */
     public static function timeSinceStart(): float
     {
@@ -90,14 +78,11 @@ final class Timer
     }
 
     /**
-     * Get request time
-     *
-     * @return float
-     *
+     * Get request time.
      * @SuppressWarnings(PHPMD.Superglobals)
      */
     public static function getRequestTime(): float
     {
-        return $_SERVER['REQUEST_TIME_FLOAT'];
+        return $_SERVER['REQUEST_TIME_FLOAT'] ?? 0.0;
     }
 }
