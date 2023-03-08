@@ -16,11 +16,6 @@ declare(strict_types=1);
 
 namespace JBZoo\Utils;
 
-/**
- * Class Env
- *
- * @package JBZoo\Utils
- */
 final class Env
 {
     public const VAR_NULL   = 1;
@@ -31,21 +26,21 @@ final class Env
 
     /**
      * Returns an environment variable.
-     *
-     * @param string $envVarName
-     * @param mixed  $default
-     * @param int    $options
-     * @return mixed
      * @SuppressWarnings(PHPMD.Superglobals)
      */
-    public static function get(string $envVarName, $default = null, int $options = self::VAR_STRING)
-    {
+    public static function get(
+        string $envVarName,
+        string|float|int|bool|null $default = null,
+        int $options = self::VAR_STRING,
+    ): string|float|int|bool|null {
         $envKey = \trim($envVarName);
 
         $value = \getenv($envKey);
         if ($value === false) {
             if (\array_key_exists($envKey, $_ENV)) {
-                return self::convert($_ENV[$envKey], $options);
+                $envValue = (string)($_ENV[$envKey] ?? '');
+
+                return self::convert($envValue, $options);
             }
 
             return $default;
@@ -56,35 +51,31 @@ final class Env
 
     /**
      * Converts the type of values like "true", "false", "null" or "123".
-     *
-     * @param string|null $value
-     * @param int         $options
-     * @return string|float|int|bool|null
      */
-    public static function convert(?string $value, int $options = self::VAR_STRING)
+    public static function convert(?string $value, int $options = self::VAR_STRING): string|float|int|bool|null
     {
         $cleanedValue = \trim(Filter::stripQuotes((string)$value));
 
-        if ($options & self::VAR_NULL) {
+        if (($options & self::VAR_NULL) > 0) {
             $cleanedValue = \strtolower($cleanedValue);
             if (\in_array($cleanedValue, ['null', 'nil', 'undefined'], true)) {
                 return null;
             }
         }
 
-        if ($options & self::VAR_STRING) {
+        if (($options & self::VAR_STRING) > 0) {
             return $cleanedValue;
         }
 
-        if ($options & self::VAR_FLOAT) {
+        if (($options & self::VAR_FLOAT) > 0) {
             return Filter::float($cleanedValue);
         }
 
-        if ($options & self::VAR_INT) {
+        if (($options & self::VAR_INT) > 0) {
             return Filter::int((int)$cleanedValue);
         }
 
-        if ($options & self::VAR_BOOL) {
+        if (($options & self::VAR_BOOL) > 0) {
             return Filter::bool($cleanedValue);
         }
 
@@ -92,11 +83,7 @@ final class Env
     }
 
     /**
-     * Convert value of environment variable to clean string
-     *
-     * @param string $envVarName
-     * @param string $default
-     * @return string
+     * Convert value of environment variable to clean string.
      */
     public static function string(string $envVarName, string $default = ''): string
     {
@@ -108,11 +95,7 @@ final class Env
     }
 
     /**
-     * Convert value of environment variable to strict integer value
-     *
-     * @param string $envVarName
-     * @param int    $default
-     * @return int
+     * Convert value of environment variable to strict integer value.
      */
     public static function int(string $envVarName, int $default = 0): int
     {
@@ -124,11 +107,7 @@ final class Env
     }
 
     /**
-     * Convert value of environment variable to strict float value
-     *
-     * @param string $envVarName
-     * @param float  $default
-     * @return float
+     * Convert value of environment variable to strict float value.
      */
     public static function float(string $envVarName, float $default = 0.0): float
     {
@@ -140,11 +119,7 @@ final class Env
     }
 
     /**
-     * Convert value of environment variable to strict bool value
-     *
-     * @param string $envVarName
-     * @param bool   $default
-     * @return bool
+     * Convert value of environment variable to strict bool value.
      */
     public static function bool(string $envVarName, bool $default = false): bool
     {
@@ -156,10 +131,7 @@ final class Env
     }
 
     /**
-     * Returns true if environment variable exists
-     *
-     * @param string $envVarName
-     * @return bool
+     * Returns true if environment variable exists.
      */
     public static function isExists(string $envVarName): bool
     {

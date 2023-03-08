@@ -16,47 +16,11 @@ declare(strict_types=1);
 
 namespace JBZoo\Utils;
 
-/**
- * Class Slug
- *
- * @package JBZoo\Utils
- */
 final class Slug
 {
-    /**
-     * The character map.
-     *
-     * @var array
-     */
-    private static $map = [];
-
-    /**
-     * The character list as a string.
-     *
-     * @var string
-     */
-    private static $chars = '';
-
-    /**
-     * The character list as a regular expression.
-     *
-     * @var string
-     */
-    private static $regex = '';
-
-    /**
-     * The current language
-     *
-     * @var string
-     */
-    private static $language = '';
-
-    /**
-     * @var array
-     */
-    public static $maps = [
-
-        'de' => [ /* German */
+    // The map to convert characters to ASCII characters.
+    public static array $maps = [
+        'de' => [// German
             'Ä' => 'Ae',
             'Ö' => 'Oe',
             'Ü' => 'Ue',
@@ -146,7 +110,7 @@ final class Slug
             '©' => '(c)',
         ],
 
-        'el' => [ /* Greek */
+        'el' => [// Greek
             'α' => 'a',
             'β' => 'b',
             'γ' => 'g',
@@ -218,7 +182,7 @@ final class Slug
             'Ϋ' => 'Y',
         ],
 
-        'tr' => [ /* Turkish */
+        'tr' => [// Turkish
             'ş' => 's',
             'Ş' => 'S',
             'ı' => 'i',
@@ -233,7 +197,7 @@ final class Slug
             'Ğ' => 'G',
         ],
 
-        'bg' => [ /* Bulgarian */
+        'bg' => [// Bulgarian
             'Щ' => 'Sht',
             'Ш' => 'Sh',
             'Ч' => 'Ch',
@@ -296,7 +260,7 @@ final class Slug
             'ъ' => 'a',
         ],
 
-        'ru' => [ /* Russian */
+        'ru' => [// Russian
             'а' => 'a',
             'б' => 'b',
             'в' => 'v',
@@ -366,7 +330,7 @@ final class Slug
             '№' => '',
         ],
 
-        'uk' => [ /* Ukrainian */
+        'uk' => [// Ukrainian
             'Є' => 'Ye',
             'І' => 'I',
             'Ї' => 'Yi',
@@ -377,7 +341,7 @@ final class Slug
             'ґ' => 'g',
         ],
 
-        'cs' => [ /* Czech */
+        'cs' => [// Czech
             'č' => 'c',
             'ď' => 'd',
             'ě' => 'e',
@@ -398,7 +362,7 @@ final class Slug
             'Ž' => 'Z',
         ],
 
-        'pl' => [ /* Polish */
+        'pl' => [// Polish
             'ą' => 'a',
             'ć' => 'c',
             'ę' => 'e',
@@ -419,7 +383,7 @@ final class Slug
             'Ż' => 'Z',
         ],
 
-        'ro' => [ /* Romanian */
+        'ro' => [// Romanian
             'ă' => 'a',
             'â' => 'a',
             'î' => 'i',
@@ -429,7 +393,7 @@ final class Slug
             'ţ' => 't',
         ],
 
-        'lv' => [ /* Latvian */
+        'lv' => [// Latvian
             'ā' => 'a',
             'č' => 'c',
             'ē' => 'e',
@@ -454,7 +418,7 @@ final class Slug
             'Ž' => 'Z',
         ],
 
-        'lt' => [ /* Lithuanian */
+        'lt' => [// Lithuanian
             'ą' => 'a',
             'č' => 'c',
             'ę' => 'e',
@@ -475,7 +439,7 @@ final class Slug
             'Ž' => 'Z',
         ],
 
-        'vn' => [ /* Vietnamese */
+        'vn' => [// Vietnamese
             'Á' => 'A',
             'À' => 'A',
             'Ả' => 'A',
@@ -612,7 +576,7 @@ final class Slug
             'đ' => 'd',
         ],
 
-        'ar' => [ /* Arabic */
+        'ar' => [// Arabic
             'أ' => 'a',
             'ب' => 'b',
             'ت' => 't',
@@ -643,7 +607,7 @@ final class Slug
             'ي' => 'y',
         ],
 
-        'sr' => [ /* Serbian */
+        'sr' => [// Serbian
             'ђ' => 'dj',
             'ј' => 'j',
             'љ' => 'lj',
@@ -660,7 +624,7 @@ final class Slug
             'Đ' => 'Dj',
         ],
 
-        'az' => [ /* Azerbaijani */
+        'az' => [// Azerbaijani
             'ç' => 'c',
             'ə' => 'e',
             'ğ' => 'g',
@@ -678,55 +642,26 @@ final class Slug
         ],
     ];
 
-    /**
-     * Initializes the character map.
-     * Part of the URLify.php Project <https://github.com/jbroadway/urlify/>
-     *
-     * @see https://github.com/jbroadway/urlify/blob/master/URLify.php
-     *
-     * @param string $language
-     */
-    private static function initLanguageMap(string $language = ''): void
-    {
-        if ((!$language || $language === self::$language) && \count(self::$map) > 0) {
-            return;
-        }
+    /** The character map. */
+    private static array $map = [];
 
-        // Is a specific map associated with $language?
+    /** The character list as a string. */
+    private static string $chars = '';
 
-        if (\array_key_exists($language, self::$maps) && \is_array(self::$maps[$language])) {
-            // Move this map to end. This means it will have priority over others
-            $langMap = self::$maps[$language];
-            unset(self::$maps[$language]);
-            self::$maps[$language] = $langMap;
-        }
+    /** The character list as a regular expression. */
+    private static string $regex = '';
 
-        // Reset static vars
-        self::$language = $language;
-        self::$map = [];
-        self::$chars = '';
-
-        foreach (self::$maps as $map) {
-            foreach ((array)$map as $orig => $conv) {
-                self::$map[$orig] = $conv;
-                self::$chars .= $orig;
-            }
-        }
-
-        self::$regex = '/[' . self::$chars . ']/u';
-    }
-
+    /** The current language. */
+    private static string $language = '';
 
     /**
      * Converts any accent characters to their equivalent normal characters and converts any other non-alphanumeric
      * characters to dashes, then converts any sequence of two or more dashes to a single dash. This function generates
      * slugs safe for use as URLs, and if you pass true as the second parameter, it will create strings safe for
      * use as CSS classes or IDs.
-     *
-     * @param string|null $string    A string to convert to a slug
+     * @param null|string $string    A string to convert to a slug
      * @param string      $separator The string to separate words with
-     * @param bool        $cssMode   Whether or not to generate strings safe for CSS classes/IDs (Default to false)
-     * @return  string
+     * @param bool        $cssMode   Whether to generate strings safe for CSS classes/IDs (Default to false)
      */
     public static function filter(?string $string, string $separator = '-', bool $cssMode = false): string
     {
@@ -735,9 +670,9 @@ final class Slug
 
         if ($cssMode) {
             $firstLetter = (int)$slug[0];
-            $digits = ['zero', 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine'];
-            if ($firstLetter && isset($digits[$firstLetter])) {
-                $slug = $digits[$firstLetter] . \substr($slug, 1);
+            $digits      = ['zero', 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine'];
+            if (isset($digits[$firstLetter])) {
+                $slug = $digits[$firstLetter] . $separator . \substr($slug, 1);
             }
         }
 
@@ -747,10 +682,8 @@ final class Slug
     /**
      * Checks to see if a string is utf8 encoded.
      * NOTE: This function checks for 5-Byte sequences, UTF8 has Bytes Sequences with a maximum length of 4.
-     * Written by Tony Ferrara <http://blog.ircmaxwell.com>
-     *
+     * Written by Tony Ferrara <http://blog.ircmaxwell.com>.
      * @param string $string The string to be checked
-     * @return bool
      */
     public static function seemsUTF8(string $string): bool
     {
@@ -764,42 +697,11 @@ final class Slug
     }
 
     /**
-     * A non-Mbstring UTF-8 checker.
-     *
-     * @link http://stackoverflow.com/a/11709412/430062
-     *
-     * @param string $string
-     * @return bool
-     */
-    protected static function seemsUtf8Regex(string $string): bool
-    {
-        $regex = '/(
-            [\xC0-\xC1]                                                         # Invalid UTF-8 Bytes
-            | [\xF5-\xFF]                                                       # Invalid UTF-8 Bytes
-            | \xE0[\x80-\x9F]                                                   # Overlong encoding of prior code point
-            | \xF0[\x80-\x8F]                                                   # Overlong encoding of prior code point
-            | [\xC2-\xDF](?![\x80-\xBF])                                        # Invalid UTF-8 Sequence Start
-            | [\xE0-\xEF](?![\x80-\xBF]{2})                                     # Invalid UTF-8 Sequence Start
-            | [\xF0-\xF4](?![\x80-\xBF]{3})                                     # Invalid UTF-8 Sequence Start
-            | (?<=[\x0-\x7F\xF5-\xFF])[\x80-\xBF]                               # Invalid UTF-8 Sequence Middle
-            | (?<![\xC2-\xDF]|[\xE0-\xEF]|[\xE0-\xEF][\x80-\xBF]|[\xF0-\xF4]|'
-            . '[\xF0-\xF4][\x80-\xBF]|[\xF0-\xF4][\x80-\xBF]{2})[\x80-\xBF]     # Overlong Sequence
-            | (?<=[\xE0-\xEF])[\x80-\xBF](?![\x80-\xBF])                        # Short 3 byte sequence
-            | (?<=[\xF0-\xF4])[\x80-\xBF](?![\x80-\xBF]{2})                     # Short 4 byte sequence
-            | (?<=[\xF0-\xF4][\x80-\xBF])[\x80-\xBF](?![\x80-\xBF])             # Short 4 byte sequence (2)
-        )/x';
-
-        return !\preg_match($regex, $string);
-    }
-
-    /**
      * Transliterates characters to their ASCII equivalents.
-     * Part of the URLify.php Project <https://github.com/jbroadway/urlify/>
-     *
+     * Part of the URLify.php Project <https://github.com/jbroadway/urlify/>.
      * @see https://github.com/jbroadway/urlify/blob/master/URLify.php
-     *
-     * @param string $text     Text that might have not-ASCII characters
-     * @param string $language Specifies a priority for a specific language.
+     * @param  string $text     Text that might have not-ASCII characters
+     * @param  string $language specifies a priority for a specific language
      * @return string Filtered string with replaced "nice" characters
      */
     public static function downCode(string $text, string $language = ''): string
@@ -807,7 +709,7 @@ final class Slug
         self::initLanguageMap($language);
 
         if (self::seemsUTF8($text)) {
-            if (\preg_match_all(self::$regex, $text, $matches)) {
+            if (\preg_match_all(self::$regex, $text, $matches) > 0) {
                 $matchesCount = \count($matches[0]);
                 /** @noinspection ForeachInvariantsInspection */
                 for ($i = 0; $i < $matchesCount; $i++) {
@@ -825,11 +727,11 @@ final class Slug
             $search .= "\xea\xeb\xec\xed\xee\xef\xf1\xf2\xf3\xf4\xf5\xf6\xf8\xf9\xfa\xfb\xfc\xfd\xff";
             $text = \strtr($text, $search, 'EfSZszYcYuAAAAAACEEEEIIIINOOOOOOUUUUYaaaaaaceeeeiiiinoooooouuuuyy');
 
-            // These latin characters should be represented by two characters so
+            // These latin characters should be represented by two characters, so
             // we can't use strtr
-            $complexSearch = ["\x8c", "\x9c", "\xc6", "\xd0", "\xde", "\xdf", "\xe6", "\xf0", "\xfe"];
+            $complexSearch  = ["\x8c", "\x9c", "\xc6", "\xd0", "\xde", "\xdf", "\xe6", "\xf0", "\xfe"];
             $complexReplace = ['OE', 'oe', 'AE', 'DH', 'TH', 'ss', 'ae', 'dh', 'th'];
-            $text = \str_replace($complexSearch, $complexReplace, $text);
+            $text           = \str_replace($complexSearch, $complexReplace, $text);
         }
 
         return $text;
@@ -838,17 +740,76 @@ final class Slug
     /**
      * Converts all accent characters to ASCII characters.
      * If there are no accent characters, then the string given is just returned.
-     *
-     * @param string $string   Text that might have accent characters
-     * @param string $language Specifies a priority for a specific language.
+     * @param  string $string   Text that might have accent characters
+     * @param  string $language specifies a priority for a specific language
      * @return string Filtered  string with replaced "nice" characters
      */
     public static function removeAccents(string $string, string $language = ''): string
     {
-        if (!\preg_match('/[\x80-\xff]/', $string)) {
+        if (\preg_match('/[\x80-\xff]/', $string) === 0) {
             return $string;
         }
 
         return self::downCode($string, $language);
+    }
+
+    /**
+     * Initializes the character map.
+     * Part of the URLify.php Project <https://github.com/jbroadway/urlify/>.
+     * @see https://github.com/jbroadway/urlify/blob/master/URLify.php
+     */
+    private static function initLanguageMap(string $language = ''): void
+    {
+        if ((isStrEmpty($language) || $language === self::$language) && \count(self::$map) > 0) {
+            return;
+        }
+
+        // Is a specific map associated with $language?
+
+        if (\array_key_exists($language, self::$maps) && \is_array(self::$maps[$language])) {
+            // Move this map to end. This means it will have priority over others
+            $langMap = self::$maps[$language];
+            unset(self::$maps[$language]);
+            self::$maps[$language] = $langMap;
+        }
+
+        // Reset static vars
+        self::$language = $language;
+        self::$map      = [];
+        self::$chars    = '';
+
+        foreach (self::$maps as $map) {
+            foreach ((array)$map as $orig => $conv) {
+                self::$map[$orig] = $conv;
+                self::$chars .= $orig;
+            }
+        }
+
+        self::$regex = '/[' . self::$chars . ']/u';
+    }
+
+    /**
+     * A non-Mbstring UTF-8 checker.
+     * @see http://stackoverflow.com/a/11709412/430062
+     */
+    private static function seemsUtf8Regex(string $string): bool
+    {
+        $regex = '/(
+            [\xC0-\xC1]                                                         # Invalid UTF-8 Bytes
+            | [\xF5-\xFF]                                                       # Invalid UTF-8 Bytes
+            | \xE0[\x80-\x9F]                                                   # Overlong encoding of prior code point
+            | \xF0[\x80-\x8F]                                                   # Overlong encoding of prior code point
+            | [\xC2-\xDF](?![\x80-\xBF])                                        # Invalid UTF-8 Sequence Start
+            | [\xE0-\xEF](?![\x80-\xBF]{2})                                     # Invalid UTF-8 Sequence Start
+            | [\xF0-\xF4](?![\x80-\xBF]{3})                                     # Invalid UTF-8 Sequence Start
+            | (?<=[\x0-\x7F\xF5-\xFF])[\x80-\xBF]                               # Invalid UTF-8 Sequence Middle
+            | (?<![\xC2-\xDF]|[\xE0-\xEF]|[\xE0-\xEF][\x80-\xBF]|[\xF0-\xF4]|'
+            . '[\xF0-\xF4][\x80-\xBF]|[\xF0-\xF4][\x80-\xBF]{2})[\x80-\xBF]     # Overlong Sequence
+            | (?<=[\xE0-\xEF])[\x80-\xBF](?![\x80-\xBF])                        # Short 3 byte sequence
+            | (?<=[\xF0-\xF4])[\x80-\xBF](?![\x80-\xBF]{2})                     # Short 4 byte sequence
+            | (?<=[\xF0-\xF4][\x80-\xBF])[\x80-\xBF](?![\x80-\xBF])             # Short 4 byte sequence (2)
+        )/x';
+
+        return \preg_match($regex, $string) === 0;
     }
 }

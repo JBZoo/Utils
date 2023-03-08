@@ -16,7 +16,6 @@
          convertNoticesToExceptions="true"
          convertWarningsToExceptions="true"
          convertDeprecationsToExceptions="true"
-         executionOrder="random"
          processIsolation="false"
          stopOnError="false"
          stopOnFailure="false"

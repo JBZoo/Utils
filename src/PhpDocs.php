@@ -16,10 +16,6 @@ declare(strict_types=1);
 
 namespace JBZoo\Utils;
 
-/**
- * Class PhpDocs
- * @package JBZoo\Utils
- */
 final class PhpDocs
 {
     /**
@@ -31,10 +27,7 @@ final class PhpDocs
      *          'param'  => ['string $phpDoc'],
      *          'return' => ['array']
      *      ]
-     *  ]
-     *
-     * @param string $phpDoc
-     * @return array
+     *  ].
      */
     public static function parse(string $phpDoc): array
     {
@@ -45,9 +38,10 @@ final class PhpDocs
 
         // split at each line
         $lines = (array)\preg_split("/(\r?\n)/", $phpDoc);
+
         foreach ($lines as $line) {
             // if starts with an asterisk
-            if (\preg_match('/^(?=\s+?\*[^\/])(.+)/', (string)$line, $matches)) {
+            if (\preg_match('/^(?=\s+?\*[^\/])(.+)/', (string)$line, $matches) > 0) {
                 // remove wrapping whitespace
                 $info = \trim($matches[1]);
 
@@ -58,8 +52,8 @@ final class PhpDocs
                 // then add to the description
 
                 $firstChar = $info[0] ?? null;
-                if ($firstChar !== "@") {
-                    $result['description'] .= "\n$info";
+                if ($firstChar !== '@') {
+                    $result['description'] .= "\n{$info}";
                     continue;
                 }
 

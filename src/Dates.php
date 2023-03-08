@@ -16,14 +16,6 @@ declare(strict_types=1);
 
 namespace JBZoo\Utils;
 
-use DateTime;
-use DateTimeZone;
-
-/**
- * Class Dates
- *
- * @package JBZoo\Utils
- */
 final class Dates
 {
     public const MINUTE = 60;
@@ -37,23 +29,19 @@ final class Dates
     public const SQL_NULL   = '0000-00-00 00:00:00';
 
     /**
-     * Convert to timestamp
-     *
-     * @param string|int|DateTime|null $time
-     * @param bool                     $currentIsDefault
-     * @return int
+     * Convert to timestamp.
      */
-    public static function toStamp($time = null, bool $currentIsDefault = true): int
+    public static function toStamp(\DateTime|int|string $time = null, bool $currentIsDefault = true): int
     {
-        if ($time instanceof DateTime) {
+        if ($time instanceof \DateTime) {
             return (int)$time->format('U');
         }
 
-        if (null !== $time) {
+        if ($time !== null) {
             $time = \is_numeric($time) ? (int)$time : (int)\strtotime($time);
         }
 
-        if (!$time) {
+        if ($time === 0 || $time === null) {
             $time = $currentIsDefault ? \time() : 0;
         }
 
@@ -61,21 +49,17 @@ final class Dates
     }
 
     /**
-     * Build PHP \DateTime object from mixed input
-     *
-     * @param mixed $time
-     * @param null  $timeZone
-     * @return DateTime
+     * Build PHP \DateTime object from mixed input.
      */
-    public static function factory($time = null, $timeZone = null): DateTime
+    public static function factory(mixed $time = null, \DateTimeZone|string $timeZone = null): \DateTime
     {
         $timeZone = self::timezone($timeZone);
 
-        if ($time instanceof DateTime) {
+        if ($time instanceof \DateTime) {
             return $time->setTimezone($timeZone);
         }
 
-        $dateTime = new DateTime('@' . self::toStamp($time));
+        $dateTime = new \DateTime('@' . self::toStamp($time));
         $dateTime->setTimezone($timeZone);
 
         return $dateTime;
@@ -83,130 +67,96 @@ final class Dates
 
     /**
      * Returns a DateTimeZone object based on the current timezone.
-     *
-     * @param \DateTimeZone|string|null $timezone
-     * @return \DateTimeZone
      */
-    public static function timezone($timezone = null): DateTimeZone
+    public static function timezone(\DateTimeZone|string $timezone = null): \DateTimeZone
     {
         if ($timezone instanceof \DateTimeZone) {
             return $timezone;
         }
 
-        $timezone = $timezone ?: \date_default_timezone_get();
+        $timezone = isStrEmpty($timezone) ? \date_default_timezone_get() : $timezone;
 
-        return new \DateTimeZone($timezone);
+        return new \DateTimeZone((string)$timezone);
     }
 
     /**
-     * Check if string is date
-     *
-     * @param string|null $date
-     * @return bool
+     * Check if string is date.
      *
      * @SuppressWarnings(PHPMD.ShortMethodName)
      */
     public static function is(?string $date): bool
     {
         $time = \strtotime((string)$date);
+
         return $time > 0;
     }
 
     /**
-     * Convert time for sql format
-     *
-     * @param string|int|null $time
-     * @return string
+     * Convert time for sql format.
      */
-    public static function sql($time = null): string
+    public static function sql(int|string $time = null): string
     {
         return self::factory($time)->format(self::SQL_FORMAT);
     }
 
     /**
-     * Convert date string ot unix timestamp to human readable date format
-     *
-     * @param string|int $date
-     * @param string     $format
-     * @return string
+     * Convert date string ot unix timestamp to human-readable date format.
      */
-    public static function human($date, string $format = 'd M Y H:i'): string
+    public static function human(int|string $date, string $format = 'd M Y H:i'): string
     {
         return self::factory($date)->format($format);
     }
 
     /**
      * Returns true if date passed is within this week.
-     *
-     * @param string|int $time
-     * @return bool
      */
-    public static function isThisWeek($time): bool
+    public static function isThisWeek(int|string $time): bool
     {
-        return (self::factory($time)->format('W-Y') === self::factory()->format('W-Y'));
+        return self::factory($time)->format('W-Y') === self::factory()->format('W-Y');
     }
 
     /**
      * Returns true if date passed is within this month.
-     *
-     * @param string|int $time
-     * @return bool
      */
-    public static function isThisMonth($time): bool
+    public static function isThisMonth(int|string $time): bool
     {
-        return (self::factory($time)->format('m-Y') === self::factory()->format('m-Y'));
+        return self::factory($time)->format('m-Y') === self::factory()->format('m-Y');
     }
 
     /**
      * Returns true if date passed is within this year.
-     *
-     * @param string|int $time
-     * @return bool
      */
-    public static function isThisYear($time): bool
+    public static function isThisYear(int|string $time): bool
     {
-        return (self::factory($time)->format('Y') === self::factory()->format('Y'));
+        return self::factory($time)->format('Y') === self::factory()->format('Y');
     }
 
     /**
      * Returns true if date passed is tomorrow.
-     *
-     * @param string|int $time
-     * @return bool
      */
-    public static function isTomorrow($time): bool
+    public static function isTomorrow(int|string $time): bool
     {
-        return (self::factory($time)->format('Y-m-d') === self::factory('tomorrow')->format('Y-m-d'));
+        return self::factory($time)->format('Y-m-d') === self::factory('tomorrow')->format('Y-m-d');
     }
 
     /**
      * Returns true if date passed is today.
-     *
-     * @param string|int $time
-     * @return bool
      */
-    public static function isToday($time): bool
+    public static function isToday(int|string $time): bool
     {
-        return (self::factory($time)->format('Y-m-d') === self::factory()->format('Y-m-d'));
+        return self::factory($time)->format('Y-m-d') === self::factory()->format('Y-m-d');
     }
 
     /**
      * Returns true if date passed was yesterday.
-     *
-     * @param string|int $time
-     * @return bool
      */
-    public static function isYesterday($time): bool
+    public static function isYesterday(int|string $time): bool
     {
-        return (self::factory($time)->format('Y-m-d') === self::factory('yesterday')->format('Y-m-d'));
+        return self::factory($time)->format('Y-m-d') === self::factory('yesterday')->format('Y-m-d');
     }
 
     /**
-     * Convert seconds to human-readable format "H:i:s"
-     *
-     * @param float $seconds
-     * @param int   $minValuableSeconds
-     * @return string
+     * Convert seconds to human-readable format "H:i:s".
      */
     public static function formatTime(float $seconds, int $minValuableSeconds = 2): string
     {
@@ -214,6 +164,6 @@ final class Dates
             return \number_format($seconds, 3) . ' sec';
         }
 
-        return \gmdate('H:i:s', (int)\round($seconds, 0)) ?: '';
+        return \gmdate('H:i:s', (int)\round($seconds, 0));
     }
 }

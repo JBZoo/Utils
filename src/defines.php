@@ -14,5 +14,5 @@
 
 declare(strict_types=1);
 
-$_SERVER['REQUEST_TIME_FLOAT'] ??= microtime(true);
+$_SERVER['REQUEST_TIME_FLOAT'] ??= \microtime(true);
 $_SERVER['REQUEST_TIME'] ??= $_SERVER['REQUEST_TIME_FLOAT'];

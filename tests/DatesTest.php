@@ -17,19 +17,13 @@ declare(strict_types=1);
 namespace JBZoo\PHPUnit;
 
 use DateTime;
-use DateTimeZone;
 use JBZoo\Utils\Dates;
 
-/**
- * Class DatesTest
- *
- * @package JBZoo\PHPUnit
- */
 class DatesTest extends PHPUnit
 {
     protected function setUp(): void
     {
-        date_default_timezone_set('UTC');
+        \date_default_timezone_set('UTC');
     }
 
     public function testToStamp(): void
@@ -37,13 +31,13 @@ class DatesTest extends PHPUnit
         is('1446203259', Dates::toStamp(new \DateTime('2015-10-30 11:07:39')));
         is(0, Dates::toStamp('undefined date', false));
 
-        isTrue(is_numeric(Dates::toStamp()));
+        isTrue(\is_numeric(Dates::toStamp()));
 
-        $time = time();
+        $time = \time();
         is($time, Dates::toStamp());
         is($time, Dates::toStamp($time));
-        isTrue(is_numeric(Dates::toStamp('+1 week')));
-        isTrue(is_numeric(Dates::toStamp(new DateTime())));
+        isTrue(\is_numeric(Dates::toStamp('+1 week')));
+        isTrue(\is_numeric(Dates::toStamp(new \DateTime())));
     }
 
     /**
@@ -51,19 +45,19 @@ class DatesTest extends PHPUnit
      */
     public function testFactory(): void
     {
-        isClass(DateTime::class, Dates::factory());
-        isClass(DateTime::class, Dates::factory('1988-02-26 12:23:12'));
-        isClass(DateTime::class, Dates::factory(time()));
+        isClass(\DateTime::class, Dates::factory());
+        isClass(\DateTime::class, Dates::factory('1988-02-26 12:23:12'));
+        isClass(\DateTime::class, Dates::factory(\time()));
 
-        $datetime = new DateTime();
+        $datetime = new \DateTime();
         isSame($datetime, Dates::factory($datetime));
     }
 
     public function testTimezone(): void
     {
-        isClass(DateTimeZone::class, Dates::timezone());
+        isClass(\DateTimeZone::class, Dates::timezone());
 
-        $dtz = new DateTimeZone('America/Los_Angeles');
+        $dtz = new \DateTimeZone('America/Los_Angeles');
         isSame($dtz, Dates::timezone($dtz));
     }
 
@@ -71,13 +65,13 @@ class DatesTest extends PHPUnit
     {
         $format = Dates::SQL_FORMAT;
 
-        is(date($format), Dates::sql());
-        is(date($format), Dates::sql(''));
-        is(date($format), Dates::sql(0));
-        is(date($format), Dates::sql());
-        is(date($format), Dates::sql(null));
+        is(\date($format), Dates::sql());
+        is(\date($format), Dates::sql(''));
+        is(\date($format), Dates::sql(0));
+        is(\date($format), Dates::sql());
+        is(\date($format), Dates::sql(null));
 
-        is(date($format), Dates::sql('string'));
+        is(\date($format), Dates::sql('string'));
         is('2015-10-30 11:07:39', Dates::sql('1446203259'));
         is('2015-10-30 11:07:39', Dates::sql(1446203259));
         is('2015-10-30 11:07:39', Dates::sql('2015-10-30 11:07:39'));

@@ -18,11 +18,6 @@ namespace JBZoo\PHPUnit;
 
 use JBZoo\Utils\Vars;
 
-/**
- * Class VarsTest
- *
- * @package JBZoo\PHPUnit
- */
 class VarsTest extends PHPUnit
 {
     public function testIn(): void

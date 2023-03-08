@@ -19,17 +19,12 @@ namespace JBZoo\PHPUnit;
 use JBZoo\Data\JSON;
 use JBZoo\Utils\Filter;
 
-/**
- * Class FilterTest
- *
- * @package JBZoo\PHPUnit
- */
 class FilterTest extends PHPUnit
 {
     /**
-     * @param $exepted
-     * @param $actual
      * @dataProvider providerInt
+     * @param mixed $exepted
+     * @param mixed $actual
      */
     public function testInt($exepted, $actual): void
     {
@@ -60,14 +55,14 @@ class FilterTest extends PHPUnit
     }
 
     /**
-     * @param $excepted
-     * @param $actual
-     * @param $round
      * @dataProvider providerFloat
+     * @param mixed      $excepted
+     * @param mixed      $actual
+     * @param null|mixed $round
      */
     public function testFloat($excepted, $actual, $round = null): void
     {
-        if (null === $round) {
+        if ($round === null) {
             isSame($excepted, Filter::_($actual, 'float'));
         } else {
             isSame($excepted, Filter::float($actual, $round));
@@ -100,14 +95,16 @@ class FilterTest extends PHPUnit
             [-12.454, 'abc-12.454abc'],
             [-12.455, 'abc-12. 455'],
             [-12.456, 'abc-12. 456 .7'],
-            [27.3e-34, '27.3e-34'],
+            [2.6e-19, '26.3e-20', 20],
+            [2.53E-19, '25.3e-20', 100],
+            [2.4e-9, '24.3e-10'],
         ];
     }
 
     /**
-     * @param $excepted
-     * @param $actual
      * @dataProvider providerBool
+     * @param mixed $excepted
+     * @param mixed $actual
      */
     public function testBool($excepted, $actual): void
     {
@@ -185,8 +182,8 @@ class FilterTest extends PHPUnit
 
     public function testTrimExtend(): void
     {
-        isSame('multi', Filter::_("\n\r" . ' multi　' . chr(0xE3) . chr(0x80) . chr(0x80), 'trimExtend'));
-        isSame('multi', Filter::_(chr(0xC2) . chr(0xA0) . "\n\r" . ' multi　' . "\t", 'trimExtend'));
+        isSame('multi', Filter::_("\n\r" . ' multi　' . \chr(0xE3) . \chr(0x80) . \chr(0x80), 'trimExtend'));
+        isSame('multi', Filter::_(\chr(0xC2) . \chr(0xA0) . "\n\r" . ' multi　' . "\t", 'trimExtend'));
 
         isSame('clean', Filter::_('clean', 'trim'));
     }
@@ -205,15 +202,13 @@ class FilterTest extends PHPUnit
 
         isSame(['p' => 'PPP', 'i' => 'III', 'z' => '', 'w' => 123], Filter::_($object, 'arr'));
         isSame(['p' => 'PPP', 'i' => 'III', 'w' => 123], Filter::arr($object, 'noempty'));
-        isSame(['w' => 123], Filter::arr($object, function ($value) {
-            return $value === 123;
-        }));
+        isSame(['w' => 123], Filter::arr($object, static fn ($value) => $value === 123));
     }
 
     public function testCmd(): void
     {
         $excepted = '0123456789-abcdefghijklmnopqrstuvwxyz_abcdefghijklmnopqrstuvwxyz';
-        $string = ' 0123456789-ABCDEFGHIJKLMNOPQRSTUVWXYZ_abcdefghijklmnopqrstuvwxyz  йцуке ';
+        $string   = ' 0123456789-ABCDEFGHIJKLMNOPQRSTUVWXYZ_abcdefghijklmnopqrstuvwxyz  йцуке ';
 
         isSame($excepted, Filter::_($string, 'cmd'));
     }
@@ -241,7 +236,7 @@ class FilterTest extends PHPUnit
 
     public function testParseLines(): void
     {
-        $source = " qw\rer\n ty \r\n12\n\r34 ";
+        $source   = " qw\rer\n ty \r\n12\n\r34 ";
         $expected = [
             'qw' => 'qw',
             'er' => 'er',
@@ -294,10 +289,10 @@ class FilterTest extends PHPUnit
     {
         $source = 'some-WORD';
 
-        isSame('some_WORD', Filter::_($source, function ($value) {
-            $value = str_replace('-', '_', $value);
-            return $value;
-        }));
+        isSame(
+            'some_WORD',
+            Filter::_($source, static fn ($value) => \str_replace('-', '_', $value)),
+        );
     }
 
     public function testUcfirst(): void
@@ -332,7 +327,7 @@ class FilterTest extends PHPUnit
         isSame('"qwerty', Filter::stripQuotes('"qwerty'));
         isSame('"qwerty"', Filter::stripQuotes('"qwerty"'));
 
-        isSame("qwerty", Filter::stripQuotes('qwerty'));
+        isSame('qwerty', Filter::stripQuotes('qwerty'));
         isSame("qwerty'", Filter::stripQuotes('qwerty\''));
         isSame("'qwerty", Filter::stripQuotes('\'qwerty'));
         isSame("'qwerty'", Filter::stripQuotes('\'qwerty\''));

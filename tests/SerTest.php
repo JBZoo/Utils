@@ -18,16 +18,11 @@ namespace JBZoo\PHPUnit;
 
 use JBZoo\Utils\Ser;
 
-/**
- * Class SerTest
- *
- * @package JBZoo\PHPUnit
- */
 class SerTest extends PHPUnit
 {
     public function testMaybe(): void
     {
-        $obj = new \stdClass();
+        $obj        = new \stdClass();
         $obj->prop1 = 'Hello';
         $obj->prop2 = 'World';
 
@@ -38,18 +33,18 @@ class SerTest extends PHPUnit
         is(
             'a:4:{i:0;s:4:"test";i:1;s:4:"blah";s:5:"hello";s:5:"world";s:5:"array";'
             . 'O:8:"stdClass":2:{s:5:"prop1";s:5:"Hello";s:5:"prop2";s:5:"World";}}',
-            Ser::maybe(['test', 'blah', 'hello' => 'world', 'array' => $obj])
+            Ser::maybe(['test', 'blah', 'hello' => 'world', 'array' => $obj]),
         );
     }
 
     public function testMaybeUn(): void
     {
-        $obj = new \stdClass();
+        $obj        = new \stdClass();
         $obj->prop1 = 'Hello';
         $obj->prop2 = 'World';
 
-        isNull(Ser::maybeUn(serialize(null)));
-        isFalse(Ser::maybeUn(serialize(false)));
+        isNull(Ser::maybeUn(\serialize(null)));
+        isFalse(Ser::maybeUn(\serialize(false)));
 
         is('This is a string', Ser::maybeUn('This is a string'));
         is(5.81, Ser::maybeUn('5.81'));
@@ -58,13 +53,13 @@ class SerTest extends PHPUnit
         is(
             ['test', 'blah', 'hello' => 'world', 'array' => $obj],
             Ser::maybeUn('a:4:{i:0;s:4:"test";i:1;s:4:"blah";s:5:"hello";s:5:"world";s:5:"array";'
-                . 'O:8:"stdClass":2:{s:5:"prop1";s:5:"Hello";s:5:"prop2";s:5:"World";}}')
+                . 'O:8:"stdClass":2:{s:5:"prop1";s:5:"Hello";s:5:"prop2";s:5:"World";}}'),
         );
 
         // Test a broken serialization.
         $expectedData = [
             'Normal',
-            'High-value Char: ' . chr(231) . 'a-va?',   // High-value Char:  ça-va? [in ISO-8859-1]
+            'High-value Char: ' . \chr(231) . 'a-va?',   // High-value Char:  ça-va? [in ISO-8859-1]
         ];
 
         $brokenSerialization = 'a:2:{i:0;s:6:"Normal";i:1;s:23:"High-value Char: ▒a-va?";}';
@@ -72,9 +67,9 @@ class SerTest extends PHPUnit
         $unserializeData = Ser::maybeUn($brokenSerialization);
         is($expectedData[0], $unserializeData[0], 'Did not properly fix the broken serialized data.');
         is(
-            substr($expectedData[1], 0, 10),
-            substr($unserializeData[1], 0, 10),
-            'Did not properly fix the broken serialized data.'
+            \substr($expectedData[1], 0, 10),
+            \substr($unserializeData[1], 0, 10),
+            'Did not properly fix the broken serialized data.',
         );
 
         // Test unfixable serialization.
@@ -83,7 +78,7 @@ class SerTest extends PHPUnit
             $unFixableSerialization,
             Ser::maybeUn($unFixableSerialization),
             'Somehow the [previously?] impossible happened and utilphp'
-            . ' thinks it has unserialized an unfixable serialization.'
+            . ' thinks it has unserialized an unfixable serialization.',
         );
     }
 
@@ -107,7 +102,7 @@ class SerTest extends PHPUnit
     {
         $expectedData = [
             'Normal',
-            'High-value Char: ' . chr(231) . 'a-va?',   // High-value Char:  ça-va? [in ISO-8859-1]
+            'High-value Char: ' . \chr(231) . 'a-va?',   // High-value Char:  ça-va? [in ISO-8859-1]
         ];
 
         $brokenSerialization = 'a:2:{i:0;s:6:"Normal";i:1;s:23:"High-value Char: ▒a-va?";}';
@@ -119,27 +114,27 @@ class SerTest extends PHPUnit
         ];
 
         $reportedError = [];
-        set_error_handler(function ($errno, $errstr) use (&$reportedError) {
-            $reportedError = compact('errno', 'errstr');
+        \set_error_handler(static function ($errno, $errstr) use (&$reportedError): void {
+            $reportedError = \compact('errno', 'errstr');
         });
 
-        unserialize($brokenSerialization, []);
+        \unserialize($brokenSerialization, []);
 
         is($expectedError['errno'], $reportedError['errno']);
         // Because HHVM's unserialize() error message does not contain enough info to properly test.
-        if (!defined('HHVM_VERSION')) {
+        if (!\defined('HHVM_VERSION')) {
             is($expectedError['errstr'], $reportedError['errstr']);
         }
-        restore_error_handler();
+        \restore_error_handler();
 
         $fixedSerialization = Ser::fix($brokenSerialization);
-        $unserializeData = unserialize($fixedSerialization, []);
+        $unserializeData    = \unserialize($fixedSerialization, []);
         is($expectedData[0], $unserializeData[0], 'Did not properly fix the broken serialized data.');
 
         is(
-            substr($expectedData[1], 0, 10),
-            substr($unserializeData[1], 0, 10),
-            'Did not properly fix the broken serialized data.'
+            \substr($expectedData[1], 0, 10),
+            \substr($unserializeData[1], 0, 10),
+            'Did not properly fix the broken serialized data.',
         );
     }
 }

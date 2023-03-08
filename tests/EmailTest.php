@@ -18,17 +18,12 @@ namespace JBZoo\PHPUnit;
 
 use JBZoo\Utils\Email;
 
-/**
- * Class EmailTest
- *
- * @package JBZoo\PHPUnit
- */
 class EmailTest extends PHPUnit
 {
     /**
      * @dataProvider getCheckProvider
-     * @param $input
-     * @param $outcome
+     * @param mixed $input
+     * @param mixed $outcome
      */
     public function testCheck($input, $outcome): void
     {
@@ -37,7 +32,7 @@ class EmailTest extends PHPUnit
 
     /**
      * @dataProvider getEmptyProvider
-     * @param $input
+     * @param mixed $input
      */
     public function testCheckWithEmptyEmails($input): void
     {
@@ -46,8 +41,8 @@ class EmailTest extends PHPUnit
 
     /**
      * @dataProvider getDomainsProvider
-     * @param $input
-     * @param $outcome
+     * @param mixed $input
+     * @param mixed $outcome
      */
     public function testGetDomains($input, $outcome): void
     {
@@ -56,7 +51,7 @@ class EmailTest extends PHPUnit
 
     /**
      * @dataProvider getEmptyProvider
-     * @param $input
+     * @param mixed $input
      */
     public function testGetDomainsWithEmptyEmails($input): void
     {
@@ -70,8 +65,8 @@ class EmailTest extends PHPUnit
 
     /**
      * @dataProvider getDomainsSortedProvider
-     * @param $input
-     * @param $outcome
+     * @param mixed $input
+     * @param mixed $outcome
      */
     public function testGetDomainsInAlphabeticalOrder($input, $outcome): void
     {
@@ -85,9 +80,9 @@ class EmailTest extends PHPUnit
 
     /**
      * @dataProvider getGravatarUrlProvider
-     * @param string $input
-     * @param string $expectedHttp
-     * @param string $expectedHttps
+     * @param mixed $input
+     * @param mixed $expectedHttp
+     * @param mixed $expectedHttps
      * @SuppressWarnings(PHPMD.Superglobals)
      */
     public function testGetGravatarUrl($input, $expectedHttp, $expectedHttps): void
@@ -206,7 +201,7 @@ class EmailTest extends PHPUnit
 
     public function getEmptyProvider(): array
     {
-        return [[[]], [false], [''], [0],];
+        return [[[]], [false], [''], [0]];
     }
 
     public function getGravatarUrlProvider(): array

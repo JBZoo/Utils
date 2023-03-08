@@ -19,9 +19,6 @@ namespace JBZoo\PHPUnit;
 use JBZoo\Utils\Http;
 
 /**
- * Class HttpTest
- *
- * @package JBZoo\PHPUnit
  * @see     https://github.com/symfony/http-foundation/blob/master/Tests/ServerBagTest.php
  */
 class HttpTest extends PHPUnit
@@ -31,18 +28,6 @@ class HttpTest extends PHPUnit
         parent::setUp();
         require_once __DIR__ . '/autoload.php';
         revertServerVar();
-    }
-
-    /**
-     * @param array $vars
-     * @SuppressWarnings(PHPMD.Superglobals)
-     */
-    protected function setServerVar(array $vars): void
-    {
-        revertServerVar();
-        foreach ($vars as $key => $value) {
-            $_SERVER[$key] = $value;
-        }
     }
 
     public function testShouldExtractHeadersFromServerArray(): void
@@ -62,7 +47,7 @@ class HttpTest extends PHPUnit
             'CONTENT_TYPE'   => 'text/html',
             'CONTENT_LENGTH' => '0',
             'ETAG'           => 'asdf',
-            'AUTHORIZATION'  => 'Basic ' . base64_encode('foo:bar'),
+            'AUTHORIZATION'  => 'Basic ' . \base64_encode('foo:bar'),
             'PHP_AUTH_USER'  => 'foo',
             'PHP_AUTH_PW'    => 'bar',
         ], Http::getHeaders());
@@ -73,7 +58,7 @@ class HttpTest extends PHPUnit
         $this->setServerVar(['PHP_AUTH_USER' => 'foo']);
 
         is([
-            'AUTHORIZATION' => 'Basic ' . base64_encode('foo:'),
+            'AUTHORIZATION' => 'Basic ' . \base64_encode('foo:'),
             'PHP_AUTH_USER' => 'foo',
             'PHP_AUTH_PW'   => '',
         ], Http::getHeaders());
@@ -81,10 +66,10 @@ class HttpTest extends PHPUnit
 
     public function testHttpBasicAuthWithPhpCgi(): void
     {
-        $this->setServerVar(['HTTP_AUTHORIZATION' => 'Basic ' . base64_encode('foo:bar')]);
+        $this->setServerVar(['HTTP_AUTHORIZATION' => 'Basic ' . \base64_encode('foo:bar')]);
 
         is([
-            'AUTHORIZATION' => 'Basic ' . base64_encode('foo:bar'),
+            'AUTHORIZATION' => 'Basic ' . \base64_encode('foo:bar'),
             'PHP_AUTH_USER' => 'foo',
             'PHP_AUTH_PW'   => 'bar',
         ], Http::getHeaders());
@@ -92,7 +77,7 @@ class HttpTest extends PHPUnit
 
     public function testHttpBasicAuthWithPhpCgiBogus(): void
     {
-        $this->setServerVar(['HTTP_AUTHORIZATION' => 'Basic_' . base64_encode('foo:bar')]);
+        $this->setServerVar(['HTTP_AUTHORIZATION' => 'Basic_' . \base64_encode('foo:bar')]);
 
         // Username and passwords should not be set as the header is bogus
         $headers = Http::getHeaders();
@@ -102,10 +87,10 @@ class HttpTest extends PHPUnit
 
     public function testHttpBasicAuthWithPhpCgiRedirect(): void
     {
-        $this->setServerVar(['REDIRECT_HTTP_AUTHORIZATION' => 'Basic ' . base64_encode('username:pass:word')]);
+        $this->setServerVar(['REDIRECT_HTTP_AUTHORIZATION' => 'Basic ' . \base64_encode('username:pass:word')]);
 
         is([
-            'AUTHORIZATION' => 'Basic ' . base64_encode('username:pass:word'),
+            'AUTHORIZATION' => 'Basic ' . \base64_encode('username:pass:word'),
             'PHP_AUTH_USER' => 'username',
             'PHP_AUTH_PW'   => 'pass:word',
         ], Http::getHeaders());
@@ -113,10 +98,10 @@ class HttpTest extends PHPUnit
 
     public function testHttpBasicAuthWithPhpCgiEmptyPassword(): void
     {
-        $this->setServerVar(['HTTP_AUTHORIZATION' => 'Basic ' . base64_encode('foo:')]);
+        $this->setServerVar(['HTTP_AUTHORIZATION' => 'Basic ' . \base64_encode('foo:')]);
 
         is([
-            'AUTHORIZATION' => 'Basic ' . base64_encode('foo:'),
+            'AUTHORIZATION' => 'Basic ' . \base64_encode('foo:'),
             'PHP_AUTH_USER' => 'foo',
             'PHP_AUTH_PW'   => '',
         ], Http::getHeaders());
@@ -124,7 +109,7 @@ class HttpTest extends PHPUnit
 
     public function testHttpDigestAuthWithPhpCgi(): void
     {
-        $digest = 'Digest username="foo", realm="acme", nonce="' . md5('secret') . '", uri="/protected, qop="auth"';
+        $digest = 'Digest username="foo", realm="acme", nonce="' . \md5('secret') . '", uri="/protected, qop="auth"';
         $this->setServerVar(['HTTP_AUTHORIZATION' => $digest]);
 
         is([
@@ -135,7 +120,7 @@ class HttpTest extends PHPUnit
 
     public function testHttpDigestAuthWithPhpCgiBogus(): void
     {
-        $digest = 'Digest_username="foo", realm="acme", nonce="' . md5('secret') . '", uri="/protected, qop="auth"';
+        $digest = 'Digest_username="foo", realm="acme", nonce="' . \md5('secret') . '", uri="/protected, qop="auth"';
         $this->setServerVar(['HTTP_AUTHORIZATION' => $digest]);
 
         // Username and passwords should not be set as the header is bogus
@@ -146,7 +131,7 @@ class HttpTest extends PHPUnit
 
     public function testHttpDigestAuthWithPhpCgiRedirect(): void
     {
-        $digest = 'Digest username="foo", realm="acme", nonce="' . md5('secret') . '", uri="/protected, qop="auth"';
+        $digest = 'Digest username="foo", realm="acme", nonce="' . \md5('secret') . '", uri="/protected, qop="auth"';
         $this->setServerVar(['REDIRECT_HTTP_AUTHORIZATION' => $digest]);
 
         is([
@@ -191,5 +176,17 @@ class HttpTest extends PHPUnit
             'PHP_AUTH_USER' => 'foo',
             'PHP_AUTH_PW'   => '',
         ], Http::getHeaders());
+    }
+
+    /**
+     * @SuppressWarnings(PHPMD.Superglobals)
+     */
+    protected function setServerVar(array $vars): void
+    {
+        revertServerVar();
+
+        foreach ($vars as $key => $value) {
+            $_SERVER[$key] = $value;
+        }
     }
 }

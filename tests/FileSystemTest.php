@@ -19,11 +19,6 @@ namespace JBZoo\PHPUnit;
 use JBZoo\Utils\FS;
 use JBZoo\Utils\Sys;
 
-/**
- * Class FileSystemTest
- *
- * @package JBZoo\PHPUnit
- */
 class FileSystemTest extends PHPUnit
 {
     protected function setUp(): void
@@ -38,38 +33,38 @@ class FileSystemTest extends PHPUnit
         $dirname = __DIR__;
 
         // Test deleting a non-existing directory
-        isFalse(file_exists($dirname . '/test1'));
+        isFalse(\file_exists($dirname . '/test1'));
         isTrue(FS::rmDir($dirname . '/test1'));
 
         // Test deleting an empty directory
         $dir = $dirname . '/test2';
-        mkdir($dir);
+        \mkdir($dir);
 
-        isTrue(is_dir($dir));
+        isTrue(\is_dir($dir));
 
-        if (is_dir($dir)) {
+        if (\is_dir($dir)) {
             FS::rmDir($dir);
-            isFalse(is_dir($dir));
+            isFalse(\is_dir($dir));
         }
 
         // Test deleting a non-empty directory
-        $dir = $dirname . '/test3';
+        $dir  = $dirname . '/test3';
         $file = $dirname . '/test3/test.txt';
-        mkdir($dir);
-        touch($file);
+        \mkdir($dir);
+        \touch($file);
 
-        isTrue(is_dir($dir));
-        isTrue(is_file($file));
+        isTrue(\is_dir($dir));
+        isTrue(\is_file($file));
 
-        if (is_dir($dir)) {
+        if (\is_dir($dir)) {
             FS::rmDir($dir);
-            isFalse(is_dir($dir));
-            isFalse(is_file($file));
+            isFalse(\is_dir($dir));
+            isFalse(\is_file($file));
         }
 
         // Test deleting a non-directory path
         $file = $dirname . '/test4.txt';
-        touch($file);
+        \touch($file);
 
         try {
             FS::rmDir($file);
@@ -78,39 +73,39 @@ class FileSystemTest extends PHPUnit
             isTrue(true);
         }
 
-        unlink($file);
+        \unlink($file);
 
         // Test deleting a nested directory
-        $dir1 = $dirname . '/test5';
-        $dir2 = $dirname . '/test5/nested_dir';
+        $dir1  = $dirname . '/test5';
+        $dir2  = $dirname . '/test5/nested_dir';
         $file1 = $dir1 . '/file1.txt';
         $file2 = $dir2 . '/file2.txt';
-        mkdir($dir1);
-        mkdir($dir2);
-        touch($file1);
-        touch($file2);
+        \mkdir($dir1);
+        \mkdir($dir2);
+        \touch($file1);
+        \touch($file2);
 
-        isTrue(is_dir($dir1));
-        isTrue(is_dir($dir2));
-        isTrue(is_file($file1));
-        isTrue(is_file($file2));
+        isTrue(\is_dir($dir1));
+        isTrue(\is_dir($dir2));
+        isTrue(\is_file($file1));
+        isTrue(\is_file($file2));
 
-        if (is_dir($dir1)) {
+        if (\is_dir($dir1)) {
             FS::rmDir($dir1);
-            isFalse(is_dir($dir1));
-            isFalse(is_dir($dir2));
-            isFalse(is_file($file1));
-            isFalse(is_file($file2));
+            isFalse(\is_dir($dir1));
+            isFalse(\is_dir($dir2));
+            isFalse(\is_file($file1));
+            isFalse(\is_file($file2));
         }
 
         // Test symlink traversal.
-        $dir = $dirname . '/test6';
-        $nestedDir = "$dir/nested";
-        $symlink = "$dir/nested-symlink";
-        @mkdir($dir);
-        @mkdir($nestedDir);
+        $dir       = $dirname . '/test6';
+        $nestedDir = "{$dir}/nested";
+        $symlink   = "{$dir}/nested-symlink";
+        @\mkdir($dir);
+        @\mkdir($nestedDir);
 
-        $symlinkStatus = symlink($nestedDir, $symlink);
+        $symlinkStatus = \symlink($nestedDir, $symlink);
         isTrue($symlinkStatus, 'The test system does not support making symlinks.');
 
         if (!$symlink) {
@@ -118,10 +113,10 @@ class FileSystemTest extends PHPUnit
         }
 
         isTrue(FS::rmDir($symlink, true), 'Could not delete a symlinked directory.');
-        isFalse(file_exists($symlink), 'Could not delete a symlinked directory.');
+        isFalse(\file_exists($symlink), 'Could not delete a symlinked directory.');
 
         FS::rmDir($dir, true);
-        isFalse(is_dir($dir), 'Could not delete a directory with a symlinked directory inside of it.');
+        isFalse(\is_dir($dir), 'Could not delete a directory with a symlinked directory inside of it.');
     }
 
     public function testOpenFile(): void
@@ -143,7 +138,7 @@ class FileSystemTest extends PHPUnit
     public function testWritable(): void
     {
         if (Sys::isWin()) {
-            //skip('This functionality is not working on Windows.');
+            // skip('This functionality is not working on Windows.');
             return;
         }
 
@@ -155,34 +150,34 @@ class FileSystemTest extends PHPUnit
 
         // Create a file to test with
         $dirname = __DIR__;
-        $file = $dirname . '/test7';
-        touch($file);
-        chmod($file, 0644);
+        $file    = $dirname . '/test7';
+        \touch($file);
+        \chmod($file, 0644);
 
         // The file is owned by us so it should be writable
-        isTrue(is_writable($file));
+        isTrue(\is_writable($file));
         is('-rw-r--r--', FS::perms($file));
 
         // Toggle writable bit off for us
         FS::writable($file, false);
-        clearstatcache();
-        isFalse(is_writable($file));
+        \clearstatcache();
+        isFalse(\is_writable($file));
         is('-r--r--r--', FS::perms($file));
 
         // Toggle writable bit back on for us
         /** @noinspection ArgumentEqualsDefaultValueInspection */
         FS::writable($file, true);
-        clearstatcache();
-        isTrue(is_writable($file));
+        \clearstatcache();
+        isTrue(\is_writable($file));
         is('-rw-r--r--', FS::perms($file));
 
-        unlink($file);
+        \unlink($file);
     }
 
     public function testReadable(): void
     {
         if (Sys::isWin()) {
-            //skip('This functionality is not working on Windows.');
+            // skip('This functionality is not working on Windows.');
             return;
         }
 
@@ -193,21 +188,21 @@ class FileSystemTest extends PHPUnit
         isFalse(FS::readable('/no/such/file'));
 
         $dirName = __DIR__;
-        $file = $dirName . '/test8';
-        touch($file);
+        $file    = $dirName . '/test8';
+        \touch($file);
 
-        isTrue(is_readable($file));
+        isTrue(\is_readable($file));
 
         FS::readable($file, false);
-        clearstatcache();
-        isFalse(is_readable($file));
+        \clearstatcache();
+        isFalse(\is_readable($file));
 
         /** @noinspection ArgumentEqualsDefaultValueInspection */
         FS::readable($file, true);
-        clearstatcache();
-        isTrue(is_readable($file));
+        \clearstatcache();
+        isTrue(\is_readable($file));
 
-        unlink($file);
+        \unlink($file);
     }
 
     public function testExecutable(): void
@@ -215,21 +210,21 @@ class FileSystemTest extends PHPUnit
         isFalse(FS::executable('/no/such/file'));
 
         $dirname = __DIR__;
-        $file = $dirname . '/test9';
-        touch($file);
+        $file    = $dirname . '/test9';
+        \touch($file);
 
-        isFalse(is_executable($file));
+        isFalse(\is_executable($file));
 
         /** @noinspection ArgumentEqualsDefaultValueInspection */
         FS::executable($file, true);
-        clearstatcache();
-        isTrue(is_executable($file));
+        \clearstatcache();
+        isTrue(\is_executable($file));
 
         FS::executable($file, false);
-        clearstatcache();
-        isFalse(is_executable($file));
+        \clearstatcache();
+        isFalse(\is_executable($file));
 
-        unlink($file);
+        \unlink($file);
     }
 
     /**
@@ -237,37 +232,37 @@ class FileSystemTest extends PHPUnit
      */
     public function testGetHome(): void
     {
-        isTrue(is_writable(Sys::getHome()));
+        isTrue(\is_writable(Sys::getHome()));
         isNotEmpty(Sys::getHome());
 
-        //skip('Should be redesigned');
-        //// Test for OS Default.
+        // skip('Should be redesigned');
+        // // Test for OS Default.
         //
-        //$oldServer = $_SERVER;
-        //unset($_SERVER);
+        // $oldServer = $_SERVER;
+        // unset($_SERVER);
         //
-        //// Test for UNIX.
-        //$_SERVER['HOME'] = '/home/unknown';
-        ////is($_SERVER['HOME'], Sys::getHome(), "Could not get the user's home directory in UNIX.");
-        //unset($_SERVER);
+        // // Test for UNIX.
+        // $_SERVER['HOME'] = '/home/unknown';
+        // //is($_SERVER['HOME'], Sys::getHome(), "Could not get the user's home directory in UNIX.");
+        // unset($_SERVER);
         //
-        //// Test for Windows.
-        //$expected = 'X:\Users\ThisUser';
-        //$_SERVER['HOMEDRIVE'] = 'X:';
-        //$_SERVER['HOMEPATH'] = '\Users\ThisUser';
-        ////is($expected, Sys::getHome(), "Could not get the user's home directory in Windows.");
+        // // Test for Windows.
+        // $expected = 'X:\Users\ThisUser';
+        // $_SERVER['HOMEDRIVE'] = 'X:';
+        // $_SERVER['HOMEPATH'] = '\Users\ThisUser';
+        // //is($expected, Sys::getHome(), "Could not get the user's home directory in Windows.");
         //
-        //// In case the tests are not being run in isolation.
-        //$_SERVER = $oldServer;
+        // // In case the tests are not being run in isolation.
+        // $_SERVER = $oldServer;
     }
 
     public function testDirSize(): void
     {
         $dir = __DIR__ . '/dir1';
 
-        @mkdir($dir);
-        file_put_contents($dir . '/file1', '1234567890');
-        file_put_contents($dir . '/file2', range('a', 'z'));
+        @\mkdir($dir);
+        \file_put_contents($dir . '/file1', '1234567890');
+        \file_put_contents($dir . '/file2', \range('a', 'z'));
 
         is(10 + 26, FS::dirSize($dir));
 
@@ -276,11 +271,11 @@ class FileSystemTest extends PHPUnit
 
     public function testLS(): void
     {
-        $dir = __DIR__ . DIRECTORY_SEPARATOR . 'dir1';
+        $dir = __DIR__ . \DIRECTORY_SEPARATOR . 'dir1';
 
-        @mkdir($dir);
-        $file1 = $dir . DIRECTORY_SEPARATOR . 'file1.txt';
-        touch($file1);
+        @\mkdir($dir);
+        $file1 = $dir . \DIRECTORY_SEPARATOR . 'file1.txt';
+        \touch($file1);
 
         is([$file1], FS::ls($dir));
 
@@ -326,12 +321,12 @@ class FileSystemTest extends PHPUnit
         isSame(
             'php',
             FS::ext('http://demo.jbzoo.com/sites/phones/smartfony.php?'
-                . 'logic=and&exact=0&controller=search&option=com_zoo&task=filter&type=phone&app_id=1&Itemid=101')
+                . 'logic=and&exact=0&controller=search&option=com_zoo&task=filter&type=phone&app_id=1&Itemid=101'),
         );
         isSame(
             '',
             FS::ext('http://demo.jbzoo.com/sites/phones/smartfony?'
-                . 'logic=and&exact=0&controller=search&option=com_zoo&task=filter&type=phone&app_id=1&Itemid=101')
+                . 'logic=and&exact=0&controller=search&option=com_zoo&task=filter&type=phone&app_id=1&Itemid=101'),
         );
 
         // to lower

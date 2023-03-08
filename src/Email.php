@@ -16,18 +16,10 @@ declare(strict_types=1);
 
 namespace JBZoo\Utils;
 
-/**
- * Class Email
- *
- * @package JBZoo\Utils
- */
 final class Email
 {
     /**
-     * Create random email
-     *
-     * @param int $userNameLength
-     * @return string
+     * Create random email.
      */
     public static function random(int $userNameLength = 10): string
     {
@@ -36,15 +28,14 @@ final class Email
 
     /**
      * Check if email(s) is(are) valid. You can send one or an array of emails.
-     *
-     * @param string|array $emails
-     * @return array
      */
-    public static function check($emails): array
+    public static function check(mixed $emails): array
     {
+        $emails = (array)$emails;
+
         $result = [];
 
-        if (empty($emails)) {
+        if (\count($emails) === 0) {
             return $result;
         }
 
@@ -54,6 +45,7 @@ final class Email
             if (!self::isValid($email)) {
                 continue;
             }
+
             if (!\in_array($email, $result, true)) {
                 $result[] = $email;
             }
@@ -63,13 +55,9 @@ final class Email
     }
 
     /**
-     * Check for DNS MX records of the email domain. Notice that a
-     * (temporary) DNS error will have the same result as no records
-     * were found. Code coverage ignored because this method requires
-     * DNS requests that could not be reliable.
-     *
-     * @param string $email
-     * @return bool
+     * Check for DNS MX records of the email domain.
+     * Notice that a (temporary) DNS error will have the same result as no records were found.
+     * Code coverage ignored because this method requires DNS requests that could not be reliable.
      */
     public static function checkDns(string $email): bool
     {
@@ -83,17 +71,15 @@ final class Email
     }
 
     /**
-     * Get domains from email addresses. The not valid email addresses
-     * will be skipped.
-     *
-     * @param string|array $emails
-     * @return array
+     * Get domains from email addresses. The not valid email addresses will be skipped.
      */
-    public static function getDomain($emails): array
+    public static function getDomain(mixed $emails): array
     {
+        $emails = (array)$emails;
+
         $result = [];
 
-        if (empty($emails)) {
+        if (\count($emails) === 0) {
             return $result;
         }
 
@@ -105,7 +91,7 @@ final class Email
             }
 
             $domain = self::extractDomain($email);
-            if (!empty($domain) && !\in_array($domain, $result, true)) {
+            if (!isStrEmpty($domain) && !\in_array($domain, $result, true)) {
                 $result[] = $domain;
             }
         }
@@ -115,9 +101,6 @@ final class Email
 
     /**
      * Get domains from email addresses in alphabetical order.
-     *
-     * @param array $emails
-     * @return array
      */
     public static function getDomainSorted(array $emails): array
     {
@@ -128,7 +111,7 @@ final class Email
     }
 
     /**
-     * Generates an Gravatar URL.
+     * Generates a Gravatar URL.
      *
      * Size of the image:
      * * The default size is 32px, and it can be anywhere between 1px up to 2048px.
@@ -136,19 +119,15 @@ final class Email
      * * If requested any value bellow the minimum, then the default is applied.
      *
      * Default image:
-     * * It can be an URL to an image.
-     * * Or one of built in options that Gravatar has. See Email::getGravatarBuiltInImages().
-     * * If none is defined then a built in default is used. See Email::getGravatarBuiltInDefaultImage().
+     * * It can be a URL to an image.
+     * * Or one of built-in options that Gravatar has. See Email::getGravatarBuiltInImages().
+     * * If none is defined then a built-in default is used. See Email::getGravatarBuiltInDefaultImage().
      *
-     * @param string $email
-     * @param int    $size
-     * @param string $defaultImage
-     * @return null|string
-     * @link http://en.gravatar.com/site/implement/images/
+     * @see http://en.gravatar.com/site/implement/images/
      */
     public static function getGravatarUrl(string $email, int $size = 32, string $defaultImage = 'identicon'): ?string
     {
-        if (empty($email) || !self::isValid($email)) {
+        if (isStrEmpty($email) || !self::isValid($email)) {
             return null;
         }
 
@@ -164,29 +143,24 @@ final class Email
 
         // Prepare default images
         $defaultImage = \trim($defaultImage);
-        if (\preg_match('/^(http|https)./', $defaultImage)) {
+        if (\preg_match('/^(http|https)./', $defaultImage) > 0) {
             $defaultImage = \urldecode($defaultImage);
         } else {
             $defaultImage = \strtolower($defaultImage);
-            if (!Arr::in($defaultImage, self::getGravatarBuiltInImages())) {
+            if (!\in_array($defaultImage, self::getGravatarBuiltInImages(), true)) {
                 $defaultImage = self::getGravatarBuiltInImages()[2];
             }
         }
 
         // Build full url
-        $parts['path'] = '/avatar/' . $hash . '/';
-        $parts['query'] = [
-            's' => $size,
-            'd' => $defaultImage,
-        ];
+        $parts['path']  = '/avatar/' . $hash . '/';
+        $parts['query'] = ['s' => $size, 'd' => $defaultImage];
 
         return Url::create($parts);
     }
 
     /**
-     * Returns gravatar supported placeholders
-     *
-     * @return array
+     * Returns gravatar supported placeholders.
      */
     public static function getGravatarBuiltInImages(): array
     {
@@ -202,32 +176,32 @@ final class Email
     }
 
     /**
-     * Returns true if string has valid email format
-     *
-     * @param string|null $email
-     * @return bool
+     * Returns true if string has valid email format.
      */
     public static function isValid(?string $email): bool
     {
-        if (empty($email)) {
+        if ($email === null) {
             return false;
         }
 
-        $email = \filter_var($email, \FILTER_SANITIZE_STRING);
+        $email = \trim($email);
+
+        if (isStrEmpty($email)) {
+            return false;
+        }
+
+        $email = \htmlspecialchars($email);
 
         return !(\filter_var($email, \FILTER_VALIDATE_EMAIL) === false);
     }
 
-    /**
-     * @param string $email
-     * @return string
-     */
     private static function extractDomain(string $email): string
     {
-        $parts = \explode('@', $email);
+        $parts  = \explode('@', $email);
         $domain = \array_pop($parts);
 
         if (Sys::isFunc('idn_to_utf8')) {
+            /** @noinspection PhpComposerExtensionStubsInspection */
             return (string)\idn_to_ascii($domain, 0, \INTL_IDNA_VARIANT_UTS46);
         }
 
@@ -238,14 +212,15 @@ final class Email
      * Transforms strings in array, and remove duplicates.
      * Using array_keys array_flip because is faster than array_unique:
      * array_unique O(n log n)
-     * array_flip O(n)
+     * array_flip O(n).
      *
-     * @link http://stackoverflow.com/questions/8321620/array-unique-vs-array-flip
-     * @param string|array $emails
-     * @return array
+     * @see http://stackoverflow.com/questions/8321620/array-unique-vs-array-flip
      */
-    private static function handleEmailsInput($emails): array
+    private static function handleEmailsInput(array|string $emails): array
     {
-        return \is_array($emails) ? \array_keys(\array_flip($emails)) : [$emails];
+        $emails = (array)$emails;
+        $emails = \array_filter($emails);
+
+        return \array_keys(\array_flip($emails));
     }
 }

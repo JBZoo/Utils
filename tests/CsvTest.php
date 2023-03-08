@@ -18,11 +18,6 @@ namespace JBZoo\PHPUnit;
 
 use JBZoo\Utils\Csv;
 
-/**
- * Class CsvTest
- *
- * @package JBZoo\PHPUnit
- */
 class CsvTest extends PHPUnit
 {
     public function testParse(): void

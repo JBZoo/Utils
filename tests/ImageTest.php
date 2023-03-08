@@ -18,11 +18,6 @@ namespace JBZoo\PHPUnit;
 
 use JBZoo\Utils\Image;
 
-/**
- * Class ImageTest
- *
- * @package JBZoo\PHPUnit
- */
 class ImageTest extends PHPUnit
 {
     public function testCheckSystem(): void
@@ -65,60 +60,58 @@ class ImageTest extends PHPUnit
     {
         isSame(
             [0, 136, 204, 0],
-            Image::normalizeColor('#0088cc')
+            Image::normalizeColor('#0088cc'),
         );
 
         isSame(
             [0, 136, 204, 0],
-            Image::normalizeColor('0088cc')
+            Image::normalizeColor('0088cc'),
         );
 
         isSame(
             [0, 136, 204, 0],
-            Image::normalizeColor('08c')
+            Image::normalizeColor('08c'),
         );
 
         isSame(
             [0, 136, 204, 0],
-            Image::normalizeColor('#08c')
-        );
-
-
-        isSame(
-            [0, 136, 204, 0],
-            Image::normalizeColor(['r' => 0, 'g' => '136', 'b' => '204'])
+            Image::normalizeColor('#08c'),
         );
 
         isSame(
             [0, 136, 204, 0],
-            Image::normalizeColor(['r' => '0', 'g' => '   136   ', 'b' => ' 204 '])
+            Image::normalizeColor(['r' => 0, 'g' => '136', 'b' => '204']),
         );
 
         isSame(
             [0, 136, 204, 0],
-            Image::normalizeColor(['r' => '0', 'g' => '   136   ', 'b' => ' 204 ', 'a' => '0'])
+            Image::normalizeColor(['r' => '0', 'g' => '   136   ', 'b' => ' 204 ']),
         );
 
         isSame(
             [0, 136, 204, 0],
-            Image::normalizeColor(['r' => '0', 'g' => '   136   ', 'b' => ' 204 ', 'a' => '0'])
+            Image::normalizeColor(['r' => '0', 'g' => '   136   ', 'b' => ' 204 ', 'a' => '0']),
+        );
+
+        isSame(
+            [0, 136, 204, 0],
+            Image::normalizeColor(['r' => '0', 'g' => '   136   ', 'b' => ' 204 ', 'a' => '0']),
         );
 
         isSame(
             [0, 136, 204, 1],
-            Image::normalizeColor(['0', '   136   ', ' 204 ', '1'])
+            Image::normalizeColor(['0', '   136   ', ' 204 ', '1']),
         );
 
         isSame(
             [255, 255, 255, 127],
-            Image::normalizeColor(['1000', '   1036   ', ' 2004 ', '1000'])
+            Image::normalizeColor(['1000', '   1036   ', ' 2004 ', '1000']),
         );
 
         isSame(
             [0, 136, 204, 0],
-            Image::normalizeColor([0, 136, 204, 0])
+            Image::normalizeColor([0, 136, 204, 0]),
         );
-
     }
 
     public function testOpacity(): void
@@ -233,9 +226,9 @@ class ImageTest extends PHPUnit
 
     public function testStrToBin(): void
     {
-        $str = 'R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAICRAEAOw==';
+        $str    = 'R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAICRAEAOw==';
         $base64 = 'data:image/gif;base64,' . $str;
-        $bin = base64_decode($str, true);
+        $bin    = \base64_decode($str, true);
 
         isSame($bin, Image::strToBin($str));
         isSame($bin, Image::strToBin($base64));
@@ -345,7 +338,7 @@ class ImageTest extends PHPUnit
 
     public function testAddAlpha(): void
     {
-        $imgRes = imagecreatefromgif(PROJECT_TESTS . '/resources/1x1.gif');
+        $imgRes = \imagecreatefromgif(PROJECT_TESTS . '/resources/1x1.gif');
         Image::addAlpha($imgRes);
         Image::addAlpha($imgRes, false);
         Image::addAlpha($imgRes, true);
@@ -354,16 +347,16 @@ class ImageTest extends PHPUnit
 
     public function testImageCopyMergeAlpha(): void
     {
-        $image = imagecreatefromgif(PROJECT_TESTS . '/resources/1x1.gif');
+        $image = \imagecreatefromgif(PROJECT_TESTS . '/resources/1x1.gif');
 
-        $width = imagesx($image);
-        $height = imagesy($image);
+        $width  = \imagesx($image);
+        $height = \imagesy($image);
 
-        $newImage = imagecreatetruecolor($width, $height);
+        $newImage = \imagecreatetruecolor($width, $height);
 
         // Set a White & Transparent Background Color
-        $background = imagecolorallocatealpha($newImage, 0, 0, 0, 127);
-        imagefill($newImage, 0, 0, $background);
+        $background = \imagecolorallocatealpha($newImage, 0, 0, 0, 127);
+        \imagefill($newImage, 0, 0, $background);
 
         // Copy and merge
         Image::imageCopyMergeAlpha(
@@ -372,11 +365,11 @@ class ImageTest extends PHPUnit
             [0, 0],
             [0, 0],
             [$width, $height],
-            50
+            50,
         );
 
-        imagedestroy($image);
-        imagedestroy($newImage);
+        \imagedestroy($image);
+        \imagedestroy($newImage);
         isTrue(true);
     }
 }

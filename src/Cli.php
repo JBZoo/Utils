@@ -16,27 +16,18 @@ declare(strict_types=1);
 
 namespace JBZoo\Utils;
 
-use RuntimeException;
 use Symfony\Component\Process\Exception\ProcessFailedException;
 use Symfony\Component\Process\Process;
 
-/**
- * Class Cli
- *
- * @package JBZoo\Utils
- */
 final class Cli
 {
-    public const STDIN  = 0;
-    public const STDOUT = 1;
-    public const STDERR = 2;
-
+    public const STDIN         = 0;
+    public const STDOUT        = 1;
+    public const STDERR        = 2;
     public const DEFAULT_WIDTH = 80;
 
     /**
-     * Is command line mode
-     *
-     * @return bool
+     * Is command line mode.
      */
     public static function check(): bool
     {
@@ -44,11 +35,7 @@ final class Cli
     }
 
     /**
-     * Print line to std out
-     *
-     * @param string $message
-     * @param bool   $addEol
-     * @return bool
+     * Print line to std out.
      */
     public static function out(string $message, bool $addEol = true): bool
     {
@@ -56,22 +43,21 @@ final class Cli
             $message .= \PHP_EOL;
         }
 
-        if (self::check() && $stdout = \fopen('php://stdout', 'wb')) {
+        $stdout = \fopen('php://stdout', 'w');
+        if ($stdout !== false && self::check()) {
             \fwrite($stdout, $message);
+
             return true;
         }
 
         /** @phan-suppress-next-line PhanPluginRemoveDebugEcho */
         echo $message;
+
         return false;
     }
 
     /**
-     * Print line to std error
-     *
-     * @param string $message
-     * @param bool   $addEol
-     * @return bool
+     * Print line to std error.
      */
     public static function err(string $message, bool $addEol = true): bool
     {
@@ -79,26 +65,21 @@ final class Cli
             $message .= \PHP_EOL;
         }
 
-        if (self::check() && $stderr = \fopen('php://stderr', 'wb')) {
+        $stderr = \fopen('php://stderr', 'w');
+        if ($stderr !== false && self::check()) {
             \fwrite($stderr, $message);
+
             return true;
         }
 
         /** @phan-suppress-next-line PhanPluginRemoveDebugEcho */
         echo $message;
+
         return false;
     }
 
     /**
-     * Execute cli commands
-     *
-     * @param string      $command
-     * @param array       $args
-     * @param string|null $cwd
-     * @param bool        $verbose
-     * @return string
-     * @throws RuntimeException
-     * @throws Exception
+     * Execute cli commands.
      */
     public static function exec(string $command, array $args = [], ?string $cwd = null, bool $verbose = false): string
     {
@@ -108,9 +89,9 @@ final class Cli
 
         $realCommand = self::build($command, $args);
 
-        if ($cwd) {
-            /** @noinspection CallableParameterUseCaseInTypeContextInspection */
-            $cwd = \realpath($cwd) ?: null;
+        if (!isStrEmpty($cwd)) {
+            $realCwd = \realpath((string)$cwd);
+            $cwd     = $realCwd === false ? null : $realCwd;
         } else {
             $cwd = null;
         }
@@ -121,6 +102,7 @@ final class Cli
         }
 
         try {
+            // @phpstan-ignore-next-line
             if (\method_exists(Process::class, 'fromShellCommandline')) {
                 $process = Process::fromShellCommandline($realCommand, $cwd, null, null, 3600);
             } else {
@@ -141,27 +123,23 @@ final class Cli
     }
 
     /**
-     * Build params for cli options
-     *
-     * @param string $command
-     * @param array  $args
-     * @return string
+     * Build params for cli options.
      */
     public static function build(string $command, array $args = []): string
     {
-        $stringArgs = [];
+        $stringArgs  = [];
         $realCommand = $command;
 
         if (\count($args) > 0) {
             foreach ($args as $key => $value) {
                 $value = \trim((string)$value);
-                $key = \trim((string)$key);
+                $key   = \trim((string)$key);
 
-                if (\strpos($key, '-') !== 0) {
+                if (!\str_starts_with($key, '-')) {
                     $key = \strlen($key) === 1 ? '-' . $key : '--' . $key;
                 }
 
-                if ($value) {
+                if (!isStrEmpty($value)) {
                     $stringArgs[] = $key . '="' . \addcslashes($value, '"') . '"';
                 } else {
                     $stringArgs[] = $key;
@@ -169,7 +147,7 @@ final class Cli
             }
         }
 
-        if (\count($stringArgs)) {
+        if (\count($stringArgs) > 0) {
             $realCommand = $command . ' ' . \implode(' ', $stringArgs);
         }
 
@@ -178,11 +156,7 @@ final class Cli
 
     /**
      * Returns true if STDOUT supports colorization.
-     *
-     * This code has been copied and adapted from
-     * Symfony\Component\Console\Output\OutputStream.
-     *
-     * @return bool
+     * This code has been copied and adapted from \Symfony\Component\Console\Output\OutputStream.
      */
     public static function hasColorSupport(): bool
     {
@@ -192,7 +166,7 @@ final class Cli
 
         // @codeCoverageIgnoreStart
         if (Sys::isWin()) {
-            return Env::bool('ANSICON') || 'ON' === Env::string('ConEmuANSI') || 'xterm' === Env::string('TERM');
+            return Env::bool('ANSICON') || Env::string('ConEmuANSI') === 'ON' || Env::string('TERM') === 'xterm';
         }
         // @codeCoverageIgnoreEnd
 
@@ -201,7 +175,6 @@ final class Cli
 
     /**
      * Returns the number of columns of the terminal.
-     * @return int
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     public static function getNumberOfColumns(): int
@@ -210,7 +183,7 @@ final class Cli
         if (Sys::isWin()) {
             $columns = self::DEFAULT_WIDTH;
 
-            if (\preg_match('/^(\d+)x\d+ \(\d+x(\d+)\)$/', Env::string('ANSICON'), $matches)) {
+            if (\preg_match('/^(\d+)x\d+ \(\d+x(\d+)\)$/', Env::string('ANSICON'), $matches) > 0) {
                 $columns = $matches[1];
             } elseif (\function_exists('proc_open')) {
                 $process = \proc_open(
@@ -219,7 +192,7 @@ final class Cli
                     $pipes,
                     null,
                     null,
-                    ['suppress_errors' => true]
+                    ['suppress_errors' => true],
                 );
 
                 if (\is_resource($process)) {
@@ -229,7 +202,7 @@ final class Cli
                     \fclose($pipes[2]);
                     \proc_close($process);
 
-                    if (\preg_match('/--------+\r?\n.+?(\d+)\r?\n.+?(\d+)\r?\n/', $info, $matches)) {
+                    if (\preg_match('/--------+\r?\n.+?(\d+)\r?\n.+?(\d+)\r?\n/', $info, $matches) > 0) {
                         $columns = $matches[2];
                     }
                 }
@@ -258,9 +231,7 @@ final class Cli
 
     /**
      * Returns if the file descriptor is an interactive terminal or not.
-     *
      * @param int|resource $fileDescriptor
-     * @return bool
      */
     public static function isInteractive($fileDescriptor = self::STDOUT): bool
     {

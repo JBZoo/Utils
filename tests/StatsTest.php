@@ -18,11 +18,6 @@ namespace JBZoo\PHPUnit;
 
 use JBZoo\Utils\Stats;
 
-/**
- * Class StatsTest
- *
- * @package JBZoo\PHPUnit
- */
 class StatsTest extends PHPUnit
 {
     public function testMean(): void
@@ -68,7 +63,7 @@ class StatsTest extends PHPUnit
             '1.7' => 0,
             '1.8' => 0,
             '1.9' => 1,
-            '2'   => 0
+            '2'   => 0,
         ], Stats::histogram([1, 2, 1]));
 
         isSame([
@@ -77,7 +72,7 @@ class StatsTest extends PHPUnit
             '1.4' => 0,
             '1.6' => 0,
             '1.8' => 0,
-            '2'   => 1
+            '2'   => 1,
         ], Stats::histogram([1, 2, 1], 5, 1, 2));
 
         isSame(['1' => 0], Stats::histogram([1, 2, 1], 5, 1, 1));

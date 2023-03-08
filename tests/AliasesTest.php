@@ -29,11 +29,6 @@ use function JBZoo\Utils\slug;
 use function JBZoo\Utils\strip;
 use function JBZoo\Utils\stripQuotes;
 
-/**
- * Class AliasesTest
- *
- * @package JBZoo\PHPUnit
- */
 class AliasesTest extends PHPUnit
 {
     public function testAliases(): void
@@ -51,7 +46,7 @@ class AliasesTest extends PHPUnit
         isSame('', isPath(__DIR__ . ':'));
         isSame(__DIR__, isPath(__DIR__));
         isSame('qwesaad', cleanCmd('qwe saad'));
-        isSame("\$source = \'127.0001  some-WORD \' ;", strip("\$source = \'127.0001 <img> some-<b>WORD</b> \' ; "));
+        isSame("\$source = \\'127.0001  some-WORD \\' ;", strip("\$source = \\'127.0001 <img> some-<b>WORD</b> \\' ; "));
         isSame('adsa', stripQuotes('"adsa"'));
         isSame('"adsa', stripQuotes('"adsa'));
     }

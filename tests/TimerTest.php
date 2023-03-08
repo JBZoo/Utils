@@ -19,14 +19,10 @@ namespace JBZoo\PHPUnit;
 use JBZoo\Utils\Timer;
 
 /**
- * Class TimerTest
- *
- * @package JBZoo\PHPUnit
  * @SuppressWarnings(PHPMD.Superglobals)
  */
 class TimerTest extends PHPUnit
 {
-
     /**
      * @dataProvider secondsProvider
      * @param string $string
@@ -57,9 +53,6 @@ class TimerTest extends PHPUnit
         isTrue(Timer::timeSinceStart() > 0);
     }
 
-    /**
-     * @return array
-     */
     public function milliSecondsProvider(): array
     {
         return [
@@ -79,9 +72,6 @@ class TimerTest extends PHPUnit
         ];
     }
 
-    /**
-     * @return array
-     */
     public function secondsProvider(): array
     {
         return [

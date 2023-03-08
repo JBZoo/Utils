@@ -17,9 +17,6 @@ declare(strict_types=1);
 namespace JBZoo\Utils;
 
 /**
- * Class Image
- *
- * @package JBZoo\Utils
  * @SuppressWarnings(PHPMD.TooManyPublicMethods)
  * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
  */
@@ -40,11 +37,7 @@ final class Image
     private const DETAILED_PARTS = 6;
 
     /**
-     * Require GD library
-     *
-     * @param bool $throwException
-     * @return bool
-     * @throws Exception
+     * Require GD library.
      */
     public static function checkGD(bool $throwException = true): bool
     {
@@ -59,85 +52,75 @@ final class Image
     }
 
     /**
-     * Checks if image has JPEG/JPG format
-     *
-     * @param string|null $format
-     * @return bool
+     * Checks if image has JPEG/JPG format.
      */
     public static function isJpeg(?string $format = null): bool
     {
-        if (!$format) {
+        if (isStrEmpty($format)) {
             return false;
         }
 
-        $format = \strtolower($format);
-        return 'image/jpg' === $format || 'jpg' === $format || 'image/jpeg' === $format || 'jpeg' === $format;
+        $format = \strtolower((string)$format);
+
+        return $format === 'image/jpg' || $format === 'jpg' || $format === 'image/jpeg' || $format === 'jpeg';
     }
 
     /**
-     * Checks if image has GIF format
-     *
-     * @param string|null $format
-     * @return bool
+     * Checks if image has GIF format.
      */
     public static function isGif(?string $format = null): bool
     {
-        if (!$format) {
+        if (isStrEmpty($format)) {
             return false;
         }
 
-        $format = \strtolower($format);
-        return 'image/gif' === $format || 'gif' === $format;
+        $format = \strtolower((string)$format);
+
+        return $format === 'image/gif' || $format === 'gif';
     }
 
     /**
-     * Checks if image has PNG format
-     *
-     * @param string|null $format
-     * @return bool
+     * Checks if image has PNG format.
      */
     public static function isPng(?string $format = null): bool
     {
-        if (!$format) {
+        if (isStrEmpty($format)) {
             return false;
         }
 
-        $format = \strtolower($format);
-        return 'image/png' === $format || 'png' === $format;
+        $format = \strtolower((string)$format);
+
+        return $format === 'image/png' || $format === 'png';
     }
 
     /**
-     * Checks if image has WEBP format
-     *
-     * @param string|null $format
-     * @return bool
+     * Checks if image has WEBP format.
      */
     public static function isWebp(?string $format = null): bool
     {
-        if (!$format) {
+        if (isStrEmpty($format)) {
             return false;
         }
 
-        $format = \strtolower($format);
-        return 'image/webp' === $format || 'webp' === $format;
+        $format = \strtolower((string)$format);
+
+        return $format === 'image/webp' || $format === 'webp';
     }
 
     /**
-     * Converts a hex color value to its RGB equivalent
-     *
-     * @param string|array $origColor Hex color string, array(red, green, blue) or array(red, green, blue, alpha).
-     *                                Where red, green, blue - integers 0-255, alpha - integer 0-127
+     * Converts a hex color value to its RGB equivalent.
+     * @param  array|string $origColor Hex color string, array(red, green, blue) or array(red, green, blue, alpha).
+     *                                 Where red, green, blue - integers 0-255, alpha - integer 0-127
      * @return int[]
-     * @throws Exception
      * @SuppressWarnings(PHPMD.DevelopmentCodeFragment)
      */
-    public static function normalizeColor($origColor): array
+    public static function normalizeColor(array|string $origColor): array
     {
         $result = [];
 
         if (\is_string($origColor)) {
             $result = self::normalizeColorString($origColor);
-        } elseif ((\count($origColor) === self::BASE_PARTS || \count($origColor) === self::EXTENDS_PARTS)) {
+        } elseif (\count($origColor) === self::BASE_PARTS || \count($origColor) === self::EXTENDS_PARTS) {
             $result = self::normalizeColorArray($origColor);
         }
 
@@ -149,104 +132,38 @@ final class Image
     }
 
     /**
-     * Normalize color from string
-     *
-     * @param string $origColor
-     * @return array
-     * @throws Exception
-     */
-    protected static function normalizeColorString(string $origColor): array
-    {
-        $color = \trim($origColor, '#');
-        $color = \trim($color);
-
-        if (\strlen($color) === self::DETAILED_PARTS) {
-            [$red, $green, $blue] = [$color[0] . $color[1], $color[2] . $color[3], $color[4] . $color[5]];
-        } elseif (\strlen($color) === self::BASE_PARTS) {
-            [$red, $green, $blue] = [$color[0] . $color[0], $color[1] . $color[1], $color[2] . $color[2]];
-        } else {
-            throw new Exception('Undefined color format (string): ' . $origColor);
-        }
-
-        $red = \hexdec($red);
-        $green = \hexdec($green);
-        $blue = \hexdec($blue);
-
-        return [$red, $green, $blue, 0];
-    }
-
-    /**
-     * Normalize color from array
-     *
-     * @param array $origColor
-     * @return int[]
-     */
-    protected static function normalizeColorArray(array $origColor): array
-    {
-        $result = [];
-
-        if (
-            \array_key_exists('r', $origColor) &&
-            \array_key_exists('g', $origColor) &&
-            \array_key_exists('b', $origColor)
-        ) {
-            $result = [
-                self::color((int)$origColor['r']),
-                self::color((int)$origColor['g']),
-                self::color((int)$origColor['b']),
-                self::alpha((float)($origColor['a'] ?? 0)),
-            ];
-        } elseif (
-            \array_key_exists('0', $origColor) &&
-            \array_key_exists(1, $origColor) &&
-            \array_key_exists(2, $origColor)
-        ) {
-            $result = [
-                self::color((int)$origColor[0]),
-                self::color((int)$origColor[1]),
-                self::color((int)$origColor[2]),
-                self::alpha((float)($origColor[3] ?? 0)),
-            ];
-        }
-
-        return $result;
-    }
-
-    /**
-     * Same as PHP's imagecopymerge() function, except preserves alpha-transparency in 24-bit PNGs
-     *
-     * @link http://www.php.net/manual/en/function.imagecopymerge.php#88456
-     *
-     * @param mixed $dstImg   Dist image resource
-     * @param mixed $srcImg   Source image resource
-     * @param array $dist     Left and Top offset of dist
-     * @param array $src      Left and Top offset of source
-     * @param array $srcSizes Width and Height  of source
-     * @param int   $opacity
+     * Same as PHP's imagecopymerge() function, except preserves alpha-transparency in 24-bit PNGs.
+     * @see http://www.php.net/manual/en/function.imagecopymerge.php#88456
+     * @param \GdImage $dstImg   Dist image resource
+     * @param \GdImage $srcImg   Source image resource
+     * @param array    $dist     Left and Top offset of dist
+     * @param array    $src      Left and Top offset of source
+     * @param array    $srcSizes Width and Height  of source
      */
     public static function imageCopyMergeAlpha(
-        $dstImg,
-        $srcImg,
+        \GdImage $dstImg,
+        \GdImage $srcImg,
         array $dist,
         array $src,
         array $srcSizes,
-        int $opacity
+        int $opacity,
     ): void {
-        [$dstX, $dstY] = $dist;
-        [$srcX, $srcY] = $src;
+        [$dstX, $dstY]          = $dist;
+        [$srcX, $srcY]          = $src;
         [$srcWidth, $srcHeight] = $srcSizes;
 
         // Get image width and height and percentage
         $opacity /= 100;
-        $width = \imagesx($srcImg) ?: 0;
-        $height = \imagesy($srcImg) ?: 0;
+        $width  = \imagesx($srcImg);
+        $height = \imagesy($srcImg);
 
         // Turn alpha blending off
         self::addAlpha($srcImg, false);
 
         // Find the most opaque pixel in the image (the one with the smallest alpha value)
         $minBaseAlpha = 127;
-        $minAlpha = $minBaseAlpha;
+        $minAlpha     = $minBaseAlpha;
+
         for ($x = 0; $x < $width; $x++) {
             for ($y = 0; $y < $height; $y++) {
                 $alpha = (\imagecolorat($srcImg, $x, $y) >> 24) & 0xFF;
@@ -261,7 +178,7 @@ final class Image
             for ($y = 0; $y < $height; $y++) {
                 // Get current alpha value (represents the TRANSPARENCY!)
                 $colorXY = \imagecolorat($srcImg, $x, $y);
-                $alpha = ($colorXY >> 24) & 0xFF;
+                $alpha   = ($colorXY >> 24) & 0xFF;
 
                 // Calculate new alpha
                 if ($minAlpha !== $minBaseAlpha) {
@@ -277,7 +194,7 @@ final class Image
                     ($colorXY >> 16) & 0xFF,
                     ($colorXY >> 8) & 0xFF,
                     $colorXY & 0xFF,
-                    (int)$alpha
+                    (int)$alpha,
                 );
 
                 // Set pixel with the new color + opacity
@@ -294,10 +211,7 @@ final class Image
     }
 
     /**
-     * Check opacity value
-     *
-     * @param float $opacity
-     * @return int
+     * Check opacity value.
      */
     public static function opacity(float $opacity): int
     {
@@ -306,16 +220,12 @@ final class Image
         }
 
         $opacity = Filter::int($opacity);
-        $opacity = Vars::limit($opacity, 0, 100);
 
-        return $opacity;
+        return Vars::limit($opacity, 0, 100);
     }
 
     /**
-     * Convert opacity value to alpha
-     *
-     * @param float $opacity
-     * @return int
+     * Convert opacity value to alpha.
      */
     public static function opacity2Alpha(float $opacity): int
     {
@@ -323,16 +233,12 @@ final class Image
         $opacity /= 100;
 
         $alpha = 127 - (127 * $opacity);
-        $alpha = self::alpha((int)$alpha);
 
-        return $alpha;
+        return self::alpha((int)$alpha);
     }
 
     /**
-     * Returns valid value to change color segment of a image (0..255)
-     *
-     * @param float $color
-     * @return int
+     * Returns valid value to change color segment of a image (0..255).
      */
     public static function color(float $color): int
     {
@@ -340,10 +246,7 @@ final class Image
     }
 
     /**
-     * Returns valid value of alpha-channel
-     *
-     * @param float $color
-     * @return int
+     * Returns valid value of alpha-channel.
      */
     public static function alpha(float $color): int
     {
@@ -351,10 +254,7 @@ final class Image
     }
 
     /**
-     * Returns valid value of image rotation (-360..360)
-     *
-     * @param float $color
-     * @return int
+     * Returns valid value of image rotation (-360..360).
      */
     public static function rotate(float $color): int
     {
@@ -362,10 +262,7 @@ final class Image
     }
 
     /**
-     * Returns valid value to make image bright (-255..255)
-     *
-     * @param float $brightness
-     * @return int
+     * Returns valid value to make image bright (-255..255).
      */
     public static function brightness(float $brightness): int
     {
@@ -373,10 +270,7 @@ final class Image
     }
 
     /**
-     * Returns valid value to change contrast of a image (-100..100)
-     *
-     * @param float $contrast
-     * @return int
+     * Returns valid value to change contrast of a image (-100..100).
      */
     public static function contrast(float $contrast): int
     {
@@ -384,10 +278,7 @@ final class Image
     }
 
     /**
-     * Returns valid value to change color segment of a image (-255..255)
-     *
-     * @param float $colorize
-     * @return int
+     * Returns valid value to change color segment of a image (-255..255).
      */
     public static function colorize(float $colorize): int
     {
@@ -395,10 +286,7 @@ final class Image
     }
 
     /**
-     * Returns valid value to change smoothness of a image (1..10)
-     *
-     * @param float $smooth
-     * @return int
+     * Returns valid value to change smoothness of a image (1..10).
      */
     public static function smooth(float $smooth): int
     {
@@ -406,10 +294,7 @@ final class Image
     }
 
     /**
-     * Returns valid value of image direction: 'x', 'y', 'xy', 'yx'
-     *
-     * @param string $direction
-     * @return string
+     * Returns valid value of image direction: 'x', 'y', 'xy', 'yx'.
      */
     public static function direction(string $direction): string
     {
@@ -423,10 +308,7 @@ final class Image
     }
 
     /**
-     * Return valid value to blur image (1-10)
-     *
-     * @param float $blur
-     * @return int
+     * Return valid value to blur image (1-10).
      */
     public static function blur(float $blur): int
     {
@@ -434,10 +316,7 @@ final class Image
     }
 
     /**
-     * Return valid value of percent (0-100)
-     *
-     * @param float $percent
-     * @return int
+     * Return valid value of percent (0-100).
      */
     public static function percent(float $percent): int
     {
@@ -445,10 +324,7 @@ final class Image
     }
 
     /**
-     * Returns valid value of image quality (0..100)
-     *
-     * @param float $percent
-     * @return int
+     * Returns valid value of image quality (0..100).
      */
     public static function quality(float $percent): int
     {
@@ -456,32 +332,31 @@ final class Image
     }
 
     /**
-     * Convert string to binary data
-     *
-     * @param string $imageString
-     * @return string
+     * Convert string to binary data.
      */
-    public static function strToBin(string $imageString): string
+    public static function strToBin(string $imageString): ?string
     {
-        $cleanedString = \str_replace(' ', '+', (string)\preg_replace('#^data:image/[^;]+;base64,#', '', $imageString));
+        $cleanedString = \str_replace(
+            ' ',
+            '+',
+            (string)\preg_replace('#^data:image/[^;]+;base64,#', '', $imageString),
+        );
+
         $result = \base64_decode($cleanedString, true);
 
-        if (!$result) {
+        if (isStrEmpty($result)) {
             $result = $imageString;
         }
 
-        return $result;
+        return $result === false ? null : $result;
     }
 
     /**
-     * Check is format supported by lib
-     *
-     * @param string $format
-     * @return bool
+     * Check is format supported by lib.
      */
     public static function isSupportedFormat(string $format): bool
     {
-        if ($format) {
+        if (!isStrEmpty($format)) {
             return self::isJpeg($format) || self::isPng($format) || self::isGif($format) || self::isWebp($format);
         }
 
@@ -489,10 +364,7 @@ final class Image
     }
 
     /**
-     * Check position name
-     *
-     * @param string $position
-     * @return string
+     * Check position name.
      * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     public static function position(string $position): string
@@ -536,20 +408,18 @@ final class Image
     }
 
     /**
-     * Determine position
-     *
+     * Determine position.
      * @param string $position Position name or code
      * @param array  $canvas   Width and Height of canvas
      * @param array  $box      Width and Height of box that will be located on canvas
      * @param array  $offset   Forced offset X, Y
-     * @return array|null
      * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     public static function getInnerCoords(string $position, array $canvas, array $box, array $offset = [0, 0]): ?array
     {
-        $positionCode = self::position($position);
+        $positionCode        = self::position($position);
         [$canvasW, $canvasH] = $canvas;
-        [$boxW, $boxH] = $box;
+        [$boxW, $boxH]       = $box;
         [$offsetX, $offsetY] = $offset;
 
         // Coords map:
@@ -603,14 +473,71 @@ final class Image
     }
 
     /**
-     * Add alpha chanel to image resource
-     *
-     * @param mixed $image   Image GD resource
-     * @param bool  $isBlend Add alpha blending
+     * Add alpha chanel to image resource.
+     * @param \GdImage $image   Image GD resource
+     * @param bool     $isBlend Add alpha blending
      */
-    public static function addAlpha($image, bool $isBlend = true): void
+    public static function addAlpha(\GdImage $image, bool $isBlend = true): void
     {
         \imagesavealpha($image, true);
         \imagealphablending($image, $isBlend);
+    }
+
+    /**
+     * Normalize color from string.
+     */
+    private static function normalizeColorString(string $origColor): array
+    {
+        $color = \trim($origColor, '#');
+        $color = \trim($color);
+
+        if (\strlen($color) === self::DETAILED_PARTS) {
+            [$red, $green, $blue] = [$color[0] . $color[1], $color[2] . $color[3], $color[4] . $color[5]];
+        } elseif (\strlen($color) === self::BASE_PARTS) {
+            [$red, $green, $blue] = [$color[0] . $color[0], $color[1] . $color[1], $color[2] . $color[2]];
+        } else {
+            throw new Exception('Undefined color format (string): ' . $origColor);
+        }
+
+        $red   = \hexdec($red);
+        $green = \hexdec($green);
+        $blue  = \hexdec($blue);
+
+        return [$red, $green, $blue, 0];
+    }
+
+    /**
+     * Normalize color from array.
+     * @return int[]
+     */
+    private static function normalizeColorArray(array $origColor): array
+    {
+        $result = [];
+
+        if (
+            \array_key_exists('r', $origColor)
+            && \array_key_exists('g', $origColor)
+            && \array_key_exists('b', $origColor)
+        ) {
+            $result = [
+                self::color((int)$origColor['r']),
+                self::color((int)$origColor['g']),
+                self::color((int)$origColor['b']),
+                self::alpha((float)($origColor['a'] ?? 0)),
+            ];
+        } elseif (
+            \array_key_exists('0', $origColor)
+            && \array_key_exists(1, $origColor)
+            && \array_key_exists(2, $origColor)
+        ) {
+            $result = [
+                self::color((int)$origColor[0]),
+                self::color((int)$origColor[1]),
+                self::color((int)$origColor[2]),
+                self::alpha((float)($origColor[3] ?? 0)),
+            ];
+        }
+
+        return $result;
     }
 }
