@@ -40,7 +40,7 @@ alphanum(' #$% Qwer 1 ty2') === 'Qwer1ty2';
 ```
 
 
-'### JBZoo\Utils\Arr
+### JBZoo\Utils\Arr
 
 ```php
 Arr::addEachKey(array $array, string $prefix): array; // Add some prefix to each key.
