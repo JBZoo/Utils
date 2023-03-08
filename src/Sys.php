@@ -141,7 +141,7 @@ final class Sys
     }
 
     /**
-     * Get usage memory.
+     * Get usage memory, human-readable.
      */
     public static function getMemory(bool $isPeak = true): string
     {

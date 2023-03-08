@@ -279,7 +279,7 @@ final class Arr
     }
 
     /**
-     * Group array by key.
+     * Group array by key and return list of grouped values.
      */
     public static function groupByKey(array $arrayList, string $key = 'id'): array
     {
@@ -399,6 +399,9 @@ final class Arr
         return $result;
     }
 
+    /**
+     * Remove all items from array by value.
+     */
     public static function removeByValue(array $array, float|bool|int|string|null $value): array
     {
         return \array_filter(

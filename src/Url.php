@@ -451,7 +451,7 @@ final class Url
     }
 
     /**
-     * Is absolute url.
+     * Check if URL is not relative.
      */
     public static function isAbsolute(string $path): bool
     {

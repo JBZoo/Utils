@@ -78,7 +78,7 @@ final class Timer
     }
 
     /**
-     * Get request time.
+     * Get request time in microseconds.
      * @SuppressWarnings(PHPMD.Superglobals)
      */
     public static function getRequestTime(): float

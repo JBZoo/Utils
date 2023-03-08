@@ -37,7 +37,7 @@ final class Image
     private const DETAILED_PARTS = 6;
 
     /**
-     * Require GD library.
+     * Check if GD library is enabled on server.
      */
     public static function checkGD(bool $throwException = true): bool
     {
@@ -408,7 +408,7 @@ final class Image
     }
 
     /**
-     * Determine position.
+     * Determine position. Returns array with X and Y coordinates.
      * @param string $position Position name or code
      * @param array  $canvas   Width and Height of canvas
      * @param array  $box      Width and Height of box that will be located on canvas
