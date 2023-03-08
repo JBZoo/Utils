@@ -28,7 +28,6 @@ final class Str
 
     /**
      * Strip all whitespaces from the given string.
-     *
      * @param string $string The string to strip
      */
     public static function stripSpace(string $string): string
@@ -118,7 +117,7 @@ final class Str
     }
 
     /**
-     * Get unique string.
+     * Get unique string with prefix.
      */
     public static function unique(string $prefix = 'unique'): string
     {
@@ -312,7 +311,7 @@ final class Str
     }
 
     /**
-     * Get string length.
+     * Get real string length if it's possible.
      */
     public static function len(string $string): int
     {
@@ -399,7 +398,7 @@ final class Str
     }
 
     /**
-     * Get part of string.
+     * Get part of string. Safe alias for substr().
      */
     public static function sub(string $string, int $start, int $length = 0): string
     {
@@ -824,6 +823,9 @@ final class Str
         return \implode("\n", $result) . "\n";
     }
 
+    /**
+     * Extend version of checking if potetielly empty string is empty.
+     */
     public static function isEmpty(null|bool|string $value, bool $strict = false): bool
     {
         if ($value === null || $value === false) {

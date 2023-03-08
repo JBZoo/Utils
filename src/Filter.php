@@ -217,6 +217,9 @@ final class Filter
         return (string)\preg_replace('#[^A-Z0-9\/+=]#i', '', $value);
     }
 
+    /**
+     * Returns only chars for base64url.
+     */
     public static function path(string $value): string
     {
         $pattern = '#^[A-Za-z0-9_\/-]+[A-Za-z0-9_\.-]*([\\\\\/][A-Za-z0-9_-]+[A-Za-z0-9_\.-]*)*$#';
@@ -225,18 +228,24 @@ final class Filter
         return $matches[0] ?? '';
     }
 
+    /**
+     * Alias for build-in function \trim().
+     */
     public static function trim(string $value): string
     {
         return Str::trim($value);
     }
 
+    /**
+     * Extended trim function for remove all spaces, tabs, new lines and really special chars.
+     */
     public static function trimExtend(string $value): string
     {
         return Str::trim($value, true);
     }
 
     /**
-     * Cleanup array.
+     * Cleanup array. No empty values.
      */
     public static function arr(mixed $value, string|\Closure $filter = null): array
     {
@@ -263,7 +272,7 @@ final class Filter
     }
 
     /**
-     * Get safe string.
+     * Get safe string without html tags and trimmed.
      */
     public static function strip(string $string): string
     {
@@ -273,7 +282,7 @@ final class Filter
     }
 
     /**
-     * Get safe string.
+     * Get safe string for sensitive external dependencies.
      */
     public static function alias(string $string): string
     {
@@ -304,7 +313,7 @@ final class Filter
     }
 
     /**
-     * Strip spaces.
+     * Alias of "Str::stripSpace($string)".
      */
     public static function stripSpace(string $string): string
     {
@@ -356,11 +365,11 @@ final class Filter
     }
 
     /**
-     * RAW placeholder.
+     * RAW placeholder for internal API of the library.
      */
-    public static function raw(mixed $string): mixed
+    public static function raw(mixed $variable): mixed
     {
-        return $string;
+        return $variable;
     }
 
     /**
@@ -405,7 +414,7 @@ final class Filter
     }
 
     /**
-     * Strip quotes.
+     * Smart striping quotes, double and single.
      */
     public static function stripQuotes(string $value): string
     {

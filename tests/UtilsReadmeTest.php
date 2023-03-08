@@ -38,22 +38,10 @@ use JBZoo\Utils\Url;
 use JBZoo\Utils\Vars;
 use JBZoo\Utils\Xml;
 
-class UtilsReadmeTest extends AbstractReadmeTest
+class UtilsReadmeTest extends PhpUnit
 {
-    protected string $packageName = 'Utils';
-
-    protected function setUp(): void
-    {
-        parent::setUp();
-
-        $this->params['strict_types'] = true;
-        $this->params['travis']       = false;
-    }
-
     public function testDocs(): void
     {
-        skip("Disabled test. It's only for local using to build README>md file manually.");
-
         $classes = [
             Arr::class,
             Cli::class,
@@ -89,7 +77,7 @@ class UtilsReadmeTest extends AbstractReadmeTest
         }
 
         if (!\str_contains($readme, $expected)) {
-            is($expected, $readme, 'Just to see difference');
+            isSame($expected, $readme, 'Just to see difference');
         }
 
         success();
@@ -107,6 +95,8 @@ class UtilsReadmeTest extends AbstractReadmeTest
         foreach ($methods as $methodName => $method) {
             if (!$method['comment']) {
                 fail("Method {$className}::{$methodName } doesn't have comment");
+            } elseif (\strlen($method['comment']) < 20) {
+                fail("Method {$className}::{$methodName } has very poor documentation");
             } elseif (!\str_contains($method['comment'], "\n")) {
                 $realDocs[] = "{$method['sign']} // {$method['comment']}";
             } else {
@@ -174,7 +164,7 @@ class UtilsReadmeTest extends AbstractReadmeTest
                 $returnTypePrint = $returnType->allowsNull() ? ": ?{$returnType}" : ": {$returnType}";
             }
 
-            $comment    = PhpDocs::parse($method->getDocComment())['description'];
+            $comment    = PhpDocs::parse($method->getDocComment() ?: '')['description'];
             $methodName = $method->getName();
 
             $result[$methodName] = [
