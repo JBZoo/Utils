@@ -29,6 +29,7 @@
         "misc"
     ],
     "minimum-stability" : "dev",
+    "prefer-stable"     : true,
 
     "authors"           : [
         {
