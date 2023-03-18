@@ -16,6 +16,7 @@ declare(strict_types=1);
 
 namespace JBZoo\PHPUnit;
 
+use JBZoo\Data\Data;
 use JBZoo\Data\JSON;
 use JBZoo\Utils\Filter;
 
@@ -342,10 +343,23 @@ class FilterTest extends PHPUnit
             'key' => 'value',
         ];
 
-        $obj = new JSON($data);
+        $obj = new Data($data);
 
         isSame($obj, Filter::data($obj));
         isSame($data, (array)Filter::data($obj));
         isSame($data, (array)Filter::data($data));
+    }
+
+    public function testJson(): void
+    {
+        $data = [
+            'key' => 'value',
+        ];
+
+        $obj = new JSON($data);
+
+        isSame($obj, Filter::json($obj));
+        isSame($data, (array)Filter::json($obj));
+        isSame($data, (array)Filter::json($data));
     }
 }
