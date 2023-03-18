@@ -353,11 +353,23 @@ final class Filter
     }
 
     /**
-     * Returns JSON object from array.
+     * Returns Data object from array.
      */
     public static function data(Data|array $data): Data
     {
         if ($data instanceof Data) {
+            return $data;
+        }
+
+        return new Data($data);
+    }
+
+    /**
+     * Returns JSON object from array.
+     */
+    public static function json(JSON|array $data): JSON
+    {
+        if ($data instanceof JSON) {
             return $data;
         }
 
