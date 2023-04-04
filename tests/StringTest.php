@@ -298,13 +298,13 @@ class StringTest extends PHPUnit
 
     public function testTestName2Human(): void
     {
-//        isSame('test', Str::testName2Human('test'));
-//        isSame('testTest', Str::testName2Human('testTest'));
-//        isSame('test_Test', Str::testName2Human('test_Test'));
-//        isSame('test_test', Str::testName2Human('test_test'));
-//        isSame('test test', Str::testName2Human('test test'));
-//        isSame('test Test', Str::testName2Human('test Test'));
-//
+        // isSame('test', Str::testName2Human('test'));
+        // isSame('testTest', Str::testName2Human('testTest'));
+        // isSame('test_Test', Str::testName2Human('test_Test'));
+        // isSame('test_test', Str::testName2Human('test_test'));
+        // isSame('test test', Str::testName2Human('test test'));
+        // isSame('test Test', Str::testName2Human('test Test'));
+
         isSame('Function', Str::testName2Human('testFunctionTest'));
         isSame('Function', Str::testName2Human('testFunction_Test'));
         isSame('Function', Str::testName2Human('Function_Test'));
