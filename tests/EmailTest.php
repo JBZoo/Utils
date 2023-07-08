@@ -21,7 +21,7 @@ use JBZoo\Utils\Email;
 class EmailTest extends PHPUnit
 {
     /**
-     * @dataProvider getCheckProvider
+     * @dataProvider provideCheckCases
      * @param mixed $input
      * @param mixed $outcome
      */
@@ -40,7 +40,7 @@ class EmailTest extends PHPUnit
     }
 
     /**
-     * @dataProvider getDomainsProvider
+     * @dataProvider provideGetDomainsCases
      * @param mixed $input
      * @param mixed $outcome
      */
@@ -64,7 +64,7 @@ class EmailTest extends PHPUnit
     }
 
     /**
-     * @dataProvider getDomainsSortedProvider
+     * @dataProvider provideGetDomainsInAlphabeticalOrderCases
      * @param mixed $input
      * @param mixed $outcome
      */
@@ -79,7 +79,7 @@ class EmailTest extends PHPUnit
     }
 
     /**
-     * @dataProvider getGravatarUrlProvider
+     * @dataProvider provideGetGravatarUrlCases
      * @param mixed $input
      * @param mixed $expectedHttp
      * @param mixed $expectedHttps
@@ -99,7 +99,7 @@ class EmailTest extends PHPUnit
         is(null, Email::getGravatarUrl(''));
     }
 
-    public function getCheckProvider(): array
+    public function provideCheckCases(): array
     {
         return [
             [
@@ -128,7 +128,7 @@ class EmailTest extends PHPUnit
         ];
     }
 
-    public function getDomainsProvider(): array
+    public function provideGetDomainsCases(): array
     {
         return [
             [
@@ -166,7 +166,7 @@ class EmailTest extends PHPUnit
         ];
     }
 
-    public function getDomainsSortedProvider()
+    public function provideGetDomainsInAlphabeticalOrderCases()
     {
         return [
             [
@@ -204,7 +204,7 @@ class EmailTest extends PHPUnit
         return [[[]], [false], [''], [0]];
     }
 
-    public function getGravatarUrlProvider(): array
+    public function provideGetGravatarUrlCases(): array
     {
         return [
             0 => [

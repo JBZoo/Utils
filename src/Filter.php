@@ -247,7 +247,7 @@ final class Filter
     /**
      * Cleanup array. No empty values.
      */
-    public static function arr(mixed $value, string|\Closure $filter = null): array
+    public static function arr(mixed $value, string|\Closure|null $filter = null): array
     {
         $array = (array)$value;
 

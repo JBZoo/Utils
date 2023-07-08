@@ -24,7 +24,7 @@ use JBZoo\Utils\Filter;
  */
 class EnvTest extends PHPUnit
 {
-    public function dataProvider(): array
+    public function provideConvertOptionsCases(): array
     {
         return [
             ['NULL', Env::VAR_NULL, null],
@@ -53,7 +53,7 @@ class EnvTest extends PHPUnit
     }
 
     /**
-     * @dataProvider dataProvider
+     * @dataProvider provideConvertOptionsCases
      * @param mixed $value
      * @param int   $options
      * @param mixed $expected
