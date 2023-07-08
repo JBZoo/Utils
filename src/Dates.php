@@ -31,7 +31,7 @@ final class Dates
     /**
      * Convert to timestamp.
      */
-    public static function toStamp(\DateTime|int|string $time = null, bool $currentIsDefault = true): int
+    public static function toStamp(\DateTime|int|string|null $time = null, bool $currentIsDefault = true): int
     {
         if ($time instanceof \DateTime) {
             return (int)$time->format('U');
@@ -51,7 +51,7 @@ final class Dates
     /**
      * Build PHP \DateTime object from mixed input.
      */
-    public static function factory(mixed $time = null, \DateTimeZone|string $timeZone = null): \DateTime
+    public static function factory(mixed $time = null, \DateTimeZone|string|null $timeZone = null): \DateTime
     {
         $timeZone = self::timezone($timeZone);
 
@@ -68,7 +68,7 @@ final class Dates
     /**
      * Returns a DateTimeZone object based on the current timezone.
      */
-    public static function timezone(\DateTimeZone|string $timezone = null): \DateTimeZone
+    public static function timezone(\DateTimeZone|string|null $timezone = null): \DateTimeZone
     {
         if ($timezone instanceof \DateTimeZone) {
             return $timezone;
@@ -94,7 +94,7 @@ final class Dates
     /**
      * Convert time for sql format.
      */
-    public static function sql(int|string $time = null): string
+    public static function sql(int|string|null $time = null): string
     {
         return self::factory($time)->format(self::SQL_FORMAT);
     }

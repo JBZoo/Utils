@@ -23,7 +23,7 @@ use JBZoo\Utils\Filter;
 class FilterTest extends PHPUnit
 {
     /**
-     * @dataProvider providerInt
+     * @dataProvider provideIntCases
      * @param mixed $exepted
      * @param mixed $actual
      */
@@ -32,7 +32,7 @@ class FilterTest extends PHPUnit
         isSame($exepted, Filter::_($actual, 'int'));
     }
 
-    public function providerInt(): array
+    public function provideIntCases(): array
     {
         return [
             [0, null],
@@ -56,7 +56,7 @@ class FilterTest extends PHPUnit
     }
 
     /**
-     * @dataProvider providerFloat
+     * @dataProvider provideFloatCases
      * @param mixed      $excepted
      * @param mixed      $actual
      * @param null|mixed $round
@@ -70,7 +70,7 @@ class FilterTest extends PHPUnit
         }
     }
 
-    public function providerFloat(): array
+    public function provideFloatCases(): array
     {
         return [
             [0.0, null],
@@ -103,7 +103,7 @@ class FilterTest extends PHPUnit
     }
 
     /**
-     * @dataProvider providerBool
+     * @dataProvider provideBoolCases
      * @param mixed $excepted
      * @param mixed $actual
      */
@@ -112,7 +112,7 @@ class FilterTest extends PHPUnit
         isSame($excepted, Filter::_($actual, 'bool'));
     }
 
-    public function providerBool(): array
+    public function provideBoolCases(): array
     {
         return [
             [true, '1'],

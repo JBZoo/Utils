@@ -24,7 +24,7 @@ use JBZoo\Utils\Timer;
 class TimerTest extends PHPUnit
 {
     /**
-     * @dataProvider secondsProvider
+     * @dataProvider provideSecondsToTimeStringCases
      * @param string $string
      * @param mixed  $seconds
      */
@@ -34,7 +34,7 @@ class TimerTest extends PHPUnit
     }
 
     /**
-     * @dataProvider milliSecondsProvider
+     * @dataProvider provideSecondsToTimeStringInMillisecondCases
      * @param string $string
      * @param mixed  $seconds
      */
@@ -53,7 +53,7 @@ class TimerTest extends PHPUnit
         isTrue(Timer::timeSinceStart() > 0);
     }
 
-    public function milliSecondsProvider(): array
+    public function provideSecondsToTimeStringInMillisecondCases(): array
     {
         return [
             ['1 000 ms', 1],
@@ -72,7 +72,7 @@ class TimerTest extends PHPUnit
         ];
     }
 
-    public function secondsProvider(): array
+    public function provideSecondsToTimeStringCases(): array
     {
         return [
             ['0 ms', 0],
