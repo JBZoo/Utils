@@ -99,7 +99,7 @@ class EmailTest extends PHPUnit
         is(null, Email::getGravatarUrl(''));
     }
 
-    public function provideCheckCases(): array
+    public function provideCheckCases(): iterable
     {
         return [
             [
@@ -128,7 +128,7 @@ class EmailTest extends PHPUnit
         ];
     }
 
-    public function provideGetDomainsCases(): array
+    public function provideGetDomainsCases(): iterable
     {
         return [
             [
@@ -166,7 +166,7 @@ class EmailTest extends PHPUnit
         ];
     }
 
-    public function provideGetDomainsInAlphabeticalOrderCases()
+    public function provideGetDomainsInAlphabeticalOrderCases(): iterable
     {
         return [
             [
@@ -199,12 +199,12 @@ class EmailTest extends PHPUnit
         ];
     }
 
-    public function getEmptyProvider(): array
+    public function getEmptyProvider(): iterable
     {
         return [[[]], [false], [''], [0]];
     }
 
-    public function provideGetGravatarUrlCases(): array
+    public function provideGetGravatarUrlCases(): iterable
     {
         return [
             0 => [
