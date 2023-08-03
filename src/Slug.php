@@ -708,7 +708,7 @@ final class Slug
     {
         self::initLanguageMap($language);
 
-        if (self::seemsUTF8($text)) {
+        if (self::$regex !== '' && self::seemsUTF8($text)) {
             if (\preg_match_all(self::$regex, $text, $matches) > 0) {
                 $matchesCount = \count($matches[0]);
                 /** @noinspection ForeachInvariantsInspection */
