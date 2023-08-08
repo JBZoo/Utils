@@ -161,26 +161,31 @@ final class Stats
     public static function percentile(array $data, float|int $percentile = 95): ?float
     {
         $count = \count($data);
-        if ($count === 0 || $percentile <= 0) {
+        if ($count === 0) {
             return null;
         }
 
-        $validPercentile = $percentile * 0.01;
-        $allIndex        = ($count - 1) * $validPercentile;
-        $intValue        = (int)$allIndex;
-        $floatValue      = $allIndex - $intValue;
-
-        \sort($data);
-
-        if (!\is_float($floatValue)) {
-            $result = $data[$intValue];
-        } elseif ($intValue + 1 < $count) {
-            $result = $data[$intValue] + ($data[$intValue + 1] - $data[$intValue]) * $floatValue;
-        } else {
-            $result = $data[$intValue];
+        $percent = $percentile / 100;
+        if ($percent < 0 || $percent > 1) {
+            throw new Exception("Percentile should be between 0 and 100, {$percentile} given");
         }
 
-        return $result;
+        $allIndex   = ($count - 1) * $percent;
+        $intValue   = (int)$allIndex;
+        $floatValue = $allIndex - $intValue;
+
+        \sort($data);
+        $pureData = \array_values($data);
+
+        if (!\is_float($floatValue)) {
+            $result = $pureData[$intValue];
+        } elseif ($intValue + 1 < $count) {
+            $result = $pureData[$intValue] + ($pureData[$intValue + 1] - $pureData[$intValue]) * $floatValue;
+        } else {
+            $result = $pureData[$intValue];
+        }
+
+        return \round($result, 6);
     }
 
     /**

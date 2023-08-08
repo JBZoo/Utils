@@ -92,26 +92,42 @@ class StatsTest extends PHPUnit
 
     public function testPercentile(): void
     {
-        isSame(null, Stats::percentile([], 90));
-        isSame(null, Stats::percentile([1, 2, 3, 4, 5, 6, 7, 8, 9, 10], 0));
-
         $data = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
 
-        isSame(1.0, Stats::percentile([1], 90));
+        isSame(1.0, Stats::percentile($data, 0));
         isSame(1.09, Stats::percentile($data, 1));
         isSame(1.9, Stats::percentile($data, 10));
         isSame(2.8, Stats::percentile($data, 20));
-        isSame(3.6999999999999997, Stats::percentile($data, 30));
+        isSame(3.7, Stats::percentile($data, 30));
         isSame(4.6, Stats::percentile($data, 40));
         isSame(5.5, Stats::percentile($data, 50));
-        isSame(6.3999999999999995, Stats::percentile($data, 60));
-        isSame(7.300000000000001, Stats::percentile($data, 70));
+        isSame(6.4, Stats::percentile($data, 60));
+        isSame(7.3, Stats::percentile($data, 70));
         isSame(8.2, Stats::percentile($data, 80));
         isSame(9.1, Stats::percentile($data, 90));
         isSame(9.91, Stats::percentile($data, 99));
         isSame(10.0, Stats::percentile($data, 100));
+
+        isSame(null, Stats::percentile([], 90));
+        isSame(null, Stats::percentile([], 0));
+        isSame(1.0, Stats::percentile([1], 90));
+
         isSame(5.5, Stats::percentile(['1', '2', '3', '4', '5', '6', '7', '8', '9', '10'], 50));
         isSame(5.5, Stats::percentile(['1.0', '2.0', '3.0', '4.0', '5.0', '6.0', '7.0', '8.0', '9.0', '10.0'], 50));
+    }
+
+    public function testPercentileWithInvalidPercent1(): void
+    {
+        $this->expectException(\JBZoo\Utils\Exception::class);
+        $this->expectExceptionMessage('Percentile should be between 0 and 100, 146 given');
+        Stats::percentile([1, 2, 3], 146);
+    }
+
+    public function testPercentileWithInvalidPercent2(): void
+    {
+        $this->expectException(\JBZoo\Utils\Exception::class);
+        $this->expectExceptionMessage('Percentile should be between 0 and 100, -146 given');
+        Stats::percentile([1, 2, 3], -146);
     }
 
     public function testMedian(): void
