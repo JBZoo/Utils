@@ -114,6 +114,18 @@ class StatsTest extends PHPUnit
 
         isSame(5.5, Stats::percentile(['1', '2', '3', '4', '5', '6', '7', '8', '9', '10'], 50));
         isSame(5.5, Stats::percentile(['1.0', '2.0', '3.0', '4.0', '5.0', '6.0', '7.0', '8.0', '9.0', '10.0'], 50));
+        isSame(5.5, Stats::percentile([
+            11 => '1.0',
+            12 => '2.0',
+            13 => '3.0',
+            14 => '4.0',
+            15 => '5.0',
+            16 => '6.0',
+            17 => '7.0',
+            18 => '8.0',
+            19 => '9.0',
+            20 => '10.0',
+        ], 50));
     }
 
     public function testPercentileWithInvalidPercent1(): void

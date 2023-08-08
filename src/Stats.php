@@ -174,15 +174,12 @@ final class Stats
         $intValue   = (int)$allIndex;
         $floatValue = $allIndex - $intValue;
 
-        \sort($data);
-        $pureData = \array_values($data);
+        \sort($data, \SORT_NUMERIC);
 
-        if (!\is_float($floatValue)) {
-            $result = $pureData[$intValue];
-        } elseif ($intValue + 1 < $count) {
-            $result = $pureData[$intValue] + ($pureData[$intValue + 1] - $pureData[$intValue]) * $floatValue;
+        if ($intValue + 1 < $count) {
+            $result = $data[$intValue] + ($data[$intValue + 1] - $data[$intValue]) * $floatValue;
         } else {
-            $result = $pureData[$intValue];
+            $result = $data[$intValue];
         }
 
         return \round($result, 6);
