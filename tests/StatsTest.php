@@ -31,6 +31,9 @@ class StatsTest extends PHPUnit
         isSame(2.0, Stats::mean([1, 3]));
         isSame(2.0, Stats::mean(['1', 3]));
         isSame(2.25, Stats::mean(['1.5', 3]));
+
+        $data = [72, 57, 66, 92, 32, 17, 146];
+        isSame(68.857142857, Stats::mean($data));
     }
 
     public function testStdDev(): void
@@ -83,17 +86,41 @@ class StatsTest extends PHPUnit
 
     public function testRenderAverage(): void
     {
-        isSame('1.500±0.500', Stats::renderAverage([1, 2, 1, 2]));
-        isSame('1.5±0.5', Stats::renderAverage([1, 2, 1, 2], 1));
-        isSame('1.50±0.50', Stats::renderAverage([1, 2, 1, 2], 2));
-        isSame('2±1', Stats::renderAverage([1, 2, 1, 2], 0));
-        isSame('2±1', Stats::renderAverage([1, 2, 1, 2], -1));
+        $data = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
+        isSame('5.500±2.872', Stats::renderAverage($data));
+        isSame('5.5±2.9', Stats::renderAverage($data, 1));
+        isSame('5.50±2.87', Stats::renderAverage($data, 2));
+        isSame('6±3', Stats::renderAverage($data, 0));
+        isSame('6±3', Stats::renderAverage($data, -1));
+
+        $data = [72, 57, 66, 92, 32, 17, 146];
+        isSame('68.857±39.084', Stats::renderAverage($data));
+        isSame('68.9±39.1', Stats::renderAverage($data, 1));
+        isSame('68.86±39.08', Stats::renderAverage($data, 2));
+        isSame('69±39', Stats::renderAverage($data, 0));
+        isSame('69±39', Stats::renderAverage($data, -1));
+    }
+
+    public function testRenderMedian(): void
+    {
+        $data = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
+        isSame('5.500±2.872', Stats::renderMedian($data));
+        isSame('5.5±2.9', Stats::renderMedian($data, 1));
+        isSame('5.50±2.87', Stats::renderMedian($data, 2));
+        isSame('6±3', Stats::renderMedian($data, 0));
+        isSame('6±3', Stats::renderMedian($data, -1));
+
+        $data = [72, 57, 66, 92, 32, 17, 146];
+        isSame('66.000±39.084', Stats::renderMedian($data));
+        isSame('66.0±39.1', Stats::renderMedian($data, 1));
+        isSame('66.00±39.08', Stats::renderMedian($data, 2));
+        isSame('66±39', Stats::renderMedian($data, 0));
+        isSame('66±39', Stats::renderMedian($data, -1));
     }
 
     public function testPercentile(): void
     {
         $data = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
-
         isSame(1.0, Stats::percentile($data, 0));
         isSame(1.09, Stats::percentile($data, 1));
         isSame(1.9, Stats::percentile($data, 10));
@@ -105,27 +132,51 @@ class StatsTest extends PHPUnit
         isSame(7.3, Stats::percentile($data, 70));
         isSame(8.2, Stats::percentile($data, 80));
         isSame(9.1, Stats::percentile($data, 90));
+        isSame(9.55, Stats::percentile($data));
         isSame(9.91, Stats::percentile($data, 99));
+        isSame(9.9991, Stats::percentile($data, 99.99));
         isSame(10.0, Stats::percentile($data, 100));
 
-        isSame(null, Stats::percentile([], 90));
+        $data = [72, 57, 66, 92, 32, 17, 146];
+        isSame(17.0, Stats::percentile($data, 0));
+        isSame(17.9, Stats::percentile($data, 1));
+        isSame(26.0, Stats::percentile($data, 10));
+        isSame(37.0, Stats::percentile($data, 20));
+        isSame(52.0, Stats::percentile($data, 30));
+        isSame(60.6, Stats::percentile($data, 40));
+        isSame(66.0, Stats::percentile($data, 50));
+        isSame(69.6, Stats::percentile($data, 60));
+        isSame(76.0, Stats::percentile($data, 70));
+        isSame(88.0, Stats::percentile($data, 80));
+        isSame(113.6, Stats::percentile($data, 90));
+        isSame(129.8, Stats::percentile($data));
+        isSame(142.76, Stats::percentile($data, 99));
+        isSame(145.9676, Stats::percentile($data, 99.99));
+        isSame(146.0, Stats::percentile($data, 100));
+
         isSame(null, Stats::percentile([], 0));
+        isSame(null, Stats::percentile([], 90));
+        isSame(0.0, Stats::percentile([0], 0));
+        isSame(0.0, Stats::percentile([0], 90));
         isSame(1.0, Stats::percentile([1], 90));
 
         isSame(5.5, Stats::percentile(['1', '2', '3', '4', '5', '6', '7', '8', '9', '10'], 50));
         isSame(5.5, Stats::percentile(['1.0', '2.0', '3.0', '4.0', '5.0', '6.0', '7.0', '8.0', '9.0', '10.0'], 50));
-        isSame(5.5, Stats::percentile([
-            11 => '1.0',
-            12 => '2.0',
-            13 => '3.0',
-            14 => '4.0',
-            15 => '5.0',
-            16 => '6.0',
-            17 => '7.0',
-            18 => '8.0',
-            19 => '9.0',
-            20 => '10.0',
-        ], 50));
+        isSame(
+            5.5,
+            Stats::percentile([
+                11 => '1.0',
+                12 => '2.0',
+                13 => '3.0',
+                14 => '4.0',
+                15 => '5.0',
+                16 => '6.0',
+                17 => '7.0',
+                18 => '8.0',
+                19 => '9.0',
+                20 => '10.0',
+            ], 50),
+        );
     }
 
     public function testPercentileWithInvalidPercent1(): void
@@ -148,5 +199,6 @@ class StatsTest extends PHPUnit
         isSame(1.0, Stats::median([1]));
         isSame(1.5, Stats::median([1, 2]));
         isSame(5.5, Stats::median([1, 2, 3, 4, 5, 6, 7, 8, 9, 10]));
+        isSame(5.5, Stats::median([1, 1, 1, 1, 5, 6, 7, 8, 9, 10]));
     }
 }

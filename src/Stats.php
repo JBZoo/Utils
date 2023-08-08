@@ -68,7 +68,7 @@ final class Stats
 
         $count = \count($values);
 
-        return $sum / $count;
+        return \round($sum / $count, 9);
     }
 
     /**
@@ -149,6 +149,17 @@ final class Stats
     public static function renderAverage(array $values, int $rounding = 3): string
     {
         $avg    = \number_format(self::mean($values), $rounding);
+        $stdDev = \number_format(self::stdDev($values), $rounding);
+
+        return "{$avg}±{$stdDev}";
+    }
+
+    /**
+     * Render human readable string of average value and system error.
+     */
+    public static function renderMedian(array $values, int $rounding = 3): string
+    {
+        $avg    = \number_format(self::median($values), $rounding);
         $stdDev = \number_format(self::stdDev($values), $rounding);
 
         return "{$avg}±{$stdDev}";
