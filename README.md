@@ -294,7 +294,7 @@ Filter::clean(string $string): string; // Alias of "Str::clean($string, true, tr
 
 Filter::cmd(string $value): string; // Cleanup system command.
 
-Filter::data(JBZoo\Data\Data|array $data): JBZoo\Data\Data; // Returns JSON object from array.
+Filter::data(JBZoo\Data\Data|array $data): JBZoo\Data\Data; // Returns Data object from array.
 
 Filter::digits(??string $value): string; // Returns only digits chars.
 
@@ -305,6 +305,8 @@ Filter::float(?mixed $value, int $round = 10): float; // Smart converter string 
 Filter::html(string $string): string; // Alias of "Str::htmlEnt($string)".
 
 Filter::int(?string|int|float|bool|null $value): int; // Smart convert any string to int.
+
+Filter::json(JBZoo\Data\JSON|array $data): JBZoo\Data\JSON; // Returns JSON object from array.
 
 Filter::low(string $string): string; // String to lower and trim.
 
@@ -495,6 +497,10 @@ Stats::linSpace(float $min, float $max, int $num = 50, bool $endpoint = true): a
 
 Stats::mean(??array $values): float; // Returns the mean (average) value of the given values.
 
+Stats::median(array $data): ??float; // Calculate the median of a given population.
+
+Stats::percentile(array $data, int|float $percentile = 95): ??float; // Calculate the percentile of a given population.
+
 Stats::renderAverage(array $values, int $rounding = 3): string; // Render human readable string of average value and system error.
 
 Stats::stdDev(array $values, bool $sample = false): float; // Returns the standard deviation of a given population.
@@ -643,7 +649,7 @@ Sys::isFunc(Closure|string $funcName): bool; // Checks if function exists and ca
 
 Sys::isHHVM(): bool; // Returns true when the runtime used is HHVM.
 
-Sys::isPHP(string $version, string $current = '8.1.16'): bool; // Compares PHP versions.
+Sys::isPHP(string $version, string $current = '8.1.22'): bool; // Compares PHP versions.
 
 Sys::isPHPDBG(): bool; // Returns true when the runtime used is PHP with the PHPDBG SAPI.
 

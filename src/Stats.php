@@ -153,4 +153,42 @@ final class Stats
 
         return "{$avg}±{$stdDev}";
     }
+
+    /**
+     * Calculate the percentile of a given population.
+     * @param float[]|int[] $data
+     */
+    public static function percentile(array $data, float|int $percentile = 95): ?float
+    {
+        $count = \count($data);
+        if ($count === 0 || $percentile <= 0) {
+            return null;
+        }
+
+        $validPercentile = $percentile * 0.01;
+        $allIndex        = ($count - 1) * $validPercentile;
+        $intValue        = (int)$allIndex;
+        $floatValue      = $allIndex - $intValue;
+
+        \sort($data);
+
+        if (!\is_float($floatValue)) {
+            $result = $data[$intValue];
+        } elseif ($intValue + 1 < $count) {
+            $result = $data[$intValue] + ($data[$intValue + 1] - $data[$intValue]) * $floatValue;
+        } else {
+            $result = $data[$intValue];
+        }
+
+        return $result;
+    }
+
+    /**
+     * Calculate the median of a given population.
+     * @param float[]|int[] $data
+     */
+    public static function median(array $data): ?float
+    {
+        return self::percentile($data, 50.0);
+    }
 }
