@@ -154,12 +154,13 @@ class StatsTest extends PHPUnit
         isSame(145.9676, Stats::percentile($data, 99.99));
         isSame(146.0, Stats::percentile($data, 100));
 
-        isSame(null, Stats::percentile([], 0));
-        isSame(null, Stats::percentile([], 90));
+        isSame(0.0, Stats::percentile([], 0));
+        isSame(0.0, Stats::percentile([], 90));
         isSame(0.0, Stats::percentile([0], 0));
         isSame(0.0, Stats::percentile([0], 90));
         isSame(1.0, Stats::percentile([1], 90));
 
+        isSame(0.0, Stats::percentile(['qwerty'], 50));
         isSame(5.5, Stats::percentile(['1', '2', '3', '4', '5', '6', '7', '8', '9', '10'], 50));
         isSame(5.5, Stats::percentile(['1.0', '2.0', '3.0', '4.0', '5.0', '6.0', '7.0', '8.0', '9.0', '10.0'], 50));
         isSame(
@@ -195,7 +196,7 @@ class StatsTest extends PHPUnit
 
     public function testMedian(): void
     {
-        isSame(null, Stats::median([]));
+        isSame(0.0, Stats::median([]));
         isSame(1.0, Stats::median([1]));
         isSame(1.5, Stats::median([1, 2]));
         isSame(5.5, Stats::median([1, 2, 3, 4, 5, 6, 7, 8, 9, 10]));

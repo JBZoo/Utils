@@ -169,11 +169,11 @@ final class Stats
      * Calculate the percentile of a given population.
      * @param float[]|int[] $data
      */
-    public static function percentile(array $data, float|int $percentile = 95): ?float
+    public static function percentile(array $data, float|int $percentile = 95): float
     {
         $count = \count($data);
         if ($count === 0) {
-            return null;
+            return 0;
         }
 
         $percent = $percentile / 100;
@@ -193,14 +193,14 @@ final class Stats
             $result = $data[$intValue];
         }
 
-        return \round($result, 6);
+        return \round(float($result), 6);
     }
 
     /**
      * Calculate the median of a given population.
      * @param float[]|int[] $data
      */
-    public static function median(array $data): ?float
+    public static function median(array $data): float
     {
         return self::percentile($data, 50.0);
     }
