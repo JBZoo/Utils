@@ -68,7 +68,7 @@ final class Stats
 
         $count = \count($values);
 
-        return $sum / $count;
+        return \round($sum / $count, 9);
     }
 
     /**
@@ -152,5 +152,56 @@ final class Stats
         $stdDev = \number_format(self::stdDev($values), $rounding);
 
         return "{$avg}±{$stdDev}";
+    }
+
+    /**
+     * Render human readable string of average value and system error.
+     */
+    public static function renderMedian(array $values, int $rounding = 3): string
+    {
+        $avg    = \number_format(self::median($values), $rounding);
+        $stdDev = \number_format(self::stdDev($values), $rounding);
+
+        return "{$avg}±{$stdDev}";
+    }
+
+    /**
+     * Calculate the percentile of a given population.
+     * @param float[]|int[] $data
+     */
+    public static function percentile(array $data, float|int $percentile = 95): float
+    {
+        $count = \count($data);
+        if ($count === 0) {
+            return 0;
+        }
+
+        $percent = $percentile / 100;
+        if ($percent < 0 || $percent > 1) {
+            throw new Exception("Percentile should be between 0 and 100, {$percentile} given");
+        }
+
+        $allIndex   = ($count - 1) * $percent;
+        $intValue   = (int)$allIndex;
+        $floatValue = $allIndex - $intValue;
+
+        \sort($data, \SORT_NUMERIC);
+
+        if ($intValue + 1 < $count) {
+            $result = $data[$intValue] + ($data[$intValue + 1] - $data[$intValue]) * $floatValue;
+        } else {
+            $result = $data[$intValue];
+        }
+
+        return \round(float($result), 6);
+    }
+
+    /**
+     * Calculate the median of a given population.
+     * @param float[]|int[] $data
+     */
+    public static function median(array $data): float
+    {
+        return self::percentile($data, 50.0);
     }
 }
