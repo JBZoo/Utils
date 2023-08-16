@@ -527,5 +527,7 @@ class ArrayTest extends PHPUnit
             ],
             'res' => 'resource (stream)',
         ], Arr::getSchema($test));
+
+        isSame([], Arr::getSchema([]));
     }
 }
