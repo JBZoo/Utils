@@ -42,7 +42,7 @@ class UtilsReadmeTest extends PhpUnit
 {
     public function testDocs(): void
     {
-        skip("Disabled test. It's only for local using to build README>md file manually.");
+        // skip("Disabled test. It's only for local using to build README>md file manually.");
 
         $classes = [
             Arr::class,
