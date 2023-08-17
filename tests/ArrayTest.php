@@ -464,4 +464,70 @@ class ArrayTest extends PHPUnit
 
         isSame([1, '1', 1.5, '1.5', true], \array_values(Arr::removeByValue([0, 0, 1, '1', 1.5, '1.5', true, 0], 0)));
     }
+
+    public function testGetSchema(): void
+    {
+        $test = [
+            // regular types
+            'string-zero'  => '0',
+            'string-empty' => '',
+            'string'       => 'qwerty',
+            'number-zero'  => 0,
+            'number'       => 10,
+            'float'        => 0.1,
+            'float-empty'  => 0.0,
+            'bool-true'    => true,
+            'bool-false'   => false,
+            'null'         => null,
+
+            // objects
+            'object' => (object)['prop-1' => 'prop-value-1'],
+            'date'   => new \DateTimeImmutable(),
+            'utils'  => new Arr(),
+
+            // array
+            'array_empty'     => [],
+            'array_not_empty' => [
+                '123' => '123321',
+                'key' => 'value',
+                'arr' => [new \DateTimeImmutable(), []],
+            ],
+
+            'res' => \fopen(__FILE__, 'r'),
+        ];
+
+        isSame([
+            'string-zero'  => 'string',
+            'string-empty' => 'string',
+            'string'       => 'string',
+
+            'number-zero' => 'int',
+            'number'      => 'int',
+
+            'float'       => 'float',
+            'float-empty' => 'float',
+
+            'bool-true'  => 'bool',
+            'bool-false' => 'bool',
+
+            'null' => 'null',
+
+            'object' => '\stdClass',
+            'date'   => '\DateTimeImmutable',
+            'utils'  => '\JBZoo\Utils\Arr',
+
+            'array_empty'     => [],
+            'array_not_empty' => [
+                123   => 'string',
+                'key' => 'string',
+                'arr' => [
+                    0 => '\DateTimeImmutable',
+                    1 => [],
+                ],
+            ],
+            'res' => 'resource (stream)',
+        ], Arr::getSchema($test));
+
+        isSame([], Arr::getSchema([]));
+    }
 }

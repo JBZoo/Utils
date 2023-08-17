@@ -410,4 +410,24 @@ final class Arr
             \ARRAY_FILTER_USE_BOTH,
         );
     }
+
+    /**
+     * Returns type of variables as array schema.
+     */
+    public static function getSchema(array $array): array
+    {
+        $result = [];
+
+        foreach ($array as $key => $value) {
+            if (\is_array($value)) {
+                $result[$key] = self::getSchema($value);
+            } elseif (\is_object($value)) {
+                $result[$key] = '\\' . \get_class($value);
+            } else {
+                $result[$key] = \get_debug_type($value);
+            }
+        }
+
+        return $result;
+    }
 }

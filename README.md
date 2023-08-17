@@ -4,6 +4,37 @@
 [![Stable Version](https://poser.pugx.org/jbzoo/utils/version)](https://packagist.org/packages/jbzoo/utils/)    [![Total Downloads](https://poser.pugx.org/jbzoo/utils/downloads)](https://packagist.org/packages/jbzoo/utils/stats)    [![Dependents](https://poser.pugx.org/jbzoo/utils/dependents)](https://packagist.org/packages/jbzoo/utils/dependents?order_by=downloads)    [![GitHub License](https://img.shields.io/github/license/jbzoo/utils)](https://github.com/JBZoo/Utils/blob/master/LICENSE)
 
 
+<!--ts-->
+   * [Install](#install)
+   * [Usage](#usage)
+      * [Smart functions](#smart-functions)
+      * [JBZoo\Utils\Arr](#jbzooutilsarr)
+      * [JBZoo\Utils\Cli](#jbzooutilscli)
+      * [JBZoo\Utils\Csv](#jbzooutilscsv)
+      * [JBZoo\Utils\Dates](#jbzooutilsdates)
+      * [JBZoo\Utilsmail](#jbzooutilsemail)
+      * [JBZoo\Utilsnv](#jbzooutilsenv)
+      * [JBZoo\Utils\FS](#jbzooutilsfs)
+      * [JBZoo\Utils\Filter](#jbzooutilsfilter)
+      * [JBZoo\Utils\Http](#jbzooutilshttp)
+      * [JBZoo\Utils\IP](#jbzooutilsip)
+      * [JBZoo\Utils\Image](#jbzooutilsimage)
+      * [JBZoo\Utils\PhpDocs](#jbzooutilsphpdocs)
+      * [JBZoo\Utils\Ser](#jbzooutilsser)
+      * [JBZoo\Utils\Slug](#jbzooutilsslug)
+      * [JBZoo\Utils\Stats](#jbzooutilsstats)
+      * [JBZoo\Utils\Str](#jbzooutilsstr)
+      * [JBZoo\Utils\Sys](#jbzooutilssys)
+      * [JBZoo\Utils\Timer](#jbzooutilstimer)
+      * [JBZoo\Utils\Url](#jbzooutilsurl)
+      * [JBZoo\Utils\Vars](#jbzooutilsvars)
+      * [JBZoo\Utils\Xml](#jbzooutilsxml)
+   * [Links (ideas and some functions)](#links-ideas-and-some-functions)
+   * [Unit tests and check code style](#unit-tests-and-check-code-style)
+   * [License](#license)
+   * [See Also](#see-also)
+<!--te-->
+
 
 Collection of PHP functions, mini classes and snippets for everyday developer's routine life.
 
@@ -58,6 +89,8 @@ Arr::firstKey(array $array): ?string|int|null; // Returns the first key in an ar
 Arr::flat(array $array, bool $preserveKeys = true): array;
 
 Arr::getField(array $arrayList, string $fieldName = 'id'): array; // Get one field from array of arrays (array of objects).
+
+Arr::getSchema(array $array): array; // Returns type of variables as array schema.
 
 Arr::groupByKey(array $arrayList, string $key = 'id'): array; // Group array by key and return list of grouped values.
 
@@ -497,11 +530,13 @@ Stats::linSpace(float $min, float $max, int $num = 50, bool $endpoint = true): a
 
 Stats::mean(??array $values): float; // Returns the mean (average) value of the given values.
 
-Stats::median(array $data): ??float; // Calculate the median of a given population.
+Stats::median(array $data): float; // Calculate the median of a given population.
 
-Stats::percentile(array $data, int|float $percentile = 95): ??float; // Calculate the percentile of a given population.
+Stats::percentile(array $data, int|float $percentile = 95): float; // Calculate the percentile of a given population.
 
 Stats::renderAverage(array $values, int $rounding = 3): string; // Render human readable string of average value and system error.
+
+Stats::renderMedian(array $values, int $rounding = 3): string; // Render human readable string of average value and system error.
 
 Stats::stdDev(array $values, bool $sample = false): float; // Returns the standard deviation of a given population.
 
@@ -649,7 +684,7 @@ Sys::isFunc(Closure|string $funcName): bool; // Checks if function exists and ca
 
 Sys::isHHVM(): bool; // Returns true when the runtime used is HHVM.
 
-Sys::isPHP(string $version, string $current = '8.1.22'): bool; // Compares PHP versions.
+Sys::isPHP(string $version, string $current = '8.2.9'): bool; // Compares PHP versions.
 
 Sys::isPHPDBG(): bool; // Returns true when the runtime used is PHP with the PHPDBG SAPI.
 
