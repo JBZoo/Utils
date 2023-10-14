@@ -24,7 +24,7 @@ final class Xml
     /**
      * Escape string before save it as xml content.
      */
-    public static function escape(float|int|string|null $rawXmlContent): string
+    public static function escape(null|float|int|string $rawXmlContent): string
     {
         $rawXmlContent = (string)$rawXmlContent;
 

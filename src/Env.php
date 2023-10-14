@@ -30,9 +30,9 @@ final class Env
      */
     public static function get(
         string $envVarName,
-        string|float|int|bool|null $default = null,
+        null|bool|float|int|string $default = null,
         int $options = self::VAR_STRING,
-    ): string|float|int|bool|null {
+    ): null|bool|float|int|string {
         $envKey = \trim($envVarName);
 
         $value = \getenv($envKey);
@@ -52,7 +52,7 @@ final class Env
     /**
      * Converts the type of values like "true", "false", "null" or "123".
      */
-    public static function convert(?string $value, int $options = self::VAR_STRING): string|float|int|bool|null
+    public static function convert(?string $value, int $options = self::VAR_STRING): null|bool|float|int|string
     {
         $cleanedValue = \trim(Filter::stripQuotes((string)$value));
 
