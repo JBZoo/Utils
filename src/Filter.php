@@ -173,7 +173,7 @@ final class Filter
     /**
      * Smart convert any string to int.
      */
-    public static function int(float|bool|int|string|null $value): int
+    public static function int(null|bool|float|int|string $value): int
     {
         $cleaned = (string)\preg_replace('#[^0-9-+.,]#', '', (string)$value);
         \preg_match('#[-+]?[\d]+#', $cleaned, $matches);
@@ -247,7 +247,7 @@ final class Filter
     /**
      * Cleanup array. No empty values.
      */
-    public static function arr(mixed $value, string|\Closure|null $filter = null): array
+    public static function arr(mixed $value, null|\Closure|string $filter = null): array
     {
         $array = (array)$value;
 
@@ -355,7 +355,7 @@ final class Filter
     /**
      * Returns Data object from array.
      */
-    public static function data(Data|array $data): Data
+    public static function data(array|Data $data): Data
     {
         if ($data instanceof Data) {
             return $data;
@@ -367,7 +367,7 @@ final class Filter
     /**
      * Returns JSON object from array.
      */
-    public static function json(JSON|array $data): JSON
+    public static function json(array|JSON $data): JSON
     {
         if ($data instanceof JSON) {
             return $data;

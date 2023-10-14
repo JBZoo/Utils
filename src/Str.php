@@ -606,7 +606,7 @@ final class Str
     /**
      * Get class name without namespace.
      */
-    public static function getClassName(object|string|null $object, bool $toLower = false): ?string
+    public static function getClassName(null|object|string $object, bool $toLower = false): ?string
     {
         if (\is_object($object)) {
             $className = $object::class;
@@ -789,8 +789,8 @@ final class Str
                 return $acc;
             }
 
-            if ($acc < \strlen((string)$key)) {
-                $acc = \strlen((string)$key);
+            if ($acc < self::len((string)$key)) {
+                $acc = self::len((string)$key);
             }
 
             return $acc;
@@ -805,7 +805,7 @@ final class Str
             if (!isStrEmpty($value)) {
                 $keyFormated = $key;
                 if ($alignByKeys) {
-                    $keyFormated = \str_pad($key, $maxWidth, ' ', \STR_PAD_RIGHT);
+                    $keyFormated = $key . \str_repeat(' ', $maxWidth - self::len($key));
                 }
 
                 if (\is_numeric($key) || isStrEmpty($key)) {
