@@ -108,6 +108,12 @@ class StatsTest extends PHPUnit
         isSame('68.86±39.08', Stats::renderAverage($data, 2));
         isSame('69±39', Stats::renderAverage($data, 0));
         isSame('70±40', Stats::renderAverage($data, -1));
+        isSame('100±0', Stats::renderAverage($data, -2));
+    }
+
+    public function testRenderMedianEmpty(): void
+    {
+        isSame('0.000±0.000', Stats::renderMedian([]));
     }
 
     public function testRenderMedian(): void
@@ -125,6 +131,7 @@ class StatsTest extends PHPUnit
         isSame('66.00±39.08', Stats::renderMedian($data, 2));
         isSame('66±39', Stats::renderMedian($data, 0));
         isSame('70±40', Stats::renderMedian($data, -1));
+        isSame('100±0', Stats::renderMedian($data, -2));
     }
 
     public function testPercentile(): void
