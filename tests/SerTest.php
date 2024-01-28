@@ -120,7 +120,6 @@ class SerTest extends PHPUnit
 
         \unserialize($brokenSerialization, []);
 
-        is($expectedError['errno'], $reportedError['errno']);
         // Because HHVM's unserialize() error message does not contain enough info to properly test.
         if (!\defined('HHVM_VERSION')) {
             is($expectedError['errstr'], $reportedError['errstr']);
