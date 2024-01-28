@@ -60,7 +60,7 @@ final class Stats
             return 0;
         }
 
-        \array_walk($values, static function (&$value): void {
+        \array_walk($values, static function (null|float|int|string &$value): void {
             $value = float($value);
         });
         $sum = \array_sum($values);
