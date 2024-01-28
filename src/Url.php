@@ -127,7 +127,8 @@ final class Url
         // Get the rest of the URL
         if (!\array_key_exists('REQUEST_URI', $_SERVER)) {
             // Microsoft IIS doesn't set REQUEST_URI by default
-            if ($queryString = $_SERVER['QUERY_STRING'] ?? null) {
+            $queryString = $_SERVER['QUERY_STRING'] ?? null;
+            if ($queryString !== null) {
                 $url .= '?' . $queryString;
             }
         } else {

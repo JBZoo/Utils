@@ -145,7 +145,8 @@ final class Http
                 $authorizationHeader = $_SERVER['REDIRECT_HTTP_AUTHORIZATION'];
             }
 
-            if ($authorizationHeader) {
+            if (bool($authorizationHeader)) {
+                $authorizationHeader = (string)$authorizationHeader;
                 if (\stripos($authorizationHeader, 'basic ') === 0) {
                     // Decode AUTHORIZATION header into PHP_AUTH_USER
                     // and PHP_AUTH_PW when authorization header is basic

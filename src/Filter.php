@@ -190,6 +190,9 @@ final class Filter
         // we need to remove - and + because they're allowed in the filter
         $cleaned = \str_replace(['-', '+'], '', (string)$value);
 
+        /**
+         * @psalm-suppress RedundantCast
+         */
         return (string)\filter_var($cleaned, \FILTER_SANITIZE_NUMBER_INT);
     }
 

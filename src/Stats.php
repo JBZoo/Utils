@@ -60,6 +60,9 @@ final class Stats
             return 0;
         }
 
+        \array_walk($values, static function (null|float|int|string &$value): void {
+            $value = float($value);
+        });
         $sum = \array_sum($values);
 
         if ($sum === 0) {
@@ -148,8 +151,8 @@ final class Stats
      */
     public static function renderAverage(array $values, int $rounding = 3): string
     {
-        $avg    = \number_format(self::mean($values), $rounding);
-        $stdDev = \number_format(self::stdDev($values), $rounding);
+        $avg    = \number_format(\round(self::mean($values), $rounding), $rounding);
+        $stdDev = \number_format(\round(self::stdDev($values), $rounding), $rounding);
 
         return "{$avg}±{$stdDev}";
     }
@@ -159,10 +162,10 @@ final class Stats
      */
     public static function renderMedian(array $values, int $rounding = 3): string
     {
-        $avg    = \number_format(self::median($values), $rounding);
-        $stdDev = \number_format(self::stdDev($values), $rounding);
+        $median = \number_format(\round(self::median($values), $rounding), $rounding);
+        $stdDev = \number_format(\round(self::stdDev($values), $rounding), $rounding);
 
-        return "{$avg}±{$stdDev}";
+        return "{$median}±{$stdDev}";
     }
 
     /**

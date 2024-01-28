@@ -74,9 +74,9 @@ final class Dates
             return $timezone;
         }
 
-        $timezone = isStrEmpty($timezone) ? \date_default_timezone_get() : $timezone;
+        $timezone = ($timezone === '' || $timezone === null) ? \date_default_timezone_get() : $timezone;
 
-        return new \DateTimeZone((string)$timezone);
+        return new \DateTimeZone($timezone);
     }
 
     /**
