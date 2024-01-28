@@ -31,6 +31,8 @@ class StatsTest extends PHPUnit
         isSame(2.0, Stats::mean([1, 3]));
         isSame(2.0, Stats::mean(['1', 3]));
         isSame(2.25, Stats::mean(['1.5', 3]));
+        isSame(5.5, Stats::mean([1, 2, 3, 4, 5, 6, 7, 8, 9, 10]));
+        isSame(5.5, Stats::mean(['1', '2', '3', '4', '5', '6', '7', '8', '9', '10']));
 
         $data = [72, 57, 66, 92, 32, 17, 146];
         isSame(68.857142857, Stats::mean($data));
@@ -84,21 +86,28 @@ class StatsTest extends PHPUnit
         isSame(['2' => 0], Stats::histogram([1, 2, 1], 5, 2, 2));
     }
 
+    public function testRenderAverageEmpty(): void
+    {
+        isSame('0.000±0.000', Stats::renderAverage([]));
+    }
+
     public function testRenderAverage(): void
     {
         $data = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
         isSame('5.500±2.872', Stats::renderAverage($data));
-        isSame('5.5±2.9', Stats::renderAverage($data, 1));
+        isSame('5.5000±2.8723', Stats::renderAverage($data, 4));
+        isSame('5.500±2.872', Stats::renderAverage($data, 3));
         isSame('5.50±2.87', Stats::renderAverage($data, 2));
+        isSame('5.5±2.9', Stats::renderAverage($data, 1));
         isSame('6±3', Stats::renderAverage($data, 0));
-        isSame('6±3', Stats::renderAverage($data, -1));
+        isSame('10±0', Stats::renderAverage($data, -1));
 
         $data = [72, 57, 66, 92, 32, 17, 146];
         isSame('68.857±39.084', Stats::renderAverage($data));
         isSame('68.9±39.1', Stats::renderAverage($data, 1));
         isSame('68.86±39.08', Stats::renderAverage($data, 2));
         isSame('69±39', Stats::renderAverage($data, 0));
-        isSame('69±39', Stats::renderAverage($data, -1));
+        isSame('70±40', Stats::renderAverage($data, -1));
     }
 
     public function testRenderMedian(): void
@@ -108,14 +117,14 @@ class StatsTest extends PHPUnit
         isSame('5.5±2.9', Stats::renderMedian($data, 1));
         isSame('5.50±2.87', Stats::renderMedian($data, 2));
         isSame('6±3', Stats::renderMedian($data, 0));
-        isSame('6±3', Stats::renderMedian($data, -1));
+        isSame('10±0', Stats::renderMedian($data, -1));
 
         $data = [72, 57, 66, 92, 32, 17, 146];
         isSame('66.000±39.084', Stats::renderMedian($data));
         isSame('66.0±39.1', Stats::renderMedian($data, 1));
         isSame('66.00±39.08', Stats::renderMedian($data, 2));
         isSame('66±39', Stats::renderMedian($data, 0));
-        isSame('66±39', Stats::renderMedian($data, -1));
+        isSame('70±40', Stats::renderMedian($data, -1));
     }
 
     public function testPercentile(): void
