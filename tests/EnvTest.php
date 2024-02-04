@@ -24,7 +24,7 @@ use JBZoo\Utils\Filter;
  */
 class EnvTest extends PHPUnit
 {
-    public function provideConvertOptionsCases(): iterable
+    public static function provideConvertOptionsCases(): iterable
     {
         return [
             ['NULL', Env::VAR_NULL, null],

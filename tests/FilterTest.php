@@ -32,7 +32,7 @@ class FilterTest extends PHPUnit
         isSame($exepted, Filter::_($actual, 'int'));
     }
 
-    public function provideIntCases(): iterable
+    public static function provideIntCases(): iterable
     {
         return [
             [0, null],
@@ -70,7 +70,7 @@ class FilterTest extends PHPUnit
         }
     }
 
-    public function provideFloatCases(): iterable
+    public static function provideFloatCases(): iterable
     {
         return [
             [0.0, null],
@@ -112,7 +112,7 @@ class FilterTest extends PHPUnit
         isSame($excepted, Filter::_($actual, 'bool'));
     }
 
-    public function provideBoolCases(): iterable
+    public static function provideBoolCases(): iterable
     {
         return [
             [true, '1'],
