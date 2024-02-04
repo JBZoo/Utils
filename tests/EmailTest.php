@@ -99,6 +99,22 @@ class EmailTest extends PHPUnit
         is(null, Email::getGravatarUrl(''));
     }
 
+    public function testRandomEmail(): void
+    {
+        isTrue((bool)Email::check(Email::random()));
+        isTrue(Email::isValid(Email::random()));
+
+        isNotSame(Email::random(), Email::random());
+        isNotSame(Email::random(), Email::random());
+        isNotSame(Email::random(), Email::random());
+    }
+
+    public function testCheckDns(): void
+    {
+        isFalse(Email::checkDns('123'));
+        isTrue(Email::checkDns('denis@gmail.com'));
+    }
+
     public static function provideCheckCases(): iterable
     {
         return [
@@ -250,21 +266,5 @@ class EmailTest extends PHPUnit
                 'https://secure.gravatar.com/avatar/f27f28ab2158cd2cccc78c364d6247fe/?s=2048&d=identicon',
             ],
         ];
-    }
-
-    public function testRandomEmail(): void
-    {
-        isTrue((bool)Email::check(Email::random()));
-        isTrue(Email::isValid(Email::random()));
-
-        isNotSame(Email::random(), Email::random());
-        isNotSame(Email::random(), Email::random());
-        isNotSame(Email::random(), Email::random());
-    }
-
-    public function testCheckDns(): void
-    {
-        isFalse(Email::checkDns('123'));
-        isTrue(Email::checkDns('denis@gmail.com'));
     }
 }
