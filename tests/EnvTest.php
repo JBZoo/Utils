@@ -24,34 +24,6 @@ use JBZoo\Utils\Filter;
  */
 class EnvTest extends PHPUnit
 {
-    public function provideConvertOptionsCases(): iterable
-    {
-        return [
-            ['NULL', Env::VAR_NULL, null],
-            ['null', Env::VAR_NULL, null],
-
-            ['false', Env::VAR_BOOL, false],
-            ['FALSE', Env::VAR_BOOL, false],
-            ['0', Env::VAR_BOOL, false],
-            ['true', Env::VAR_BOOL, true],
-            ['True', Env::VAR_BOOL, true],
-            ['1', Env::VAR_BOOL, true],
-
-            ['42', Env::VAR_INT, 42],
-            ['FALSE', Env::VAR_INT, 0],
-
-            ['42.42', Env::VAR_FLOAT, 42.42],
-            ['42', Env::VAR_FLOAT, 42.0],
-            ['FALSE', Env::VAR_FLOAT, 0.],
-
-            ['"hello"', Env::VAR_STRING, 'hello'],
-            ["'hello'", Env::VAR_STRING, 'hello'],
-
-            ['"hello"', 0, '"hello"'],
-            ["'hello'", 0, "'hello'"],
-        ];
-    }
-
     /**
      * @dataProvider provideConvertOptionsCases
      * @param mixed $value
@@ -140,5 +112,33 @@ class EnvTest extends PHPUnit
         isTrue(Env::isExists('FOO_STRING_2'));
         isTrue(Env::isExists('FOO_EMPTY_2'));
         isFalse(Env::isExists('FOO_QWERTY_2'));
+    }
+
+    public static function provideConvertOptionsCases(): iterable
+    {
+        return [
+            ['NULL', Env::VAR_NULL, null],
+            ['null', Env::VAR_NULL, null],
+
+            ['false', Env::VAR_BOOL, false],
+            ['FALSE', Env::VAR_BOOL, false],
+            ['0', Env::VAR_BOOL, false],
+            ['true', Env::VAR_BOOL, true],
+            ['True', Env::VAR_BOOL, true],
+            ['1', Env::VAR_BOOL, true],
+
+            ['42', Env::VAR_INT, 42],
+            ['FALSE', Env::VAR_INT, 0],
+
+            ['42.42', Env::VAR_FLOAT, 42.42],
+            ['42', Env::VAR_FLOAT, 42.0],
+            ['FALSE', Env::VAR_FLOAT, 0.],
+
+            ['"hello"', Env::VAR_STRING, 'hello'],
+            ["'hello'", Env::VAR_STRING, 'hello'],
+
+            ['"hello"', 0, '"hello"'],
+            ["'hello'", 0, "'hello'"],
+        ];
     }
 }

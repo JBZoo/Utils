@@ -99,7 +99,23 @@ class EmailTest extends PHPUnit
         is(null, Email::getGravatarUrl(''));
     }
 
-    public function provideCheckCases(): iterable
+    public function testRandomEmail(): void
+    {
+        isTrue((bool)Email::check(Email::random()));
+        isTrue(Email::isValid(Email::random()));
+
+        isNotSame(Email::random(), Email::random());
+        isNotSame(Email::random(), Email::random());
+        isNotSame(Email::random(), Email::random());
+    }
+
+    public function testCheckDns(): void
+    {
+        isFalse(Email::checkDns('123'));
+        isTrue(Email::checkDns('denis@gmail.com'));
+    }
+
+    public static function provideCheckCases(): iterable
     {
         return [
             [
@@ -128,7 +144,7 @@ class EmailTest extends PHPUnit
         ];
     }
 
-    public function provideGetDomainsCases(): iterable
+    public static function provideGetDomainsCases(): iterable
     {
         return [
             [
@@ -166,7 +182,7 @@ class EmailTest extends PHPUnit
         ];
     }
 
-    public function provideGetDomainsInAlphabeticalOrderCases(): iterable
+    public static function provideGetDomainsInAlphabeticalOrderCases(): iterable
     {
         return [
             [
@@ -199,12 +215,12 @@ class EmailTest extends PHPUnit
         ];
     }
 
-    public function getEmptyProvider(): iterable
+    public static function getEmptyProvider(): iterable
     {
         return [[[]], [false], [''], [0]];
     }
 
-    public function provideGetGravatarUrlCases(): iterable
+    public static function provideGetGravatarUrlCases(): iterable
     {
         return [
             0 => [
@@ -250,21 +266,5 @@ class EmailTest extends PHPUnit
                 'https://secure.gravatar.com/avatar/f27f28ab2158cd2cccc78c364d6247fe/?s=2048&d=identicon',
             ],
         ];
-    }
-
-    public function testRandomEmail(): void
-    {
-        isTrue((bool)Email::check(Email::random()));
-        isTrue(Email::isValid(Email::random()));
-
-        isNotSame(Email::random(), Email::random());
-        isNotSame(Email::random(), Email::random());
-        isNotSame(Email::random(), Email::random());
-    }
-
-    public function testCheckDns(): void
-    {
-        isFalse(Email::checkDns('123'));
-        isTrue(Email::checkDns('denis@gmail.com'));
     }
 }

@@ -53,7 +53,7 @@ class TimerTest extends PHPUnit
         isTrue(Timer::timeSinceStart() > 0);
     }
 
-    public function provideSecondsToTimeStringInMillisecondCases(): iterable
+    public static function provideSecondsToTimeStringInMillisecondCases(): iterable
     {
         return [
             ['1 000 ms', 1],
@@ -72,7 +72,7 @@ class TimerTest extends PHPUnit
         ];
     }
 
-    public function provideSecondsToTimeStringCases(): iterable
+    public static function provideSecondsToTimeStringCases(): iterable
     {
         return [
             ['0 ms', 0],

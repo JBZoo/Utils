@@ -32,29 +32,6 @@ class FilterTest extends PHPUnit
         isSame($exepted, Filter::_($actual, 'int'));
     }
 
-    public function provideIntCases(): iterable
-    {
-        return [
-            [0, null],
-            [0, false],
-            [0, ''],
-            [0, 0],
-            [1, 1],
-            [1, '1'],
-            [1, '01'],
-            [-1, '-01'],
-            [-15, ' - 1 5 '],
-            [-17, ' - 1 asd 7 '],
-            [-1, ' - 1 . 0 '],
-            [-1, ' - 1 , 5 '],
-            [-1, ' - 1 - 0 '],
-            [3, ' + 3'],
-            [-4, ' - 4'],
-            [-5, ' +- 5'],
-            [6, ' -+ 6'],
-        ];
-    }
-
     /**
      * @dataProvider provideFloatCases
      * @param mixed      $excepted
@@ -70,38 +47,6 @@ class FilterTest extends PHPUnit
         }
     }
 
-    public function provideFloatCases(): iterable
-    {
-        return [
-            [0.0, null],
-            [0.0, false],
-            [0.0, ''],
-            [0.0, 'asdasd'],
-            [0.0, 0],
-            [1.0, 1],
-            [123456789.0, 123456789],
-            [1.0, '1'],
-            [1.0, '01'],
-            [-1.0, '-01'],
-            [-10.0, ' - 1 0 '],
-            [-1.5, ' - 1,5 '],
-            [-1.5, ' - 1.5 '],
-            [-1.512, ' - 1.5123 ', 3],
-            [-15123.0, ' - 1 asd 5123 ', 3],
-            [15123.0, ' + 1 asd 5123 ', 3],
-
-            [-12.451, 'abc-12,451'],
-            [-12.452, 'abc-12.452'],
-            [-12.453, '-abc12.453'],
-            [-12.454, 'abc-12.454abc'],
-            [-12.455, 'abc-12. 455'],
-            [-12.456, 'abc-12. 456 .7'],
-            [2.6e-19, '26.3e-20', 20],
-            [2.53E-19, '25.3e-20', 100],
-            [2.4e-9, '24.3e-10'],
-        ];
-    }
-
     /**
      * @dataProvider provideBoolCases
      * @param mixed $excepted
@@ -110,60 +55,6 @@ class FilterTest extends PHPUnit
     public function testBool($excepted, $actual): void
     {
         isSame($excepted, Filter::_($actual, 'bool'));
-    }
-
-    public function provideBoolCases(): iterable
-    {
-        return [
-            [true, '1'],
-            [true, ' 1'],
-            [true, '1 '],
-            [true, '10'],
-            [true, '-1'],
-            [true, true],
-            [true, 27],
-            [true, 1.0],
-            [true, -1],
-            [true, -1.0],
-            [true, 10],
-            [true, 10.0],
-            [true, 10.0],
-            [true, 'true'],
-            [true, 'TRUE'],
-            [true, 'yes'],
-            [true, 'YES'],
-            [true, 'y'],
-            [true, 'Y'],
-            [true, 'oui'],
-            [true, 'vrai'],
-            [true, 'ДА'],
-            [true, 'Д'],
-            [true, '*'],
-            [true, '+'],
-            [true, '++'],
-            [true, '+++'],
-            [true, '++++'],
-            [true, '+++++'],
-
-            [false, ''],
-            [false, ' '],
-            [false, ' 0'],
-            [false, '0 '],
-            [false, false],
-            [false, null],
-            [false, 0],
-            [false, '0'],
-            [false, '0.'],
-            [false, '0.0'],
-            [false, '0.00'],
-            [false, 'false'],
-            [false, 'no'],
-            [false, 'n'],
-            [false, 'non'],
-            [false, 'faux'],
-            [false, 'НЕТ'],
-            [false, '-'],
-        ];
     }
 
     public function testDigests(): void
@@ -361,5 +252,114 @@ class FilterTest extends PHPUnit
         isSame($obj, Filter::json($obj));
         isSame($data, (array)Filter::json($obj));
         isSame($data, (array)Filter::json($data));
+    }
+
+    public static function provideIntCases(): iterable
+    {
+        return [
+            [0, null],
+            [0, false],
+            [0, ''],
+            [0, 0],
+            [1, 1],
+            [1, '1'],
+            [1, '01'],
+            [-1, '-01'],
+            [-15, ' - 1 5 '],
+            [-17, ' - 1 asd 7 '],
+            [-1, ' - 1 . 0 '],
+            [-1, ' - 1 , 5 '],
+            [-1, ' - 1 - 0 '],
+            [3, ' + 3'],
+            [-4, ' - 4'],
+            [-5, ' +- 5'],
+            [6, ' -+ 6'],
+        ];
+    }
+
+    public static function provideFloatCases(): iterable
+    {
+        return [
+            [0.0, null],
+            [0.0, false],
+            [0.0, ''],
+            [0.0, 'asdasd'],
+            [0.0, 0],
+            [1.0, 1],
+            [123456789.0, 123456789],
+            [1.0, '1'],
+            [1.0, '01'],
+            [-1.0, '-01'],
+            [-10.0, ' - 1 0 '],
+            [-1.5, ' - 1,5 '],
+            [-1.5, ' - 1.5 '],
+            [-1.512, ' - 1.5123 ', 3],
+            [-15123.0, ' - 1 asd 5123 ', 3],
+            [15123.0, ' + 1 asd 5123 ', 3],
+
+            [-12.451, 'abc-12,451'],
+            [-12.452, 'abc-12.452'],
+            [-12.453, '-abc12.453'],
+            [-12.454, 'abc-12.454abc'],
+            [-12.455, 'abc-12. 455'],
+            [-12.456, 'abc-12. 456 .7'],
+            [2.6e-19, '26.3e-20', 20],
+            [2.53E-19, '25.3e-20', 100],
+            [2.4e-9, '24.3e-10'],
+        ];
+    }
+
+    public static function provideBoolCases(): iterable
+    {
+        return [
+            [true, '1'],
+            [true, ' 1'],
+            [true, '1 '],
+            [true, '10'],
+            [true, '-1'],
+            [true, true],
+            [true, 27],
+            [true, 1.0],
+            [true, -1],
+            [true, -1.0],
+            [true, 10],
+            [true, 10.0],
+            [true, 10.0],
+            [true, 'true'],
+            [true, 'TRUE'],
+            [true, 'yes'],
+            [true, 'YES'],
+            [true, 'y'],
+            [true, 'Y'],
+            [true, 'oui'],
+            [true, 'vrai'],
+            [true, 'ДА'],
+            [true, 'Д'],
+            [true, '*'],
+            [true, '+'],
+            [true, '++'],
+            [true, '+++'],
+            [true, '++++'],
+            [true, '+++++'],
+
+            [false, ''],
+            [false, ' '],
+            [false, ' 0'],
+            [false, '0 '],
+            [false, false],
+            [false, null],
+            [false, 0],
+            [false, '0'],
+            [false, '0.'],
+            [false, '0.0'],
+            [false, '0.00'],
+            [false, 'false'],
+            [false, 'no'],
+            [false, 'n'],
+            [false, 'non'],
+            [false, 'faux'],
+            [false, 'НЕТ'],
+            [false, '-'],
+        ];
     }
 }
