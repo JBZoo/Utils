@@ -50,8 +50,8 @@ final class Xml
 
         $document->preserveWhiteSpace = $preserveWhiteSpace;
 
-        if (!isStrEmpty($source)) {
-            $document->loadXML($source ?? '');
+        if ($source !== '' && $source !== null) {
+            $document->loadXML($source);
         }
 
         $document->xmlVersion   = self::VERSION;
