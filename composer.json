@@ -48,11 +48,7 @@
     ],
 
     "require"           : {
-        "php"        : "^8.1",
-        "ext-posix"  : "*",
-        "ext-filter" : "*",
-        "ext-dom"    : "*",
-        "ext-gd"     : "*"
+        "php" : "^8.1"
     },
 
     "require-dev"       : {
@@ -66,7 +62,11 @@
         "symfony/process"           : "For Cli::exec() method only",
         "symfony/polyfill-mbstring" : "For UTF-8 if ext-mbstring disabled",
         "jbzoo/data"                : ">=4.0",
-        "ext-intl"                  : "*"
+        "ext-intl"                  : "*",
+        "ext-posix"                 : "*",
+        "ext-filter"                : "*",
+        "ext-dom"                   : "*",
+        "ext-gd"                    : "*"
     },
 
     "autoload"          : {
