@@ -284,8 +284,17 @@ class FileSystemTest extends PHPUnit
 
     public function testFormat(): void
     {
+        $size = FS::format(0);
+        is('0 B', $size);
+
+        $size = FS::format(0, 0);
+        is('0 B', $size);
+
         $size = FS::format(512, 0);
         is('512 B', $size);
+
+        $size = FS::format(-512, 0);
+        is('-512 B', $size);
 
         $size = FS::format(512);
         is('512 B', $size);
@@ -298,6 +307,9 @@ class FileSystemTest extends PHPUnit
 
         $size = FS::format(19971597926);
         is('18.60 GB', $size);
+
+        $size = FS::format(-19971597926);
+        is('-18.60 GB', $size);
 
         $size = FS::format(2748779069440, 1);
         is('2.5 TB', $size);
