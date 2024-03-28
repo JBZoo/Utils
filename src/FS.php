@@ -284,22 +284,19 @@ final class FS
      */
     public static function format(int $bytes, int $decimals = 2): string
     {
-        $exp     = 0;
-        $value   = 0;
+        $isNegative = $bytes < 0;
+
         $symbols = ['B', 'KB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB'];
 
-        $bytes = (float)$bytes;
-
-        if ($bytes > 0) {
-            $exp   = (int)\floor(\log($bytes) / \log(1024));
-            $value = ($bytes / (1024 ** \floor($exp)));
-        }
+        $bytes = \abs((float)$bytes);
+        $exp   = (int)\floor(\log($bytes) / \log(1024));
+        $value = ($bytes / (1024 ** \floor($exp)));
 
         if ($symbols[$exp] === 'B') {
             $decimals = 0;
         }
 
-        return \number_format($value, $decimals, '.', '') . ' ' . $symbols[$exp];
+        return ($isNegative ? '-' : '') . \number_format($value, $decimals, '.', '') . ' ' . $symbols[$exp];
     }
 
     /**
