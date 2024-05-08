@@ -60,6 +60,6 @@ function revertServerVar(): void
         $_SERVER['ROOT'],
         $_SERVER['HTTP_AUTHORIZATION'],
         $_SERVER['REDIRECT_HTTP_AUTHORIZATION'],
-        $_SERVER['PHP_AUTH_DIGEST']
+        $_SERVER['PHP_AUTH_DIGEST'],
     );
 }
