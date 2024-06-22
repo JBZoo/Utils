@@ -263,7 +263,7 @@ class XmlTest extends PHPUnit
     {
         isSame(
             '&lt;a href=&quot;/test&quot;&gt;Test!@#$%^&amp;*()_+\/&lt;/a&gt;',
-            Xml::escape('<a href="/test">Test!@#$%^&*()_+\\/</a>'),
+            Xml::escape('<a href="/test">Test!@#$%^&*()_+\/</a>'),
         );
     }
 

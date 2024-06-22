@@ -89,7 +89,7 @@ class SysTest extends PHPUnit
         $_SERVER['DOCUMENT_ROOT'] = '../../';
         isSame(\realpath('../../'), Sys::getDocRoot());
 
-        $_SERVER['DOCUMENT_ROOT'] = __DIR__ . '\\..\\';
+        $_SERVER['DOCUMENT_ROOT'] = __DIR__ . '\..\\';
         isSame(PROJECT_ROOT, Sys::getDocRoot());
     }
 

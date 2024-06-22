@@ -38,7 +38,7 @@ final class Arr
 
                 $uniqueArray[$value] = $key;
             }
-            
+
             return \array_flip($uniqueArray);
         }
 

@@ -173,9 +173,14 @@ final class FS
 
         $realPath = \realpath($filepath);
         if ($realPath !== false) {
-            $handle = \fopen($realPath, 'r');
+            $handle   = \fopen($realPath, 'r');
+            $fileSize = (int)\filesize($realPath);
+            if ($fileSize === 0) {
+                return null;
+            }
+
             if ($handle !== false) {
-                $contents = (string)\fread($handle, (int)\filesize($realPath));
+                $contents = (string)\fread($handle, $fileSize);
                 \fclose($handle);
             }
         }
@@ -370,9 +375,9 @@ final class FS
         $path = \trim((string)$path);
 
         if (($dirSep === '\\') && ($path[0] === '\\') && ($path[1] === '\\')) {
-            $path = '\\' . \preg_replace('#[/\\\\]+#', $dirSep, $path);
+            $path = '\\' . \preg_replace('#[/\\\]+#', $dirSep, $path);
         } else {
-            $path = (string)\preg_replace('#[/\\\\]+#', $dirSep, $path);
+            $path = (string)\preg_replace('#[/\\\]+#', $dirSep, $path);
         }
 
         return $path;
