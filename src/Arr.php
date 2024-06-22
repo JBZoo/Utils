@@ -28,15 +28,24 @@ final class Arr
     public static function unique(array $array, bool $keepKeys = false): array
     {
         if ($keepKeys) {
-            $array = \array_unique($array);
-        } else {
-            // This is faster version than the builtin array_unique().
-            // http://stackoverflow.com/questions/8321620/array-unique-vs-array-flip
-            // http://php.net/manual/en/function.array-unique.php
-            $array = \array_keys(\array_flip($array));
+            // This is faster than the builtin array_unique().
+            $uniqueArray = [];
+
+            foreach ($array as $key => $value) {
+                if (isset($uniqueArray[$value])) {
+                    continue;
+                }
+
+                $uniqueArray[$value] = $key;
+            }
+            
+            return \array_flip($uniqueArray);
         }
 
-        return $array;
+        // This is faster version than the builtin array_unique().
+        // http://stackoverflow.com/questions/8321620/array-unique-vs-array-flip
+        // http://php.net/manual/en/function.array-unique.php
+        return \array_keys(\array_flip($array));
     }
 
     /**
