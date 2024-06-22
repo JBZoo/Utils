@@ -173,9 +173,14 @@ final class FS
 
         $realPath = \realpath($filepath);
         if ($realPath !== false) {
-            $handle = \fopen($realPath, 'r');
+            $handle   = \fopen($realPath, 'r');
+            $fileSize = (int)\filesize($realPath);
+            if ($fileSize === 0) {
+                return null;
+            }
+
             if ($handle !== false) {
-                $contents = (string)\fread($handle, (int)\filesize($realPath));
+                $contents = (string)\fread($handle, $fileSize);
                 \fclose($handle);
             }
         }
