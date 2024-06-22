@@ -394,9 +394,9 @@ class FileSystemTest extends PHPUnit
         isSame('/path/path', FS::clean('///path///path'));
         isSame('/path/path/path', FS::clean('///path///path/path'));
         isSame('/path/path/path/', FS::clean('\path\path\path\\\\\\\\'));
-        isSame('\\path\\path\\path\\', FS::clean('\path\path\path\\\\\\\\', '\\'));
-        isSame('\\path\\path\\path\\', FS::clean('\\path\\path\\path\\\\\\\\', '\\'));
-        isSame('\\\\path\\path\\path\\', FS::clean('\\\\path\\path\\path\\\\\\\\', '\\'));
+        isSame('\path\path\path\\', FS::clean('\path\path\path\\\\\\\\', '\\'));
+        isSame('\path\path\path\\', FS::clean('\path\path\path\\\\\\\\', '\\'));
+        isSame('\\\path\path\path\\', FS::clean('\\\path\path\path\\\\\\\\', '\\'));
 
         isSame('../../path/', FS::clean('..///..///path/', '/'));
         isSame('./../path/', FS::clean('.///..///path/', '/'));
@@ -438,10 +438,10 @@ class FileSystemTest extends PHPUnit
 
         $root = __DIR__ . '/..';
         isSame('tests/FileSystemTest.php', FS::getRelative($file, $root, '/'));
-        isSame('tests\\FileSystemTest.php', FS::getRelative($file, $root, '\\'));
+        isSame('tests\FileSystemTest.php', FS::getRelative($file, $root, '\\'));
 
         $root = null;
         isSame('tests/FileSystemTest.php', FS::getRelative($file, $root, '/'));
-        isSame('tests\\FileSystemTest.php', FS::getRelative($file, $root, '\\'));
+        isSame('tests\FileSystemTest.php', FS::getRelative($file, $root, '\\'));
     }
 }

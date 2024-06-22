@@ -74,7 +74,7 @@ class StringTest extends PHPUnit
         $input = ' <b>ASDF</b> !@#$%^&*()_+"\';:>< ';
 
         isSame('ASDF !@#$%^&*()_+"\';:><', Str::clean($input));
-        isSame('asdf !@#$%^&*()_+\\"\\\';:><', Str::clean($input, true, true));
+        isSame('asdf !@#$%^&*()_+\"\\\';:><', Str::clean($input, true, true));
     }
 
     public function testParseLines(): void
@@ -272,7 +272,7 @@ class StringTest extends PHPUnit
     {
         isSame(
             '&lt;a href="/test"&gt;Test !@#$%^&amp;*()_+\/&lt;/a&gt;',
-            Str::esc('<a href="/test">Test !@#$%^&*()_+\\/</a>'),
+            Str::esc('<a href="/test">Test !@#$%^&*()_+\/</a>'),
         );
     }
 
@@ -280,7 +280,7 @@ class StringTest extends PHPUnit
     {
         isSame(
             '&lt;a href=&quot;/test&quot;&gt;Test!@#$%^&amp;*()_+\/&lt;/a&gt;',
-            Str::escXml('<a href="/test">Test!@#$%^&*()_+\\/</a>'),
+            Str::escXml('<a href="/test">Test!@#$%^&*()_+\/</a>'),
         );
     }
 
@@ -333,10 +333,10 @@ class StringTest extends PHPUnit
         isSame('Function IE Test', Str::testName2Human('Test_FunctionIE_TestTest'));
         isSame('Test Function IE Test', Str::testName2Human('Test_testFunctionIE_TestTest'));
 
-        isSame('Function IE', Str::testName2Human('\\JBZoo\\Test_FunctionIE_Test'));
-        isSame('Function IE', Str::testName2Human('\\JBZoo\\PHPHunit\\Test_FunctionIE_Test'));
-        isSame('Function IE', Str::testName2Human('\\JBZoo\\PHPHunit\\Some\\Test_FunctionIE_Test'));
-        isSame('Function IE', Str::testName2Human('\\JBZoo\\PHPHunit\\Some\\Some\\Test_FunctionIE_Test'));
+        isSame('Function IE', Str::testName2Human('\JBZoo\Test_FunctionIE_Test'));
+        isSame('Function IE', Str::testName2Human('\JBZoo\PHPHunit\Test_FunctionIE_Test'));
+        isSame('Function IE', Str::testName2Human('\JBZoo\PHPHunit\Some\Test_FunctionIE_Test'));
+        isSame('Function IE', Str::testName2Human('\JBZoo\PHPHunit\Some\Some\Test_FunctionIE_Test'));
     }
 
     public function testGenerateUUID(): void

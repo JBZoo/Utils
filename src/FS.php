@@ -370,9 +370,9 @@ final class FS
         $path = \trim((string)$path);
 
         if (($dirSep === '\\') && ($path[0] === '\\') && ($path[1] === '\\')) {
-            $path = '\\' . \preg_replace('#[/\\\\]+#', $dirSep, $path);
+            $path = '\\' . \preg_replace('#[/\\\]+#', $dirSep, $path);
         } else {
-            $path = (string)\preg_replace('#[/\\\\]+#', $dirSep, $path);
+            $path = (string)\preg_replace('#[/\\\]+#', $dirSep, $path);
         }
 
         return $path;
