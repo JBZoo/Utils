@@ -113,10 +113,10 @@ class XmlTest extends PHPUnit
     /** @var string[] */
     private array $expectedXml = [
         '<?xml version="1.0" encoding="UTF-8"?>',
-        '<phpunit bootstrap="tests/autoload.php" convertErrorsToExceptions="true" convertNoticesToExceptions="true"' .
-        ' convertWarningsToExceptions="true" convertDeprecationsToExceptions="true" processIsolation="false" ' .
-        'stopOnError="false" stopOnFailure="false" stopOnIncomplete="false" stopOnSkipped="false" ' .
-        'stopOnRisky="false" noNamespaceSchemaLocation="https://schema.phpunit.de/9.3/phpunit.xsd">',
+        '<phpunit bootstrap="tests/autoload.php" convertErrorsToExceptions="true" convertNoticesToExceptions="true"'
+        . ' convertWarningsToExceptions="true" convertDeprecationsToExceptions="true" processIsolation="false" '
+        . 'stopOnError="false" stopOnFailure="false" stopOnIncomplete="false" stopOnSkipped="false" '
+        . 'stopOnRisky="false" noNamespaceSchemaLocation="https://schema.phpunit.de/9.3/phpunit.xsd">',
         '  <coverage processUncoveredFiles="true">',
         '    <include>',
         '      <directory suffix=".php">src</directory>',

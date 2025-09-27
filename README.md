@@ -1,6 +1,6 @@
 # JBZoo / Utils
 
-[![CI](https://github.com/JBZoo/Utils/actions/workflows/main.yml/badge.svg?branch=master)](https://github.com/JBZoo/Utils/actions/workflows/main.yml?query=branch%3Amaster)    [![Coverage Status](https://coveralls.io/repos/github/JBZoo/Utils/badge.svg?branch=master)](https://coveralls.io/github/JBZoo/Utils?branch=master)    [![Psalm Coverage](https://shepherd.dev/github/JBZoo/Utils/coverage.svg)](https://shepherd.dev/github/JBZoo/Utils)    [![Psalm Level](https://shepherd.dev/github/JBZoo/Utils/level.svg)](https://shepherd.dev/github/JBZoo/Utils)    [![CodeFactor](https://www.codefactor.io/repository/github/jbzoo/utils/badge)](https://www.codefactor.io/repository/github/jbzoo/utils/issues)    
+[![CI](https://github.com/JBZoo/Utils/actions/workflows/main.yml/badge.svg?branch=master)](https://github.com/JBZoo/Utils/actions/workflows/main.yml?query=branch%3Amaster)    [![Coverage Status](https://coveralls.io/repos/github/JBZoo/Utils/badge.svg?branch=master)](https://coveralls.io/github/JBZoo/Utils?branch=master)    [![Psalm Coverage](https://shepherd.dev/github/JBZoo/Utils/coverage.svg)](https://shepherd.dev/github/JBZoo/Utils)    [![Psalm Level](https://shepherd.dev/github/JBZoo/Utils/level.svg)](https://shepherd.dev/github/JBZoo/Utils)    [![CodeFactor](https://www.codefactor.io/repository/github/jbzoo/utils/badge)](https://www.codefactor.io/repository/github/jbzoo/utils/issues)
 [![Stable Version](https://poser.pugx.org/jbzoo/utils/version)](https://packagist.org/packages/jbzoo/utils/)    [![Total Downloads](https://poser.pugx.org/jbzoo/utils/downloads)](https://packagist.org/packages/jbzoo/utils/stats)    [![Dependents](https://poser.pugx.org/jbzoo/utils/dependents)](https://packagist.org/packages/jbzoo/utils/dependents?order_by=downloads)    [![GitHub License](https://img.shields.io/github/license/jbzoo/utils)](https://github.com/JBZoo/Utils/blob/master/LICENSE)
 
 
@@ -889,6 +889,6 @@ MIT
 - [Composer-Graph](https://github.com/JBZoo/Composer-Graph) - Dependency graph visualization of composer.json based on mermaid-js.
 - [Mermaid-PHP](https://github.com/JBZoo/Mermaid-PHP) - Generate diagrams and flowcharts with the help of the mermaid script language.
 - [Image](https://github.com/JBZoo/Image) - Package provides object-oriented way to manipulate with images as simple as possible.
-- [Data](https://github.com/JBZoo/Data) - Extended implementation of ArrayObject. Use files as config/array. 
+- [Data](https://github.com/JBZoo/Data) - Extended implementation of ArrayObject. Use files as config/array.
 - [Retry](https://github.com/JBZoo/Retry) - Tiny PHP library providing retry/backoff functionality with multiple backoff strategies and jitter support.
 - [SimpleTypes](https://github.com/JBZoo/SimpleTypes) - Converting any values and measures - money, weight, exchange rates, length, ...

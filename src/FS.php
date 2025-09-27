@@ -83,7 +83,8 @@ final class FS
         } elseif (($perms & self::TYPE_FIFO) === self::TYPE_FIFO) {
             $info = 'p';
         }
-        // @codeCoverageIgnoreEnd
+
+        /** @codeCoverageIgnoreEnd */
 
         // Owner
         $info .= (($perms & self::PERM_OWNER_READ) > 0 ? 'r' : '-');

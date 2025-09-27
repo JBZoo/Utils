@@ -58,12 +58,6 @@ class CliTest extends PHPUnit
         Cli::exec('undefined-command');
     }
 
-    public function testCanDetectColorSupport(): void
-    {
-        skip('it needs a new idea to test it');
-        isTrue(Cli::hasColorSupport());
-    }
-
     public function testCanDetectNumberOfColumns(): void
     {
         self::assertIsInt(Cli::getNumberOfColumns());

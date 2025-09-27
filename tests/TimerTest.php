@@ -33,45 +33,6 @@ class TimerTest extends PHPUnit
         isSame($string, Timer::format($seconds));
     }
 
-    /**
-     * @dataProvider provideSecondsToTimeStringInMillisecondCases
-     * @param string $string
-     * @param mixed  $seconds
-     */
-    public function testSecondsToTimeStringInMillisecond($string, $seconds): void
-    {
-        isSame($string, Timer::formatMS($seconds));
-    }
-
-    public function testGetRequestTime(): void
-    {
-        isTrue(Timer::getRequestTime() > 0);
-    }
-
-    public function testTimeSinceStart(): void
-    {
-        isTrue(Timer::timeSinceStart() > 0);
-    }
-
-    public static function provideSecondsToTimeStringInMillisecondCases(): iterable
-    {
-        return [
-            ['1 000 ms', 1],
-            ['100 ms', 0.100],
-            ['106 ms', 0.1056],
-            ['10 ms', 0.01],
-            ['15 ms', 0.015],
-            ['0 ms', 0],
-            ['1.0 ms', 0.001],
-            ['9.9 ms', 0.0099],
-            ['10.0 ms', 0.00999],
-            ['0.6 ms', 0.00055],
-            ['0.010 ms', 0.00001],
-            ['0.001 ms', 0.000001],
-            ['0 ms', 0.0000001],
-        ];
-    }
-
     public static function provideSecondsToTimeStringCases(): iterable
     {
         return [
@@ -110,5 +71,44 @@ class TimerTest extends PHPUnit
             ['1.01 hours', 3659.01],
             ['2 hours', 7199.9999],
         ];
+    }
+
+    /**
+     * @dataProvider provideSecondsToTimeStringInMillisecondCases
+     * @param string $string
+     * @param mixed  $seconds
+     */
+    public function testSecondsToTimeStringInMillisecond($string, $seconds): void
+    {
+        isSame($string, Timer::formatMS($seconds));
+    }
+
+    public static function provideSecondsToTimeStringInMillisecondCases(): iterable
+    {
+        return [
+            ['1 000 ms', 1],
+            ['100 ms', 0.100],
+            ['106 ms', 0.1056],
+            ['10 ms', 0.01],
+            ['15 ms', 0.015],
+            ['0 ms', 0],
+            ['1.0 ms', 0.001],
+            ['9.9 ms', 0.0099],
+            ['10.0 ms', 0.00999],
+            ['0.6 ms', 0.00055],
+            ['0.010 ms', 0.00001],
+            ['0.001 ms', 0.000001],
+            ['0 ms', 0.0000001],
+        ];
+    }
+
+    public function testGetRequestTime(): void
+    {
+        isTrue(Timer::getRequestTime() > 0);
+    }
+
+    public function testTimeSinceStart(): void
+    {
+        isTrue(Timer::timeSinceStart() > 0);
     }
 }
