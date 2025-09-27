@@ -48,13 +48,13 @@
     ],
 
     "require"           : {
-        "php" : "^8.1"
+        "php" : "^8.2"
     },
 
     "require-dev"       : {
-        "jbzoo/toolbox-dev" : "^7.1",
-        "jbzoo/data"        : "^7.1",
-        "symfony/process"   : ">=6.4"
+        "jbzoo/toolbox-dev" : "^7.2",
+        "jbzoo/data"        : "^7.2",
+        "symfony/process"   : ">=7.3.4"
     },
 
     "suggest"           : {

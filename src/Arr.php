@@ -71,7 +71,7 @@ final class Arr
      * Check is value exists in the array.
      * @SuppressWarnings(PHPMD.ShortMethodName)
      */
-    public static function in(mixed $value, array $array, bool $returnKey = false): null|bool|int|string
+    public static function in(mixed $value, array $array, bool $returnKey = false): bool|int|string|null
     {
         $inArray = \in_array($value, $array, true);
 
@@ -105,7 +105,7 @@ final class Arr
     /**
      * Returns the first key in an array.
      */
-    public static function firstKey(array $array): null|int|string
+    public static function firstKey(array $array): int|string|null
     {
         \reset($array);
 
@@ -115,7 +115,7 @@ final class Arr
     /**
      * Returns the last key in an array.
      */
-    public static function lastKey(array $array): null|int|string
+    public static function lastKey(array $array): int|string|null
     {
         \end($array);
 
@@ -157,7 +157,7 @@ final class Arr
      */
     public static function search(
         array $array,
-        null|bool|float|int|string $search,
+        bool|float|int|string|null $search,
         ?string $field = null,
     ): bool|string {
         // *grumbles* stupid PHP type system
@@ -411,11 +411,11 @@ final class Arr
     /**
      * Remove all items from array by value.
      */
-    public static function removeByValue(array $array, null|bool|float|int|string $value): array
+    public static function removeByValue(array $array, bool|float|int|string|null $value): array
     {
         return \array_filter(
             $array,
-            static fn (null|bool|float|int|string $arrayItem): bool => $value !== $arrayItem,
+            static fn (bool|float|int|string|null $arrayItem): bool => $value !== $arrayItem,
             \ARRAY_FILTER_USE_BOTH,
         );
     }

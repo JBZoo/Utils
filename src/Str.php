@@ -606,7 +606,7 @@ final class Str
     /**
      * Get class name without namespace.
      */
-    public static function getClassName(null|object|string $object, bool $toLower = false): ?string
+    public static function getClassName(object|string|null $object, bool $toLower = false): ?string
     {
         if (\is_object($object)) {
             $className = $object::class;
@@ -826,7 +826,7 @@ final class Str
     /**
      * Extend version of checking if potetielly empty string is empty.
      */
-    public static function isEmpty(null|bool|string $value, bool $strict = false): bool
+    public static function isEmpty(bool|string|null $value, bool $strict = false): bool
     {
         if ($value === null || $value === false) {
             return true;

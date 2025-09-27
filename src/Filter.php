@@ -173,7 +173,7 @@ final class Filter
     /**
      * Smart convert any string to int.
      */
-    public static function int(null|bool|float|int|string $value): int
+    public static function int(bool|float|int|string|null $value): int
     {
         $cleaned = (string)\preg_replace('#[^0-9-+.,]#', '', (string)$value);
         \preg_match('#[-+]?[\d]+#', $cleaned, $matches);
@@ -250,7 +250,7 @@ final class Filter
     /**
      * Cleanup array. No empty values.
      */
-    public static function arr(mixed $value, null|\Closure|string $filter = null): array
+    public static function arr(mixed $value, \Closure|string|null $filter = null): array
     {
         $array = (array)$value;
 

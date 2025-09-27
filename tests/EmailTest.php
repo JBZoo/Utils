@@ -30,91 +30,6 @@ class EmailTest extends PHPUnit
         is($outcome, Email::check($input));
     }
 
-    /**
-     * @dataProvider getEmptyProvider
-     * @param mixed $input
-     */
-    public function testCheckWithEmptyEmails($input): void
-    {
-        is([], Email::check($input));
-    }
-
-    /**
-     * @dataProvider provideGetDomainsCases
-     * @param mixed $input
-     * @param mixed $outcome
-     */
-    public function testGetDomains($input, $outcome): void
-    {
-        is($outcome, Email::getDomain($input));
-    }
-
-    /**
-     * @dataProvider getEmptyProvider
-     * @param mixed $input
-     */
-    public function testGetDomainsWithEmptyEmails($input): void
-    {
-        is([], Email::getDomain($input));
-    }
-
-    public function testGetDomainsWithStringParam(): void
-    {
-        is(['test.pt'], Email::getDomain('test@test.pt'));
-    }
-
-    /**
-     * @dataProvider provideGetDomainsInAlphabeticalOrderCases
-     * @param mixed $input
-     * @param mixed $outcome
-     */
-    public function testGetDomainsInAlphabeticalOrder($input, $outcome): void
-    {
-        is($outcome, Email::getDomainSorted($input));
-    }
-
-    public function testGetDomainsInAlphabeticalOrderWithOneSizeArray(): void
-    {
-        is(['test.pt'], Email::getDomainSorted(['test@test.pt']));
-    }
-
-    /**
-     * @dataProvider provideGetGravatarUrlCases
-     * @param mixed $input
-     * @param mixed $expectedHttp
-     * @param mixed $expectedHttps
-     * @SuppressWarnings(PHPMD.Superglobals)
-     */
-    public function testGetGravatarUrl($input, $expectedHttp, $expectedHttps): void
-    {
-        $_SERVER['HTTPS'] = 'off';
-        isSame($expectedHttp, Email::getGravatarUrl($input[0], $input[1], $input[2] ?? 'identicon'));
-
-        $_SERVER['HTTPS'] = 'on';
-        isSame($expectedHttps, Email::getGravatarUrl($input[0], $input[1], $input[2] ?? 'identicon'));
-    }
-
-    public function testGetGravatarUrlWithEmptyEmails(): void
-    {
-        is(null, Email::getGravatarUrl(''));
-    }
-
-    public function testRandomEmail(): void
-    {
-        isTrue((bool)Email::check(Email::random()));
-        isTrue(Email::isValid(Email::random()));
-
-        isNotSame(Email::random(), Email::random());
-        isNotSame(Email::random(), Email::random());
-        isNotSame(Email::random(), Email::random());
-    }
-
-    public function testCheckDns(): void
-    {
-        isFalse(Email::checkDns('123'));
-        isTrue(Email::checkDns('denis@gmail.com'));
-    }
-
     public static function provideCheckCases(): iterable
     {
         return [
@@ -142,6 +57,25 @@ class EmailTest extends PHPUnit
                 ],
             ],
         ];
+    }
+
+    /**
+     * @dataProvider getEmptyProvider
+     * @param mixed $input
+     */
+    public function testCheckWithEmptyEmails($input): void
+    {
+        is([], Email::check($input));
+    }
+
+    /**
+     * @dataProvider provideGetDomainsCases
+     * @param mixed $input
+     * @param mixed $outcome
+     */
+    public function testGetDomains($input, $outcome): void
+    {
+        is($outcome, Email::getDomain($input));
     }
 
     public static function provideGetDomainsCases(): iterable
@@ -182,6 +116,35 @@ class EmailTest extends PHPUnit
         ];
     }
 
+    /**
+     * @dataProvider getEmptyProvider
+     * @param mixed $input
+     */
+    public function testGetDomainsWithEmptyEmails($input): void
+    {
+        is([], Email::getDomain($input));
+    }
+
+    public static function getEmptyProvider(): iterable
+    {
+        return [[[]], [false], [''], [0]];
+    }
+
+    public function testGetDomainsWithStringParam(): void
+    {
+        is(['test.pt'], Email::getDomain('test@test.pt'));
+    }
+
+    /**
+     * @dataProvider provideGetDomainsInAlphabeticalOrderCases
+     * @param mixed $input
+     * @param mixed $outcome
+     */
+    public function testGetDomainsInAlphabeticalOrder($input, $outcome): void
+    {
+        is($outcome, Email::getDomainSorted($input));
+    }
+
     public static function provideGetDomainsInAlphabeticalOrderCases(): iterable
     {
         return [
@@ -215,9 +178,25 @@ class EmailTest extends PHPUnit
         ];
     }
 
-    public static function getEmptyProvider(): iterable
+    public function testGetDomainsInAlphabeticalOrderWithOneSizeArray(): void
     {
-        return [[[]], [false], [''], [0]];
+        is(['test.pt'], Email::getDomainSorted(['test@test.pt']));
+    }
+
+    /**
+     * @dataProvider provideGetGravatarUrlCases
+     * @param mixed $input
+     * @param mixed $expectedHttp
+     * @param mixed $expectedHttps
+     * @SuppressWarnings(PHPMD.Superglobals)
+     */
+    public function testGetGravatarUrl($input, $expectedHttp, $expectedHttps): void
+    {
+        $_SERVER['HTTPS'] = 'off';
+        isSame($expectedHttp, Email::getGravatarUrl($input[0], $input[1], $input[2] ?? 'identicon'));
+
+        $_SERVER['HTTPS'] = 'on';
+        isSame($expectedHttps, Email::getGravatarUrl($input[0], $input[1], $input[2] ?? 'identicon'));
     }
 
     public static function provideGetGravatarUrlCases(): iterable
@@ -266,5 +245,26 @@ class EmailTest extends PHPUnit
                 'https://secure.gravatar.com/avatar/f27f28ab2158cd2cccc78c364d6247fe/?s=2048&d=identicon',
             ],
         ];
+    }
+
+    public function testGetGravatarUrlWithEmptyEmails(): void
+    {
+        is(null, Email::getGravatarUrl(''));
+    }
+
+    public function testRandomEmail(): void
+    {
+        isTrue((bool)Email::check(Email::random()));
+        isTrue(Email::isValid(Email::random()));
+
+        isNotSame(Email::random(), Email::random());
+        isNotSame(Email::random(), Email::random());
+        isNotSame(Email::random(), Email::random());
+    }
+
+    public function testCheckDns(): void
+    {
+        isFalse(Email::checkDns('123'));
+        isTrue(Email::checkDns('denis@gmail.com'));
     }
 }

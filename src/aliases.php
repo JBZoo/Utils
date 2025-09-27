@@ -76,7 +76,7 @@ function stripQuotes(mixed $variable): string
     return Filter::stripQuotes($variable);
 }
 
-function isStrEmpty(null|bool|string $variable): bool
+function isStrEmpty(bool|string|null $variable): bool
 {
     return Str::isEmpty($variable);
 }
