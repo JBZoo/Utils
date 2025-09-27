@@ -18,6 +18,7 @@ namespace JBZoo\Utils;
 
 /**
  * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
+ * @psalm-suppress UnusedClass
  */
 final class Sys
 {
@@ -74,6 +75,7 @@ final class Sys
 
     /**
      * Alias fo ini_set function.
+     * @psalm-suppress PossiblyUnusedReturnValue
      */
     public static function iniSet(string $phpIniKey, string $newValue): bool
     {

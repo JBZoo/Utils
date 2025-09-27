@@ -16,6 +16,9 @@ declare(strict_types=1);
 
 namespace JBZoo\Utils;
 
+/**
+ * @psalm-suppress UnusedClass
+ */
 final class Http
 {
     /**
@@ -159,7 +162,7 @@ final class Http
                     $expectedNumOfParts = 2;
                     if (\count($exploded) === $expectedNumOfParts) {
                         $headers['PHP_AUTH_USER'] = $exploded[0];
-                        $headers['PHP_AUTH_PW']   = $exploded[1] ?? '';
+                        $headers['PHP_AUTH_PW']   = $exploded[1] ?? ''; // @phpstan-ignore-line
                     }
                 } elseif (
                     isStrEmpty($_SERVER['PHP_AUTH_DIGEST'] ?? '')

@@ -19,6 +19,9 @@ namespace JBZoo\Utils;
 use Symfony\Component\Process\Exception\ProcessFailedException;
 use Symfony\Component\Process\Process;
 
+/**
+ * @psalm-suppress UnusedClass
+ */
 final class Cli
 {
     public const STDIN         = 0;

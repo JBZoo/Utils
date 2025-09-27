@@ -16,12 +16,17 @@ declare(strict_types=1);
 
 namespace JBZoo\Utils;
 
+/**
+ * @psalm-suppress UnusedClass
+ */
 final class Csv
 {
     public const LENGTH_LIMIT = 10000000;
 
     /**
      * Simple parser for CSV files.
+     * @psalm-suppress PossiblyNullIterator
+     * @psalm-suppress PossiblyNullArrayAccess
      */
     public static function parse(
         string $csvFile,

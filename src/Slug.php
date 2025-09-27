@@ -16,6 +16,9 @@ declare(strict_types=1);
 
 namespace JBZoo\Utils;
 
+/**
+ * @psalm-suppress UnusedClass
+ */
 final class Slug
 {
     // The map to convert characters to ASCII characters.

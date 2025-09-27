@@ -19,6 +19,7 @@ namespace JBZoo\Utils;
 /**
  * @SuppressWarnings(PHPMD.TooManyPublicMethods)
  * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
+ * @psalm-suppress UnusedClass
  */
 final class Arr
 {

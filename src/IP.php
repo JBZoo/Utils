@@ -18,6 +18,7 @@ namespace JBZoo\Utils;
 
 /**
  * @SuppressWarnings(PHPMD.ShortClassName)
+ * @psalm-suppress UnusedClass
  */
 final class IP
 {
@@ -58,7 +59,7 @@ final class IP
         if (\str_contains($range, '/')) {
             // $range is in IP/NETMASK format
             $rangeParts = \explode('/', $range, 2);
-            $range      = $rangeParts[0] ?? '';
+            $range      = $rangeParts[0] ?? ''; // @phpstan-ignore-line
             $netMask    = $rangeParts[1] ?? '';
 
             if (\str_contains($netMask, '.')) {
@@ -75,7 +76,7 @@ final class IP
 
             $range = \sprintf(
                 '%u.%u.%u.%u',
-                (int)($blocks[0] ?? 0),
+                (int)($blocks[0] ?? 0), // @phpstan-ignore-line
                 (int)($blocks[1] ?? 0),
                 (int)($blocks[2] ?? 0),
                 (int)($blocks[3] ?? 0),
@@ -101,7 +102,7 @@ final class IP
 
         if (\str_contains($range, '-')) { // A-B format
             $rangeParts = \explode('-', $range, 2);
-            $lower      = $rangeParts[0] ?? '';
+            $lower      = $rangeParts[0] ?? ''; // @phpstan-ignore-line
             $upper      = $rangeParts[1] ?? '';
 
             $lowerDec = (float)\sprintf('%u', (int)\ip2long($lower));
