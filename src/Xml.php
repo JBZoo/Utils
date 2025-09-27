@@ -16,6 +16,9 @@ declare(strict_types=1);
 
 namespace JBZoo\Utils;
 
+/**
+ * @psalm-suppress UnusedClass
+ */
 final class Xml
 {
     public const VERSION  = '1.0';

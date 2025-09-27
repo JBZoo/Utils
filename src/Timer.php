@@ -17,7 +17,8 @@ declare(strict_types=1);
 namespace JBZoo\Utils;
 
 /**
- * @see     https://github.com/sebastianbergmann/php-timer
+ * @see https://github.com/sebastianbergmann/php-timer
+ * @psalm-suppress UnusedClass
  */
 final class Timer
 {

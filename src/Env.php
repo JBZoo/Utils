@@ -16,6 +16,9 @@ declare(strict_types=1);
 
 namespace JBZoo\Utils;
 
+/**
+ * @psalm-suppress UnusedClass
+ */
 final class Env
 {
     public const VAR_NULL   = 1;

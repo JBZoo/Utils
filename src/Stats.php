@@ -18,6 +18,7 @@ namespace JBZoo\Utils;
 
 /**
  * @see https://github.com/phpbench/phpbench/blob/master/lib/Math/Statistics.php
+ * @psalm-suppress UnusedClass
  */
 final class Stats
 {

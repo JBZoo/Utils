@@ -22,6 +22,7 @@ use JBZoo\Data\JSON;
 /**
  * @SuppressWarnings(PHPMD.TooManyMethods)
  * @SuppressWarnings(PHPMD.TooManyPublicMethods)
+ * @psalm-suppress UnusedClass
  */
 final class Filter
 {

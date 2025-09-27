@@ -19,6 +19,7 @@ namespace JBZoo\Utils;
 /**
  * @SuppressWarnings(PHPMD.TooManyPublicMethods)
  * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
+ * @psalm-suppress UnusedClass
  */
 final class Image
 {
@@ -194,7 +195,7 @@ final class Image
                     ($colorXY >> 16) & 0xFF,
                     ($colorXY >> 8) & 0xFF,
                     $colorXY & 0xFF,
-                    (int)$alpha,
+                    (int)$alpha, // @phpstan-ignore-line
                 );
 
                 // Set pixel with the new color + opacity
@@ -415,7 +416,7 @@ final class Image
      * @param array  $offset   Forced offset X, Y
      * @SuppressWarnings(PHPMD.NPathComplexity)
      */
-    public static function getInnerCoords(string $position, array $canvas, array $box, array $offset = [0, 0]): ?array
+    public static function getInnerCoords(string $position, array $canvas, array $box, array $offset = [0, 0]): array
     {
         $positionCode        = self::position($position);
         [$canvasW, $canvasH] = $canvas;

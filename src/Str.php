@@ -20,6 +20,7 @@ namespace JBZoo\Utils;
  * @SuppressWarnings(PHPMD.TooManyPublicMethods)
  * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
  * @SuppressWarnings(PHPMD.TooManyMethods)
+ * @psalm-suppress UnusedClass
  */
 final class Str
 {

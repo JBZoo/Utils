@@ -21,6 +21,7 @@ use function JBZoo\Data\data;
 /**
  * @SuppressWarnings(PHPMD.TooManyPublicMethods)
  * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
+ * @psalm-suppress UnusedClass
  */
 final class Url
 {
