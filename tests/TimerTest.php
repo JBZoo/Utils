@@ -24,10 +24,10 @@ use JBZoo\Utils\Timer;
 class TimerTest extends PHPUnit
 {
     /**
-     * @dataProvider provideSecondsToTimeStringCases
      * @param string $string
      * @param mixed  $seconds
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('provideSecondsToTimeStringCases')]
     public function testSecondsToTimeString($string, $seconds): void
     {
         isSame($string, Timer::format($seconds));
@@ -74,10 +74,10 @@ class TimerTest extends PHPUnit
     }
 
     /**
-     * @dataProvider provideSecondsToTimeStringInMillisecondCases
      * @param string $string
      * @param mixed  $seconds
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('provideSecondsToTimeStringInMillisecondCases')]
     public function testSecondsToTimeStringInMillisecond($string, $seconds): void
     {
         isSame($string, Timer::formatMS($seconds));

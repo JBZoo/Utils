@@ -198,10 +198,8 @@ final class Image
                     (int)$alpha, // @phpstan-ignore-line
                 );
 
-                // Set pixel with the new color + opacity
-                if (!\imagesetpixel($srcImg, $x, $y, (int)$alphaColorXY)) {
-                    return;
-                }
+                // Set pixel with the new color + opacity (imagesetpixel() always returns true on a GdImage)
+                \imagesetpixel($srcImg, $x, $y, (int)$alphaColorXY);
             }
         }
 

@@ -56,11 +56,12 @@ final class IP
      */
     public static function v4InRange(string $ipAddress, string $range): bool
     {
-        if (\str_contains($range, '/')) {
-            // $range is in IP/NETMASK format
-            $rangeParts = \explode('/', $range, 2);
-            $range      = $rangeParts[0] ?? ''; // @phpstan-ignore-line
-            $netMask    = $rangeParts[1] ?? '';
+        $slashPos = \strpos($range, '/');
+        if ($slashPos !== false) {
+            // $range is in IP/NETMASK format. Using strpos as the guard (not str_contains + explode)
+            // keeps the offset a known int, so both PHPStan and Psalm see two present string parts.
+            $netMask = \substr($range, $slashPos + 1);
+            $range   = \substr($range, 0, $slashPos);
 
             if (\str_contains($netMask, '.')) {
                 // $netMask is a 255.255.0.0 format
@@ -100,10 +101,10 @@ final class IP
             $range = "{$lower}-{$upper}";
         }
 
-        if (\str_contains($range, '-')) { // A-B format
-            $rangeParts = \explode('-', $range, 2);
-            $lower      = $rangeParts[0] ?? ''; // @phpstan-ignore-line
-            $upper      = $rangeParts[1] ?? '';
+        $dashPos = \strpos($range, '-');
+        if ($dashPos !== false) { // A-B format
+            $lower = \substr($range, 0, $dashPos);
+            $upper = \substr($range, $dashPos + 1);
 
             $lowerDec = (float)\sprintf('%u', (int)\ip2long($lower));
             $upperDec = (float)\sprintf('%u', (int)\ip2long($upper));

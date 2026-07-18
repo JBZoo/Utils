@@ -21,6 +21,7 @@ use JBZoo\Utils\Sys;
 /**
  * @SuppressWarnings(PHPMD.Superglobals)
  */
+#[\PHPUnit\Framework\Attributes\CoversClass(Sys::class)]
 class SysTest extends PHPUnit
 {
     public function testIsFunc(): void
@@ -93,87 +94,46 @@ class SysTest extends PHPUnit
         isSame(PROJECT_ROOT, Sys::getDocRoot());
     }
 
-    /**
-     * @covers \JBZoo\Utils\Sys::canCollectCodeCoverage
-     * @uses   \JBZoo\Utils\Sys::hasXdebug
-     * @uses   \JBZoo\Utils\Sys::isHHVM
-     * @uses   \JBZoo\Utils\Sys::isPHP
-     */
     public function testAbilityToCollectCodeCoverageCanBeAssessed(): void
     {
         self::assertIsBool(Sys::canCollectCodeCoverage());
     }
 
-    /**
-     * @covers \JBZoo\Utils\Sys::getBinary
-     * @uses   \JBZoo\Utils\Sys::isHHVM
-     */
     public function testBinaryCanBeRetrieved(): void
     {
         self::assertIsString(Sys::getBinary());
     }
 
-    /**
-     * @covers \JBZoo\Utils\Sys::isHHVM
-     */
     public function testCanBeDetected(): void
     {
         self::assertIsBool(Sys::isHHVM());
     }
 
-    /**
-     * @covers \JBZoo\Utils\Sys::isRealPHP
-     * @uses   \JBZoo\Utils\Sys::isHHVM
-     */
     public function testCanBeDetected2(): void
     {
         self::assertIsBool(Sys::isRealPHP());
     }
 
-    /**
-     * @covers \JBZoo\Utils\Sys::hasXdebug
-     * @uses   \JBZoo\Utils\Sys::isHHVM
-     * @uses   \JBZoo\Utils\Sys::isPHP
-     */
     public function testXdebugCanBeDetected(): void
     {
         self::assertIsBool(Sys::hasXdebug());
     }
 
-    /**
-     * @covers \JBZoo\Utils\Sys::getNameWithVersion
-     * @uses   \JBZoo\Utils\Sys::getName
-     * @uses   \JBZoo\Utils\Sys::getVersion
-     * @uses   \JBZoo\Utils\Sys::isHHVM
-     * @uses   \JBZoo\Utils\Sys::isPHP
-     */
     public function testNameAndVersionCanBeRetrieved(): void
     {
         self::assertIsString(Sys::getNameWithVersion());
     }
 
-    /**
-     * @covers \JBZoo\Utils\Sys::getName
-     * @uses   \JBZoo\Utils\Sys::isHHVM
-     */
     public function testNameCanBeRetrieved(): void
     {
         self::assertIsString(Sys::getName());
     }
 
-    /**
-     * @covers \JBZoo\Utils\Sys::getVersion
-     * @uses   \JBZoo\Utils\Sys::isHHVM
-     */
     public function testVersionCanBeRetrieved(): void
     {
         self::assertIsString(Sys::getVersion());
     }
 
-    /**
-     * @covers \JBZoo\Utils\Sys::getVendorUrl
-     * @uses   \JBZoo\Utils\Sys::isHHVM
-     */
     public function testVendorUrlCanBeRetrieved(): void
     {
         self::assertIsString(Sys::getVendorUrl());

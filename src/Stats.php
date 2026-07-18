@@ -66,7 +66,7 @@ final class Stats
         });
         $sum = \array_sum($values);
 
-        if ($sum === 0) {
+        if ($sum === 0.0) {
             return 0;
         }
 

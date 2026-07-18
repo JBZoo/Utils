@@ -25,11 +25,11 @@ use JBZoo\Utils\Filter;
 class EnvTest extends PHPUnit
 {
     /**
-     * @dataProvider provideConvertOptionsCases
      * @param mixed $value
      * @param int   $options
      * @param mixed $expected
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('provideConvertOptionsCases')]
     public function testConvertOptions($value, $options, $expected): void
     {
         isSame($expected, Env::convert($value, $options));
