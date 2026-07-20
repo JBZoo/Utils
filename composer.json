@@ -54,7 +54,7 @@
     "require-dev"       : {
         "jbzoo/toolbox-dev" : "^7.2",
         "jbzoo/data"        : "^7.2",
-        "symfony/process"   : ">=7.3.4"
+        "symfony/process"   : "^7.3.4"
     },
 
     "suggest"           : {
