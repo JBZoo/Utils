@@ -21,10 +21,10 @@ use JBZoo\Utils\Email;
 class EmailTest extends PHPUnit
 {
     /**
-     * @dataProvider provideCheckCases
      * @param mixed $input
      * @param mixed $outcome
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('provideCheckCases')]
     public function testCheck($input, $outcome): void
     {
         is($outcome, Email::check($input));
@@ -60,19 +60,19 @@ class EmailTest extends PHPUnit
     }
 
     /**
-     * @dataProvider getEmptyProvider
      * @param mixed $input
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('getEmptyProvider')]
     public function testCheckWithEmptyEmails($input): void
     {
         is([], Email::check($input));
     }
 
     /**
-     * @dataProvider provideGetDomainsCases
      * @param mixed $input
      * @param mixed $outcome
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('provideGetDomainsCases')]
     public function testGetDomains($input, $outcome): void
     {
         is($outcome, Email::getDomain($input));
@@ -117,9 +117,9 @@ class EmailTest extends PHPUnit
     }
 
     /**
-     * @dataProvider getEmptyProvider
      * @param mixed $input
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('getEmptyProvider')]
     public function testGetDomainsWithEmptyEmails($input): void
     {
         is([], Email::getDomain($input));
@@ -136,10 +136,10 @@ class EmailTest extends PHPUnit
     }
 
     /**
-     * @dataProvider provideGetDomainsInAlphabeticalOrderCases
      * @param mixed $input
      * @param mixed $outcome
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('provideGetDomainsInAlphabeticalOrderCases')]
     public function testGetDomainsInAlphabeticalOrder($input, $outcome): void
     {
         is($outcome, Email::getDomainSorted($input));
@@ -184,12 +184,12 @@ class EmailTest extends PHPUnit
     }
 
     /**
-     * @dataProvider provideGetGravatarUrlCases
      * @param mixed $input
      * @param mixed $expectedHttp
      * @param mixed $expectedHttps
      * @SuppressWarnings(PHPMD.Superglobals)
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('provideGetGravatarUrlCases')]
     public function testGetGravatarUrl($input, $expectedHttp, $expectedHttps): void
     {
         $_SERVER['HTTPS'] = 'off';

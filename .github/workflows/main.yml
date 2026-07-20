@@ -15,12 +15,15 @@ permissions:
   contents: read
 
 on:
+  schedule:
+    - cron: '0 4 * * *'   # daily 04:00 UTC canary keepalive
   pull_request:
     branches:
       - "*"
   push:
     branches:
       - 'master'
+  workflow_dispatch: {}
 
 env:
   COLUMNS: 120
@@ -34,12 +37,12 @@ jobs:
       JBZOO_COMPOSER_UPDATE_FLAGS: ${{ matrix.composer_flags }}
     strategy:
       matrix:
-        php-version: [ 8.2, 8.3, 8.4 ]
+        php-version: [ 8.3, 8.4, 8.5 ]
         coverage: [ xdebug, none ]
         composer_flags: [ "--prefer-lowest", "" ]
     steps:
       - name: Checkout code
-        uses: actions/checkout@v3
+        uses: actions/checkout@v7
         with:
           fetch-depth: 0
 
@@ -65,11 +68,12 @@ jobs:
         run: make report-coveralls --no-print-directory || true
 
       - name: Upload Artifacts
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         continue-on-error: true
         with:
           name: PHPUnit - ${{ matrix.php-version }} - ${{ matrix.coverage }}
           path: build/
+          overwrite: true
 
 
   linters:
@@ -77,10 +81,10 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        php-version: [ 8.2, 8.3, 8.4 ]
+        php-version: [ 8.3, 8.4, 8.5 ]
     steps:
       - name: Checkout code
-        uses: actions/checkout@v3
+        uses: actions/checkout@v7
         with:
           fetch-depth: 0
 
@@ -99,11 +103,12 @@ jobs:
         run: make codestyle --no-print-directory
 
       - name: Upload Artifacts
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         continue-on-error: true
         with:
           name: Linters - ${{ matrix.php-version }}
           path: build/
+          overwrite: true
 
 
   report:
@@ -111,10 +116,10 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        php-version: [ 8.2, 8.3, 8.4 ]
+        php-version: [ 8.3, 8.4, 8.5 ]
     steps:
       - name: Checkout code
-        uses: actions/checkout@v3
+        uses: actions/checkout@v7
         with:
           fetch-depth: 0
 
@@ -133,8 +138,9 @@ jobs:
         run: make report-all --no-print-directory
 
       - name: Upload Artifacts
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         continue-on-error: true
         with:
           name: Reports - ${{ matrix.php-version }}
           path: build/
+          overwrite: true

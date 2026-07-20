@@ -75,7 +75,6 @@ final class Sys
 
     /**
      * Alias fo ini_set function.
-     * @psalm-suppress PossiblyUnusedReturnValue
      */
     public static function iniSet(string $phpIniKey, string $newValue): bool
     {
@@ -101,7 +100,7 @@ final class Sys
     {
         $disabledOnPhpIni = false;
 
-        if (\is_string($funcName)) {
+        if (!$funcName instanceof \Closure) {
             $disabledOnPhpIni = \str_contains(
                 \strtolower(self::iniGet('disable_functions')),
                 \strtolower(\trim($funcName)),

@@ -23,10 +23,10 @@ use JBZoo\Utils\Filter;
 class FilterTest extends PHPUnit
 {
     /**
-     * @dataProvider provideIntCases
      * @param mixed $exepted
      * @param mixed $actual
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('provideIntCases')]
     public function testInt($exepted, $actual): void
     {
         isSame($exepted, Filter::_($actual, 'int'));
@@ -56,11 +56,11 @@ class FilterTest extends PHPUnit
     }
 
     /**
-     * @dataProvider provideFloatCases
      * @param mixed      $excepted
      * @param mixed      $actual
      * @param null|mixed $round
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('provideFloatCases')]
     public function testFloat($excepted, $actual, $round = null): void
     {
         if ($round === null) {
@@ -103,10 +103,10 @@ class FilterTest extends PHPUnit
     }
 
     /**
-     * @dataProvider provideBoolCases
      * @param mixed $excepted
      * @param mixed $actual
      */
+    #[\PHPUnit\Framework\Attributes\DataProvider('provideBoolCases')]
     public function testBool($excepted, $actual): void
     {
         isSame($excepted, Filter::_($actual, 'bool'));

@@ -296,7 +296,8 @@ final class FS
         $symbols = ['B', 'KB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB'];
 
         $bytes = \abs((float)$bytes);
-        $exp   = (int)\floor(\log($bytes) / \log(1024));
+        // log(0) is -INF; casting -INF to int emits a warning on PHP 8.5. Zero bytes => "0 B".
+        $exp   = $bytes > 0.0 ? (int)\floor(\log($bytes) / \log(1024)) : 0;
         $value = ($bytes / (1024 ** \floor($exp)));
 
         if ($symbols[$exp] === 'B') {

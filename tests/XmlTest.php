@@ -113,14 +113,9 @@ class XmlTest extends PHPUnit
     /** @var string[] */
     private array $expectedXml = [
         '<?xml version="1.0" encoding="UTF-8"?>',
-        '<phpunit bootstrap="tests/autoload.php" convertErrorsToExceptions="true" convertNoticesToExceptions="true"'
-        . ' convertWarningsToExceptions="true" convertDeprecationsToExceptions="true" processIsolation="false" '
-        . 'stopOnError="false" stopOnFailure="false" stopOnIncomplete="false" stopOnSkipped="false" '
-        . 'stopOnRisky="false" noNamespaceSchemaLocation="https://schema.phpunit.de/9.3/phpunit.xsd">',
-        '  <coverage processUncoveredFiles="true">',
-        '    <include>',
-        '      <directory suffix=".php">src</directory>',
-        '    </include>',
+        '<phpunit bootstrap="tests/autoload.php" processIsolation="false" stopOnError="false" stopOnFailure="false"'
+        . ' stopOnIncomplete="false" stopOnSkipped="false" stopOnRisky="false">',
+        '  <coverage>',
         '    <report>',
         '      <clover outputFile="build/coverage_xml/main.xml"/>',
         '      <php outputFile="build/coverage_cov/main.cov"/>',
@@ -135,6 +130,11 @@ class XmlTest extends PHPUnit
         '  <logging>',
         '    <junit outputFile="build/coverage_junit/main.xml"/>',
         '  </logging>',
+        '  <source>',
+        '    <include>',
+        '      <directory suffix=".php">src</directory>',
+        '    </include>',
+        '  </source>',
         '</phpunit>',
         '',
     ];
@@ -146,41 +146,21 @@ class XmlTest extends PHPUnit
                 '_text'  => null,
                 '_cdata' => null,
                 '_attrs' => [
-                    'bootstrap'                       => 'tests/autoload.php',
-                    'convertErrorsToExceptions'       => 'true',
-                    'convertNoticesToExceptions'      => 'true',
-                    'convertWarningsToExceptions'     => 'true',
-                    'convertDeprecationsToExceptions' => 'true',
-                    'processIsolation'                => 'false',
-                    'stopOnError'                     => 'false',
-                    'stopOnFailure'                   => 'false',
-                    'stopOnIncomplete'                => 'false',
-                    'stopOnSkipped'                   => 'false',
-                    'stopOnRisky'                     => 'false',
-                    'noNamespaceSchemaLocation'       => 'https://schema.phpunit.de/9.3/phpunit.xsd',
+                    'bootstrap'        => 'tests/autoload.php',
+                    'processIsolation' => 'false',
+                    'stopOnError'      => 'false',
+                    'stopOnFailure'    => 'false',
+                    'stopOnIncomplete' => 'false',
+                    'stopOnSkipped'    => 'false',
+                    'stopOnRisky'      => 'false',
                 ],
                 '_children' => [
                     [
                         '_node'     => 'coverage',
                         '_text'     => null,
                         '_cdata'    => null,
-                        '_attrs'    => ['processUncoveredFiles' => 'true'],
+                        '_attrs'    => [],
                         '_children' => [
-                            [
-                                '_node'     => 'include',
-                                '_text'     => null,
-                                '_cdata'    => null,
-                                '_attrs'    => [],
-                                '_children' => [
-                                    [
-                                        '_node'     => 'directory',
-                                        '_text'     => 'src',
-                                        '_cdata'    => null,
-                                        '_attrs'    => ['suffix' => '.php'],
-                                        '_children' => [],
-                                    ],
-                                ],
-                            ],
                             [
                                 '_node'     => 'report',
                                 '_text'     => null,
@@ -251,6 +231,29 @@ class XmlTest extends PHPUnit
                                 '_cdata'    => null,
                                 '_attrs'    => ['outputFile' => 'build/coverage_junit/main.xml'],
                                 '_children' => [],
+                            ],
+                        ],
+                    ],
+                    [
+                        '_node'     => 'source',
+                        '_text'     => null,
+                        '_cdata'    => null,
+                        '_attrs'    => [],
+                        '_children' => [
+                            [
+                                '_node'     => 'include',
+                                '_text'     => null,
+                                '_cdata'    => null,
+                                '_attrs'    => [],
+                                '_children' => [
+                                    [
+                                        '_node'     => 'directory',
+                                        '_text'     => 'src',
+                                        '_cdata'    => null,
+                                        '_attrs'    => ['suffix' => '.php'],
+                                        '_children' => [],
+                                    ],
+                                ],
                             ],
                         ],
                     ],

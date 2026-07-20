@@ -87,10 +87,10 @@ final class Url
         }
 
         // Re-construct the query string
-        $parsedUri['query'] = self::build($queryParams);
+        $query = self::build($queryParams);
 
         // Strip = from valueless parameters.
-        $parsedUri['query'] = (string)\preg_replace('/=(?=&|$)/', '', (string)$parsedUri['query']);
+        $parsedUri['query'] = (string)\preg_replace('/=(?=&|$)/', '', $query);
 
         // Re-construct the entire URL
         $newUri = self::buildAll((array)$parsedUri);

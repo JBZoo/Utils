@@ -68,7 +68,7 @@ The project uses JBZoo Toolbox codestyle standards via Makefile targets:
 ### Build System
 - **Makefile**: Main build configuration with standard targets
 - **Dependencies**: Uses `jbzoo/toolbox-dev` for development dependencies
-- **PHP Version**: Requires PHP 8.2+ (as of current version)
+- **PHP Version**: Requires PHP 8.3+ (as of current version)
 
 ## Testing Architecture
 
@@ -85,7 +85,7 @@ The project uses JBZoo Toolbox codestyle standards via Makefile targets:
 
 ### CI/CD Pipeline
 - **GitHub Actions**: `.github/workflows/main.yml`
-- **PHP Versions**: Tests run on PHP 8.2, 8.3, 8.4
+- **PHP Versions**: Tests run on PHP 8.3, 8.4, 8.5
 - **Matrix Testing**: Tests with different composer flags (`--prefer-lowest`)
 - **Coverage**: Uses Xdebug for coverage reporting
 - **Quality Gates**: Separate jobs for PHPUnit tests, linters, and reports
@@ -102,13 +102,13 @@ src/
 ```
 
 ### Development Standards
-- **PHP 8.2+**: Uses modern PHP features including typed properties and strict types
+- **PHP 8.3+**: Uses modern PHP features including typed properties and strict types
 - **PSR Standards**: Follows PSR-4 autoloading and coding standards
 - **Static Methods**: All utility functions implemented as static class methods
 - **Immutable Operations**: Most operations return new values rather than modifying input
 
 ### Key Dependencies
-- **Production**: Minimal dependencies (only PHP 8.2+)
+- **Production**: Minimal dependencies (only PHP 8.3+)
 - **Development**: `jbzoo/toolbox-dev` for testing and code quality tools
 - **Optional**: `symfony/process` for CLI operations, `jbzoo/data` for data handling
 

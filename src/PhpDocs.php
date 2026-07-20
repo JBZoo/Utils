@@ -61,7 +61,9 @@ final class PhpDocs
                 }
 
                 // get the name of the param
-                \preg_match('/@(\w+)/', $info, $matches);
+                if (\preg_match('/@(\w+)/', $info, $matches) !== 1) {
+                    continue;
+                }
                 $paramName = $matches[1];
 
                 // remove the param from the string

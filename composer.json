@@ -48,13 +48,13 @@
     ],
 
     "require"           : {
-        "php" : "^8.2"
+        "php" : "^8.3"
     },
 
     "require-dev"       : {
-        "jbzoo/toolbox-dev" : "^7.2",
-        "jbzoo/data"        : "^7.2",
-        "symfony/process"   : "^7.3.4"
+        "jbzoo/toolbox-dev" : "^8.0",
+        "jbzoo/data"        : "^8.0",
+        "symfony/process"   : ">=7.3.4"
     },
 
     "suggest"           : {
@@ -91,7 +91,7 @@
 
     "extra"             : {
         "branch-alias" : {
-            "dev-master" : "7.x-dev"
+            "dev-master" : "8.x-dev"
         }
     }
 }
